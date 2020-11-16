@@ -1,0 +1,574 @@
+/* General Page layout */
+html,
+body {
+  height: 100%;
+}
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -50px;
+  /* Pad bottom by footer height */
+  padding: 0 0 30px;
+ }
+
+ /*  General and Miscellaneous Tag Styles */
+label, input {
+    float: left;
+}
+
+.smaller-text {
+    font-size: 0.9em;
+}
+
+.alone {
+    clear: both;
+}
+
+.float-l {
+    float: left;
+}
+.float-r {
+    float: right;
+}
+
+.display-details strong {
+    display: inline-block;
+    width: 200px;
+}
+
+.inline-display-details span,
+.inline-display-details strong {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.panel-btn {
+    display: inline-block;
+    margin-left: 40px;
+}
+
+.user-image {
+    max-width: 300px;
+    max-height: 300px;
+    min-width: 150px;
+    min-height: 150px;
+}
+
+.carousel-inner .img-responsive {
+    width: 100%;
+}
+
+/* Zebra grid on some div displays */
+.form-pane .row {
+    border-bottom: 1px solid #DDDDDD;
+}
+.form-pane .row:hover {
+    background-color: #F5F5F5;
+}
+.form-pane .row-striped {
+    background-color: #F9F9F9;
+}
+
+.view, .view-striped {
+    border-top: 1px solid #DDDDDD;
+    min-height: 30px;
+    padding: 4px;
+}
+.view-striped:hover,.view:hover {
+    background-color: #F5F5F5;
+}
+.view-striped {
+    background-color: #F9F9F9;
+}
+
+
+/*
+*   FORMS
+*
+*/
+
+.form-group{
+    overflow: hidden;
+    position: relative;
+    clear: both;
+}
+.form-group.actions-row {
+    padding-left: 200px;
+}
+    .form-group > label {
+        width: 200px;
+    }
+    .form-group .form-control {
+        width: 270px;
+    }
+    .form-group .form-control.duration,
+    .form-group .form-control.observation,
+    .form-group .form-control.drug,
+    .form-group .form-control.susceptibility {
+        width: 100%;
+    }
+    .form-group .form-pane {
+        clear:both;
+        overflow: hidden;
+    }
+        .form-group .form-pane label {
+            font-weight: 100;
+        }
+         .form-group span.input-tag{
+            display: inline-block;
+            padding-left: 15px;
+            min-width: 60px;
+         }
+         .form-group span.input-tag:hover{
+            cursor: pointer;
+         }
+
+         .form-group span.units{
+            line-height: 3em;
+            margin-left: 5px;
+         }
+
+.form-inline label {
+    line-height: 34px;
+}
+
+/*
+*
+* LOGIN PAGE
+*
+*/
+
+.login-page {
+    background: #ffffff;
+    color: #F1F1F1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    bottom: 0;
+    top:0;
+    position: absolute;
+    /* background-image: linear-gradient(to bottom, #444444 0px, #000000 100%);*/
+}
+    .login-page .login-form {
+        background: #EDEDED;
+        color: #333333;
+        width: 351px;
+        margin: auto;
+        margin-top:30px;
+        border: #666666;
+        text-align: center;
+        position:relative;
+        border-radius: 10px;
+    }
+
+        .login-page .login-form .form-head,
+        .login-page .login-form form {
+            width: 300px;
+            margin: auto;
+        }
+        .login-page .login-form .form-head {
+            height: auto;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+            .login-page .login-form .form-head h3{
+                font-weight: 100;
+            }
+            .login-page .login-form .form-head .alert{
+                padding: 5px;
+            }
+        .login-page .login-form .info {
+            color:#999;
+            border-top: 1px solid #CCCCCC;
+            border-bottom: 1px solid #CCCCCC;
+            margin-bottom: 10px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+            .login-page .login-form .form-group .form-control {
+                padding-left: 25px;
+                width: 100%;
+            }
+    .login-page .help {
+        text-align:right;
+        padding-right: 27px;
+    }
+    .login-page .foot {
+        color:#999999;
+        bottom: 0;
+        border-top: 1px solid #CCCCCC;
+        margin-bottom: 5px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 15px;
+        /*position: absolute;*/
+    }
+
+/*
+*
+* GLOBAL LAYOUTS VIEW
+*
+*/
+    .user-settings {
+        display: none;
+        background-color: #313131;
+        border: 1px solid #CCCCCC;
+        width: 190px;
+        top: 52px;
+        position: absolute;
+        right: 5px;
+        z-index: 2;
+    }
+        .user-settings div{
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #CCCCCC;
+            position: relative;
+            height: 40px;
+        }
+        .user-settings > div:hover{
+            background-color: #F1F1F1;
+            cursor: pointer;
+        }
+            .user-settings div a{
+                line-height: 35px;
+                padding-left: 35px;
+                color: #333333;
+                display: inline-block;
+                width: 100%;
+            }
+            .user-settings div a:hover{
+                text-decoration: none;
+            }
+            .user-settings div span{
+                position: absolute;
+                left: 5px;
+                top: 11px;
+            }
+/*
+ *
+ *
+ * BODY
+ *
+ */
+/*
+ *      Side Menubar Left
+ */
+.sidebar {
+  display: block;
+  float: left;
+  background: #222930;
+  margin-top: 71px;
+}
+.content {
+  display: block;
+  overflow: hidden;
+  width: auto;
+}
+.sidebar-nav {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+
+}
+.sidebar-nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.sidebar-nav a, .sidebar-nav a:hover, .sidebar-nav a:focus, .sidebar-nav a:active {
+  outline: none;
+}
+.sidebar-nav ul li, .sidebar-nav ul a {
+  display: block;
+}
+.sidebar-nav ul a {
+  padding: 10px 20px;
+  color: #aaa;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.05) inset;
+  text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5);
+}
+.sidebar-nav ul a:hover, .sidebar-nav ul a:focus, .sidebar-nav ul a:active {
+  color: #fff;
+  text-decoration: none;
+}
+.sidebar-nav ul ul a {
+  padding: 10px 30px;
+  background-color: #222930;
+}
+.sidebar-nav ul ul a:hover, .sidebar-nav ul ul a:focus, .sidebar-nav ul ul a:active {
+  background-color: #DC3D24;
+}
+.sidebar-nav-item {
+  padding-left: 5px;
+}
+.sidebar-nav-item-icon {
+  padding-right: 5px;
+}
+#rtlh3 small {
+    transform: rotateY(180deg);
+    display: inline-block;
+}
+/*  Main area*/
+
+    .row .main {
+        margin-top: 71px;
+        overflow-y: auto;
+    }
+
+/*
+*
+* FOOTER
+*/
+.footer{
+    line-height : 50px;
+    height      : 50px;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+/*
+*
+* MODALS
+*/
+.modal-primary{
+    border-color: #428BCA;
+}
+    .modal-primary .modal-header{
+        color: #FFF;
+        background-color: #428BCA;
+        border-radius: 4px 4px 0 0;
+    }
+    .modal-primary .modal-header .close{
+        color: #FFF;
+        opacity: 0.8;
+    }
+    .modal-primary .modal-header .close:hover{
+        color: #FFF;
+        opacity: 1;
+    }
+
+/*
+*
+*   ERRORS PAGE (404)
+*
+*/
+.error-page {
+    text-align: center;
+    padding-top: 40px;
+}
+
+/**
+ *MEASURE VIEW
+ */
+.measurevalue .measure-input div
+{
+    border-bottom: 1px solid #D1D1D1;
+    padding:5px 0px;
+}
+.measure .col-md-3 .form-group .form-control
+{
+    width:100%;
+}
+
+/*
+* REJECT Specimen shading - Used on test-index view
+*/
+.table tbody tr.rejected td.rejected {
+    background: #FFCCCC;
+}
+
+/*
+*
+* Specimen and Test status separation - Used on test-index view
+*/
+.test-status div.row {
+    margin-bottom: 2px;
+}
+
+.row.less-gutter .col-md-11 {
+    padding-left:0;
+}
+.row.less-gutter .col-md-1 {
+    padding-right:0;
+}
+    .row.less-gutter .col-md-11 > span{
+        line-height: 30px;
+    }
+
+/*
+* Test list
+*/
+.test-list-row {
+  border-bottom: 1px solid #cecfd5;
+}
+
+
+/*
+* REPORTS PAGES
+*
+*/
+
+.report-filter .btn{
+    min-width: 125px;
+}
+.spacer {  margin-top: 20px; }
+
+/*Bordered-table - evade bootstrap's break on use or col & row spans*/
+table.table.report-table-border,
+table.table.report-table-border > thead > tr > th,
+table.table.report-table-border > tbody > tr > td{
+    border: 1px solid #DDDDDD;
+}
+/*Styling for barcode button*/
+.btn.btn-midnight-blue {
+    background-color: #2C3E50;
+    color: #ffffff;
+    -webkit-transition:all 0.5s ease;
+    -moz-transition:all 0.5s ease;
+    -o-transition:all 0.5s ease;
+    -ms-transition:all 0.5s ease;
+    transition:all 0.5s ease;
+}
+.btn.btn-midnight-blue:hover {
+    opacity: .8;
+}
+
+.stat_box {
+  padding: 10px;
+  position: relative;
+}
+.stat_box .stat_ico {
+  width: 48px;
+  height: 48px;
+  font-size: 32px;
+  color: #fff;
+  float: left;
+  text-align: center;
+  margin-right: 16px;
+  padding-top: 2px;
+}
+.stat_box .stat_content {
+  overflow: hidden;
+}
+.stat_box .stat_content .stat_name {
+  font-size: 11px;
+  display: block;
+  margin-top: 2px;
+  color: #888;
+}
+.stat_box .stat_content .stat_count {
+  font: 400 28px / 30px "Source Sans Pro", Arial, sans-serif;
+}
+.stat_box.stat_up:before,
+.stat_box.stat_down:before,
+.stat_box.stat_up:after,
+.stat_box.stat_down:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+}
+.stat_box.stat_up:after,
+.stat_box.stat_down:after {
+  width: 0;
+  height: 0;
+  right: 13px;
+  border: 9px solid transparent;
+}
+.stat_box.stat_up:before,
+.stat_box.stat_down:before {
+  width: 8px;
+  height: 5px;
+  right: 18px;
+}
+.stat_box.stat_up:after {
+  margin-top: -17px;
+  border-bottom-color: #64b92a;
+}
+.stat_box.stat_up:before {
+  margin-top: 2px;
+  background: #64b92a;
+}
+.stat_box.stat_down:after {
+  margin-top: -1px;
+  border-top-color: #c0392b;
+}
+.stat_box.stat_down:before {
+  margin-top: -7px;
+  background: #c0392b;
+}
+
+.stat_overview {
+  margin-bottom: 30px;
+}
+.stat_overview h3 {
+  margin-top: 0;
+}
+.stat_overview .stat_col,
+.stat_overview .stat_col hr {
+  margin: 10px 0;
+}
+.stat_overview .stat_col .label {
+  vertical-align: 1px;
+}
+
+.nav-header-h4{
+    color: #FFF;
+}
+
+.navbar .top_links > li > a {
+  background: #2487c9;
+  font-size: 10px;
+  display: block;
+  padding-right: 8px;
+  text-transform: uppercase;
+  color: #fff;
+
+}
+
+.navbar .top_links > li > a span {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 8px;
+  margin-right: 8px;
+  line-height: 22px;
+  background: #185b88;
+}
+.navbar .top_links > li > a:hover,
+.navbar .top_links > li > a:focus {
+  background: #2487c9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.tinynav {
+    display: none;
+  }
+
+  .stat_box .stat_content .stat_count {
+    font: 400 18px / 20px "Source Sans Pro", Arial, sans-serif;
+}
+
+.small-font
+{
+  font-size: 10.5px;
+}
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
+}

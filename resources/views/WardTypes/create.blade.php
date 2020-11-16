@@ -1,0 +1,1 @@
+/Users/simon/projects/METS/alis/iBLIS_UGANDA/app/views/WardTypes/create.blade.php
