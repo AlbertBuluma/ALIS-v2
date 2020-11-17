@@ -1,12 +1,15 @@
 <?php
 
-use Zizaco\Entrust\EntrustRole;
+namespace  App\Models;
 
-class Role extends EntrustRole
+use Spatie\Permission\Models\Role as SpatieRole;
+
+
+class Role extends SpatieRole
 {
     /**
     * Function for getting the admin role, currently the first user
-    *  
+    *
     */
     public static function getAdminRole()
     {
