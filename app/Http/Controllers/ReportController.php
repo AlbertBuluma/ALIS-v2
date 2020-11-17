@@ -31,7 +31,7 @@ use DateTime;
 
 set_time_limit(0); //60 seconds = 1 minute
 
-class ReportController extends BaseController {
+class ReportController extends Controller {
 
 	//	Begin patient report functions
 	/**
