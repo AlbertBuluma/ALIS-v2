@@ -1,15 +1,19 @@
 <?php
 namespace App\Http\Controllers;
 
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\User;
-use Hash;
 
 //Importing laravel-permission models
 use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 
 /**
@@ -58,7 +62,7 @@ class UserController extends Controller {
     /**
      * Display a listing of the users.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -72,7 +76,7 @@ class UserController extends Controller {
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
@@ -83,9 +87,10 @@ class UserController extends Controller {
     /**
      * Store a newly created resource in storage.
      *
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store()
+    public function store(Request $request)
     {
         //
         $rules = array(
@@ -94,23 +99,23 @@ class UserController extends Controller {
             'full_name' => 'required',
             //'email' => 'required|email'
         );
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
         // process the login
         if ($validator->fails()) {
             return redirect()->route('user.create')
                 ->withErrors($validator)
-                ->withInput(Input::except('password'));
+                ->withInput($request->except('password'));
         } else {
             // store
             $user = new User;
-            $user->username = Input::get('username');
-            $user->name = Input::get('full_name');
-            $user->gender = Input::get('gender');
-            $user->phone_contact = Input::get('phone_contact');
-            $user->designation = Input::get('designation');
-            $user->email = Input::get('email');
-            $user->password = Hash::make(Input::get('password'));
+            $user->username = $request->get('username');
+            $user->name = $request->get('full_name');
+            $user->gender = $request->get('gender');
+            $user->phone_contact = $request->get('phone_contact');
+            $user->designation = $request->get('designation');
+            $user->email = $request->get('email');
+            $user->password = Hash::make($request->get('password'));
             // todo this facility id has to be removed from here since the system is local
             // leaving it here because of dependencies
             $user->facility_id = 1;
@@ -118,13 +123,13 @@ class UserController extends Controller {
             $user->save();
             $id = $user->id;
 
-            if (Input::hasFile('image')) {
+            if ($request->hasFile('image')) {
                 try {
-                    $extension = Input::file('image')->getClientOriginalExtension();
+                    $extension = $request->file('image')->getClientOriginalExtension();
                     $destination = public_path().'/i/users/';
                     $filename = "user-$id.$extension";
 
-                    $file = Input::file('image')->move($destination, $filename);
+                    $file = $request->file('image')->move($destination, $filename);
                     $user->image = "/i/users/$filename";
 
                 } catch (Exception $e) {}
