@@ -5,6 +5,8 @@ namespace  App\Models;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 class UnhlsPatient extends Model
 {
@@ -160,7 +162,7 @@ class UnhlsPatient extends Model
 	*/
 	public function getFacilityCode()
 	{
-		$facilityCode =\Config::get('constants.FACILITY_CODE');
+		$facilityCode = config('constants.FACILITY_CODE');
 		return $facilityCode;
 
 	}
