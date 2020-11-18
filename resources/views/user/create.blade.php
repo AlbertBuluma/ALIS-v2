@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{ URL::route('user.index') }}">{{ Lang::choice('messages.user', 1) }}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{ route('user.index') }}">{{ Lang::choice('messages.user', 1) }}</a></li>
 		  <li class="active">{{ trans('messages.create-user') }}</li>
 		</ol>
 	</div>
@@ -25,7 +25,7 @@
 
 				<div class="form-group">
 					{{ Form::label('username', trans('messages.username')) }}
-					{{ Form::text('username', Input::old('username'), ['class' => 'form-control']) }}
+					{{ Form::text('username', old('username'), ['class' => 'form-control']) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('password', Lang::choice('messages.password',1)) }}
@@ -34,22 +34,22 @@
 				<div class="form-group">
 					{{ Form::label('password_confirmation', trans('messages.repeat-password')) }}
 					{{ Form::password('password_confirmation', ['class' => 'form-control']) }}
-				</div>
+
 				<div class="form-group">
 					{{ Form::label('full_name', trans('messages.full-name')) }}
-					{{ Form::text('full_name', Input::old('full_name'), ['class' => 'form-control']) }}
+					{{ Form::text('full_name', old('full_name'), ['class' => 'form-control']) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('email', trans('messages.email-address')) }}
-					{{ Form::email('email', Input::old('email'), ['class' => 'form-control']) }}
+					{{ Form::email('email', old('email'), ['class' => 'form-control']) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('phone_contact', 'Phone Contact') }}
-					{{ Form::text('phone_contact', Input::old('phone_contact'), ['class' => 'form-control']) }}
+					{{ Form::text('phone_contact', old('phone_contact'), ['class' => 'form-control']) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('designation', trans('messages.designation')) }}
-					{{ Form::text('designation', Input::old('designation'), ['class' => 'form-control']) }}
+					{{ Form::text('designation', old('designation'), ['class' => 'form-control']) }}
 				</div>
                 <div class="form-group">
                     {{ Form::label('gender', trans('messages.gender')) }}
