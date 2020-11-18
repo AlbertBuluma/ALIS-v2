@@ -8,7 +8,6 @@ use App\User;
 
 //Importing laravel-permission models
 use App\Models\Role;
-use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -152,7 +151,7 @@ class UserController extends Controller {
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
@@ -167,7 +166,7 @@ class UserController extends Controller {
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
@@ -181,10 +180,11 @@ class UserController extends Controller {
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($id)
+    public function update(Request $request, $id)
     {
         //
         $rules = array(
@@ -193,34 +193,34 @@ class UserController extends Controller {
             'image' => 'image|max:500'
         );
 
-        if (Input::get('reset-password')) {
+        if ($request->get('reset-password')) {
             $rules['reset-password'] = 'min:6';
         }
 
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
         // process the login
         if ($validator->fails()) {
             return redirect()->route('user.edit', array($id))
                 ->withErrors($validator)
-                ->withInput(Input::except('password'));
+                ->withInput($request->except('password'));
         } else {
-            // Update
+            //$request->
             $user = User::find($id);
-            $user->username = Input::get('username');
-            $user->name = Input::get('full_name');
-            $user->gender = Input::get('gender');
-            $user->phone_contact = Input::get('phone_contact');
-            $user->designation = Input::get('designation');
-            $user->email = Input::get('email');
+            $user->username = $request->get('username');
+            $user->name = $request->get('full_name');
+            $user->gender = $request->get('gender');
+            $user->phone_contact = $request->get('phone_contact');
+            $user->designation = $request->get('designation');
+            $user->email = $request->get('email');
 
-            if (Input::hasFile('image')) {
+            if ($request->hasFile('image')) {
                 try {
-                    $extension = Input::file('image')->getClientOriginalExtension();
+                    $extension = $request->file('image')->getClientOriginalExtension();
                     $destination = public_path().'/i/users/';
                     $filename = "user-$id.$extension";
 
-                    $file = Input::file('image')->move($destination, $filename);
+                    $file = $request->file('image')->move($destination, $filename);
                     $user->image = "/i/users/$filename";
 
                 } catch (Exception $e) {
@@ -229,8 +229,8 @@ class UserController extends Controller {
             }
 
             //Resetting passwords - by the administrator
-            if (Input::get('reset-password')) {
-                $user->password = Hash::make(Input::get('reset-password'));
+            if ($request->get('reset-password')) {
+                $user->password = Hash::make($request->get('reset-password'));
             }
 
             $user->save();
@@ -238,17 +238,18 @@ class UserController extends Controller {
             // redirect
             $url = Session::get('SOURCE_URL');
 
-            return Redirect::to($url)->with('message', trans('messages.user-profile-edit-success')) ->with('activeuser', $user ->id);
+            return redirect($url)->with('message', trans('messages.user-profile-edit-success')) ->with('activeuser', $user ->id);
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateOwnPassword($id)
+    public function updateOwnPassword(Request $request, $id)
     {
         //
         $rules = array(
@@ -256,7 +257,7 @@ class UserController extends Controller {
             'new_password'  => 'confirmed|required|min:6',
         );
 
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
         // process the login
         if ($validator->fails()) {
@@ -265,9 +266,9 @@ class UserController extends Controller {
             // Update
             $user = User::find($id);
             // change password if parameters were entered (changing ones own password)
-            if (Hash::check(Input::get('current_password'), $user->password))
+            if (Hash::check($request->get('current_password'), $user->password))
             {
-                $user->password = Hash::make(Input::get('new_password'));
+                $user->password = Hash::make($request->get('new_password'));
             }else{
                 return redirect()->route('user.edit', array($id))
                         ->withErrors(trans('messages.incorrect-current-passord'));
@@ -279,7 +280,7 @@ class UserController extends Controller {
         // redirect
         $url = Session::get('SOURCE_URL');
 
-        return Redirect::to($url)->with('message', trans('messages.user-profile-edit-success'));
+        return redirect($url)->with('message', trans('messages.user-profile-edit-success'));
     }
 
     /**
@@ -297,7 +298,7 @@ class UserController extends Controller {
      * Remove the specified resource from storage (soft delete).
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function delete($id)
     {
@@ -309,6 +310,6 @@ class UserController extends Controller {
         // redirect
         $url = Session::get('SOURCE_URL');
 
-        return Redirect::to($url)->with('message', trans('messages.success-deleting-user'));
+        return redirect($url)->with('message', trans('messages.success-deleting-user'));
     }
 }
