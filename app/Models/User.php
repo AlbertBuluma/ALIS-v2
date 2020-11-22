@@ -228,7 +228,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	public function facility()
 	{
-		return $this->belongsTo('UNHLSFacility', 'facility_id', 'id');
+		return $this->belongsTo('App\Models\UNHLSFacility', 'facility_id', 'id');
 	}
 
 }
