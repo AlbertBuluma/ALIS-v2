@@ -20,7 +20,7 @@ class GramStainResult extends Model
      */
     public function test()
     {
-      return $this->belongsTo('UnhlsTest','test_id','id');
+      return $this->belongsTo('App\Models\UnhlsTest','test_id','id');
     }
 
     /**
@@ -28,6 +28,6 @@ class GramStainResult extends Model
      */
     public function gramStainRange()
     {
-      return $this->belongsTo('GramStainRange');
+      return $this->belongsTo('App\Models\GramStainRange');
     }
 }

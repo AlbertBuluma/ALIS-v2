@@ -37,7 +37,7 @@ class MeasureRange extends Model
 	 */
 	public function measure()
 	{
-	  return $this->belongsTo('Measure');
+	  return $this->belongsTo('App\Models\Measure');
 	}
 
 	/**
@@ -45,6 +45,6 @@ class MeasureRange extends Model
 	 */
 	public function resultInterpretation()
 	{
-	  return $this->belongsTo('ResultInterpretation');
+	  return $this->belongsTo('App\Models\ResultInterpretation');
 	}
 }

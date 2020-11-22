@@ -33,7 +33,7 @@ class UnhlsPatient extends Model
 	 */
     public function visits()
     {
-        return $this->hasMany('UnhlsVisit');
+        return $this->hasMany('App\Models\UnhlsVisit');
     }
 
 

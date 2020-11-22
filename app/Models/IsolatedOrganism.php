@@ -15,15 +15,15 @@ class IsolatedOrganism extends Model
 
 	public function test()
 	{
-		return $this->belongsTo('UnhlsTest', 'test_id');
+		return $this->belongsTo('App\Models\UnhlsTest', 'test_id');
 	}
 
 	public function organism()
 	{
-		return $this->belongsTo('Organism');
+		return $this->belongsTo('App\Models\Organism');
 	}
 	public function drugSusceptibilities()
 	{
-		return $this->hasMany('DrugSusceptibility','isolated_organism_id');
+		return $this->hasMany('App\Models\DrugSusceptibility','isolated_organism_id');
 	}
 }

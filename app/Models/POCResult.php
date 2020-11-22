@@ -10,7 +10,7 @@ class POCResult extends Model {
 	protected $table = 'poc_results';
 
 	public function poc(){
-		return $this->belongsTo('POC', 'patient_id');
+		return $this->belongsTo('App\Models\POC', 'patient_id');
 	}
 
 }

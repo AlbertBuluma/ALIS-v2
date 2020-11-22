@@ -2,12 +2,15 @@
 
 namespace  App\Models;
 
+use DateInterval;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use PHPUnit\Framework\TestResult;
 
 class TestType extends Model
 {
@@ -31,7 +34,7 @@ class TestType extends Model
 	 */
 	public function testCategory()
 	{
-	  return $this->belongsTo('TestCategory', 'test_category_id');
+	  return $this->belongsTo('App\Models\TestCategory', 'test_category_id');
 	}
 
 	/**
@@ -39,7 +42,7 @@ class TestType extends Model
 	 */
 	public function specimenTypes()
 	{
-	  return $this->belongsToMany('SpecimenType', 'testtype_specimentypes');
+	  return $this->belongsToMany('App\Models\SpecimenType', 'testtype_specimentypes');
 	}
 
 	/**
@@ -47,7 +50,7 @@ class TestType extends Model
 	 */
 	public function measures()
 	{
-	  return $this->belongsToMany('Measure', 'testtype_measures');
+	  return $this->belongsToMany('App\Models\Measure', 'testtype_measures');
 	}
 
 	/**
@@ -55,7 +58,7 @@ class TestType extends Model
 	 */
     public function tests()
     {
-        return $this->hasMany('UnhlsTest', 'test_type_id');
+        return $this->hasMany('App\Models\UnhlsTest', 'test_type_id');
     }
 
 	/**
@@ -63,7 +66,7 @@ class TestType extends Model
 	 */
 	public function instruments()
 	{
-	  return $this->belongsToMany('Instrument', 'instrument_testtypes');
+	  return $this->belongsToMany('App\Models\Instrument', 'instrument_testtypes');
 	}
 
 	/**
@@ -453,6 +456,6 @@ class TestType extends Model
 
     public function testNameMapping()
     {
-        return $this->hasOne('TestNameMapping');
+        return $this->hasOne('App\Models\TestNameMapping');
     }
 }

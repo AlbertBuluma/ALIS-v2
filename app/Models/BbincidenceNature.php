@@ -23,7 +23,7 @@ class BbincidenceNature extends Model
 
 	public function bbincidence()
 	{
-		return $this->belongsToMany('Bbincidence', 'unhls_bbincidences_nature', 'nature_id', 'bbincidence_id');
+		return $this->belongsToMany('App\Models\Bbincidence', 'unhls_bbincidences_nature', 'nature_id', 'bbincidence_id');
 	}
 
 

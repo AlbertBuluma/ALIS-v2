@@ -26,7 +26,7 @@ class UnhlsTestResult extends Model
 	 */
 	public function test()
 	{
-		return $this->belongsTo('UnhlsTest', 'test_id');
+		return $this->belongsTo('App\Models\UnhlsTest', 'test_id');
 	}
 	/*
 	* Counts for microbiology - count organisms per specimen type
@@ -50,6 +50,6 @@ class UnhlsTestResult extends Model
 	*/
 	public function measure()
 	{
-		return $this->belongsTo('Measure');
+		return $this->belongsTo('App\Models\Measure');
 	}
 }

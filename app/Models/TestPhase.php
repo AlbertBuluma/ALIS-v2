@@ -27,7 +27,7 @@ class TestPhase extends Model
 	 */
     public function testStatuses()
     {
-        return $this->hasMany('TestStatus');
+        return $this->hasMany('App\Models\TestStatus');
     }
 
 }

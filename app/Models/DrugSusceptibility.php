@@ -15,16 +15,16 @@ class DrugSusceptibility extends Model
 
 	public function isolatedOrganism()
 	{
-		return $this->belongsTo('IsolatedOrganism');
+		return $this->belongsTo('App\Models\IsolatedOrganism');
 	}
 
 	public function drug()
 	{
-		return $this->belongsTo('Drug');
+		return $this->belongsTo('App\Models\Drug');
 	}
 
 	public function drugSusceptibilityMeasure()
 	{
-		return $this->belongsTo('DrugSusceptibilityMeasure');
+		return $this->belongsTo('App\Models\DrugSusceptibilityMeasure');
 	}
 }

@@ -2,14 +2,13 @@
 
 namespace  App\Models;
 
-use Illuminate\Auth\UserInterface;
 //use Zizaco\Entrust\HasRole;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Contracts\Auth\Access\Authorizable;
+use Spatie\Permission\Models\Role;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -17,7 +16,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 //class User extends Model implements UserInterface, RemindableInterface {
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract, Authorizable {
 
     use SoftDeletes;
 	use HasRoles;
@@ -76,11 +75,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->remember_token;
 	}
 
-	/**
-	 * Set the token value for the "remember me" session.
-	 *
-	 * @return void
-	 */
+    /**
+     * Set the token value for the "remember me" session.
+     *
+     * @param $value
+     * @return void
+     */
 	public function setRememberToken($value)
 	{
 		$this->remember_token = $value;
@@ -116,11 +116,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return User::find(1);
 	}
 
-	/**
-	 * Get the summary user statistics
-	 *
-	 * @return db resultset
-	 */
+    public static function getAdminRole()
+    {
+        return Role::find(1);
+    }
+
+    /**
+     * Get the summary user statistics
+     *
+     * @param $from
+     * @param $to
+     * @param int $userID
+     * @return db resultset
+     */
 	public static function getSummaryUserStatistics($from, $to, $userID=0)
 	{
 
@@ -159,11 +167,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $data;
 	}
 
-	/**
-	 * Get the patients registered by a user
-	 *
-	 * @return db resultset
-	 */
+    /**
+     * Get the patients registered by a user
+     *
+     * @param $from
+     * @param $to
+     * @param int $userID
+     * @return db resultset
+     */
 	public static function getPatientsRegistered($from, $to, $userID=0)
 	{
 
@@ -175,11 +186,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $patients->get();
 	}
 
-	/**
-	 * Get the specimen registered by a user
-	 *
-	 * @return db resultset
-	 */
+    /**
+     * Get the specimen registered by a user
+     *
+     * @param $from
+     * @param $to
+     * @param int $userID
+     * @return db resultset
+     */
 	public static function getSpecimensRegistered($from, $to, $userID=0)
 	{
 
@@ -191,11 +205,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $specimens->get();
 	}
 
-	/**
-	 * Get the tests registered by a user
-	 *
-	 * @return db resultset
-	 */
+    /**
+     * Get the tests registered by a user
+     *
+     * @param $from
+     * @param $to
+     * @param int $userID
+     * @return db resultset
+     */
 	public static function getTestsRegistered($from, $to, $userID=0)
 	{
 
@@ -207,11 +224,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $tests->get();
 	}
 
-	/**
-	 * Get the tests performed by a user
-	 *
-	 * @return db resultset
-	 */
+    /**
+     * Get the tests performed by a user
+     *
+     * @param $from
+     * @param $to
+     * @param int $userID
+     * @return db resultset
+     */
 	public static function getTestsPerformed($from, $to, $userID=0)
 	{
 
@@ -231,4 +251,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->belongsTo('App\Models\UNHLSFacility', 'facility_id', 'id');
 	}
 
+    public function can($ability, $arguments = [])
+    {
+        // TODO: Implement can() method.
+    }
 }

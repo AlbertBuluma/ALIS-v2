@@ -21,7 +21,7 @@ class Therapy extends Model
 	*/
 	public function clinicianLink()
 	{
-		return $this->belongsTo('Clinician','clinician_id');
+		return $this->belongsTo('App\Models\Clinician','clinician_id');
 	}
 
 

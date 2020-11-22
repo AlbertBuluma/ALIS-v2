@@ -24,6 +24,6 @@ class ReferralReason extends Model {
 	 */
 	public function specimen()
 	{
-		return $this->hasMany('Specimen');
+		return $this->hasMany('App\Models\Specimen');
 	}
 }

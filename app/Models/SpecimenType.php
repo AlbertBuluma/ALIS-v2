@@ -29,7 +29,7 @@ class SpecimenType extends Model
 	 */
 	public function testTypes()
 	{
-	  return $this->belongsToMany('TestType', 'testtype_specimentypes');
+	  return $this->belongsToMany('App\Models\TestType', 'testtype_specimentypes');
 	}
 
 	/**
@@ -37,7 +37,7 @@ class SpecimenType extends Model
 	 */
 	public function specimen()
 	{
-	  return $this->hasMany('UnhlsSpecimen');
+	  return $this->hasMany('App\Models\UnhlsSpecimen');
 	}
 	/**
 	* Return the counts for a specimen type given the specimen_status_id, and date range for ungrouped specimen

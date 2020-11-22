@@ -24,7 +24,7 @@ class Control extends Model {
 	 */
 	public function controlMeasures()
 	{
-	  return $this->hasMany('ControlMeasure');
+	  return $this->hasMany('App\Models\ControlMeasure');
 	}
 
 	/**
@@ -32,7 +32,7 @@ class Control extends Model {
 	*/
 	public function controlTests()
 	{
-		return $this->hasMany('ControlTest');
+		return $this->hasMany('App\Models\ControlTest');
 	}
 
 	/**
@@ -40,6 +40,6 @@ class Control extends Model {
 	*/
 	public function lot()
 	{
-		return $this->belongsTo('Lot');
+		return $this->belongsTo('App\Models\Lot');
 	}
 }

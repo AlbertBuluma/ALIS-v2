@@ -27,16 +27,16 @@ class ResultInterpretation extends Model
 
     public function dailyOrganismCounts()
     {
-      return $this->hasMany('DailyOrganismCount');
+      return $this->hasMany('App\Models\DailyOrganismCount');
     }
 
     public function dailyNumericRangeCounts()
     {
-      return $this->hasMany('DailyNumericRangeCount');
+      return $this->hasMany('App\Models\DailyNumericRangeCount');
     }
 
     public function dailyAlphanumericCounts()
     {
-      return $this->hasMany('DailyAlphanumericCount');
+      return $this->hasMany('App\Models\DailyAlphanumericCount');
     }
 }

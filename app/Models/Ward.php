@@ -22,7 +22,7 @@ class Ward extends Model
 	*/
 	public function wardType()
 	{
-		return $this->belongsTo('WardType','ward_type_id');
+		return $this->belongsTo('App\Models\WardType','ward_type_id');
 	}
 
 	public function getWardType()

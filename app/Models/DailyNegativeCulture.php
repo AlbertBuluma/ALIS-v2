@@ -11,6 +11,6 @@ class DailyNegativeCulture extends Model
 
     public function organism()
     {
-      return $this->belongsTo('Organism');
+      return $this->belongsTo('App\Models\Organism');
     }
 }

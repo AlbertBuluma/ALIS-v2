@@ -2,7 +2,9 @@
 
 namespace  App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
 class Instrument extends Model
@@ -19,7 +21,7 @@ class Instrument extends Model
 	 */
 	public function testTypes()
 	{
-	  return $this->belongsToMany('TestType', 'instrument_testtypes');
+	  return $this->belongsToMany('App\Models\TestType', 'instrument_testtypes');
 	}
 
 	/**

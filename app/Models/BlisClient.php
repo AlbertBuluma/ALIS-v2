@@ -36,7 +36,7 @@ class BlisClient extends Model
 	 */
 	public function testCategory()
 	{
-		return $this->belongsTo('TestCategory', 'lab_section');
+		return $this->belongsTo('App\Models\TestCategory', 'lab_section');
 	}
 	/**
 	 * Get feed source

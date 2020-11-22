@@ -28,7 +28,7 @@ class TestCategory extends Model
 	 *
 	 */
 	public function testTypes(){
-         return $this->hasMany('TestType', 'test_category_id');
+         return $this->hasMany('App\Models\TestType', 'test_category_id');
       }
     /**
 	* Given the test category name we return the test category ID

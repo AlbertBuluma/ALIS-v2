@@ -11,16 +11,16 @@ class UNHLSSetting extends Model
 
 	public function district()
 	{
-		return $this->belongsTo('District');
+		return $this->belongsTo('App\Models\District');
 	}
 
 	public function facility()
 	{
-		return $this->belongsTo('UNHLSFacility');
+		return $this->belongsTo('App\Models\UNHLSFacility');
 	}
 
 	public function year()
 	{
-		return $this->belongsTo('UNHLSFinancialYear');
+		return $this->belongsTo('App\Models\UNHLSFinancialYear');
 	}
 }

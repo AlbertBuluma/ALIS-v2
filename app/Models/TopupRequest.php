@@ -17,14 +17,14 @@ class TopupRequest extends Model {
 	*/
 	public function commodity()
 	{
-		return $this->belongsTo('Commodity');
+		return $this->belongsTo('App\Models\Commodity');
 	}
 
 	/**
 	* Relationship between commodity and the user who handled it
 	*/
 	public function user(){
-		return $this->belongsTo('user');
+		return $this->belongsTo('App\Models\User');
 	}
 
 	/**
@@ -32,6 +32,6 @@ class TopupRequest extends Model {
 	 */
 	public function section()
 	{
-		return $this->belongsTo('TestCategory', 'test_category_id');
+		return $this->belongsTo('App\Models\TestCategory', 'test_category_id');
 	}
 }

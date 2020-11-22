@@ -20,7 +20,7 @@ class RejectionReason extends Model
 	 */
 	public function tests()
 	{
-		return $this->hasMany('AnalyticSpecimenRejection', 'test_id');
+		return $this->hasMany('App\Models\AnalyticSpecimenRejection', 'test_id');
 	}
 
 	/**
@@ -28,7 +28,7 @@ class RejectionReason extends Model
 	 */
 	public function specimens()
 	{
-		return $this->hasMany('PreAnalyticSpecimenRejection', 'specimen_id');
+		return $this->hasMany('App\Models\PreAnalyticSpecimenRejection', 'specimen_id');
 	}
 
 }

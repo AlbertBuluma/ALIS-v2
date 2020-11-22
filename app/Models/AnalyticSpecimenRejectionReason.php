@@ -1,6 +1,6 @@
 <?php
 
-class AnalyticSpecimenRejectionReason extends Eloquent 
+class AnalyticSpecimenRejectionReason extends Eloquent
 {
 	/**
 	 * The database table used by the model.
@@ -17,7 +17,7 @@ class AnalyticSpecimenRejectionReason extends Eloquent
 
 	public function analyticSpecimenRejection()
 	{
-		return $this->belongsTo('AnalyticSpecimenRejection');
+		return $this->belongsTo('App\Models\AnalyticSpecimenRejection');
 	}
 
 	/**
@@ -25,6 +25,6 @@ class AnalyticSpecimenRejectionReason extends Eloquent
 	 */
 	public function rejectionReason()
 	{
-		return $this->belongsTo('RejectionReason');
+		return $this->belongsTo('App\Models\RejectionReason');
 	}
 }

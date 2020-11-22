@@ -20,6 +20,6 @@ class DailyTurnAroundTime extends Model
      */
     public function dailyTestCount()
     {
-      return $this->belongsTo('DailyTestCount');
+      return $this->belongsTo('App\Models\DailyTestCount');
     }
 }

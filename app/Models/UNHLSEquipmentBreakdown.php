@@ -12,7 +12,7 @@ class UNHLSEquipmentBreakdown extends Model
 
 	public function equipment()
 	{
-		return $this->belongsTo('UNHLSEquipmentInventory');
+		return $this->belongsTo('App\Models\UNHLSEquipmentInventory');
 	}
 
 	public function staff($id)

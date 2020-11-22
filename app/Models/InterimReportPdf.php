@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 class InterimReportPdf extends TCPDF {
 	var $test_request_information=[];
 
@@ -14,7 +16,7 @@ class InterimReportPdf extends TCPDF {
 
 		$this->writeHTML(View::make('interimReportHeader',$this->getTestRequestInformation()), true, false, true, false, '');
 		$this->SetMargins(PDF_MARGIN_LEFT, 80, PDF_MARGIN_RIGHT);
-		
+
 	}
 
 	Public function Footer(){

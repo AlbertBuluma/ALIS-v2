@@ -15,6 +15,6 @@ class CultureObservation extends Model
 
 	public function test()
 	{
-		return $this->belongsTo('UnhlsTest','test_id');
+		return $this->belongsTo('App\Models\UnhlsTest','test_id');
 	}
 }

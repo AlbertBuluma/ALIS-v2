@@ -20,7 +20,7 @@ class PreAnalyticSpecimenRejection extends Model
 	 */
 	public function specimen()
 	{
-		return $this->belongsTo('UnhlsSpecimen');
+		return $this->belongsTo('App\Models\UnhlsSpecimen');
 	}
 
 	/**
@@ -28,6 +28,6 @@ class PreAnalyticSpecimenRejection extends Model
 	 */
 	public function rejectedBy()
 	{
-		return $this->belongsTo('User', 'rejected_by', 'id');
+		return $this->belongsTo('App\Models\User', 'rejected_by', 'id');
 	}
 }

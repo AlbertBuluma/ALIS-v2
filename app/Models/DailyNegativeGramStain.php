@@ -12,6 +12,6 @@ class DailyNegativeGramStain extends Model
 
     public function gramStainRange()
     {
-      return $this->belongsTo('GramStainRange');
+      return $this->belongsTo('App\Models\GramStainRange');
     }
 }

@@ -21,7 +21,7 @@ class Receipt extends Model
 	*/
 	public function commodity()
 	{
-		return $this->belongsTo('Commodity');
+		return $this->belongsTo('App\Models\Commodity');
 	}
 
 	/**
@@ -29,7 +29,7 @@ class Receipt extends Model
 	*/
 	public function supplier()
 	{
-		return $this->belongsTo('Supplier');
+		return $this->belongsTo('App\Models\Supplier');
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Receipt extends Model
 	*/
 	public function user()
 	{
-		return $this->belongsTo('User');
+		return $this->belongsTo('App\Models\User');
 	}
 
 	public static function getIssuedCommodities($from, $to){

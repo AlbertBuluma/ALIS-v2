@@ -12,12 +12,12 @@ class UNHLSEquipmentMaintenance extends Model
 
 	public function equipment()
 	{
-		return $this->belongsTo('UNHLSEquipmentInventory');
+		return $this->belongsTo('App\Models\UNHLSEquipmentInventory');
 	}
 
 	public function supplier()
 	{
-		return $this->belongsTo('UNHLSEquipmentSupplier');
+		return $this->belongsTo('App\Models\UNHLSEquipmentSupplier');
 	}
 
 }

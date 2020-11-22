@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 class PermissionController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
 		$permissions = Permission::all();
 		$roles = Role::all();
 		$permissionsRolesData = array('permissions' => $permissions,'roles' => $roles,);
-		return View::make('permission.index', $permissionsRolesData);
+		return view('permission.index', $permissionsRolesData);
 	}
 
 
@@ -29,14 +33,15 @@ class PermissionController extends Controller {
 	}
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function store(Request $request)
 	{
-		$arrayPermissionRoleMapping = Input::get('permissionRoles');
+		$arrayPermissionRoleMapping = $request->get('permissionRoles');
 		$permissions = Permission::all();
 		$roles = Role::all();
 
@@ -45,61 +50,67 @@ class PermissionController extends Controller {
 				//If checkbox is clicked attach the permission
 				if(!empty($arrayPermissionRoleMapping[$permissionkey][$roleKey]))
 				{
-					$role->attachPermission($permission);
+//					$role->attachPermission($permission);
+					$role->givePermissionTo($permission);
 				}
 				//If checkbox is NOT clicked detatch the permission
 				elseif (empty($arrayPermissionRoleMapping[$permissionkey][$roleKey])) {
-					$role->detachPermission($permission);
+//					$role->detachPermission($permission);
+					$role->revokePermissionTo($permission);
 				}
 			}
 		}
-		return Redirect::route('permission.index')->with('message', trans('messages.success-updating-permission'));
+		return redirect('permission.index')->with('message', trans('messages.success-updating-permission'));
 	}
 
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return void
+     */
+	public function show(Request $request, $id)
 	{
 		//
 	}
 
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return void
+     */
+	public function edit(Request $request, $id)
 	{
 		//
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return void
+     */
+	public function update(Request $request, $id)
 	{
 		//
 	}
 
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return void
+     */
+	public function destroy(Request $request, $id)
 	{
 		//
 	}

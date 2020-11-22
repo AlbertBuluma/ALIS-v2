@@ -20,6 +20,6 @@ class GramStainRange extends Model
      */
     public function gramStainResult()
     {
-      return $this->hasMany('GramStainResults');
+      return $this->hasMany('App\Models\GramStainResults');
     }
 }

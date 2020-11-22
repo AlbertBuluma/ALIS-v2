@@ -2,6 +2,8 @@
 
 namespace  App\Models;
 
+use Illuminate\Support\Facades\Auth;
+
 class FinalReportPdf extends TCPDF {
 	var $test_request_information=[];
 

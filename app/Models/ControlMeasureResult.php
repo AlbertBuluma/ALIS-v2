@@ -11,20 +11,20 @@ class ControlMeasureResult extends Model {
 	/**
 	* Relationship between result and measure
 	*
-	* @return relationship
+	* @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	*/
 	public function controlMeasure()
 	{
-		return $this->belongsTo('ControlMeasure', 'control_measure_id');
+		return $this->belongsTo('App\Models\ControlMeasure', 'control_measure_id');
 	}
 
 	/**
 	* Relationship between result and test
 	*
-	* @return relationship
+	* @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	*/
 	public function controlTests()
 	{
-		return $this->belongsTo('controlTest', 'control_test_id');
+		return $this->belongsTo('App\Models\ControlTest', 'control_test_id');
 	}
 }

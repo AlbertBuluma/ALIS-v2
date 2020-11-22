@@ -17,11 +17,11 @@ class TestNameMapping extends Model
 
     public function testType()
     {
-      return $this->belongsTo('TestType');
+      return $this->belongsTo('App\Models\TestType');
     }
 
     public function measureNameMappings()
     {
-      return $this->hasMany('MeasureNameMapping');
+      return $this->hasMany('App\Models\MeasureNameMapping');
     }
 }

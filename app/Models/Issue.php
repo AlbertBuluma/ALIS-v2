@@ -1,5 +1,7 @@
 <?php
 
+namespace  App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +22,7 @@ class Issue extends Model
 	*/
 	public function topupRequest()
 	{
-		return $this->belongsTo('TopupRequest');
+		return $this->belongsTo('App\Models\TopupRequest');
 	}
 
 	/**
@@ -28,7 +30,7 @@ class Issue extends Model
 	* the items
 	*/
 	public function receiver(){
-		return $this->belongsTo('user', 'issued_to');
+		return $this->belongsTo('App\Models\User', 'issued_to');
 	}
 
 	/**
@@ -36,7 +38,7 @@ class Issue extends Model
 	*/
 	public function user()
 	{
-		return $this->belongsTo('User');
+		return $this->belongsTo('App\Models\User');
 	}
 
 	/**
@@ -44,7 +46,7 @@ class Issue extends Model
 	*/
 	public function receipt()
 	{
-		return $this->belongsTo('Receipt');
+		return $this->belongsTo('App\Models\Receipt');
 	}
 
 }

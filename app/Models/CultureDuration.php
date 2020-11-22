@@ -1,6 +1,10 @@
 <?php
 
-class CultureDuration extends Eloquent
+namespace  App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class CultureDuration extends Model
 {
 	/**
 	 * The database table used by the model.

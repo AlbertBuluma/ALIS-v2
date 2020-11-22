@@ -20,7 +20,7 @@ class TestStatus extends Model
 	 */
     public function tests()
     {
-        return $this->hasMany('Test');
+        return $this->hasMany('App\Models\Test');
     }
 
 	/**
@@ -28,6 +28,6 @@ class TestStatus extends Model
 	 */
 	public function testPhase()
 	{
-		return $this->belongsTo('TestPhase');
+		return $this->belongsTo('App\Models\TestPhase');
 	}
 }

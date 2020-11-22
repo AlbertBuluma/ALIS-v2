@@ -20,6 +20,6 @@ class DailyRejectionReasonCount extends Model
      */
     public function dailySpecimenCount()
     {
-      return $this->belongsTo('DailySpecimenCount');
+      return $this->belongsTo('App\Models\DailySpecimenCount');
     }
 }

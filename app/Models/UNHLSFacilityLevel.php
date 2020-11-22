@@ -16,7 +16,7 @@ class UNHLSFacilityLevel extends Model
 
 	public function facility()
 	{
-		return $this->hasMany('UNHLSFacility', 'level_id', 'id');
+		return $this->hasMany('App\Models\UNHLSFacility', 'level_id', 'id');
 	}
 
 

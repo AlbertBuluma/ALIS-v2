@@ -19,13 +19,13 @@ class DailySusceptibilityCount extends Model
      */
     public function dailyTestResultCount()
     {
-      return $this->belongsTo('DailyTestResultCount');
+      return $this->belongsTo('App\Models\DailyTestResultCount');
     }
     /**
      *
      */
     public function disease()
     {
-      return $this->belongsTo('Disease');
+      return $this->belongsTo('App\Models\Disease');
     }
 }

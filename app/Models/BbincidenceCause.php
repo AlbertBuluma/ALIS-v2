@@ -1,14 +1,17 @@
 <?php
 
-use Illuminate\Database\Eloquent\SoftDeletingTrait;
+namespace  App\Models;
 
-class BbincidenceCause extends Eloquent
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class BbincidenceCause extends Model
 {
 	/**
 	 * Enabling soft deletes for specimen type details.
 	 *
 	 */
-	use SoftDeletingTrait;
+	use SoftDeletes;
 	protected $dates = ['deleted_at'];
 
 	/**
@@ -20,8 +23,8 @@ class BbincidenceCause extends Eloquent
 
 	public function bbincidence()
 	{
-		return $this->belongsToMany('Bbincidence', 'unhls_bbincidences_cause', 'cause_id', 'bbincidence_id');
+		return $this->belongsToMany('App\Models\Bbincidence', 'unhls_bbincidences_cause', 'cause_id', 'bbincidence_id');
 	}
-	
+
 
 }

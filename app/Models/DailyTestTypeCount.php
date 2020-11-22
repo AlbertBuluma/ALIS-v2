@@ -20,24 +20,24 @@ class DailyTestTypeCount extends Model
      */
     public function testType()
     {
-      return $this->belongsTo('TestType');
+      return $this->belongsTo('App\Models\TestType');
     }
 
     public function dailyAlphanumericCount()
     {
-      return $this->hasMany('DailyAlphanumericCount');
+      return $this->hasMany('App\Models\DailyAlphanumericCount');
     }
     public function dailyGramStainResultCount()
     {
-      return $this->hasMany('DailyGramStainResultCount');
+      return $this->hasMany('App\Models\DailyGramStainResultCount');
     }
     public function dailyOrganismCount()
     {
-      return $this->hasMany('DailyOrganismCount');
+      return $this->hasMany('App\Models\DailyOrganismCount');
     }
     public function dailyHIVCount()
     {
-      return $this->hasMany('DailyHIVCount');
+      return $this->hasMany('App\Models\DailyHIVCount');
     }
 
 }

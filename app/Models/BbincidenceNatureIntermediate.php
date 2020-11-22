@@ -17,11 +17,11 @@ class BbincidenceNatureIntermediate extends Model
 
 	public function bbnature()
 	{
-		return $this->belongsTo('BbincidenceNature', 'nature_id', 'id');
+		return $this->belongsTo('App\Models\BbincidenceNature', 'nature_id', 'id');
 	}
 
 	public function bbincidence()
 	{
-		return $this->belongsTo('Bbincidence', 'bbincidence_id', 'id');
+		return $this->belongsTo('App\Models\Bbincidence', 'bbincidence_id', 'id');
 	}
 }

@@ -16,7 +16,7 @@ class AnalyticSpecimenRejection extends Eloquent
 	 */
 	public function test()
 	{
-		return $this->belongsTo('UnhlsTest');
+		return $this->belongsTo('App\Models\UnhlsTest');
 	}
 
 	/**
@@ -24,7 +24,7 @@ class AnalyticSpecimenRejection extends Eloquent
 	 */
 	public function specimen()
 	{
-		return $this->belongsTo('UnhlsSpecimen');
+		return $this->belongsTo('App\Models\UnhlsSpecimen');
 	}
 
 	/**
@@ -32,6 +32,6 @@ class AnalyticSpecimenRejection extends Eloquent
 	 */
 	public function rejectedBy()
 	{
-		return $this->belongsTo('User', 'rejected_by', 'id');
+		return $this->belongsTo('App\Models\User', 'rejected_by', 'id');
 	}
 }

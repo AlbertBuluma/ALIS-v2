@@ -692,7 +692,7 @@ class UnhlsTest extends Model
 	* @param String $testStatusId
 	* @param String $dateFrom
 	* @param String $dateTo
-	* @return Collection
+	* @return \Illuminate\Database\Eloquent\Builder
 	*/
 	// todo: =this should include verified tests
 	public static function completedTests($searchString = '', $testStatusId = 4, $dateFrom = NULL, $dateTo = NULL)

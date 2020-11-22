@@ -20,6 +20,6 @@ class DailySpecimenTypeCount extends Model
      */
     public function specimenType()
     {
-      return $this->belongsTo('SpecimenType');
+      return $this->belongsTo('App\Models\SpecimenType');
     }
 }

@@ -13,7 +13,7 @@ class ControlTest extends Model {
 	*/
 	public function controlResults()
 	{
-		return $this->hasMany('ControlMeasureResult');
+		return $this->hasMany('App\Models\ControlMeasureResult');
 	}
 
 	/**
@@ -21,6 +21,6 @@ class ControlTest extends Model {
 	*/
 	public function Control()
 	{
-		return $this->belongsTo('Control');
+		return $this->belongsTo('App\Models\Control');
 	}
 }

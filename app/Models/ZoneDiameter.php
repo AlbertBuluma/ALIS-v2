@@ -26,7 +26,7 @@ class ZoneDiameter extends Model
      */
     public function drug()
     {
-      return $this->belongsTo('Drug');
+      return $this->belongsTo('App\Models\Drug');
     }
 
     /**
@@ -34,7 +34,7 @@ class ZoneDiameter extends Model
      */
     public function organism()
     {
-      return $this->belongsTo('Organism');
+      return $this->belongsTo('App\Models\Organism');
     }
 
     /**

@@ -29,7 +29,7 @@ class POC extends Model
 
 
 	public function poc_result(){
-		return $this->hasOne('POCResult', 'patient_id');
+		return $this->hasOne('App\Models\POCResult', 'patient_id');
 	}
 
 	/**
@@ -39,7 +39,7 @@ class POC extends Model
 
     public function visits()
     {
-        return $this->hasMany('UnhlsVisit');
+        return $this->hasMany('App\Models\UnhlsVisit');
     }
 
 	/**
@@ -116,7 +116,7 @@ class POC extends Model
 	*/
 	public function getFacilityCode()
 	{
-		$facilityCode =\Config::get('constants.FACILITY_CODE');
+		$facilityCode = config('constants.FACILITY_CODE');
 		return $facilityCode;
 
 	}

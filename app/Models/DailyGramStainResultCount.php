@@ -20,13 +20,13 @@ class DailyGramStainResultCount extends Model
      */
     public function dailyMeasureCount()
     {
-      return $this->belongsTo('DailyMeasureCount');
+      return $this->belongsTo('App\Models\DailyMeasureCount');
     }
     /**
      *
      */
     public function gramStainRange()
     {
-      return $this->belongsTo('GramStainRange');
+      return $this->belongsTo('App\Models\GramStainRange');
     }
 }

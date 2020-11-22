@@ -19,7 +19,7 @@ class MeasureType extends Model
 	 */
     public function measures()
     {
-        return $this->hasMany('Measure');
+        return $this->hasMany('App\Models\Measure');
     }
 
 }

@@ -20,7 +20,7 @@ class Disease extends Model
 	 */
 	public function reportDiseases()
 	{
-	  return $this->hasMany('ReportDisease');
+	  return $this->hasMany('App\Models\ReportDisease');
 	}
 
 }

@@ -21,7 +21,7 @@ class ReportDisease extends Model
 	 */
 	public function testTypes()
 	{
-	  return $this->hasMany('TestType');
+	  return $this->hasMany('App\Models\TestType');
 	}
 
 	/**
@@ -29,6 +29,6 @@ class ReportDisease extends Model
 	 */
 	public function disease()
 	{
-	  return $this->belongsTo('Disease');
+	  return $this->belongsTo('App\Models\Disease');
 	}
 }

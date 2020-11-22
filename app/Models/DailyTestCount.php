@@ -17,7 +17,7 @@ class DailyTestCount extends Model
 
     public function dailyTestTypeCount()
     {
-      return $this->hasMany('DailyTestTypeCount');
+      return $this->hasMany('App\Models\DailyTestTypeCount');
     }
 
 }

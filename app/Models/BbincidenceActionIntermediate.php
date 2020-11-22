@@ -1,14 +1,17 @@
 <?php
 
-use Illuminate\Database\Eloquent\SoftDeletingTrait;
+namespace  App\Models;
 
-class BbincidenceActionIntermediate extends Eloquent
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class BbincidenceActionIntermediate extends Model
 {
 	/**
 	 * Enabling soft deletes for specimen type details.
 	 *
 	 */
-	use SoftDeletingTrait;
+	use SoftDeletes;
 	protected $dates = ['deleted_at'];
 
 	/**

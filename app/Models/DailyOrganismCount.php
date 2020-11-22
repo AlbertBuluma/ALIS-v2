@@ -20,30 +20,30 @@ class DailyOrganismCount extends Model
      */
     public function dailyTestCount()
     {
-      return $this->belongsTo('DailyTestCount');
+      return $this->belongsTo('App\Models\DailyTestCount');
     }
     /**
      *
      */
     public function organism()
     {
-      return $this->belongsTo('Organism');
+      return $this->belongsTo('App\Models\Organism');
     }
     /**
      *
      */
     public function antibiotics()
     {
-      return $this->belongsTo('Antibiotic');
+      return $this->belongsTo('App\Models\Antibiotic');
     }
 
     public function susceptibilityInterpretation()
     {
-      return $this->belongsTo('DrugSusceptibilityMeasure');
+      return $this->belongsTo('App\Models\DrugSusceptibilityMeasure');
     }
 
     public function resultInterpretation()
     {
-      return $this->belongsTo('ResultInterpretation');
+      return $this->belongsTo('App\Models\ResultInterpretation');
     }
 }

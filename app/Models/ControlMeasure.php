@@ -21,11 +21,11 @@ class ControlMeasure extends Model {
 	/**
 	* Return the ranges for this measure
 	*
-	* @return relationship
+	* @return \Illuminate\Database\Eloquent\Relations\HasMany
 	*/
 	public function controlMeasureRanges()
 	{
-		return $this->hasMany('ControlMeasureRange');
+		return $this->hasMany('App\Models\ControlMeasureRange');
 	}
 	/**
 	* Check if this measure is Numeric
@@ -58,6 +58,6 @@ class ControlMeasure extends Model {
 	 */
 	public function results()
 	{
-		return $this->hasMany('ControlMeasureResult');
+		return $this->hasMany('App\Models\ControlMeasureResult');
 	}
 }

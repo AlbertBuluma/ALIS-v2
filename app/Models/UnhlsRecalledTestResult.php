@@ -26,7 +26,7 @@ class UnhlsRecalledTestResult extends Model
 	 */
 	public function test()
 	{
-		return $this->belongsTo('UnhlsTest');
+		return $this->belongsTo('App\Models\UnhlsTest');
 	}
 
 
@@ -37,7 +37,7 @@ class UnhlsRecalledTestResult extends Model
 	*/
 	public function measure()
 	{
-		return $this->belongsTo('Measure');
+		return $this->belongsTo('App\Models\Measure');
 	}
 
 	/**
@@ -45,7 +45,7 @@ class UnhlsRecalledTestResult extends Model
 	 */
 	public function recalledBy()
 	{
-		return $this->belongsTo('User', 'created_by', 'id');
+		return $this->belongsTo('App\Models\User', 'created_by', 'id');
 	}
 	public static function numberOfRevisions($test_id){
 

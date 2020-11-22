@@ -1,12 +1,21 @@
 <?php
 namespace App\Http\Controllers;
 
+use AnalyticSpecimenRejection;
+use AnalyticSpecimenRejectionReason;
 use App\Models\Clinician;
+use App\Models\Measure;
+use App\Models\POCResult;
+use App\Models\Referral;
+use App\Models\ReferralReason;
+use App\Models\RejectionReason;
 use App\Models\SpecimenType;
 use App\Models\TestCategory;
 use App\Models\Therapy;
+use App\Models\UNHLSFacility;
 use App\Models\UnhlsPatient;
 use App\Models\UnhlsSpecimen;
+use App\Models\UnhlsTestResult;
 use App\Models\Ward;
 use DateTime;
 use Illuminate\Database\QueryException;
@@ -18,6 +27,8 @@ use App\Models\TestStatus;
 use App\Models\Barcode;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Contains test resources
@@ -30,7 +41,7 @@ class UnhlsTestController extends Controller {
      * The search string may match: patient_number, patient name, test type name, specimen ID or visit ID
      *
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
 	public function index(Request $request)
 	{
@@ -104,7 +115,7 @@ class UnhlsTestController extends Controller {
 	 *@param
 	 * @return Response
 	 */
-	public function completed()
+	public function completed(Request $request)
 	{
 		$fromRedirect = \Session::pull('fromRedirect');
 
@@ -114,7 +125,7 @@ class UnhlsTestController extends Controller {
 
 		}else{
 
-			$input = Input::except('_token');
+			$input = $request->except('_token');
 		}
 
 		$searchString = isset($input['search'])?$input['search']:'';
@@ -126,13 +137,13 @@ class UnhlsTestController extends Controller {
 			$input['date_from'] = date('Y-m-d');
 		}
 		$dateTo = isset($input['date_to'])?$input['date_to']:'';
-		$tests = UnhlsTest::CompletedTests();
+		$tests = UnhlsTest::completedTests();
 
 				// Search Conditions
 		if($searchString||$testStatusId||$dateFrom||$dateTo){
 
 			$tests = UnhlsTest::completedTests($searchString, $testStatusId, $dateFrom, $dateTo);
-
+            dd($tests);
 			if (count($tests) == 0) {
 			 	\Session::flash('message', trans('messages.empty-search'));
 			}
@@ -156,7 +167,7 @@ class UnhlsTestController extends Controller {
 		//	Barcode
 		$barcode = Barcode::first();
 
-		return View::make('unhls_test.index')
+		return view('unhls_test.index')
 					->with('testSet', $tests)
 					->with('testStatus', $statuses)
 					->with('dateFrom', $dateFrom)
@@ -172,7 +183,7 @@ class UnhlsTestController extends Controller {
 	 *@param
 	 * @return Response
 	 */
-	public function pending()
+	public function pending(Request $request)
 	{
 		$fromRedirect = \Session::pull('fromRedirect');
 
@@ -182,7 +193,7 @@ class UnhlsTestController extends Controller {
 
 		}else{
 
-			$input = Input::except('_token');
+			$input = $request->except('_token');
 		}
 
 		$searchString = isset($input['search'])?$input['search']:'';
@@ -223,7 +234,7 @@ class UnhlsTestController extends Controller {
 		//	Barcode
 		$barcode = Barcode::first();
 
-		return View::make('unhls_test.index')
+		return view('unhls_test.index')
 					->with('testSet', $tests)
 					->with('testStatus', $statuses)
 					->with('dateFrom', $dateFrom)
@@ -239,7 +250,7 @@ class UnhlsTestController extends Controller {
 	 *@param
 	 * @return Response
 	 */
-	public function started()
+	public function started(Request $request)
 	{
 		$fromRedirect = \Session::pull('fromRedirect');
 
@@ -249,7 +260,7 @@ class UnhlsTestController extends Controller {
 
 		}else{
 
-			$input = Input::except('_token');
+			$input = $request->except('_token');
 		}
 
 		$searchString = isset($input['search'])?$input['search']:'';
@@ -290,7 +301,7 @@ class UnhlsTestController extends Controller {
 		//	Barcode
 		$barcode = Barcode::first();
 
-		return View::make('unhls_test.index')
+		return view('unhls_test.index')
 					->with('testSet', $tests)
 					->with('testStatus', $statuses)
 					->with('dateFrom', $dateFrom)
@@ -306,7 +317,7 @@ class UnhlsTestController extends Controller {
 	 *@param
 	 * @return Response
 	 */
-	public function notRecieved()
+	public function notRecieved(Request $request)
 	{
 		$fromRedirect = \Session::pull('fromRedirect');
 
@@ -316,7 +327,7 @@ class UnhlsTestController extends Controller {
 
 		}else{
 
-			$input = Input::except('_token');
+			$input = $request->except('_token');
 		}
 
 		$searchString = isset($input['search'])?$input['search']:'';
@@ -357,7 +368,7 @@ class UnhlsTestController extends Controller {
 		//	Barcode
 		$barcode = Barcode::first();
 
-		return View::make('unhls_test.index')
+		return view('unhls_test.index')
 					->with('testSet', $tests)
 					->with('testStatus', $statuses)
 					->with('dateFrom', $dateFrom)
@@ -374,7 +385,7 @@ class UnhlsTestController extends Controller {
 	 *@param
 	 * @return Response
 	 */
-	public function verified()
+	public function verified(Request $request)
 	{
 		$fromRedirect = \Session::pull('fromRedirect');
 
@@ -384,7 +395,7 @@ class UnhlsTestController extends Controller {
 
 		}else{
 
-			$input = Input::except('_token');
+			$input = $request->except('_token');
 		}
 
 		$searchString = isset($input['search'])?$input['search']:'';
@@ -425,7 +436,7 @@ class UnhlsTestController extends Controller {
 		//	Barcode
 		$barcode = Barcode::first();
 
-		return View::make('unhls_test.index')
+		return view('unhls_test.index')
 					->with('testSet', $tests)
 					->with('testStatus', $statuses)
 					->with('barcode', $barcode)
@@ -454,39 +465,43 @@ class UnhlsTestController extends Controller {
 		return $id;
 	}
 
-	/**
-	 *Select all tests under a selected test Category - Test Menu
-	 *
-	 * @return Response
-	 */
-	public function testList()
+    /**
+     *Select all tests under a selected test Category - Test Menu
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+	public function testList(Request $request)
 	{
-		$testCategoryId =Input::get('test_category_id');
-		$specimenTypeId =Input::get('specimen_type_id');
+		$testCategoryId = $request->get('test_category_id');
+		$specimenTypeId = $request->get('specimen_type_id');
 
 		$specimenType = SpecimenType::find($specimenTypeId);
 		$testTypes = $specimenType->testTypes;
 
-		return View::make('unhls_test.testTypeList')
+		return view('unhls_test.testTypeList')
 			->with('testCategoryId', $testCategoryId)
 			->with('testTypes', $testTypes);
 	}
 
-	/**
-	 * Display a form for creating a new Test.
-	 *
-	 * @return Response
-	 */
-	public function create($patientID = 0)
+    /**
+     * Display a form for creating a new Test.
+     *
+     * @param Request $request
+     * @param int $patientID
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+	public function create(Request $request, $patientID = 0)
 	{
 		if ($patientID == 0) {
-			$patientID = Input::get('patient_id');
+			$patientID = $request->get('patient_id');
 		}
 
 		//Create a Lab categories Array
-		$categories = ['Select Lab Section']+TestCategory::lists('name', 'id');
-		$wards = ['Select Sample Origin']+Ward::lists('name', 'id');
-		$clinicians = ['Select clinician']+Clinician::lists('name', 'id');
+//        dd(TestCategory::pluck('name', 'id'));
+		$categories = ['Select Lab Section'] + TestCategory::pluck('name', 'id');
+		$wards = ['Select Sample Origin'] + Ward::lists('name', 'id');
+		$clinicians = ['Select clinician'] + Clinician::lists('name', 'id');
 
 		// sample collection default details
 		$now = new DateTime();
@@ -498,15 +513,15 @@ class UnhlsTestController extends Controller {
 		if($fromRedirect){
 			$input = \Session::get('TEST_CATEGORY');
 		}else{
-			$input = Input::except('_token');
+			$input =$request->except('_token');
 		}
 
-		$specimenTypes = ['select Specimen Type']+SpecimenType::lists('name', 'id');
+		$specimenTypes = ['select Specimen Type'] + SpecimenType::lists('name', 'id');
 
 		$patient = UnhlsPatient::find($patientID);
 
 		//Load Test Create View
-		return View::make('unhls_test.create')
+		return view('unhls_test.create')
 					->with('collectionDate', $collectionDate)
 					->with('receptionDate', $receptionDate)
 					->with('specimenType', $specimenTypes)
@@ -516,10 +531,10 @@ class UnhlsTestController extends Controller {
 					->with('clinicians',$clinicians);
 	}
 
-	public function getWards($ward_type_id = 0){
+	public function getWards(Request $request, $ward_type_id = 0){
 
 		if($ward_type_id == 0){
-			$ward_type_id = Input::get('ward_type_id');
+			$ward_type_id = $request->get('ward_type_id');
 
 		}else{
 			$wards = Ward::where('ward_type_id','=',$ward_type_id)->get();
@@ -537,12 +552,14 @@ class UnhlsTestController extends Controller {
 		$clinician = Clinician::find($id);
 		return $clinician;
 	}
-	/**
-	 * Save a new Test.
-	 *
-	 * @return Response
-	 */
-	public function saveNewTest()
+
+    /**
+     * Save a new Test.
+     *
+     * @param Request $request
+     * @return Response
+     */
+	public function saveNewTest(Request $request)
 	{
 
 		//Create New Test
@@ -556,11 +573,11 @@ class UnhlsTestController extends Controller {
 			'clinical_notes'=>'required'
 
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::route('unhls_test.create',
+			return redirect('unhls_test.create',
 				array(Input::get('patient_id')))->withInput()->withErrors($validator);
 		} else {
 
@@ -572,24 +589,24 @@ class UnhlsTestController extends Controller {
 			 * - Fields required: visit_type, patient_id
 			 */
 			$visit = new UnhlsVisit;
-			$visit->visit_lab_number = Input::get('visit_lab_number');
-			$visit->patient_id = Input::get('patient_id');
-			$visit->visit_type = $visitType[Input::get('visit_type')];
-			$visit->ward_id = Input::get('ward_id');
-			$visit->bed_no = Input::get('bed_no');
-			$visit->hospitalized = Input::get('hospitalized');
-			$visit->on_antibiotics = Input::get('on_antibiotics');
+			$visit->visit_lab_number = $request->get('visit_lab_number');
+			$visit->patient_id = $request->get('patient_id');
+			$visit->visit_type = $visitType[$request->get('visit_type')];
+			$visit->ward_id = $request->get('ward_id');
+			$visit->bed_no = $request->get('bed_no');
+			$visit->hospitalized = $request->get('hospitalized');
+			$visit->on_antibiotics = $request->get('on_antibiotics');
 			$visit->save();
 
 			$therapy = new Therapy;
-			$therapy->patient_id = Input::get('patient_id');
+			$therapy->patient_id = $request->get('patient_id');
 			$therapy->visit_id = $visit->id;
-			$therapy->previous_therapy = Input::get('previous_therapy');
-			$therapy->current_therapy = Input::get('current_therapy');
+			$therapy->previous_therapy = $request->get('previous_therapy');
+			$therapy->current_therapy = $request->get('current_therapy');
 
-			$therapy->clinical_notes = Input::get('clinical_notes');
+			$therapy->clinical_notes = $request->get('clinical_notes');
 
-            $therapy->clinician_id = Input::get('clinician');
+            $therapy->clinician_id = $request->get('clinician');
             //$therapy->contact = Input::get('phone_contact');
 
 			$therapy->save();
@@ -598,15 +615,15 @@ class UnhlsTestController extends Controller {
 			 * - Create tests requested
 			 * - Fields required: visit_id, test_type_id, specimen_id, test_status_id, created_by, requested_by
 			 */
-            $testLists = Input::get('test_list');
+            $testLists = $request->get('test_list');
             if(is_array($testLists)){
                 foreach ($testLists as $testList) {
                     // Create Specimen - specimen_type_id, accepted_by, referred_from, referred_to
                     $specimen = new UnhlsSpecimen;
                     $specimen->specimen_type_id = $testList['specimen_type_id'];
                     $specimen->accepted_by = Auth::user()->id;
-                    $specimen->time_collected = Input::get('collection_date');
-                    $specimen->time_accepted = Input::get('reception_date');
+                    $specimen->time_collected = $request->get('collection_date');
+                    $specimen->time_accepted = $request->get('reception_date');
                     $specimen->save();
                     foreach ($testList['test_type_id'] as $id) {
                         $testTypeID = (int)$id;
@@ -617,10 +634,10 @@ class UnhlsTestController extends Controller {
                         $test->specimen_id = $specimen->id;
                         $test->test_status_id = UnhlsTest::PENDING;
                         $test->created_by = Auth::user()->id;
-                        $test->requested_by = Input::get('clinician');
-                        $therapy->clinician_id = Input::get('clinician');
+                        $test->requested_by = $request->get('clinician');
+                        $therapy->clinician_id = $request->get('clinician');
 
-                        $test->purpose = Input::get('hiv_purpose');
+                        $test->purpose = $request->get('hiv_purpose');
                         $test->save();
 
                         $activeTest[] = $test->id;
@@ -630,7 +647,7 @@ class UnhlsTestController extends Controller {
 
 			$url = \Session::get('SOURCE_URL');
 
-			return Redirect::to($url)->with('message', 'messages.success-creating-test')
+			return redirect($url)->with('message', 'messages.success-creating-test')
 					->with('activeTest', $activeTest);
 		}
 	}
@@ -645,7 +662,7 @@ class UnhlsTestController extends Controller {
 	public function collectSpecimen($specimenID)
 	{
 		$specimen = UnhlsSpecimen::find($specimenID);
-		return View::make('unhls_test.collect')->with('specimen', $specimen);
+		return view('unhls_test.collect')->with('specimen', $specimen);
 	}
 
     /**
@@ -654,11 +671,11 @@ class UnhlsTestController extends Controller {
      * @param
      * @return
      */
-    public function acceptSpecimen()
+    public function acceptSpecimen(Request $request)
     {
-		$specimen = UnhlsSpecimen::find(Input::get('id'));
+		$specimen = UnhlsSpecimen::find($request->get('id'));
 		$specimenTypes = SpecimenType::all();
-		return View::make('unhls_test.acceptSpecimen')
+		return view('unhls_test.acceptSpecimen')
 			->with('specimen', $specimen)
 			->with('specimenTypes', $specimenTypes);
     }
@@ -673,7 +690,7 @@ class UnhlsTestController extends Controller {
 	{
 		$test = UnhlsTest::find($testID);
 		$rejectionReason = RejectionReason::all();
-		return View::make('unhls_test.reject')->with('test', $test)
+		return view('unhls_test.reject')->with('test', $test)
 						->with('rejectionReason', $rejectionReason);
 	}
 
@@ -688,7 +705,7 @@ class UnhlsTestController extends Controller {
 		$specimen = UnhlsSpecimen::find($specimenID);
 		$referralReason = ReferralReason::all();
 		$test = UnhlsTest::find($specimenID);
-		return View::make('unhls_test.refer')->with('specimen', $specimen)->with('test', $test)
+		return view('unhls_test.refer')->with('specimen', $specimen)->with('test', $test)
 						->with('referralReason', $referralReason);
 	}
 
@@ -699,51 +716,51 @@ class UnhlsTestController extends Controller {
 	 * @return
 	 */
 	// todo: create a functions for pre-analytic rejection
-	public function rejectAction()
+	public function rejectAction(Request $request)
 	{
 		//Reject justifying why.
 		$rules = array(
 			'rejectionReason' => 'required|non_zero_key',
 			'reject_explained_to' => 'required',
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::route('unhls_test.reject', array(Input::get('test_id')))
+			return redirect('unhls_test.reject', array($request->get('test_id')))
 				->withInput()
 				->withErrors($validator);
 		} else {
-			$test = UnhlsTest::find(Input::get('test_id'));
+			$test = UnhlsTest::find($request->get('test_id'));
 			// this refers to analytic rejection of specimen
 			$test->test_status_id = UnhlsTest::REJECTED;
 			$test->save();
 			// todo: create cascade deletion for it, incase rejection is reversed
 			$rejection = new AnalyticSpecimenRejection;
 			//$rejection->rejection_reason_id = Input::get('rejectionReason');
-			$rejection->test_id = Input::get('test_id');
-			$rejection->specimen_id = Input::get('specimen_id');
+			$rejection->test_id = $request->get('test_id');
+			$rejection->specimen_id = $request->get('specimen_id');
 			$rejection->rejected_by = Auth::user()->id;
 			$rejection->time_rejected = date('Y-m-d H:i:s');
-			$rejection->reject_explained_to = Input::get('reject_explained_to');
+			$rejection->reject_explained_to = $request->get('reject_explained_to');
 			$rejection->save();
 
 			/**
 			 * Create rejection reasons
 			 */
-			$reasons = Input::get('rejectionReason');
+			$reasons = $request->get('rejectionReason');
 			if(is_array($reasons)){
 				foreach ($reasons as $id => $value) {
 					$reason =new AnalyticSpecimenRejectionReason;
 
 					$reason->rejection_id = $rejection->id;
-					$reason->specimen_id = Input::get('specimen_id');
+					$reason->specimen_id = $request->get('specimen_id');
 					$reason->reason_id = $value;
 					$reason->save();
 				}
 			}
 			$url = \Session::get('SOURCE_URL');
 
-			return Redirect::to($url)->with('message', 'messages.success-rejecting-specimen')
+			return redirect($url)->with('message', 'messages.success-rejecting-specimen')
 						->with('activeTest', array($test->id));
 		}
 	}
@@ -754,16 +771,16 @@ class UnhlsTestController extends Controller {
 	 * @param
 	 * @return
 	 */
-	public function acceptSpecimenAction()
+	public function acceptSpecimenAction(Request $request)
 	{
-		$specimen = UnhlsSpecimen::find(Input::get('specimen_id'));
+		$specimen = UnhlsSpecimen::find($request->get('specimen_id'));
 		$specimen->specimen_status_id = UnhlsSpecimen::ACCEPTED;
-		$specimen->specimen_type_id = Input::get('specimen_type_id');
+		$specimen->specimen_type_id = $request->get('specimen_type_id');
 		$specimen->accepted_by = Auth::user()->id;
 		$specimen->time_accepted = date('Y-m-d H:i:s');
 		$specimen->save();
 
-		return Redirect::route('unhls_test.index')
+		return redirect('unhls_test.index')
 			->with('message', 'You have successfully captured specimen collection details');
 	}
 
@@ -774,10 +791,10 @@ class UnhlsTestController extends Controller {
 	 * @param
 	 * @return
 	 */
-	public function changeSpecimenType()
+	public function changeSpecimenType(Request $request)
 	{
-		$test = UnhlsTest::find(Input::get('id'));
-		return View::make('unhls_test.changeSpecimenType')->with('test', $test);
+		$test = UnhlsTest::find($request->get('id'));
+		return view('unhls_test.changeSpecimenType')->with('test', $test);
 	}
 
 	/**
@@ -786,13 +803,13 @@ class UnhlsTestController extends Controller {
 	 * @param
 	 * @return
 	 */
-	public function updateSpecimenType()
+	public function updateSpecimenType(Request $request)
 	{
-		$specimen = UnhlsSpecimen::find(Input::get('specimen_id'));
-		$specimen->specimen_type_id = Input::get('specimen_type');
+		$specimen = UnhlsSpecimen::find($request->get('specimen_id'));
+		$specimen->specimen_type_id = $request->get('specimen_type');
 		$specimen->save();
 
-		return Redirect::route('unhls_test.viewDetails', array($specimen->test->id));
+		return redirect('unhls_test.viewDetails', array($specimen->test->id));
 	}
 
 	/**
@@ -801,9 +818,9 @@ class UnhlsTestController extends Controller {
 	 * @param
 	 * @return
 	 */
-	public function start()
+	public function start(Request $request)
 	{
-		$test = UnhlsTest::find(Input::get('id'));
+		$test = UnhlsTest::find($request->get('id'));
 		$test->tested_by = Auth::user()->id;
 		$test->test_status_id = UnhlsTest::STARTED;
 		$test->time_started = date('Y-m-d H:i:s');
@@ -817,16 +834,16 @@ class UnhlsTestController extends Controller {
 	 * @param
 	 * @return
 	 */
-	public function enterResults($testID)
+	public function enterResults(Request $request, $testID)
 	{
 		$test = UnhlsTest::find($testID);
 		// if the test being carried out requires a culture worksheet
 		if ($test->testType->isCulture()) {
-			return Redirect::route('culture.edit', [$test->id]);
+			return redirect('culture.edit', [$test->id]);
 		}elseif ($test->testType->isGramStain()) {
-			return Redirect::route('gramstain.edit', [$test->id]);
+			return redirect('gramstain.edit', [$test->id]);
 		}else{
-			return View::make('unhls_test.enterResults')->with('test', $test);
+			return view('unhls_test.enterResults')->with('test', $test);
 		}
 	}
 
@@ -835,29 +852,30 @@ class UnhlsTestController extends Controller {
 	 * @param
 	 * @return
 	 */
-	public function getResultInterpretation()
+	public function getResultInterpretation(Request $request)
 	{
 		$result = array();
 		//save if it is available
 
-		if (Input::get('age')) {
-			$result['birthdate'] = Input::get('age');
-			$result['gender'] = Input::get('gender');
+		if ($request->get('age')) {
+			$result['birthdate'] = $request->get('age');
+			$result['gender'] = $request->get('gender');
 		}
-		$result['measureid'] = Input::get('measureid');
-		$result['measurevalue'] = Input::get('measurevalue');
+		$result['measureid'] = $request->get('measureid');
+		$result['measurevalue'] = $request->get('measurevalue');
 
 		$measure = new Measure;
 		return $measure->getResultInterpretation($result);
 	}
 
-	/**
-	 * Saves Test Results
-	 *
-	 * @param $testID to save
-	 * @return view
-	 */
-	public function saveResults($testID)
+    /**
+     * Saves Test Results
+     *
+     * @param Request $request
+     * @param $testID to save
+     * @return view
+     */
+	public function saveResults(Request $request, $testID)
 	{
 		$test = UnhlsTest::find($testID);
 		$test->test_status_id = UnhlsTest::COMPLETED;
@@ -878,15 +896,15 @@ class UnhlsTestController extends Controller {
 				$testResult->result = $results;
 				$inputName = "m_".$measure->id;
 			}else{
-				$testResult->result = Input::get('m_'.$measure->id);
+				$testResult->result = $request->get('m_'.$measure->id);
 				$inputName = "m_".$measure->id;
 			}
 			$rules = array("$inputName" => 'max:255');
 
-			$validator = Validator::make(Input::all(), $rules);
+			$validator = Validator::make($request->all(), $rules);
 
 			if ($validator->fails()) {
-				return Redirect::back()->withErrors($validator)->withInput(Input::all());
+				return redirect()->back()->withErrors($validator)->withInput(Input::all());
 			} else {
 				$testResult->save();
 			}
@@ -894,7 +912,7 @@ class UnhlsTestController extends Controller {
 		if ($test->isHIV()) {
 			$test->interpretation = $test->interpreteHIVResults();
 		}else{
-			$test->interpretation = Input::get('interpretation');
+			$test->interpretation = $request->get('interpretation');
 		}
 		$test->save();
 
@@ -913,7 +931,7 @@ class UnhlsTestController extends Controller {
 		}
 
 		// redirect
-		return Redirect::to($url)
+		return redirect($url)
 					->with('message', trans('messages.success-saving-results'))
 					->with('activeTest', array($test->id))
 					->withInput($input);
@@ -990,14 +1008,14 @@ class UnhlsTestController extends Controller {
 		//Fire of entry approved event
 		Event::fire('test.approved', array($testID));
 
-		return View::make('unhls_test.viewDetails')->with('test', $test);
+		return view('unhls_test.viewDetails')->with('test', $test);
 	}
 
 	/**
 	 * Refer the test
 	 *
 	 * @param specimenId
-	 * @return View
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function showRefer($specimenId)
 	{
@@ -1021,7 +1039,7 @@ class UnhlsTestController extends Controller {
 		//Referral facilities
 		$referralReason = ReferralReason::all();
 		// dd($unhlspatient);
-		return View::make('unhls_test.refer')
+		return view('unhls_test.refer')
 			->with('now', $now)
 			->with('dispatchDate', $dispatchDate)
 			->with('receptionDate', $receptionDate)
@@ -1032,12 +1050,13 @@ class UnhlsTestController extends Controller {
 
 	}
 
-	/**
-	 * Refer action
-	 *
-	 * @return View
-	 */
-	public function referAction()
+    /**
+     * Refer action
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function referAction(Request $request)
 	{
 		//Validate
 		$rules = array(
@@ -1046,29 +1065,31 @@ class UnhlsTestController extends Controller {
 			'person',
 			'contacts'
 			);
-		$validator = Validator::make(Input::all(), $rules);
-		$specimenId = Input::get('specimen_id');
+		$validator = Validator::make($request->all(), $rules);
+		$specimenId = $request->get('specimen_id');
 
 		if ($validator->fails())
 		{
-			return Redirect::route('unhls_test.refer', array($specimenId))-> withInput()->withErrors($validator);
+			return redirect('unhls_test.refer', array($specimenId))
+                        ->withInput()
+                        ->withErrors($validator);
 		}
 
 		//Insert into referral table
 		$referral = new Referral();
-		$referral->status = Input::get('referral-status');
-		$referral->sample_obtainer = Input::get('sample-obtainer');
-		$referral->cadre_obtainer = Input::get('cadre-obtainer');
-		$referral->sample_date = Input::get('reception_date');
-		$referral->sample_time = Input::get('reception_date');
-		$referral->time_dispatch = Input::get('time-dispatch');
-		$referral->storage_condition = Input::get('storage-condition');
-		$referral->transport_type = Input::get('transport-type');
-		$referral->referral_reason = Input::get('referral-reason');
-		$referral->priority_specimen = Input::get('priority-specimen');
-		$referral->facility_id = Input::get('facility_id');
-		$referral->person = Input::get('person');
-		$referral->contacts = Input::get('contacts');
+		$referral->status = $request->get('referral-status');
+		$referral->sample_obtainer = $request->get('sample-obtainer');
+		$referral->cadre_obtainer = $request->get('cadre-obtainer');
+		$referral->sample_date = $request->get('reception_date');
+		$referral->sample_time = $request->get('reception_date');
+		$referral->time_dispatch = $request->get('time-dispatch');
+		$referral->storage_condition = $request->get('storage-condition');
+		$referral->transport_type = $request->get('transport-type');
+		$referral->referral_reason = $request->get('referral-reason');
+		$referral->priority_specimen = $request->get('priority-specimen');
+		$referral->facility_id = $request->get('facility_id');
+		$referral->person = $request->get('person');
+		$referral->contacts = $request->get('contacts');
 		$referral->user_id = Auth::user()->id;
 
 		//Update specimen referral status
@@ -1081,7 +1102,7 @@ class UnhlsTestController extends Controller {
 		});
 
 		//Start test
-		Input::merge(array('id' => $specimen->tests->first()->id)); //Add the testID to the Input
+        $request->merge(array('id' => $specimen->tests->first()->id)); //Add the testID to the Input
 		$this->start();
 
 		//Return view
@@ -1119,24 +1140,24 @@ class UnhlsTestController extends Controller {
 	/**
 	 * Import POC samples
 	 *@param
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function importPoc()
 	{
 
 		// Load the view and pass it the tests
-		return View::make('unhls_test.importPoCResults')
+		return view('unhls_test.importPoCResults')
 					->with('message', false)
 					->with('failed_import', false);
 
 	}
 
-	public function uploadPoCResults()
+	public function uploadPoCResults(Request $request)
 	{
 
-        if(Input::hasFile('file')){
+        if($request->hasFile('file')){
 
-            $path = Input::file('file')->getRealPath();
+            $path = $request->file('file')->getRealPath();
 
             $data = Excel::load($path, function($reader) {
 
@@ -1186,7 +1207,7 @@ class UnhlsTestController extends Controller {
             		//dd($failed_import);
 				// redirect
 				//return Redirect::to('unhls_test/importPoc')
-				return View::make('unhls_test.importPoCResults')
+				return view('unhls_test.importPoCResults')
 							->with('message', 'Import completed successfully')
 							->with('failed_import', $failed_import);
             }

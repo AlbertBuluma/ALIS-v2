@@ -4,6 +4,7 @@ namespace  App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Bbincidence extends Model
@@ -28,7 +29,7 @@ class Bbincidence extends Model
 	 */
 	public function facility()
 	{
-		return $this->belongsTo('UNHLSFacility', 'facility_id', 'id');
+		return $this->belongsTo('App\Models\UNHLSFacility', 'facility_id', 'id');
 	}
 
 	/**
@@ -36,7 +37,7 @@ class Bbincidence extends Model
 	 */
 	public function user()
 	{
-		return $this->belongsTo('User', 'createdby', 'id');
+		return $this->belongsTo('App\Models\User', 'createdby', 'id');
 	}
 
 	/**
@@ -44,7 +45,7 @@ class Bbincidence extends Model
 	 */
 	public function bbnature()
 	{
-		return $this->belongsToMany('BbincidenceNature', 'unhls_bbincidences_nature', 'bbincidence_id', 'nature_id');
+		return $this->belongsToMany('App\Models\BbincidenceNature', 'unhls_bbincidences_nature', 'bbincidence_id', 'nature_id');
 
 		$bbnaturecount = Bbincidence::with( 'bbincidence_id', 'nature_id' )->where( 'bbincidence_id','=', 'bbincidence_id' )->first();
 		$sum = $bbnaturecount[ 'nature_id'];
@@ -55,7 +56,7 @@ class Bbincidence extends Model
 	 */
 	public function bbcause()
 	{
-		return $this->belongsToMany('BbincidenceCause', 'unhls_bbincidences_cause', 'bbincidence_id', 'cause_id');
+		return $this->belongsToMany('App\Models\BbincidenceCause', 'unhls_bbincidences_cause', 'bbincidence_id', 'cause_id');
 	}
 
 	/**
@@ -63,7 +64,7 @@ class Bbincidence extends Model
 	 */
 	public function bbaction()
 	{
-		return $this->belongsToMany('BbincidenceAction', 'unhls_bbincidences_action', 'bbincidence_id', 'action_id');
+		return $this->belongsToMany('App\Models\BbincidenceAction', 'unhls_bbincidences_action', 'bbincidence_id', 'action_id');
 	}
 
 	/**

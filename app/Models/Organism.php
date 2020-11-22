@@ -43,7 +43,7 @@ class Organism extends Model
 	 */
 	public function susceptibility()
 	{
-	  return $this->hasMany('DrugSusceptibility');
+	  return $this->hasMany('App\Models\DrugSusceptibility');
 	}
 
 	/**
@@ -51,6 +51,6 @@ class Organism extends Model
 	 */
 	public function zoneDiameters()
 	{
-	  return $this->hasMany('ZoneDiameter');
+	  return $this->hasMany('App\Models\ZoneDiameter');
 	}
 }

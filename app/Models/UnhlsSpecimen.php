@@ -30,7 +30,7 @@ class UnhlsSpecimen extends Model
 	 */
 	public function testPhase()
 	{
-		return $this->belongsTo('TestPhase');
+		return $this->belongsTo('App\Models\TestPhase');
 	}
 
 	/**
@@ -38,7 +38,7 @@ class UnhlsSpecimen extends Model
 	 */
 	public function specimenStatus()
 	{
-		return $this->belongsTo('SpecimenStatus');
+		return $this->belongsTo('App\Models\SpecimenStatus');
 	}
 
 	/**
@@ -46,7 +46,7 @@ class UnhlsSpecimen extends Model
 	 */
 	public function specimenType()
 	{
-		return $this->belongsTo('SpecimenType');
+		return $this->belongsTo('App\Models\SpecimenType');
 	}
 
 	/**
@@ -54,7 +54,7 @@ class UnhlsSpecimen extends Model
 	 */
 	public function preAnalyticSpecimenRejections()
 	{
-		return $this->hasOne('PreAnalyticSpecimenRejection', 'specimen_id');
+		return $this->hasOne('App\Models\PreAnalyticSpecimenRejection', 'specimen_id');
 	}
 
 	/**
@@ -62,7 +62,7 @@ class UnhlsSpecimen extends Model
 	 */
 	public function analyticSpecimenRejections()
 	{
-		return $this->hasOne('AnalyticSpecimenRejection', 'specimen_id');
+		return $this->hasOne('App\Models\AnalyticSpecimenRejection', 'specimen_id');
 	}
 
 	/**
@@ -70,7 +70,7 @@ class UnhlsSpecimen extends Model
 	 */
 	public function tests()
     {
-        return $this->hasMany('UnhlsTest', 'specimen_id');
+        return $this->hasMany('App\Models\UnhlsTest', 'specimen_id');
     }
 
 
@@ -79,7 +79,7 @@ class UnhlsSpecimen extends Model
 	 */
 	public function referral()
     {
-        return $this->belongsTo('Referral');
+        return $this->belongsTo('App\Models\Referral');
     }
 
     /**
@@ -87,7 +87,7 @@ class UnhlsSpecimen extends Model
 	 */
 	public function acceptedBy()
 	{
-		return $this->belongsTo('User', 'accepted_by', 'id');
+		return $this->belongsTo('App\Models\User', 'accepted_by', 'id');
 	}
 
     /**

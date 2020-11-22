@@ -17,14 +17,14 @@ class Commodity extends Model
 	*/
 	public function receipts()
 	{
-		return $this->hasMany('Receipt');
+		return $this->hasMany('App\Models\Receipt');
 	}
 
 	/**
 	* Relationship between commodity and the user who handled it
 	*/
 	public function user(){
-		return $this->belongsTo('user');
+		return $this->belongsTo('App\Models\User');
 	}
 
 	/**
@@ -32,7 +32,7 @@ class Commodity extends Model
 	*/
 	public function metric()
 	{
-		return $this->belongsTo('Metric');
+		return $this->belongsTo('App\Models\Metric');
 	}
 
 	/**

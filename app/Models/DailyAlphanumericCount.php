@@ -17,11 +17,11 @@ class DailyAlphanumericCount extends Model
 
     public function dailyTestTypeCount()
     {
-      return $this->belongsTo('DailyTestTypeCount');
+      return $this->belongsTo('App\Models\DailyTestTypeCount');
     }
 
     public function resultInterpretation()
     {
-      return $this->belongsTo('ResultInterpretation');
+      return $this->belongsTo('App\Models\ResultInterpretation');
     }
 }

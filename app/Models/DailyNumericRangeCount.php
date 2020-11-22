@@ -17,11 +17,11 @@ class DailyNumericRangeCount extends Model
 
     public function resultInterpretation()
     {
-      return $this->belongsTo('ResultInterpretation');
+      return $this->belongsTo('App\Models\ResultInterpretation');
     }
 
     public function dailyTestTypeCount()
     {
-      return $this->belongsTo('DailyTestTypeCount');
+      return $this->belongsTo('App\Models\DailyTestTypeCount');
     }
 }
