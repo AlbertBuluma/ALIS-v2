@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-        <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-        <li><a href="{{{URL::route('metric.index')}}}">{{trans('messages.metricsList')}}</a></li>
+        <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+        <li><a href="{{ route('metric.index') }}">{{trans('messages.metricsList')}}</a></li>
         <li class="active">{{ Lang::choice('messages.metrics',2) }}</li>
 	</ol>
 </div>
@@ -25,24 +25,24 @@
 
             <div class="form-group">
                 {{ Form::label('unit-of-issue', trans('messages.unit-of-issue')) }}
-                {{ Form::text('unit-of-issue', Input::old('unit-of-issue'), array('class' => 'form-control', 'rows' => '2')) }}
+                {{ Form::text('unit-of-issue', old('unit-of-issue'), array('class' => 'form-control', 'rows' => '2')) }}
             </div>
              <div class="form-group">
                 {{ Form::label('description', trans('messages.description')) }}
-                {{ Form::textarea('description', Input::old('description'), array('class' => 'form-control', 'rows' => '2')) }}
+                {{ Form::textarea('description', old('description'), array('class' => 'form-control', 'rows' => '2')) }}
             </div>
-                     
-           
+
+
 
             <div class="form-group actions-row">
-                    {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+                    {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
                         array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
             </div>
         {{ Form::close() }}
 
-		<?php  
+		<?php
 		Session::put('SOURCE_URL', URL::full());?>
 	</div>
-	
+
 </div>
 @stop
