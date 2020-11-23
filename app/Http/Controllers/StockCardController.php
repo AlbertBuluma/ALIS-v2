@@ -7,7 +7,12 @@ use App\Models\UNHLSFacility;
 use App\Models\UNHLSStaff;
 use App\Models\UNHLSStockcard;
 use App\Models\UNHLSWarehouse;
+use DateTime;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class StockCardController extends Controller {
 
@@ -20,8 +25,9 @@ class StockCardController extends Controller {
 	{
 
 		$items = Commodity::select(DB::raw('concat (name," (",description,")") as full_name,id'))
-		->orderBy('full_name', 'ASC')
-		->lists('full_name', 'id');
+                        ->orderBy('full_name', 'ASC')
+                        ->pluck('full_name', 'id')
+                        ->toArray();
 
 		$stock = UNHLSStockcard::with('District','Year','Facility','Commodity')
 				->get();
@@ -32,17 +38,18 @@ class StockCardController extends Controller {
 
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function create()
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+	public function create(Request $request)
 	{
-		if( Input::get('redirect')==0 )
+		if( $request->get('redirect')==0 )
 		{
-			Session::put('item',Input::get('item'));
-			Session::put('action',Input::get('optAction'));
+			Session::put('item',$request->get('item'));
+			Session::put('action',$request->get('optAction'));
 		}
 
 		else
@@ -51,12 +58,12 @@ class StockCardController extends Controller {
 
 			if(!(Session::has('item')))
 			{
-				Session::put('item',Input::get('item'));
+				Session::put('item',$request->get('item'));
 			}
 
 			if(!(Session::has('action')))
 			{
-				Session::put('action',Input::get('optAction'));
+				Session::put('action',$request->get('optAction'));
 			}
 		}
 
@@ -71,7 +78,7 @@ class StockCardController extends Controller {
 		if(Session::get('action')== config('constants.INCOMING_STOCK_FLAG') )
 		{
 			$card_action = 'stock in';
-			if(Input::get('inboundOption')==1)
+			if($request->get('inboundOption')==1)
 			{
 				$source_destination_list = UNHLSFacility::orderBy('name', 'ASC')->lists('name', 'id');
 				Session::put('to_from_type', config('constants.FROM_FACILITY'));
@@ -87,7 +94,7 @@ class StockCardController extends Controller {
 			$card_action = 'stock out';
 			$source_destination_label = "To";
 
-			if(Input::get('outboundOption')==3)
+			if($request->get('outboundOption')==3)
 			{
 				$source_destination_list = UNHLSFacility::orderBy('name', 'ASC')->lists('name', 'id');
 				Session::put('to_from_type', config('constants.TO_FACILITY'));
@@ -118,10 +125,10 @@ class StockCardController extends Controller {
 	}
 
 
-	public function validate_batch()
+	public function validate_batch(Request $request)
 	{
 
-		$batch = 	UNHLSStockcard::where('action','=','I')->where('batch_number','=',Input::get('batch_no'))->orderBy('created_at','asc')->first();
+		$batch = UNHLSStockcard::where('action','=','I')->where('batch_number','=',$request->get('batch_no'))->orderBy('created_at','asc')->first();
 
 		if ($batch==null)
 		{
@@ -136,7 +143,7 @@ class StockCardController extends Controller {
 	}
 
 
-	public function store()
+	public function store(Request $request)
 	{
 
 		$rules = array(
@@ -145,10 +152,10 @@ class StockCardController extends Controller {
 		'transaction_date'=>'required'
 		);
 
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator);
+			return redirect()->back()->withErrors($validator);
 		}
 		/*else if ($batch->count()==0) {
 			Session::put('batch_error',Input::get('batch_no').' is an invalid batch number');
@@ -160,55 +167,55 @@ class StockCardController extends Controller {
 		//check for batch number validity
 		$stockcard = new UNHLSStockcard;
 
-		$action = Input::get('action');
+		$action = $request->get('action');
 
 		$quantity=0;
-		$balance=Input::get('balance_on_hand');
+		$balance=$request->get('balance_on_hand');
 
 
-        $stockcard->to_from = Input::get('to_from');
+        $stockcard->to_from = $request->get('to_from');
         $stockcard->to_from_type = Session::get('to_from_type');
-        $stockcard->district_id = \Config::get('constants.DISTRICT_ID') ;
-        $stockcard->facility_id = \Config::get('constants.FACILITY_ID');
-        $stockcard->year_id = \Config::get('constants.FIN_YEAR_ID');
+        $stockcard->district_id = config('constants.DISTRICT_ID') ;
+        $stockcard->facility_id = config('constants.FACILITY_ID');
+        $stockcard->year_id = config('constants.FIN_YEAR_ID');
         $stockcard->commodity_id = Session::get('item');
-        $stockcard->voucher_number = Input::get('voucher_no');
-        $stockcard->batch_number = Input::get('batch_no');
-        $stockcard->expiry_date = Input::get('expiry_date');
-        $stockcard->transaction_date = date('Y-m-d',strtotime(Input::get('transaction_date')));
+        $stockcard->voucher_number = $request->get('voucher_no');
+        $stockcard->batch_number = $request->get('batch_no');
+        $stockcard->expiry_date = $request->get('expiry_date');
+        $stockcard->transaction_date = date('Y-m-d',strtotime($request->get('transaction_date')));
         $stockcard->issue_date = new DateTime();
-        $stockcard->remarks = Input::get('remarks');
-        $stockcard->initials = Input::get('initials');
-        $stockcard->action = Input::get('action');
+        $stockcard->remarks = $request->get('remarks');
+        $stockcard->initials = $request->get('initials');
+        $stockcard->action = $request->get('action');
 
-		if($action==\Config::get('constants.INCOMING_STOCK_FLAG'))
+		if($action==config('constants.INCOMING_STOCK_FLAG'))
 		{
-			$quantity = Input::get('quantity_in');
+			$quantity = $request->get('quantity_in');
 			$balance += $quantity;
 
  		    $stockcard->quantity_in = $quantity;
 		}
-		else if($action==\Config::get('constants.OUTGOING_STOCK_FLAG'))
+		else if($action==config('constants.OUTGOING_STOCK_FLAG'))
 		{
-			$quantity = Input::get('quantity_out');
+			$quantity = $request->get('quantity_out');
 			$balance -= $quantity;
 
  		    $stockcard->quantity_out = $quantity;
 		}
 		else{
-			$quantity = Input::get('losses_adjustments');
+			$quantity = $request->get('losses_adjustments');
 			$balance += $quantity;
 
  	        $stockcard->quantity = $quantity;
-			$stockcard->to_from = \Config::get('constants.FACILITY_ID');
-        	$stockcard->to_from_type = \Config::get('constants.FROM_FACILITY');
+			$stockcard->to_from = config('constants.FACILITY_ID');
+        	$stockcard->to_from_type = config('constants.FROM_FACILITY');
 		}
 
         $stockcard->balance = $balance;
 
         $stockcard->save();
 
-		return Redirect::to('stockcard');
+		return redirect('stockcard');
 
 		}
 	}
