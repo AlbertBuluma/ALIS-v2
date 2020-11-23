@@ -504,7 +504,7 @@ class UnhlsTest extends Model
 					INNER JOIN unhls_test_results tr ON t.id = tr.test_id AND m.id = tr.measure_id
 				WHERE (t.test_status_id=4 OR t.test_status_id=5) AND m.measure_type_id = 2
 					AND t.time_created BETWEEN ? AND ? $testCategoryWhereClause
-				GROUP BY tt.id, m.id, mr.alphanumeric, s.id) AS alpha
+				GROUP BY tt.name, tt.id, m.name, m.id, mr.alphanumeric, s.id, s.gender) AS alpha
 				UNION
 				(
 				SELECT
@@ -582,7 +582,7 @@ class UnhlsTest extends Model
 					INNER JOIN unhls_test_results tr ON t.id = tr.test_id AND tm.measure_id = tr.measure_id
 				WHERE (t.test_status_id=4 OR t.test_status_id=5) AND mmr.measure_type_id = 1
 					AND t.time_created BETWEEN ? AND ? $testCategoryWhereClause
-				GROUP BY tt.id, tm.measure_id, mmr.result_alias, s.id)
+				GROUP BY tt.name, tt.id, tm.measure_id, mmr.result_alias, s.id, s.gender)
 			ORDER BY test_name, measure_name, result, gender",
 			array($startTime, $endTime, $startTime, $endTime)
 			);
@@ -1276,7 +1276,8 @@ class UnhlsTest extends Model
 		return $this->hasMany('App\Models\UnhlsRecalledTestResult', 'unhls_test_id','id');
 	}
 
-	public static function latestRevision($test_id){
+//	public static function latestRevision($test_id){
+	public function latestRevision($test_id){
 
 		$revisions = DB::select("SELECT * revisions from unhls_recalled_test_results WHERE unhls_test_id=".$test_id);
 
