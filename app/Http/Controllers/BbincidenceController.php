@@ -1,11 +1,20 @@
 <?php
+
 namespace App\Http\Controllers;
 
+use App\Models\BbincidenceAction;
+use App\Models\BbincidenceActionIntermediate;
+use App\Models\BbincidenceCause;
+use App\Models\BbincidenceCauseIntermediate;
 use App\Models\BbincidenceNature;
+use App\Models\BbincidenceNatureIntermediate;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use App\Models\Bbincidence;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 /**
  *Contains functions for managing bbincidence records
@@ -53,7 +62,7 @@ class BbincidenceController extends Controller {
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function create()
 	{
@@ -74,15 +83,16 @@ class BbincidenceController extends Controller {
 		//$actions = BbincidenceAction::orderBy('actionname')->get();
 
 
-		return View::make('bbincidence.create')->with('natures', $natures);
+		return view('bbincidence.create')->with('natures', $natures);
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return Response
+     */
+	public function store(Request $request)
 	{
 		//
 		$rules = array(
@@ -92,7 +102,6 @@ class BbincidenceController extends Controller {
 			//'occurrence_date' => ['required','date_format:Y-m-d|before:today'],
 			'occurrence_date' => 'required',
 			'occurrence_time' =>'required',
-			'description' =>'required',
 			'officer_fname' => 'required',
 			'officer_lname' => 'required',
 			'officer_cadre' => 'required',
@@ -112,17 +121,17 @@ class BbincidenceController extends Controller {
 		//	'personnel_dob' => 'required_without:personnel_age',
 		//	'personnel_age' => 'required_without:personnel_dob',
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
 
-			return Redirect::back()->withErrors($validator)->withInput(Input::all());
+			return redirect()->back()->withErrors($validator)->withInput($request->all());
 		} else {
 			// store
 
 
-			$personnel_dob = Input::get('personnel_dob');
-			$personnel_age = Input::get('personnel_age');
+			$personnel_dob = $request->get('personnel_dob');
+			$personnel_age = $request->get('personnel_age');
 
 			//converting Age to DOB
 			if ($personnel_dob=='' && $personnel_age!=''){
@@ -134,34 +143,34 @@ class BbincidenceController extends Controller {
 
 			$bbincidence = new Bbincidence;
 
-			$bbincidence->facility_id = Input::get('facility_id');
-			$bbincidence->occurrence_date = Input::get('occurrence_date');
-			$bbincidence->occurrence_time = Input::get('occurrence_time');
-			$bbincidence->firstaid = Input::get('firstaid');
-			$bbincidence->personnel_id = Input::get('personnel_id');
-			$bbincidence->personnel_surname = Input::get('personnel_surname');
-			$bbincidence->personnel_othername = Input::get('personnel_othername');
-			$bbincidence->personnel_gender = Input::get('personnel_gender');
+			$bbincidence->facility_id = $request->get('facility_id');
+			$bbincidence->occurrence_date = $request->get('occurrence_date');
+			$bbincidence->occurrence_time = $request->get('occurrence_time');
+			$bbincidence->firstaid = $request->get('firstaid');
+			$bbincidence->personnel_id = $request->get('personnel_id');
+			$bbincidence->personnel_surname = $request->get('personnel_surname');
+			$bbincidence->personnel_othername = $request->get('personnel_othername');
+			$bbincidence->personnel_gender = $request->get('personnel_gender');
 			$bbincidence->personnel_dob = $personnel_dob;
 			$bbincidence->personnel_age = $personnel_age;
-			$bbincidence->personnel_category = Input::get('personnel_category');
-			$bbincidence->personnel_telephone = Input::get('personnel_telephone');
-			$bbincidence->personnel_email = Input::get('personnel_email');
-			$bbincidence->nok_name = Input::get('nok_name');
-			$bbincidence->nok_telephone = Input::get('nok_telephone');
-			$bbincidence->nok_email = Input::get('nok_email');
-			$bbincidence->lab_section = Input::get('lab_section');
-			$occurrences = Input::get('nature');
-			if(Input::get('nature')!=''){ $bbincidence->occurrence = implode(',', Input::get('nature') ); }
-			$bbincidence->ulin = Input::get('ulin');
-			$bbincidence->equip_name = Input::get('equip_name');
-			$bbincidence->equip_code = Input::get('equip_code');
-			$bbincidence->task = Input::get('task');
-			$bbincidence->description = Input::get('description');
-			$bbincidence->officer_fname = Input::get('officer_fname');
-			$bbincidence->officer_lname = Input::get('officer_lname');
-			$bbincidence->officer_cadre = Input::get('officer_cadre');
-			$bbincidence->officer_telephone = Input::get('officer_telephone');
+			$bbincidence->personnel_category = $request->get('personnel_category');
+			$bbincidence->personnel_telephone = $request->get('personnel_telephone');
+			$bbincidence->personnel_email = $request->get('personnel_email');
+			$bbincidence->nok_name = $request->get('nok_name');
+			$bbincidence->nok_telephone = $request->get('nok_telephone');
+			$bbincidence->nok_email = $request->get('nok_email');
+			$bbincidence->lab_section = $request->get('lab_section');
+			$occurrences = $request->get('nature');
+			if($request->get('nature')!=''){ $bbincidence->occurrence = implode(',', $request->get('nature') ); }
+			$bbincidence->ulin = $request->get('ulin');
+			$bbincidence->equip_name = $request->get('equip_name');
+			$bbincidence->equip_code = $request->get('equip_code');
+			$bbincidence->task = $request->get('task');
+			$bbincidence->description = $request->get('description');
+			$bbincidence->officer_fname = $request->get('officer_fname');
+			$bbincidence->officer_lname = $request->get('officer_lname');
+			$bbincidence->officer_cadre = $request->get('officer_cadre');
+			$bbincidence->officer_telephone = $request->get('officer_telephone');
 
 			$bbincidence->status = 'Ongoing';
 
@@ -270,7 +279,7 @@ class BbincidenceController extends Controller {
 		//dd($bbincidence);
 
 		//Show the view and pass the $bbincidence to it
-		$content = View::make('bbincidence.show')->with('bbincidence', $bbincidence)->with('nextbbincidence', $nextbbincidence)
+		$content = view('bbincidence.show')->with('bbincidence', $bbincidence)->with('nextbbincidence', $nextbbincidence)
 		->with('previousbbincidence', $previousbbincidence);
 
 		return PDF::loadHTML($content)->stream('bbincidenceReport.pdf');
@@ -280,7 +289,7 @@ class BbincidenceController extends Controller {
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
@@ -298,17 +307,18 @@ class BbincidenceController extends Controller {
 		$id<=$firstInsertedId ? $previousbbincidence=$firstInsertedId : $previousbbincidence = $id-1;
 
 		//Open the Edit View and pass to it the $bbincidence
-		return View::make('bbincidence.edit')->with('bbincidence', $bbincidence)->with('natures', $natures)
+		return view('bbincidence.edit')->with('bbincidence', $bbincidence)->with('natures', $natures)
 		->with('nextbbincidence', $nextbbincidence)->with('previousbbincidence', $previousbbincidence);
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function update(Request $request, $id)
 	{
 		//
 		$rules = array(
@@ -317,17 +327,17 @@ class BbincidenceController extends Controller {
 			'description' => 'required',
 		//	'dob' => 'required'
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
 
-			return Redirect::back()->withErrors($validator)->withInput(Input::all());
+			return redirect()->back()->withErrors($validator)->withInput($request->all());
 		} else {
 			// Update
 			$bbincidence = Bbincidence::find($id);
 
-			$personnel_dob = Input::get('personnel_dob');
-			$personnel_age = Input::get('personnel_age');
+			$personnel_dob = $request->get('personnel_dob');
+			$personnel_age = $request->get('personnel_age');
 
 			//converting Age to DOB
 			if (($personnel_dob=='' or $personnel_dob=='0000-00-00') and $personnel_age!=''){
@@ -335,33 +345,33 @@ class BbincidenceController extends Controller {
 				$personnel_dob = $dob_year.'-06-01';
 			}
 
-			$bbincidence->occurrence_date = Input::get('occurrence_date');
-			$bbincidence->occurrence_time = Input::get('occurrence_time');
-			$bbincidence->firstaid = Input::get('firstaid');
-			$bbincidence->personnel_id = Input::get('personnel_id');
-			$bbincidence->personnel_surname = Input::get('personnel_surname');
-			$bbincidence->personnel_othername = Input::get('personnel_othername');
-			$bbincidence->personnel_gender = Input::get('personnel_gender');
+			$bbincidence->occurrence_date = $request->get('occurrence_date');
+			$bbincidence->occurrence_time = $request->get('occurrence_time');
+			$bbincidence->firstaid = $request->get('firstaid');
+			$bbincidence->personnel_id = $request->get('personnel_id');
+			$bbincidence->personnel_surname = $request->get('personnel_surname');
+			$bbincidence->personnel_othername = $request->get('personnel_othername');
+			$bbincidence->personnel_gender = $request->get('personnel_gender');
 			$bbincidence->personnel_dob = $personnel_dob;
 			$bbincidence->personnel_age = $personnel_age;
-			$bbincidence->personnel_category = Input::get('personnel_category');
-			$bbincidence->personnel_telephone = Input::get('personnel_telephone');
-			$bbincidence->personnel_email = Input::get('personnel_email');
-			$bbincidence->nok_name = Input::get('nok_name');
-			$bbincidence->nok_telephone = Input::get('nok_telephone');
-			$bbincidence->nok_email = Input::get('nok_email');
-			$bbincidence->lab_section = Input::get('lab_section');
-			$occurrences = Input::get('nature');
-			if(Input::get('nature')!=''){ $bbincidence->occurrence = implode(',', Input::get('nature') ); }
-			$bbincidence->ulin = Input::get('ulin');
-			$bbincidence->equip_name = Input::get('equip_name');
-			$bbincidence->equip_code = Input::get('equip_code');
-			$bbincidence->task = Input::get('task');
-			$bbincidence->description = Input::get('description');
-			$bbincidence->officer_fname = Input::get('officer_fname');
-			$bbincidence->officer_lname = Input::get('officer_lname');
-			$bbincidence->officer_cadre = Input::get('officer_cadre');
-			$bbincidence->officer_telephone = Input::get('officer_telephone');
+			$bbincidence->personnel_category = $request->get('personnel_category');
+			$bbincidence->personnel_telephone = $request->get('personnel_telephone');
+			$bbincidence->personnel_email = $request->get('personnel_email');
+			$bbincidence->nok_name = $request->get('nok_name');
+			$bbincidence->nok_telephone = $request->get('nok_telephone');
+			$bbincidence->nok_email = $request->get('nok_email');
+			$bbincidence->lab_section = $request->get('lab_section');
+			$occurrences = $request->get('nature');
+			if($request->get('nature')!=''){ $bbincidence->occurrence = implode(',', $request->get('nature') ); }
+			$bbincidence->ulin = $request->get('ulin');
+			$bbincidence->equip_name = $request->get('equip_name');
+			$bbincidence->equip_code = $request->get('equip_code');
+			$bbincidence->task = $request->get('task');
+			$bbincidence->description = $request->get('description');
+			$bbincidence->officer_fname = $request->get('officer_fname');
+			$bbincidence->officer_lname = $request->get('officer_lname');
+			$bbincidence->officer_cadre = $request->get('officer_cadre');
+			$bbincidence->officer_telephone = $request->get('officer_telephone');
 
 			$bbincidence->updatedby = Auth::user()->id;
 			$bbincidence->save();
@@ -415,29 +425,30 @@ class BbincidenceController extends Controller {
 			->with('message', 'The commodity was successfully deleted!');
 	}
 
-	/**
-	 * Return a Bbincidence collection that meets the searched criteria as JSON.
-	 *
-	 * @return Response
-	 */
-	public function search()
+    /**
+     * Return a Bbincidence collection that meets the searched criteria as JSON.
+     *
+     * @param Request $request
+     * @return Response
+     */
+	public function search(Request $request)
 	{
-        return Bbincidence::search(Input::get('text'))->take(\Config::get('kblis.limit-items'))->get()->toJson();
+        return Bbincidence::search($request->get('text'))->take(config('kblis.limit-items'))->get()->toJson();
 	}
 
-	public function facility_search()
+	public function facility_search(Request $request)
 	{
-        return Bbincidence::facility_search(Input::get('text'))->take(\Config::get('kblis.limit-items'))->get()->toJson();
+        return Bbincidence::facility_search($request->get('text'))->take(config('kblis.limit-items'))->get()->toJson();
 	}
 
-	public function filterbydate()
+	public function filterbydate(Request $request)
 	{
-        return Bbincidence::filterbydate(Input::get('text'))->take(\Config::get('kblis.limit-items'))->get()->toJson();
+        return Bbincidence::filterbydate($request->get('text'))->take(config('kblis.limit-items'))->get()->toJson();
 	}
 
-	public function facility_filterbydate()
+	public function facility_filterbydate(Request $request)
 	{
-        return Bbincidence::facility_filterbydate(Input::get('text'))->take(\Config::get('kblis.limit-items'))->get()->toJson();
+        return Bbincidence::facility_filterbydate($request->get('text'))->take(config('kblis.limit-items'))->get()->toJson();
 	}
 
 
@@ -484,33 +495,33 @@ class BbincidenceController extends Controller {
 		$id<=$firstInsertedId ? $previousbbincidence=$firstInsertedId : $previousbbincidence = $id-1;
 
 		//Open the Edit View and pass to it the $bbincidence
-		return View::make('bbincidence.clinicaledit')->with('bbincidence', $bbincidence)->with('natures', $natures)
+		return view('bbincidence.clinicaledit')->with('bbincidence', $bbincidence)->with('natures', $natures)
 		->with('causes', $causes)->with('actions', $actions)->with('nextbbincidence', $nextbbincidence)
 		->with('previousbbincidence', $previousbbincidence);
 	}
 
-	public function clinicalupdate($id){
+	public function clinicalupdate(Request $request, $id){
 		//
 		$rules = array(
 
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator)->withInput(Input::all());
+			return redirect()->back()->withErrors($validator)->withInput($request->all());
 		} else {
 			// Update
 			$bbincidence = Bbincidence::find($id);
 
-			$bbincidence->extent = Input::get('extent');
-			$bbincidence->intervention = Input::get('intervention');
-			$bbincidence->intervention_date = Input::get('intervention_date');
-			$bbincidence->intervention_time = Input::get('intervention_time');
-			$bbincidence->intervention_followup = Input::get('intervention_followup');
-			$bbincidence->mo_fname = Input::get('mo_fname');
-			$bbincidence->mo_lname = Input::get('mo_lname');
-			$bbincidence->mo_designation = Input::get('mo_designation');
-			$bbincidence->mo_telephone = Input::get('mo_telephone');
+			$bbincidence->extent = $request->get('extent');
+			$bbincidence->intervention = $request->get('intervention');
+			$bbincidence->intervention_date = $request->get('intervention_date');
+			$bbincidence->intervention_time = $request->get('intervention_time');
+			$bbincidence->intervention_followup = $request->get('intervention_followup');
+			$bbincidence->mo_fname = $request->get('mo_fname');
+			$bbincidence->mo_lname = $request->get('mo_lname');
+			$bbincidence->mo_designation = $request->get('mo_designation');
+			$bbincidence->mo_telephone = $request->get('mo_telephone');
 
 			$bbincidence->save();
 
@@ -538,36 +549,36 @@ class BbincidenceController extends Controller {
 		$id<=$firstInsertedId ? $previousbbincidence=$firstInsertedId : $previousbbincidence = $id-1;
 
 		//Open the Update View and pass to it the $bbincidence
-		return View::make('bbincidence.analysisedit')->with('bbincidence', $bbincidence)
+		return view('bbincidence.analysisedit')->with('bbincidence', $bbincidence)
 		->with('causes', $causes)->with('actions', $actions)->with('nextbbincidence', $nextbbincidence)
 		->with('previousbbincidence', $previousbbincidence);
 	}
 
-	public function analysisupdate($id){
+	public function analysisupdate(Request $request, $id){
 		//
 		$rules = array(
 
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator)->withInput(Input::all());
+			return redirect()->back()->withErrors($validator)->withInput($request->all());
 		} else {
 			// Update
 			$bbincidence = Bbincidence::find($id);
 
-			$causes = Input::get('cause');
-			if(Input::get('cause')!=''){ $bbincidence->cause = implode(',', Input::get('cause') ); }
-			$actions = Input::get('corrective_action');
-			if(Input::get('corrective_action')!=''){ $bbincidence->corrective_action = implode(',', Input::get('corrective_action') ); }
-			$bbincidence->referral_status = Input::get('referral_status');
-			$bbincidence->status = Input::get('status');
-			$bbincidence->analysis_date = Input::get('analysis_date');
-			$bbincidence->analysis_time = Input::get('analysis_time');
-			$bbincidence->bo_fname = Input::get('bo_fname');
-			$bbincidence->bo_lname = Input::get('bo_lname');
-			$bbincidence->bo_designation = Input::get('bo_designation');
-			$bbincidence->bo_telephone = Input::get('bo_telephone');
+			$causes = $request->get('cause');
+			if($request->get('cause')!=''){ $bbincidence->cause = implode(',', $request->get('cause') ); }
+			$actions = $request->get('corrective_action');
+			if($request->get('corrective_action')!=''){ $bbincidence->corrective_action = implode(',', $request->get('corrective_action') ); }
+			$bbincidence->referral_status = $request->get('referral_status');
+			$bbincidence->status = $request->get('status');
+			$bbincidence->analysis_date = $request->get('analysis_date');
+			$bbincidence->analysis_time = $request->get('analysis_time');
+			$bbincidence->bo_fname = $request->get('bo_fname');
+			$bbincidence->bo_lname = $request->get('bo_lname');
+			$bbincidence->bo_designation = $request->get('bo_designation');
+			$bbincidence->bo_telephone = $request->get('bo_telephone');
 
 			$bbincidence->save();
 
@@ -612,31 +623,31 @@ class BbincidenceController extends Controller {
 		$id<=$firstInsertedId ? $previousbbincidence=$firstInsertedId : $previousbbincidence = $id-1;
 
 		//Open the Update View and pass to it the $bbincidence
-		return View::make('bbincidence.responseedit')->with('bbincidence', $bbincidence)
+		return view('bbincidence.responseedit')->with('bbincidence', $bbincidence)
 		->with('nextbbincidence', $nextbbincidence)->with('previousbbincidence', $previousbbincidence);
 	}
 
-	public function responseupdate($id){
+	public function responseupdate(Request $request, $id){
 		//
 		$rules = array(
 
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator)->withInput(Input::all());
+			return redirect()->back()->withErrors($validator)->withInput($request->all());
 		} else {
 			// Update
 			$bbincidence = Bbincidence::find($id);
 
-			$bbincidence->findings = Input::get('findings');
-			$bbincidence->improvement_plan = Input::get('improvement_plan');
-			$bbincidence->response_date = Input::get('response_date');
-			$bbincidence->response_time = Input::get('response_time');
-			$bbincidence->brm_fname = Input::get('brm_fname');
-			$bbincidence->brm_lname = Input::get('brm_lname');
-			$bbincidence->brm_designation = Input::get('brm_designation');
-			$bbincidence->brm_telephone = Input::get('brm_telephone');
+			$bbincidence->findings = $request->get('findings');
+			$bbincidence->improvement_plan = $request->get('improvement_plan');
+			$bbincidence->response_date = $request->get('response_date');
+			$bbincidence->response_time = $request->get('response_time');
+			$bbincidence->brm_fname = $request->get('brm_fname');
+			$bbincidence->brm_lname = $request->get('brm_lname');
+			$bbincidence->brm_designation = $request->get('brm_designation');
+			$bbincidence->brm_telephone = $request->get('brm_telephone');
 
 			$bbincidence->save();
 
@@ -649,14 +660,14 @@ class BbincidenceController extends Controller {
 	}
 
 
-	public function bbfacilityreport()
+	public function bbfacilityreport(Request $request)
 	{
 		$natures = BbincidenceNature::orderBy('class')->get();
 		$causes = BbincidenceCause::orderBy('causename')->get();
 		$actions = BbincidenceAction::orderBy('actionname')->get();
 
-		$datefrom = Input::get('datefrom');
-		$dateto = Input::get('dateto');
+		$datefrom = $request->get('datefrom');
+		$dateto = $request->get('dateto');
 
         $bbincidentnatureclasses = DB::table('unhls_bbnatures')->distinct()->get(['class']);
 
@@ -670,7 +681,7 @@ class BbincidenceController extends Controller {
 					->groupBy('referral_status')
              		->get();
 
-		return View::make('bbincidence.bbfacilityreport') ->with('bbincidentnatureclasses', $bbincidentnatureclasses)
+		return view('bbincidence.bbfacilityreport') ->with('bbincidentnatureclasses', $bbincidentnatureclasses)
 			->with('natures', $natures)
 			->with('causes', $causes)
 			->with('actions', $actions)
