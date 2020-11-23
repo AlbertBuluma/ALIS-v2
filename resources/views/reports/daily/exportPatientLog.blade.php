@@ -31,7 +31,7 @@
 				<td>
 					{{--*/ $male = 0 /*--}}
 					@forelse($visits as $visit)
-					  @if($visit->patient->gender==Patient::MALE)
+					  @if($visit->patient->gender==App\Models\Patient::MALE)
 					   	{{--*/ $male++ /*--}}
 					  @endif
 					@endforeach
