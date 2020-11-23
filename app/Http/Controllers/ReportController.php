@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdhocConfig;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\AdhocConfig;
+use App\Models\FinalReportPdf;
+use App\Models\User;
 use App\Models\Control;
 use App\Models\ControlTest;
 use App\Models\DailyAlphanumericCount;
@@ -28,6 +34,7 @@ use App\Models\UnhlsSpecimen;
 use App\Models\UnhlsTest;
 use App\Models\UnhlsVisit;
 use DateTime;
+use Maatwebsite\Excel\Facades\Excel;
 
 set_time_limit(0); //60 seconds = 1 minute
 
@@ -49,28 +56,30 @@ class ReportController extends Controller {
 	public function loadPatients(Request $request)
 	{
 		$search = $request->search;
+        $request['search'] = $request->search;
 
 		$patients = UnhlsPatient::search($search)->orderBy('id','DESC')->paginate(config('kblis.page-items'));
 
-
-
 		if (count($patients) == 0) {
-		 	Session::flash('message', trans('messages.no-match'));
+            $request->session()->flash('message', trans('messages.no-match'));
 		}
 
 		// Load the view and pass the patients
-		return View('reports.patient.index')->with('patients', $patients)->withInput(Input::all());
+		return view('reports.patient.index')
+                    ->with('patients', $patients)
+                    ->with('request', $request);
+//                    ->withInput($request = $request->all());
 	}
 
-	public function viewFinalPatientReport($id, $visit = null,$testId = null){
-		$from = Input::get('start');
-		$to = Input::get('end');
-		$pending = Input::get('pending');
+	public function viewFinalPatientReport(Request $request, $id, $visit = null,$testId = null){
+		$from = $request->get('start');
+		$to = $request->get('end');
+		$pending = $request->get('pending');
 		$date = date('Y-m-d');
 		$error = '';
-		$visitId = Input::get('visit_id');
+		$visitId = $request->get('visit_id');
 		//	Check checkbox if checked and assign the 'checked' value
-		if (Input::get('tests') === '1') {
+		if ($request->get('tests') === '1') {
 			$pending='checked';
 		}
 		//	Query to get tests of a particular patient
@@ -132,7 +141,7 @@ class ReportController extends Controller {
 			->with('visit', $visit)
 			->with('accredited', $accredited)
 			->with('verified', $verified)
-			->withInput(Input::all());
+			->withInput($request->all());
 
 			ob_end_clean();
 
@@ -153,15 +162,15 @@ class ReportController extends Controller {
 
 	}
 
-	public function viewInterimPatientReport($id, $visit = null,$testId = null){
-		$from = Input::get('start');
-		$to = Input::get('end');
-		$pending = Input::get('pending');
+	public function viewInterimPatientReport(Request $request, $id, $visit = null,$testId = null){
+		$from = $request->get('start');
+		$to = $request->get('end');
+		$pending = $request->get('pending');
 		$date = date('Y-m-d');
 		$error = '';
-		$visitId = Input::get('visit_id');
+		$visitId = $request->get('visit_id');
 		//	Check checkbox if checked and assign the 'checked' value
-		if (Input::get('tests') === '1') {
+		if ($request->get('tests') === '1') {
 			$pending='checked';
 		}
 		//	Query to get tests of a particular patient
@@ -221,7 +230,7 @@ class ReportController extends Controller {
 			->with('visit', $visit)
 			->with('accredited', $accredited)
 			->with('verified', $verified)
-			->withInput(Input::all());
+			->withInput($request->all());
 
 			ob_end_clean();
 		$test_request_information  = array(
@@ -242,20 +251,24 @@ class ReportController extends Controller {
 
 	}
 
-	/**
-	 * Display data after applying the filters on the report uses patient ID
-	 *
-	 * @return Response
-	 */
-	public function viewPatientReport($id, $visit = null, $testId = null){
-		$from = Input::get('start');
-		$to = Input::get('end');
-		$pending = Input::get('pending');
+    /**
+     * Display data after applying the filters on the report uses patient ID
+     *
+     * @param Request $request
+     * @param $id
+     * @param null $visit
+     * @param null $testId
+     * @return Response
+     */
+	public function viewPatientReport(Request $request, $id, $visit = null, $testId = null){
+		$from = $request->get('start');
+		$to = $request->get('end');
+		$pending = $request->get('pending');
 		$date = date('Y-m-d');
 		$error = '';
-		$visitId = Input::get('visit_id');
+		$visitId = $request->get('visit_id');
 		//	Check checkbox if checked and assign the 'checked' value
-		if (Input::get('tests') === '1') {
+		if ($request->get('tests') === '1') {
 			$pending='checked';
 		}
 
@@ -315,28 +328,28 @@ class ReportController extends Controller {
 		$visits = UnhlsVisit::select('id')->where('patient_id','=',$id)->get();
 		//$tests = UnhlsTest::whereIn('visit_id', [5051])->get();
 
-		\Log::info('...visits...');
-		\Log::info($visits);
+		Log::info('...visits...');
+		Log::info($visits);
 		$visits_array=json_decode($visits,true);
-		\Log::info('...end visits...');
+		Log::info('...end visits...');
 		$tests = UnhlsTest::whereIn('visit_id', $visits_array)->get();
 
-		\Log::info("....1....");
+		Log::info("....1....");
 		// adhoc config decision
 		$template = AdhocConfig::where('name','Report')->first()->getReportTemplate();
 
-		\Log::info("....2....");
-		\Log::info($patient);
+		Log::info("....2....");
+		Log::info($patient);
 
-		\Log::info("....tests....");
-		\Log::info($tests);
-		\Log::info("..end..tests....");
+		Log::info("....tests....");
+		Log::info($tests);
+		Log::info("..end..tests....");
 
-		$content = View($template)
+		$content = view($template)
 			->with('patient', $patient)
 			->with('tests', $tests)
 
-			->withInput(Input::all());
+			->withInput($request->all());
 
 			/*$content = View($template)
 			->with('patient', $patient)
@@ -361,7 +374,7 @@ class ReportController extends Controller {
 
 	}
 
-    public function viewPatientVisitReport($visit_id){
+    public function viewPatientVisitReport(Request $request, $visit_id){
 
 	    $tests = UnhlsTest::where('visit_id', '=', $visit_id)->get();
 
@@ -380,7 +393,7 @@ class ReportController extends Controller {
 		$content = View($template)
 			->with('patient', $patient)
 			->with('tests', $tests)
-			->withInput(Input::all());
+			->withInput($request->all());
 
 			ob_end_clean();
 
@@ -421,10 +434,10 @@ class ReportController extends Controller {
 
     	return $isInterim;
     }
-	public function viewPatientVisits($id){
+	public function viewPatientVisits(Request $request, $id){
 
 		$error = '';
-		$visitId = Input::get('visit_id');
+		$visitId = $request->get('visit_id');
 
 		//	Get patient details
 		$patient = UnhlsPatient::find($id);
@@ -433,15 +446,18 @@ class ReportController extends Controller {
 
 		// Load the view and pass the patients
 		return View('reports.patient.visits')->with('patient', $patient)
-		->with('visits', $visits)->withInput(Input::all());
+		->with('visits', $visits)->withInput($request->all());
 
 	}
-	/**
-	 *
-	 *
-	 * @return Response
-	 */
-	public function viewVisitReport($id){
+
+    /**
+     *
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+	public function viewVisitReport(Request $request, $id){
 		$date = date('Y-m-d');
 		$error = '';
 
@@ -453,27 +469,32 @@ class ReportController extends Controller {
 			'unhls_tests.isolatedOrganisms.organism',
 			'unhls_tests.isolatedOrganisms.drugSusceptibilities.drug',
 			'unhls_tests.isolatedOrganisms.drugSusceptibilities.drugSusceptibilityMeasure');
-		return View('reports.visit.report')
+		return view('reports.visit.report')
 					->with('error', $error)
 					->with('visit', $visit)
-					->withInput(Input::all());
+					->withInput($request->all());
 	}
 
-	/**
-	*	Function to return test types of a particular test category to fill test types dropdown
-	*/
-	public function reportsDropdown(){
-		$input = Input::get('option');
+    /**
+     *    Function to return test types of a particular test category to fill test types dropdown
+     * @param Request $request
+     * @return
+     */
+	public function reportsDropdown(Request $request){
+		$input = $request->get('option');
 		$testCategory = TestCategory::find($input);
 		$testTypes = $testCategory->testTypes();
 		return Response::make($testTypes->get(['id','name']));
 	}
 
 	//	Begin Daily Log-Patient report functions
-	/**
-	 * Display a view of the daily patient records.
-	 *
-	 */
+
+    /**
+     * Display a view of the daily patient records.
+     * @param Request $request
+     * @return
+     * @throws \Exception
+     */
 	public function dailyLog(Request $request)
 	{
 		$from = $request->get('start');
@@ -497,7 +518,7 @@ class ReportController extends Controller {
 		$testCategory = $request->get('section_id');
 		$testType = $request->get('test_type');
 //		$labSections = TestCategory::lists('name', 'id');
-		$labSections = TestCategory::pluck('name', 'id');
+		$labSections = TestCategory::pluck('name', 'id')->toArray();
 		if($testCategory)
 			$testTypes = TestCategory::find($testCategory)->testTypes->lists('name', 'id');
 		else
@@ -512,14 +533,14 @@ class ReportController extends Controller {
 					$visits = UnhlsVisit::whereBetween('created_at', array($from, $toPlusOne))->get();
 				}
 				if (count($visits) == 0) {
-				 	Session::flash('message', trans('messages.no-match'));
+                    $request->session()->flash('message', trans('messages.no-match'));
 				}
 			}
 			else{
 
 				$visits = UnhlsVisit::where('created_at', 'LIKE', $date.'%')->orderBy('patient_id')->get();
 			}
-			if(Input::has('word')){
+			if($request->has('word')){
 				$date = date("Ymdhi");
 				$fileName = "daily_visits_log_".$date.".doc";
 				$headers = array(
@@ -529,15 +550,17 @@ class ReportController extends Controller {
 				$content = View('reports.daily.exportPatientLog')
 								->with('visits', $visits)
 								->with('accredited', $accredited)
-								->withInput(Input::all());
-				return Response::make($content,200, $headers);
+								->withInput($request->all());
+//				return Response::make($content,200, $headers);
+				return response($content, 200)->withHeaders($headers);
+
 			}
 			else{
 				return view('reports.daily.patient')
 								->with('visits', $visits)
 								->with('error', $error)
 								->with('accredited', $accredited)
-								->withInput(Input::all());
+								->withInput($request->all());
 			}
 		}
 		//Begin specimen rejections
@@ -578,7 +601,7 @@ class ReportController extends Controller {
 				$specimens = $specimens->where('time_rejected', 'LIKE', $date.'%')->orderBy('id')
 										->get(array('specimens.*'));
 			}
-			if(Input::has('word')){
+			if($request->has('word')){
 				$date = date("Ymdhi");
 				$fileName = "daily_rejected_specimen_".$date.".doc";
 				$headers = array(
@@ -590,12 +613,13 @@ class ReportController extends Controller {
 								->with('testCategory', $testCategory)
 								->with('testType', $testType)
 								->with('accredited', $accredited)
-								->withInput(Input::all());
-				return Response::make($content,200, $headers);
+								->withInput($request->all());
+                return response($content, 200)->withHeaders($headers);
+//                return Response::make($content,200, $headers);
 			}
 			else
 			{
-				return View('reports.daily.specimen')
+				return view('reports.daily.specimen')
 							->with('labSections', $labSections)
 							->with('testTypes', $testTypes)
 							->with('specimens', $specimens)
@@ -603,7 +627,7 @@ class ReportController extends Controller {
 							->with('testType', $testType)
 							->with('error', $error)
 							->with('accredited', $accredited)
-							->withInput(Input::all());
+							->withInput($request->all());
 			}
 		}
 		//Begin test records
@@ -647,25 +671,26 @@ class ReportController extends Controller {
 			{
 				$tests = $tests->where('time_created', 'LIKE', $date.'%')->get(array('unhls_tests.*'));
 			}
-			if(Input::has('word')){
+			if($request->has('word')){
 				$date = date("Ymdhi");
 				$fileName = "daily_test_records_".$date.".doc";
 				$headers = array(
 					"Content-type"=>"text/html",
 					"Content-Disposition"=>"attachment;Filename=".$fileName
 				);
-				$content = View('reports.daily.exportTestLog')
+				$content = view('reports.daily.exportTestLog')
 								->with('tests', $tests)
 								->with('testCategory', $testCategory)
 								->with('testType', $testType)
 								->with('pendingOrAll', $pendingOrAll)
 								->with('accredited', $accredited)
-								->withInput(Input::all());
-				return Response::make($content,200, $headers);
+								->withInput($request->all());
+				return response($content, 200)->withHeaders($headers);
+//				return Response::make($content,200, $headers);
 			}
 			else
 			{
-				return View('reports.daily.test')
+				return view('reports.daily.test')
 							->with('labSections', $labSections)
 							->with('testTypes', $testTypes)
 							->with('tests', $tests)
@@ -676,7 +701,7 @@ class ReportController extends Controller {
 							->with('pendingOrAll', $pendingOrAll)
 							->with('accredited', $accredited)
 							->with('error', $error)
-							->withInput(Input::all());
+							->withInput($request->all());
 			}
 		}
 	}
@@ -684,26 +709,27 @@ class ReportController extends Controller {
 
 	/*	Begin Aggregate reports functions	*/
 	//	Begin prevalence rates reports functions
-	/**
-	 * Display a both chart and table on load.
-	 *
-	 * @return Response
-	 */
-	public function prevalenceRates()
+    /**
+     * Display a both chart and table on load.
+     *
+     * @param Request $request
+     * @return Response
+     */
+	public function prevalenceRates(Request $request)
 	{
-		$from = Input::get('start');
-		$to = Input::get('end');
+		$from = $request->get('start');
+		$to = $request->get('end');
 		$today = date('Y-m-d');
 		$year = date('Y');
-		$testTypeID = Input::get('test_type');
+		$testTypeID = $request->get('test_type');
 
 		//	Apply filters if any
-		if(Input::has('filter')){
+		if($request->has('filter')){
 
 			if(!$to) $to=$today;
 
 			if(strtotime($from)>strtotime($to)||strtotime($from)>strtotime($today)||strtotime($to)>strtotime($today)){
-				Session::flash('message', trans('messages.check-date-range'));
+                $request->session()->flash('message', trans('messages.check-date-range'));
 			}
 
 			$months = json_decode(self::getMonths($from, $to));
@@ -720,10 +746,10 @@ class ReportController extends Controller {
 			$chart = self::getPrevalenceRatesChart();
 		}
 
-		return View('reports.prevalence.index')
+		return view('reports.prevalence.index')
 						->with('data', $data)
 						->with('chart', $chart)
-						->withInput(Input::all());
+						->withInput($request->all());
 	}
 
 	/**
@@ -758,14 +784,17 @@ class ReportController extends Controller {
 
 		return json_encode($dates);
 	}
-	/**
-	 * Display prevalence rates chart
-	 *
-	 * @return Response
-	 */
-	public static function getPrevalenceRatesChart($testTypeID = 0){
-		$from = Input::get('start');
-		$to = Input::get('end');
+
+    /**
+     * Display prevalence rates chart
+     *
+     * @param Request $request
+     * @param int $testTypeID
+     * @return Response
+     */
+	public static function getPrevalenceRatesChart(Request $request, $testTypeID = 0){
+		$from = $request->get('start');
+		$to = $request->get('end');
 		$months = json_decode(self::getMonths($from, $to));
 		$testTypes = new Illuminate\Database\Eloquent\Collection();
 
@@ -871,18 +900,21 @@ class ReportController extends Controller {
 	return $options;
 	}
 	//	Begin count reports functions
-	/**
-	 * Display a test((un)grouped) and specimen((un)grouped) counts.
-	 *
-	 */
-	public function countReports(){
+
+    /**
+     * Display a test((un)grouped) and specimen((un)grouped) counts.
+     * @param Request $request
+     * @return
+     * @throws \Exception
+     */
+	public function countReports(Request $request){
 		$date = date('Y-m-d');
-		$from = Input::get('start');
+		$from = $request->get('start');
 		if(!$from) $from = date('Y-m-01');
-		$to = Input::get('end');
+		$to = $request->get('end');
 		if(!$to) $to = $date;
 		$toPlusOne = date_add(new DateTime($to), date_interval_create_from_date_string('1 day'));
-		$counts = Input::get('counts');
+		$counts = $request->get('counts');
 		$accredited = array();
 		//	Begin grouped test counts
 		if($counts==trans('messages.grouped-test-counts'))
@@ -895,7 +927,7 @@ class ReportController extends Controller {
 			$perAgeRange = array();	// array for counts data for each test type and age range
 			$perTestType = array();	//	array for counts data per testype
 			if(strtotime($from)>strtotime($to)||strtotime($from)>strtotime($date)||strtotime($to)>strtotime($date)){
-				Session::flash('message', trans('messages.check-date-range'));
+                $request->session()->flash('message', trans('messages.check-date-range'));
 			}
 			foreach ($testTypes as $testType) {
 				$countAll = $this->getGroupedTestCounts($testType, null, null, $from, $toPlusOne->format('Y-m-d H:i:s'));
@@ -908,18 +940,18 @@ class ReportController extends Controller {
 					$perAgeRange[$testType->id][$ageRange] = ['male'=>$maleCount, 'female'=>$femaleCount];
 				}
 			}
-			return View('reports.counts.groupedTestCount')
+			return view('reports.counts.groupedTestCount')
 						->with('testCategories', $testCategories)
 						->with('ageRanges', $ageRanges)
 						->with('gender', $gender)
 						->with('perTestType', $perTestType)
 						->with('perAgeRange', $perAgeRange)
 						->with('accredited', $accredited)
-						->withInput(Input::all());
+						->withInput($request->all());
 		}
 		else if($counts==trans('messages.ungrouped-specimen-counts')){
 			if(strtotime($from)>strtotime($to)||strtotime($from)>strtotime($date)||strtotime($to)>strtotime($date)){
-				Session::flash('message', trans('messages.check-date-range'));
+                $request->session()->flash('message', trans('messages.check-date-range'));
 			}
 
 			$ungroupedSpecimen = array();
@@ -931,10 +963,10 @@ class ReportController extends Controller {
 			}
 
 			// $data = $data->groupBy('test_type_id')->paginate(Config::get('kblis.page-items'));
-			return View('reports.counts.ungroupedSpecimenCount')
+			return view('reports.counts.ungroupedSpecimenCount')
 							->with('ungroupedSpecimen', $ungroupedSpecimen)
 							->with('accredited', $accredited)
-							->withInput(Input::all());
+							->withInput($request->all());
 
 		}
 		else if($counts==trans('messages.grouped-specimen-counts')){
@@ -944,7 +976,7 @@ class ReportController extends Controller {
 			$perAgeRange = array();	// array for counts data for each test type and age range
 			$perSpecimenType = array();	//	array for counts data per testype
 			if(strtotime($from)>strtotime($to)||strtotime($from)>strtotime($date)||strtotime($to)>strtotime($date)){
-				Session::flash('message', trans('messages.check-date-range'));
+                $request->session()->flash('message', trans('messages.check-date-range'));
 			}
 			$specimenTypes = SpecimenType::all();
 			foreach ($specimenTypes as $specimenType) {
@@ -965,11 +997,11 @@ class ReportController extends Controller {
 						->with('perSpecimenType', $perSpecimenType)
 						->with('perAgeRange', $perAgeRange)
 						->with('accredited', $accredited)
-						->withInput(Input::all());
+						->withInput($request->all());
 		}
 		else{
 			if(strtotime($from)>strtotime($to)||strtotime($from)>strtotime($date)||strtotime($to)>strtotime($date)){
-				Session::flash('message', trans('messages.check-date-range'));
+                $request->session()->flash('message', trans('messages.check-date-range'));
 			}
 
 			$ungroupedTests = array();
@@ -983,7 +1015,7 @@ class ReportController extends Controller {
 			return view('reports.counts.ungroupedTestCount')
 							->with('ungroupedTests', $ungroupedTests)
 							->with('accredited', $accredited)
-							->withInput(Input::all());
+							->withInput($request->all());
 		}
 	}
 
@@ -1229,23 +1261,25 @@ class ReportController extends Controller {
 		return $progression_val;
 	}
 
-	/**
-	 * turnaroundTime() function returns the turnaround time blade with necessary contents
-	 *
-	 * @return Response
-	 */
-	public function turnaroundTime()
+    /**
+     * turnaroundTime() function returns the turnaround time blade with necessary contents
+     *
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
+     */
+	public function turnaroundTime(Request $request)
 	{
 		$today = date('Y-m-d');
-		$from = Input::get('start');
-		$to = Input::get('end');
+		$from = $request->get('start');
+		$to = $request->get('end');
 		if(!$to){
 			$to=$today;
 		}
-		$testCategory = Input::get('section_id');
-		$testType = Input::get('test_type');
+		$testCategory = $request->get('section_id');
+		$testType = $request->get('test_type');
 		$labSections = TestCategory::lists('name', 'id');
-		$interval = Input::get('period');
+		$interval = $request->get('period');
 		$error = null;
 		$accredited = array();
 
@@ -1261,11 +1295,11 @@ class ReportController extends Controller {
 			else
 			{
 				$toPlusOne = date_add(new DateTime($to), date_interval_create_from_date_string('1 day'));
-				Session::flash('fine', '');
+				$request->session()->flash('fine', '');
 			}
 		}
 		$resultset = self::getTatStats($from, $to, $testCategory, $testType, $interval);
-		return View('reports.tat.index')
+		return view('reports.tat.index')
 					->with('labSections', $labSections)
 					->with('testTypes', $testTypes)
 					->with('resultset', $resultset)
@@ -1274,15 +1308,18 @@ class ReportController extends Controller {
 					->with('interval', $interval)
 					->with('error', $error)
 					->with('accredited', $accredited)
-					->withInput(Input::all());
+					->withInput($request->all());
 	}
 
 	//	Begin infection reports functions
-	/**
-	 * Display a table containing all infection statistics.
-	 *
-	 */
-	public function infectionReport(){
+
+    /**
+     * Display a table containing all infection statistics.
+     * @param Request $request
+     * @return
+     * @throws \Exception
+     */
+	public function infectionReport(Request $request){
 
 	 	$ageRanges = array('0-5'=>'Under 5 years',
 	 					'5-14'=>'5 years and over but under 14 years',
@@ -1293,69 +1330,70 @@ class ReportController extends Controller {
 
 		//	Fetch form filters
 		$date = date('Y-m-d');
-		$from = Input::get('start');
+		$from = $request->get('start');
 		if(!$from) $from = date('Y-m-01');
 
-		$to = Input::get('end');
+		$to = $request->get('end');
 		if(!$to) $to = $date;
 
 		$toPlusOne = date_add(new DateTime($to), date_interval_create_from_date_string('1 day'));
 
-		$testCategory = Input::get('test_category');
+		$testCategory = $request->get('test_category');
 
 		$infectionData = UnhlsTest::getInfectionData($from, $toPlusOne, $testCategory);	// array for counts data for each test type and age range
 
-		return View('reports.infection.index')
+		return view('reports.infection.index')
 					->with('gender', $gender)
 					->with('ageRanges', $ageRanges)
 					->with('ranges', $ranges)
 					->with('infectionData', $infectionData)
 					->with('accredited', $accredited)
-					->withInput(Input::all());
+					->withInput($request->all());
 	}
 
-	/**
-	 * Displays summary statistics on users application usage.
-	 *
-	 */
-	public function userStatistics(){
+    /**
+     * Displays summary statistics on users application usage.
+     * @param Request $request
+     * @return
+     */
+	public function userStatistics(Request $request){
 
 		//	Fetch form filters
 		$date = date('Y-m-d');
-		$from = Input::get('start');
+		$from = $request->get('start');
 		if(!$from) $from = date('Y-m-01');
 
-		$to = Input::get('end');
+		$to = $request->get('end');
 		if(!$to) $to = $date;
 
-		$selectedUser = Input::get('user');
+		$selectedUser = $request->get('user');
 		if(!$selectedUser)$selectedUser = "";
 		else $selectedUser = " USER: ".User::find($selectedUser)->name;
 
 		$reportTypes = array('Summary', 'Patient Registry', 'Specimen Registry', 'Tests Registry', 'Tests Performed');
 
-		$selectedReport = Input::get('report_type');
+		$selectedReport = $request->get('report_type');
 		if(!$selectedReport)$selectedReport = 0;
 
 		switch ($selectedReport) {
 			case '1':
-				$reportData = User::getPatientsRegistered($from, $to.' 23:59:59', Input::get('user'));
+				$reportData = User::getPatientsRegistered($from, $to.' 23:59:59', $request->get('user'));
 				$reportTitle = Lang::choice('messages.user-statistics-patients-register-report-title',1);
 				break;
 			case '2':
-				$reportData = User::getSpecimensRegistered($from, $to.' 23:59:59', Input::get('user'));
+				$reportData = User::getSpecimensRegistered($from, $to.' 23:59:59', $request->get('user'));
 				$reportTitle = Lang::choice('messages.user-statistics-specimens-register-report-title',1);
 				break;
 			case '3':
-				$reportData = User::getTestsRegistered($from, $to.' 23:59:59', Input::get('user'));
+				$reportData = User::getTestsRegistered($from, $to.' 23:59:59', $request->get('user'));
 				$reportTitle = Lang::choice('messages.user-statistics-tests-register-report-title',1);
 				break;
 			case '4':
-				$reportData = User::getTestsPerformed($from, $to.' 23:59:59', Input::get('user'));
+				$reportData = User::getTestsPerformed($from, $to.' 23:59:59', $request->get('user'));
 				$reportTitle = Lang::choice('messages.user-statistics-tests-performed-report-title',1);
 				break;
 			default:
-				$reportData = User::getSummaryUserStatistics($from, $to.' 23:59:59', Input::get('user'));
+				$reportData = User::getSummaryUserStatistics($from, $to.' 23:59:59', $request->get('user'));
 				$reportTitle = Lang::choice('messages.user-statistics-summary-report-title',1);
 				break;
 		}
@@ -1369,13 +1407,13 @@ class ReportController extends Controller {
 					->with('reportData', $reportData)
 					->with('reportTitle', $reportTitle)
 					->with('selectedReport', $selectedReport)
-					->withInput(Input::all());
+					->withInput($request->all());
 	}
 
 	/**
 	* Returns qc index page
 	*
-	* @return view
+	* @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	*/
 	public function qualityControl()
 	{
@@ -1393,22 +1431,22 @@ class ReportController extends Controller {
 	* Returns qc results for a specific control page
 	*
 	* @param Input - controlId, date range
-	* @return view
+	* @return \Illuminate\Http\RedirectResponse
 	*/
-	public function qualityControlResults()
+	public function qualityControlResults(Request $request)
 	{
 		$rules = array('start_date' => 'date|required',
 					'end_date' => 'date|required',
 					'control' => 'required');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if($validator->fails()){
-			return Redirect::back()->withErrors($validator)->withInput();
+			return redirect()->back()->withErrors($validator)->withInput();
 		}
 		else {
-			$controlId = Input::get('control');
-			$endDatePlusOne = date_add(new DateTime(Input::get('end_date')), date_interval_create_from_date_string('1 day'));
-			$dates= array(Input::get('start_date'), $endDatePlusOne);
+			$controlId = $request->get('control');
+			$endDatePlusOne = date_add(new DateTime($request->get('end_date')), date_interval_create_from_date_string('1 day'));
+			$dates= array($request->get('start_date'), $endDatePlusOne);
 			$control = Control::find($controlId);
 			$controlTests = ControlTest::where('control_id', '=', $controlId)
 										->whereBetween('created_at', $dates)->get();
@@ -1417,22 +1455,22 @@ class ReportController extends Controller {
 				->with('control', $control)
 				->with('controlTests', $controlTests)
 				->with('leveyJennings', $leveyJennings)
-				->withInput(Input::all());
+				->withInput($request->all());
 		}
 	}
 
-	/**
-	 * Displays Surveillance
-	 * @param string $from, string $to, array() $testTypeIds
-	 * As of now surveillance works only with alphanumeric measures
-	 */
-	public function surveillance(){
+    /**
+     * Displays Surveillance
+     * @param Request $request
+     * @return
+     */
+	public function surveillance(Request $request){
 		/*surveillance diseases*/
 		//	Fetch form filters
 		$date = date('Y-m-d');
-		$from = Input::get('start');
+		$from = $request->get('start');
 		if(!$from) $from = date('Y-m-01');
-		$to = Input::get('end');
+		$to = $request->get('end');
 		if(!$to) $to = $date;
 		$accredited = array();
 
@@ -1440,25 +1478,27 @@ class ReportController extends Controller {
 		$accredited = array();
 		$tests = array();
 
-		if(Input::has('word')){
+		if($request->has('word')){
 			$fileName = "surveillance_".$date.".doc";
 			$headers = array(
 				"Content-type"=>"text/html",
 				"Content-Disposition"=>"attachment;Filename=".$fileName
 			);
-			$content = View('reports.surveillance.exportSurveillance')
+			$content = view('reports.surveillance.exportSurveillance')
 							->with('surveillance', $surveillance)
 							->with('tests', $tests)
 							->with('accredited', $accredited)
-							->withInput(Input::all());
-			return Response::make($content,200, $headers);
+							->withInput($request->all());
+
+//			return Response::make($content,200, $headers);
+			return response($content, 200)->withHeaders($headers);
 		}else{
-			return View('reports.surveillance.index')
+			return view('reports.surveillance.index')
 					->with('accredited', $accredited)
 					->with('tests', $tests)
 					->with('surveillance', $surveillance)
 					->with('accredited', $accredited)
-					->withInput(Input::all());
+					->withInput($request->all());
 		}
 	}
 
@@ -1466,13 +1506,13 @@ class ReportController extends Controller {
 	 * Manage Surveillance Configurations
 	 * @param
 	 */
-	public function surveillanceConfig(){
+	public function surveillanceConfig(Request $request){
 
 		$allSurveillanceIds = array();
 
 		//edit or leave surveillance entries as is
-		if (Input::get('surveillance')) {
-			$diseases = Input::get('surveillance');
+		if ($request->get('surveillance')) {
+			$diseases = $request->get('surveillance');
 
 			foreach ($diseases as $id => $disease) {
 				$allSurveillanceIds[] = $id;
@@ -1484,8 +1524,8 @@ class ReportController extends Controller {
 		}
 
 		//save new surveillance entries
-		if (Input::get('new-surveillance')) {
-			$diseases = Input::get('new-surveillance');
+		if ($request->get('new-surveillance')) {
+			$diseases = $request->get('new-surveillance');
 
 			foreach ($diseases as $id => $disease) {
 				$surveillance = new ReportDisease;
@@ -1498,7 +1538,7 @@ class ReportController extends Controller {
 		}
 
 		//check if action is from a form submission
-		if (Input::get('from-form')) {
+		if ($request->get('from-form')) {
 			// Delete any pre-existing surveillance entries
 			//that were not captured in any of the above save loops
 			$allSurveillances = ReportDisease::all(array('id'));
@@ -1517,13 +1557,19 @@ class ReportController extends Controller {
 
 		$diseaseTests = ReportDisease::all();
 
-		return View('reportconfig.surveillance')
+		return view('reportconfig.surveillance')
 					->with('diseaseTests', $diseaseTests);
 	}
 
-	/**
-	* Function to check object state before groupedTestCount
-	**/
+    /**
+     * Function to check object state before groupedTestCount
+     * @param $ttypeob
+     * @param null $gender
+     * @param null $ageRange
+     * @param null $from
+     * @param null $to
+     * @return int
+     */
 	public function getGroupedTestCounts($ttypeob, $gender=null, $ageRange=null, $from=null, $to=null)
 	{
 		if($ttypeob == null){
@@ -1531,9 +1577,18 @@ class ReportController extends Controller {
 		}
 		return $ttypeob->groupedTestCount($gender, $ageRange, $from, $to);
 	}
-	/**
-	* Function to check object state before totalTestResults
-	**/
+
+    /**
+     * Function to check object state before totalTestResults
+     * @param $measureobj
+     * @param null $gender
+     * @param null $ageRange
+     * @param null $from
+     * @param null $to
+     * @param null $range
+     * @param null $positive
+     * @return int
+     */
 	public function getTotalTestResults($measureobj, $gender=null, $ageRange=null, $from=null, $to=null, $range=null, $positive=null){
 		if($measureobj == null){
 			return 0;
@@ -1551,12 +1606,12 @@ class ReportController extends Controller {
 	 * Manage Diseases reported on
 	 * @param
 	 */
-	public function disease(){
-		if (Input::all()) {
+	public function disease(Request $request){
+		if ($request->all()) {
 			$rules = array();
-			$newDiseases = Input::get('new-diseases');
+			$newDiseases = $request->get('new-diseases');
 
-			if (Input::get('new-diseases')) {
+			if ($request->get('new-diseases')) {
 				// create an array that form the rules array
 				foreach ($newDiseases as $key => $value) {
 
@@ -1565,17 +1620,17 @@ class ReportController extends Controller {
 				}
 			}
 
-			$validator = Validator::make(Input::all(), $rules);
+			$validator = Validator::make($request->all(), $rules);
 
 			if ($validator->fails()) {
-				return Redirect::route('reportconfig.disease')->withErrors($validator);
+				return redirect('reportconfig.disease')->withErrors($validator);
 			} else {
 
 				$allDiseaseIds = array();
 
 				//edit or leave disease entries as is
-				if (Input::get('diseases')) {
-					$diseases = Input::get('diseases');
+				if ($request->get('diseases')) {
+					$diseases = $request->get('diseases');
 
 					foreach ($diseases as $id => $disease) {
 						$allDiseaseIds[] = $id;
@@ -1586,8 +1641,8 @@ class ReportController extends Controller {
 				}
 
 				//save new disease entries
-				if (Input::get('new-diseases')) {
-					$diseases = Input::get('new-diseases');
+				if ($request->get('new-diseases')) {
+					$diseases = $request->get('new-diseases');
 
 					foreach ($diseases as $id => $disease) {
 						$diseases = new Disease;
@@ -1598,7 +1653,7 @@ class ReportController extends Controller {
 				}
 
 				//check if action is from a form submission
-				if (Input::get('from-form')) {
+				if ($request->get('from-form')) {
 					// Delete any pre-existing disease entries
 					//that were not captured in any of the above save loops
 					$allDiseases = Disease::all(array('id'));
@@ -1632,20 +1687,20 @@ class ReportController extends Controller {
 					->with('diseases', $diseases);
 	}
 
-	public function stockLevel(){
+	public function stockLevel(Request $request){
 
 		//	Fetch form filters
 		$date = date('Y-m-d');
-		$from = Input::get('start');
+		$from = $request->get('start');
 		if(!$from) $from = date('Y-m-01');
 
-		$to = Input::get('end');
+		$to = $request->get('end');
 		if(!$to) $to = $date;
 
 		$reportTypes = array('Monthly', 'Quarterly');
 
 
-		$selectedReport = Input::get('report_type');
+		$selectedReport = $request->get('report_type');
 		if(!$selectedReport)$selectedReport = 0;
 
 		switch ($selectedReport) {
@@ -1667,21 +1722,22 @@ class ReportController extends Controller {
 		$reportTitle = str_replace("[FROM]", $from, $reportTitle);
 		$reportTitle = str_replace("[TO]", $to, $reportTitle);
 
-		return View('reports.inventory.index')
+		return view('reports.inventory.index')
 					->with('reportTypes', $reportTypes)
 					->with('reportData', $reportData)
 					->with('reportTitle', $reportTitle)
 					->with('selectedReport', $selectedReport)
-					->withInput(Input::all());
+					->withInput($request->all());
 	}
-	/**
-	* Function to calculate the mean, SD, and UCL, LCL
-	* for a given control measure.
-	*
-	* @param control_measure_id
-	* @return json string
-	*
-	*/
+
+    /**
+     * Function to calculate the mean, SD, and UCL, LCL
+     * for a given control measure.
+     *
+     * @param $control
+     * @param $dates
+     * @return json|false|string
+     */
 	public function leveyJennings($control, $dates)
 	{
 		foreach ($control->controlMeasures as $key => $controlMeasure) {
@@ -1767,17 +1823,18 @@ class ReportController extends Controller {
 		return sqrt($carry / $n);
 	}
 
-	/**
-	 * Display data after applying the filters on the report uses patient ID
-	 *
-	 * @return Response
-	 */
-	public function cd4(){
+    /**
+     * Display data after applying the filters on the report uses patient ID
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+	public function cd4(Request $request){
 		//	check if accredited
 		$accredited = array();
-		$from = Input::get('start');
-		$to = Input::get('end');
-		$pending = Input::get('pending');
+		$from = $request->get('start');
+		$to = $request->get('end');
+		$pending = $request->get('pending');
 		$date = date('Y-m-d');
 		$error = '';
 		//	Check dates
@@ -1803,7 +1860,7 @@ class ReportController extends Controller {
 				}
 			}
 		}
-		if(Input::has('word'))
+		if($request->has('word'))
 		{
 			$date = date("Ymdhi");
 			$fileName = "cd4_report_".$date.".doc";
@@ -1811,30 +1868,34 @@ class ReportController extends Controller {
 				"Content-type"=>"text/html",
 				"Content-Disposition"=>"attachment;Filename=".$fileName
 			);
-			$content = View('reports.cd4.export')
+			$content = view('reports.cd4.export')
 				->with('columns', $columns)
 				->with('rows', $rows)
 				->with('accredited', $accredited)
 				->with('test', $test)
 				->with('counts', $counts)
-				->withInput(Input::all());
-			return Response::make($content,200, $headers);
+				->withInput($request->all());
+
+//			return Response::make($content,200, $headers);
+            return response($content, 200)->withHeaders($headers);
 		}
 		else
 		{
-			return View('reports.cd4.index')
+			return view('reports.cd4.index')
 				->with('columns', $columns)
 				->with('rows', $rows)
 				->with('accredited', $accredited)
 				->with('test', $test)
 				->with('counts', $counts)
-				->withInput(Input::all());
+				->withInput($request->all());
 		}
 	}
-	/**
-	*	Function to check for accredited test types
-	*
-	*/
+
+    /**
+     *    Function to check for accredited test types
+     * @param $tests
+     * @return array
+     */
 	public function accredited($tests)
 	{
 		$accredited = array();
@@ -1845,10 +1906,11 @@ class ReportController extends Controller {
 		return $accredited;
 	}
 
-	/**
-	*	Function to check for accredited test types
-	*
-	*/
+    /**
+     *    Function to check for accredited test types
+     * @param string $month
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
 	public function hmis105($month = '')
 	{
 		$month = ($month == '') ? date('Y-m') : $month ;
@@ -2123,11 +2185,11 @@ class ReportController extends Controller {
 					->with('dateTo', $dateTo);
 	}
 
-	public function downloadMicrobiology()
+	public function downloadMicrobiology(Request $request)
 	{
 
-		$dateFrom =  Input::get('date_from');
-		$dateTo = Input::get('date_to');
+		$dateFrom =  $request->get('date_from');
+		$dateTo = $request->get('date_to');
 
 		if(!$dateFrom) $dateFrom = date('Y-m-01');
 		if(!$dateTo) $dateTo = date('Y-m-d');
