@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-	  <li class="active"><a href="{{ URL::route('reports.patient.index') }}">{{Lang::choice('messages.report',2)}}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+	  <li class="active"><a href="{{ route('reports.patient.index') }}">{{Lang::choice('messages.report',2)}}</a></li>
 	  <li class="active">{{ trans('messages.counts') }}</li>
 	</ol>
 </div>
@@ -16,7 +16,7 @@
 					{{ Form::label('start', trans("messages.from")) }}
 				</div>
 				<div class="col-sm-3">
-					{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-01'), 
+					{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-01'),
 				        array('class' => 'form-control standard-datepicker')) }}
 			    </div>
 	    	</div>
@@ -27,13 +27,13 @@
 			    	{{ Form::label('end', trans("messages.to")) }}
 			    </div>
 				<div class="col-sm-3">
-				    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'), 
+				    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'),
 				        array('class' => 'form-control standard-datepicker')) }}
 		        </div>
 	    	</div>
 	    </div>
 	    <div class="col-sm-2">
-		    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'), 
+		    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'),
 		        array('class' => 'btn btn-info', 'id' => 'filter', 'type' => 'submit')) }}
 	    </div>
 	</div>
@@ -42,7 +42,7 @@
 	    	<div class="row">
 				<div class="col-sm-3">
 				  	<label class="radio-inline">
-						{{ Form::radio('counts', trans('messages.ungrouped-test-counts'), true, array('data-toggle' => 'radio', 
+						{{ Form::radio('counts', trans('messages.ungrouped-test-counts'), true, array('data-toggle' => 'radio',
 						  'id' => 'tests')) }} {{trans('messages.ungrouped-test-counts')}}
 					</label>
 				</div>
@@ -80,7 +80,7 @@
 		<div class="alert alert-info">{{ trans(Session::get('message')) }}</div>
 	@endif
 	<strong>
-		<p> {{ trans('messages.ungrouped-test-counts') }} - 
+		<p> {{ trans('messages.ungrouped-test-counts') }} -
 			<?php $from = isset($input['start'])?$input['start']:date('01-m-Y');?>
 			<?php $to = isset($input['end'])?$input['end']:date('d-m-Y');?>
 			@if($from!=$to)
@@ -101,7 +101,7 @@
 			    @forelse($ungroupedTests as $key => $value)
 
 			    <tr>
-			    	<td>{{ TestType::find($key)->name }}</td>
+			    	<td>{{ App\Models\TestType::find($key)->name }}</td>
 			    	<td>{{ $value['complete'] }}</td>
 			    	<td>{{ $value['pending'] }}</td>
 			    </tr>
