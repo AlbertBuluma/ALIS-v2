@@ -520,7 +520,7 @@ class ReportController extends Controller {
 //		$labSections = TestCategory::lists('name', 'id');
 		$labSections = TestCategory::pluck('name', 'id')->toArray();
 		if($testCategory)
-			$testTypes = TestCategory::find($testCategory)->testTypes->lists('name', 'id');
+			$testTypes = TestCategory::find($testCategory)->testTypes->pluck('name', 'id')->toArray();
 		else
 			$testTypes = array(""=>"");
 
@@ -1278,13 +1278,13 @@ class ReportController extends Controller {
 		}
 		$testCategory = $request->get('section_id');
 		$testType = $request->get('test_type');
-		$labSections = TestCategory::lists('name', 'id');
+		$labSections = TestCategory::pluck('name', 'id')->toArray();
 		$interval = $request->get('period');
 		$error = null;
 		$accredited = array();
 
 		if($testCategory)
-			$testTypes = TestCategory::find($testCategory)->testTypes->lists('name', 'id');
+			$testTypes = TestCategory::find($testCategory)->testTypes->pluck('name', 'id')->toArray();
 		else
 			$testTypes = array(""=>"");
 
@@ -1402,7 +1402,7 @@ class ReportController extends Controller {
 		$reportTitle = str_replace("[TO]", $to, $reportTitle);
 		$reportTitle = str_replace("[USER]", $selectedUser, $reportTitle);
 
-		return View('reports.userstatistics.index')
+		return view('reports.userstatistics.index')
 					->with('reportTypes', $reportTypes)
 					->with('reportData', $reportData)
 					->with('reportTitle', $reportTitle)
