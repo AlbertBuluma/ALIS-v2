@@ -45,27 +45,33 @@ class UnhlsTestController extends Controller {
      */
 	public function index(Request $request)
 	{
-
-		$fromRedirect = \Session::pull('fromRedirect');
+		$fromRedirect = $request->session()->pull('fromRedirect');
 
 		if($fromRedirect){
 
-			$input = \Session::get('TESTS_FILTER_INPUT');
+			$input = $request->session()->get('TESTS_FILTER_INPUT');
 
 		}else{
 
-			$input = $request->_token;
+			$input = $request->token;
 		}
 
-		$searchString = isset($input['search'])?$input['search']:'';
-		$testStatusId = isset($input['test_status'])?$input['test_status']:'';
+        $input['search'] = $request->get('search');
+        $input['test_status'] = $request->get('test_status');
+        $input['date_from'] = $request->get('date_from');
+        $input['date_to'] = $request->get('date_to');
+
+
+		$searchString = isset($input['search']) ? $input['search'] : '';
+		$testStatusId = isset($input['test_status']) ? $input['test_status'] : '';
+
 		if (isset($input['date_from'])) {
 			$dateFrom = $input['date_from'];
 		}else{
 			$dateFrom = date('Y-m-d');
 			$input['date_from'] = date('Y-m-d');
 		}
-		$dateTo = isset($input['date_to'])?$input['date_to']:'';
+		$dateTo = isset($input['date_to']) ? $input['date_to'] : '';
 
 		// Search Conditions
 		if($searchString||$testStatusId||$dateFrom||$dateTo){
@@ -113,20 +119,26 @@ class UnhlsTestController extends Controller {
 	/**
 	 * Listing of Completed tests
 	 *@param
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function completed(Request $request)
 	{
-		$fromRedirect = \Session::pull('fromRedirect');
+		$fromRedirect = $request->session()->pull('fromRedirect');
 
 		if($fromRedirect){
 
-			$input = \Session::get('TESTS_FILTER_INPUT');
+			$input = $request->session()->get('TESTS_FILTER_INPUT');
 
 		}else{
 
-			$input = $request->except('_token');
+			$input['token'] = $request->except('_token');
 		}
+
+
+        $input['search'] = $request->get('search');
+        $input['test_status'] = $request->get('test_status');
+        $input['date_from'] = $request->get('date_from');
+        $input['date_to'] = $request->get('date_to');
 
 		$searchString = isset($input['search'])?$input['search']:'';
 		$testStatusId = '4';
@@ -143,19 +155,19 @@ class UnhlsTestController extends Controller {
 		if($searchString||$testStatusId||$dateFrom||$dateTo){
 
 			$tests = UnhlsTest::completedTests($searchString, $testStatusId, $dateFrom, $dateTo);
-            dd($tests);
-			if (count($tests) == 0) {
-			 	\Session::flash('message', trans('messages.empty-search'));
+
+			if (count($tests->get()) == 0) {
+                $request->session()->flash('message', trans('messages.empty-search'));
 			}
 		}
-		else
-		{
+		else{
 		// List all the active tests
 			$tests = UnhlsTest::orderBy('time_created', 'DESC');
 		}
 
 		// Create Test Statuses array. Include a first entry for ALL
-		$statuses = array('all')+TestStatus::all()->lists('name','id');
+		$statuses = TestStatus::pluck('name','id')->toArray();
+        array_push($statuses, 'all');
 
 		foreach ($statuses as $key => $value) {
 			$statuses[$key] = trans("messages.$value");
@@ -173,7 +185,8 @@ class UnhlsTestController extends Controller {
 					->with('dateFrom', $dateFrom)
 					->with('dateTo', $dateTo)
 					->with('barcode', $barcode)
-					->withInput($input);
+					->with('request', $request = $input);
+//					->withInput($input);
 
 	}
 
@@ -181,20 +194,25 @@ class UnhlsTestController extends Controller {
 	/**
 	 * Listing of pending tests
 	 *@param
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function pending(Request $request)
 	{
-		$fromRedirect = \Session::pull('fromRedirect');
+		$fromRedirect = $request->session()->pull('fromRedirect');
 
 		if($fromRedirect){
 
-			$input = \Session::get('TESTS_FILTER_INPUT');
+			$input = $request->session()->get('TESTS_FILTER_INPUT');
 
 		}else{
 
-			$input = $request->except('_token');
+			$input['token'] = $request->except('_token');
 		}
+
+        $input['search'] = $request->get('search');
+        $input['test_status'] = $request->get('test_status');
+        $input['date_from'] = $request->get('date_from');
+        $input['date_to'] = $request->get('date_to');
 
 		$searchString = isset($input['search'])?$input['search']:'';
 		$testStatusId = '2';
@@ -211,8 +229,8 @@ class UnhlsTestController extends Controller {
 
 			$tests = UnhlsTest::pendingTests($searchString, $testStatusId, $dateFrom, $dateTo);
 
-			if (count($tests) == 0) {
-			 	\Session::flash('message', trans('messages.empty-search'));
+			if (count($tests->get()) == 0) {
+                $request->session()->flash('message', trans('messages.empty-search'));
 			}
 		}
 		else
@@ -222,9 +240,10 @@ class UnhlsTestController extends Controller {
 		}
 
 		// Create Test Statuses array. Include a first entry for ALL
-		$statuses = array('all')+TestStatus::all()->lists('name','id');
+		$statuses = TestStatus::pluck('name','id')->toArray();
+        array_push($statuses, 'all');
 
-		foreach ($statuses as $key => $value) {
+        foreach ($statuses as $key => $value) {
 			$statuses[$key] = trans("messages.$value");
 		}
 
@@ -240,7 +259,8 @@ class UnhlsTestController extends Controller {
 					->with('dateFrom', $dateFrom)
 					->with('dateTo', $dateTo)
 					->with('barcode', $barcode)
-					->withInput($input);
+                    ->with('request', $request = $input);
+//					->withInput($input);
 
 	}
 
@@ -248,20 +268,25 @@ class UnhlsTestController extends Controller {
 	/**
 	 * Listing of started tests
 	 *@param
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function started(Request $request)
 	{
-		$fromRedirect = \Session::pull('fromRedirect');
+		$fromRedirect = $request->session()->pull('fromRedirect');
 
 		if($fromRedirect){
 
-			$input = \Session::get('TESTS_FILTER_INPUT');
+			$input = $request->session()->get('TESTS_FILTER_INPUT');
 
 		}else{
 
-			$input = $request->except('_token');
+			$input['token'] = $request->except('_token');
 		}
+
+        $input['search'] = $request->get('search');
+        $input['test_status'] = $request->get('test_status');
+        $input['date_from'] = $request->get('date_from');
+        $input['date_to'] = $request->get('date_to');
 
 		$searchString = isset($input['search'])?$input['search']:'';
 		$testStatusId = '3';
@@ -278,8 +303,8 @@ class UnhlsTestController extends Controller {
 
 			$tests = UnhlsTest::startedTests($searchString, $testStatusId, $dateFrom, $dateTo);
 
-			if (count($tests) == 0) {
-			 	\Session::flash('message', trans('messages.empty-search'));
+			if (count($tests->get()) == 0) {
+                $request->session()->flash('message', trans('messages.empty-search'));
 			}
 		}
 		else
@@ -289,14 +314,15 @@ class UnhlsTestController extends Controller {
 		}
 
 		// Create Test Statuses array. Include a first entry for ALL
-		$statuses = array('all')+TestStatus::all()->lists('name','id');
+        $statuses = TestStatus::pluck('name','id')->toArray();
+        array_push($statuses, 'all');
 
 		foreach ($statuses as $key => $value) {
 			$statuses[$key] = trans("messages.$value");
 		}
 
 		// Pagination
-		$tests = $tests->paginate(Config::get('kblis.page-items'))->appends($input);
+		$tests = $tests->paginate(config('kblis.page-items'))->appends($input);
 
 		//	Barcode
 		$barcode = Barcode::first();
@@ -307,7 +333,8 @@ class UnhlsTestController extends Controller {
 					->with('dateFrom', $dateFrom)
 					->with('dateTo', $dateTo)
 					->with('barcode', $barcode)
-					->withInput($input);
+                    ->with('request', $request = $input);
+//					->withInput($input);
 
 	}
 
@@ -315,20 +342,25 @@ class UnhlsTestController extends Controller {
 	/**
 	 * Listing of samples not yet recieved
 	 *@param
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function notRecieved(Request $request)
 	{
-		$fromRedirect = \Session::pull('fromRedirect');
+		$fromRedirect = $request->session()->pull('fromRedirect');
 
 		if($fromRedirect){
 
-			$input = \Session::get('TESTS_FILTER_INPUT');
+			$input = $request->session()->get('TESTS_FILTER_INPUT');
 
 		}else{
 
-			$input = $request->except('_token');
+			$input['token'] = $request->except('_token');
 		}
+
+        $input['search'] = $request->get('search');
+        $input['test_status'] = $request->get('test_status');
+        $input['date_from'] = $request->get('date_from');
+        $input['date_to'] = $request->get('date_to');
 
 		$searchString = isset($input['search'])?$input['search']:'';
 		$testStatusId = '1';
@@ -345,8 +377,8 @@ class UnhlsTestController extends Controller {
 
 			$tests = UnhlsTest::startedTests($searchString, $testStatusId, $dateFrom, $dateTo);
 
-			if (count($tests) == 0) {
-			 	\Session::flash('message', trans('messages.empty-search'));
+			if (count($tests->get()) == 0) {
+                $request->session()->flash('message', trans('messages.empty-search'));
 			}
 		}
 		else
@@ -356,7 +388,8 @@ class UnhlsTestController extends Controller {
 		}
 
 		// Create Test Statuses array. Include a first entry for ALL
-		$statuses = array('all')+TestStatus::all()->lists('name','id');
+        $statuses = TestStatus::pluck('name','id')->toArray();
+        array_push($statuses, 'all');
 
 		foreach ($statuses as $key => $value) {
 			$statuses[$key] = trans("messages.$value");
@@ -374,7 +407,8 @@ class UnhlsTestController extends Controller {
 					->with('dateFrom', $dateFrom)
 					->with('dateTo', $dateTo)
 					->with('barcode', $barcode)
-					->withInput($input);
+                    ->with('request', $request = $input);
+//					->withInput($input);
 
 	}
 
@@ -383,20 +417,25 @@ class UnhlsTestController extends Controller {
 	/**
 	 * Listing of verified tests
 	 *@param
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function verified(Request $request)
 	{
-		$fromRedirect = \Session::pull('fromRedirect');
+		$fromRedirect = $request->session()->pull('fromRedirect');
 
 		if($fromRedirect){
 
-			$input = \Session::get('TESTS_FILTER_INPUT');
+			$input = $request->session()->get('TESTS_FILTER_INPUT');
 
 		}else{
 
-			$input = $request->except('_token');
+            $input['token'] = $request->except('_token');
 		}
+
+        $input['search'] = $request->get('search');
+        $input['test_status'] = $request->get('test_status');
+        $input['date_from'] = $request->get('date_from');
+        $input['date_to'] = $request->get('date_to');
 
 		$searchString = isset($input['search'])?$input['search']:'';
 		$testStatusId = '5';
@@ -413,8 +452,8 @@ class UnhlsTestController extends Controller {
 
 			$tests = UnhlsTest::verified($searchString, $testStatusId, $dateFrom, $dateTo);
 
-			if (count($tests) == 0) {
-			 	\Session::flash('message', trans('messages.empty-search'));
+			if (count($tests->get()) == 0) {
+                $request->session()->flash('message', trans('messages.empty-search'));
 			}
 		}
 		else
@@ -424,7 +463,8 @@ class UnhlsTestController extends Controller {
 		}
 
 		// Create Test Statuses array. Include a first entry for ALL
-		$statuses = array('all')+TestStatus::all()->lists('name','id');
+        $statuses = TestStatus::pluck('name','id')->toArray();
+        array_push($statuses, 'all');
 
 		foreach ($statuses as $key => $value) {
 			$statuses[$key] = trans("messages.$value");
@@ -442,7 +482,8 @@ class UnhlsTestController extends Controller {
 					->with('barcode', $barcode)
 					->with('dateFrom', $dateFrom)
 					->with('dateTo', $dateTo)
-					->withInput($input);
+                    ->with('request', $request = $input);
+//					->withInput($input);
 
 	}
 
@@ -508,10 +549,10 @@ class UnhlsTestController extends Controller {
 		$collectionDate = $now->format('Y-m-d H:i');
 		$receptionDate = $now->format('Y-m-d H:i');
 
-		$fromRedirect = \Session::pull('TEST_CATEGORY');
+		$fromRedirect = $request->session()->pull('TEST_CATEGORY');
 
 		if($fromRedirect){
-			$input = \Session::get('TEST_CATEGORY');
+			$input = $request->session()->get('TEST_CATEGORY');
 		}else{
 			$input =$request->except('_token');
 		}
@@ -557,7 +598,7 @@ class UnhlsTestController extends Controller {
      * Save a new Test.
      *
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
 	public function saveNewTest(Request $request)
 	{
@@ -578,7 +619,7 @@ class UnhlsTestController extends Controller {
 		// process the login
 		if ($validator->fails()) {
 			return redirect('unhls_test.create',
-				array(Input::get('patient_id')))->withInput()->withErrors($validator);
+				array($request->get('patient_id')))->withInput()->withErrors($validator);
 		} else {
 
 			$visitType = ['2' => 'Out-patient','1' => 'In-patient'];
@@ -645,7 +686,7 @@ class UnhlsTestController extends Controller {
                 }
             }
 
-			$url = \Session::get('SOURCE_URL');
+			$url = $request->session()->get('SOURCE_URL');
 
 			return redirect($url)->with('message', 'messages.success-creating-test')
 					->with('activeTest', $activeTest);
@@ -676,8 +717,8 @@ class UnhlsTestController extends Controller {
 		$specimen = UnhlsSpecimen::find($request->get('id'));
 		$specimenTypes = SpecimenType::all();
 		return view('unhls_test.acceptSpecimen')
-			->with('specimen', $specimen)
-			->with('specimenTypes', $specimenTypes);
+                    ->with('specimen', $specimen)
+                    ->with('specimenTypes', $specimenTypes);
     }
 
 	/**
@@ -690,8 +731,9 @@ class UnhlsTestController extends Controller {
 	{
 		$test = UnhlsTest::find($testID);
 		$rejectionReason = RejectionReason::all();
-		return view('unhls_test.reject')->with('test', $test)
-						->with('rejectionReason', $rejectionReason);
+		return view('unhls_test.reject')
+                    ->with('test', $test)
+                    ->with('rejectionReason', $rejectionReason);
 	}
 
 	/**
@@ -705,8 +747,10 @@ class UnhlsTestController extends Controller {
 		$specimen = UnhlsSpecimen::find($specimenID);
 		$referralReason = ReferralReason::all();
 		$test = UnhlsTest::find($specimenID);
-		return view('unhls_test.refer')->with('specimen', $specimen)->with('test', $test)
-						->with('referralReason', $referralReason);
+		return view('unhls_test.refer')
+                ->with('specimen', $specimen)
+                ->with('test', $test)
+                ->with('referralReason', $referralReason);
 	}
 
 	/**
@@ -758,7 +802,7 @@ class UnhlsTestController extends Controller {
 					$reason->save();
 				}
 			}
-			$url = \Session::get('SOURCE_URL');
+			$url = $request->session()->get('SOURCE_URL');
 
 			return redirect($url)->with('message', 'messages.success-rejecting-specimen')
 						->with('activeTest', array($test->id));
@@ -873,7 +917,7 @@ class UnhlsTestController extends Controller {
      *
      * @param Request $request
      * @param $testID to save
-     * @return view
+     * @return \Illuminate\Http\RedirectResponse
      */
 	public function saveResults(Request $request, $testID)
 	{
@@ -919,11 +963,11 @@ class UnhlsTestController extends Controller {
 		//Fire of entry saved/edited event
 		Event::fire('test.saved', array($testID));
 
-		$input = \Session::get('TESTS_FILTER_INPUT');
-		\Session::put('fromRedirect', 'true');
+		$input = $request->session()->get('TESTS_FILTER_INPUT');
+        $request->session()->put('fromRedirect', 'true');
 
 		// Get page
-		$url = \Session::get('SOURCE_URL');
+		$url = $request->session()->get('SOURCE_URL');
 		$urlParts = explode('&', $url);
 		if(isset($urlParts['page'])){
 			$pageParts = explode('=', $urlParts['page']);
@@ -949,11 +993,11 @@ class UnhlsTestController extends Controller {
 		$test = UnhlsTest::find($testID);
 		// if the test being carried out requires a culture worksheet
 		if ($test->testType->name == 'Culture and Sensitivity') {
-			return Redirect::route('culture.edit', [$test->id]);
+			return redirect('culture.edit', [$test->id]);
 		}elseif ($test->testType->name == 'Gram Staining') {
-			return Redirect::route('gramstain.edit', [$test->id]);
+			return redirect('gramstain.edit', [$test->id]);
 		}else{
-			return View::make('unhls_test.edit')->with('test', $test);
+			return view('unhls_test.edit')->with('test', $test);
 		}
 	}
 
@@ -967,7 +1011,7 @@ class UnhlsTestController extends Controller {
 	{
 
 		$test = UnhlsTest::find($testID);
-		return View::make('unhls_test.viewDetails')->with('test',$test );
+		return view('unhls_test.viewDetails')->with('test',$test );
 
 	}
 
@@ -988,7 +1032,7 @@ class UnhlsTestController extends Controller {
 		//Fire of entry verified event
 		Event::fire('test.verified', array($testID));
 
-		return View::make('unhls_test.viewDetails')->with('test', $test);
+		return view('unhls_test.viewDetails')->with('test', $test);
 	}
 
 	/**
@@ -1106,7 +1150,7 @@ class UnhlsTestController extends Controller {
 		$this->start();
 
 		//Return view
-		$url = \Session::get('SOURCE_URL');
+		$url = $request->session()->get('SOURCE_URL');
 
 		return Redirect::to($url)->with('message', trans('messages.specimen-successful-refer'))
 					->with('activeTest', array($specimen->tests->first()->id));
