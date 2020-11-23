@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 
 class UnhlsTest extends Model
 {
@@ -1062,11 +1063,13 @@ class UnhlsTest extends Model
 	}
 
 
-	/**
-	 * Get the Surveillance Data
-	 *
-	 * @return db resultset
-	 */
+    /**
+     * Get the Surveillance Data
+     *
+     * @param $from
+     * @param $to
+     * @return db resultset
+     */
 	public static function getSurveillanceData($from, $to)
 	{
 		$diseases = Disease::all();
@@ -1298,7 +1301,7 @@ class UnhlsTest extends Model
 	}
 
 	public function recalledTestResults(){
-		return $this->hasMany('UnhlsRecalledTestResult');
+		return $this->hasMany('App\Models\UnhlsRecalledTestResult');
 	}
 
 	public static function getMeasure($measure_id){
