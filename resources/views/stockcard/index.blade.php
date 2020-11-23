@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-	 
+	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+
 	  <li class="active">{{ Lang::choice('messages.stock-list',2) }}</li>
 	</ol>
 </div>
@@ -21,7 +21,7 @@
                                 <span class="glyphicon glyphicon-plus-sign"></span>
                                 {{trans('messages.add-stock')}}
                             </a>
-			
+
 		</div>
 	</div>
 
@@ -40,25 +40,25 @@
 					<th>Expiry date</th>
 					<th>Batch Number</th>
 					<th>Balance</th>
-					<th>Initials</th>									
+					<th>Initials</th>
 				</tr>
-			</thead>			
+			</thead>
 			<tbody>
 				@foreach($stock as $row)
 				<tr>
 				<td class="text-left">{{ date('d M Y', strtotime($row->issue_date)) }}</td>
 				<td class="text-left">{{ $row->commodity->name }}  </td>
-				@if($row->action==\Config::get('constants.INCOMING_STOCK_FLAG'))
+				@if($row->action==config('constants.INCOMING_STOCK_FLAG'))
 				<td class="text-left">
 					{{ $row->sourceOfStock($row->to_from_type,$row->to_from)->name }}
 				</td>
 				@endif
-				@if($row->action==\Config::get('constants.OUTGOING_STOCK_FLAG'))
+				@if($row->action==config('constants.OUTGOING_STOCK_FLAG'))
 				<td class="text-left">
 					{{ $row->destinationOfStock($row->to_from_type,$row->to_from)->firstName}} {{$row->destinationOfStock($row->to_from_type,$row->to_from)->lastName }}
 				</td>
 				@endif
-				@if($row->action==\Config::get('constants.LOSSES_ADJUSTMENTS_STOCK_FLAG'))
+				@if($row->action==config('constants.LOSSES_ADJUSTMENTS_STOCK_FLAG'))
 				<td class="text-left">
 					N/A
 				</td>
@@ -92,34 +92,34 @@
     	<div class="form-group">
 			{{ Form::label('item', 'Item', array('class'=>'control-label')) }}
 		    {{ Form::select('item', array(null => '')+ $items,
-                    Input::old('item'), array('class' => 'form-control', 'id' => 'item-id')) }}            	
+                    old('item'), array('class' => 'form-control', 'id' => 'item-id')) }}
     	</div>
 
     	<div class="row">
     		<div class="col-sm-4">
-				 <label for="recipient-name" class="control-label">Action</label>  
+				 <label for="recipient-name" class="control-label">Action</label>
 			</div>
-    	
+
 
 			<div class="col-sm-8">
-            	<label  class="radio-inline">            
-					{{ Form::radio('optAction', 'I', (Input::old('optAction') == 'I'), array('id'=>'stock-in', 'class'=>'radio')) }}     
+            	<label  class="radio-inline">
+					{{ Form::radio('optAction', 'I', (old('optAction') == 'I'), array('id'=>'stock-in', 'class'=>'radio')) }}
             		Stock in
             	</label>
         	</div>
 		</div>
 		<div class="row">
-    		<div class="col-sm-offset-4 col-sm-8">				
-				<label  class="radio-inline">            
-					{{ Form::radio('optAction', 'O', (Input::old('optAction') == 'O'), array('id'=>'stock-out', 'class'=>'radio')) }}     
+    		<div class="col-sm-offset-4 col-sm-8">
+				<label  class="radio-inline">
+					{{ Form::radio('optAction', 'O', (old('optAction') == 'O'), array('id'=>'stock-out', 'class'=>'radio')) }}
             		Stock out
             	</label>
 			</div>
 		</div>
 		<div class="row">
-    		<div class="col-sm-offset-4 col-sm-8">				
-				<label  class="radio-inline">            
-					{{ Form::radio('optAction', 'A', (Input::old('optAction') == 'A'), array('id'=>'loss-adjustment', 'class'=>'radio')) }}     
+    		<div class="col-sm-offset-4 col-sm-8">
+				<label  class="radio-inline">
+					{{ Form::radio('optAction', 'A', (old('optAction') == 'A'), array('id'=>'loss-adjustment', 'class'=>'radio')) }}
             		Losses / Adjustments
             	</label>
 			</div>
@@ -130,21 +130,21 @@
 <hr>
 				<div class="row">
 		    		<div class="col-sm-4">
-						 <label class="control-label">From</label>  
+						 <label class="control-label">From</label>
 					</div>
-		    	
+
 
 					<div class="col-sm-8">
-		            	<label  class="radio-inline">            
-							{{ Form::radio('inboundOption', '1', (Input::old('inboundOption') == '1'), array('id'=>'from_warehouse', 'class'=>'radio')) }}     
+		            	<label  class="radio-inline">
+							{{ Form::radio('inboundOption', '1', (old('inboundOption') == '1'), array('id'=>'from_warehouse', 'class'=>'radio')) }}
 		            		Facility
 		            	</label>
 		        	</div>
 				</div>
 				<div class="row">
-		    		<div class="col-sm-offset-4 col-sm-8">				
-						<label  class="radio-inline">            
-							{{ Form::radio('inboundOption', '2', (Input::old('inboundOption') == '2'), array('id'=>'from_facility', 'class'=>'radio')) }}     
+		    		<div class="col-sm-offset-4 col-sm-8">
+						<label  class="radio-inline">
+							{{ Form::radio('inboundOption', '2', (old('inboundOption') == '2'), array('id'=>'from_facility', 'class'=>'radio')) }}
 		            		Warehouse
 		            	</label>
 					</div>
@@ -155,34 +155,34 @@
 <hr>
 				<div class="row">
 		    		<div class="col-sm-4">
-						 <label class="control-label">To</label>  
+						 <label class="control-label">To</label>
 					</div>
-		    	
+
 
 					<div class="col-sm-8">
-		            	<label  class="radio-inline">            
-							{{ Form::radio('outboundOption', '3', (Input::old('outboundOption') == '3'), array('id'=>'to_person', 'class'=>'radio')) }}     
+		            	<label  class="radio-inline">
+							{{ Form::radio('outboundOption', '3', (old('outboundOption') == '3'), array('id'=>'to_person', 'class'=>'radio')) }}
 		            		Facility
 		            	</label>
 		        	</div>
 				</div>
 				<div class="row">
-		    		<div class="col-sm-offset-4 col-sm-8">				
-						<label  class="radio-inline">            
-							{{ Form::radio('outboundOption', '4', (Input::old('outboundOption') == '4'), array('id'=>'to_facility', 'class'=>'radio')) }}     
+		    		<div class="col-sm-offset-4 col-sm-8">
+						<label  class="radio-inline">
+							{{ Form::radio('outboundOption', '4', (old('outboundOption') == '4'), array('id'=>'to_facility', 'class'=>'radio')) }}
 		            		Person
 		            	</label>
 					</div>
 				</div>
 		</div>
 
-		
+
 
 
 		            <div class="form-group">
                 {{ Form::label('redirect', 'Redirect',array('class'=>'hidden')) }}
-                {{ Form::hidden('redirect', 0 ,Input::old('redirect'), array('class' => 'form-control')) }}
-            </div>  
+                {{ Form::hidden('redirect', 0 ,old('redirect'), array('class' => 'form-control')) }}
+            </div>
 
 		<div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -198,7 +198,7 @@
 
 		<?php Session::put('SOURCE_URL', URL::full());?>
 	</div>
-	
+
 </div>
 
 
@@ -220,10 +220,10 @@
         	$('#facility').remove();
         	var sel = $('<select>').appendTo('#facility-id');
         		sel.attr('id', 'facility').attr('name', 'facility').addClass('form-control');
-           		$.each(response, function(index,value) {   
+           		$.each(response, function(index,value) {
 
         	console.log(value.id);
-     			sel.append($('<option>', { value : value.id }).text(value.name)); 
+     			sel.append($('<option>', { value : value.id }).text(value.name));
 			});
         }).fail(function (jqXHR, textStatus, errorThrown) {
             //TODO handle fails on note post backs.
