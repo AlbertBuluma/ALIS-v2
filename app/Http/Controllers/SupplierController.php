@@ -58,7 +58,7 @@ class SupplierController extends Controller {
 			try{
 				$supplier->save();
 				return redirect('supplier.index')
-					->with('message',  'Successifully added a new supplier');
+					        ->with('message',  'Successfully added a new supplier');
 			}catch(QueryException $e){
 				Log::error($e);
 			}
@@ -107,7 +107,7 @@ class SupplierController extends Controller {
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::to('supplier.edit')->withErrors($validator)->withInput($request->except('password'));
+			return redirect('supplier.edit')->withErrors($validator)->withInput($request->except('password'));
 		} else {
 		// Update
 			$supplier = Supplier::find($id);
@@ -130,7 +130,7 @@ class SupplierController extends Controller {
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
@@ -139,7 +139,7 @@ class SupplierController extends Controller {
 		$supplier->delete();
 
 		// redirect
-		return Redirect::route('supplier.index')->with('message', trans('messages.supplier-succesfully-deleted'));
+		return redirect()->route('supplier.index')->with('message', trans('messages.supplier-succesfully-deleted'));
 	}
 
 
