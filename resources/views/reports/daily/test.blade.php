@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-	  <li class="active"><a href="{{ URL::route('reports.patient.index') }}">{{ Lang::choice('messages.report', 2) }}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+	  <li class="active"><a href="{{ route('reports.patient.index') }}">{{ Lang::choice('messages.report', 2) }}</a></li>
 	  <li class="active">{{ trans('messages.daily-log') }}</li>
 	</ol>
 </div>
@@ -16,7 +16,7 @@
 				    {{ Form::label('start', trans('messages.from')) }}
 				</div>
 				<div class="col-sm-2">
-				    {{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-d'), 
+				    {{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-d'),
 			                array('class' => 'form-control standard-datepicker')) }}
 		        </div>
 			</div>
@@ -27,7 +27,7 @@
 				    {{ Form::label('end', trans('messages.to')) }}
 				</div>
 				<div class="col-sm-2">
-				    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'), 
+				    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'),
 			                array('class' => 'form-control standard-datepicker')) }}
 		        </div>
 			</div>
@@ -35,11 +35,11 @@
 		<div class="col-sm-4">
 	    	<div class="row">
 				<div class="col-sm-3">
-				  	{{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'), 
+				  	{{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'),
 		                array('class' => 'btn btn-info', 'id' => 'filter', 'type' => 'submit')) }}
 		        </div>
 		        <div class="col-sm-1">
-					{{Form::submit(trans('messages.export-to-word'), 
+					{{Form::submit(trans('messages.export-to-word'),
 			    		array('class' => 'btn btn-success', 'id'=>'word', 'name'=>'word'))}}
 				</div>
 			</div>
@@ -50,7 +50,7 @@
 	    	<div class="row">
 				<div class="col-sm-2">
 				  	<label class="radio-inline">
-						{{ Form::radio('records', 'tests', true, array('data-toggle' => 'radio', 
+						{{ Form::radio('records', 'tests', true, array('data-toggle' => 'radio',
 						  'id' => 'tests')) }} {{trans('messages.test-records')}}
 					</label>
 				</div>
@@ -94,8 +94,8 @@
 				  	{{ Form::label('description',  Lang::choice('messages.test-category', 2)) }}
 				 </div>
 			  	<div class="col-sm-3">
-				  	{{ Form::select('section_id', array(''=>trans('messages.select-lab-section'))+$labSections, 
-							    		Request::old('testCategory') ? Request::old('testCategory') : $testCategory, 
+				  	{{ Form::select('section_id', array(''=>trans('messages.select-lab-section'))+$labSections,
+							    		Request::old('testCategory') ? Request::old('testCategory') : $testCategory,
 											array('class' => 'form-control', 'id' => 'section_id')) }}
 				</div>
 			</div>
@@ -106,8 +106,8 @@
 					{{ Form::label('description', Lang::choice('messages.test-type', 1)) }}
 				</div>
 				<div class="col-sm-3">
-					{{ Form::select('test_type', array('' => trans('messages.select-test-type'))+$testTypes, 
-							    		Request::old('testType') ? Request::old('testType') : $testType, 
+					{{ Form::select('test_type', array('' => trans('messages.select-test-type'))+$testTypes,
+							    		Request::old('testType') ? Request::old('testType') : $testType,
 											array('class' => 'form-control', 'id' => 'test_type')) }}
 				</div>
 			</div>
@@ -130,7 +130,7 @@
 			@include("reportHeader")
 			<strong>
 				<p>
-					{{trans('messages.test-records')}} 
+					{{trans('messages.test-records')}}
 
 					@if($pendingOrAll == 'pending')
 						{{' - '.trans('messages.pending-only')}}
