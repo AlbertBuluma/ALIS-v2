@@ -138,7 +138,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		$data = array();
 
 		if ($userID == 0) {
-			$users = User::lists('id');
+			$users = User::pluck('id')->toArray();
 		} else {
 			$users[] = $userID;
 		}
@@ -157,7 +157,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 						INNER JOIN unhls_patients AS p ON v.patient_id = p.id
 						CROSS JOIN users AS u
 						WHERE u.id = $user
-						GROUP BY u.id
+						GROUP BY u.id, u.name, u.designation
 						ORDER BY u.name",
 						$params
 					);
