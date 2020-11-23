@@ -23,9 +23,9 @@ class StockRequisitionController extends Controller {
 	public function index()
 	{
 		//
-		$districts = District::orderBy('name', 'ASC')->lists('name', 'id');
-		$years = FinancialYear::orderBy('year', 'ASC')->lists('year', 'id');
-		$items = Commodity::orderBy('name', 'ASC')->lists('name', 'id');
+		$districts = District::orderBy('name', 'ASC')->pluck('name', 'id')->toArray();
+		$years = FinancialYear::orderBy('year', 'ASC')->pluck('year', 'id')->toArray();
+		$items = Commodity::orderBy('name', 'ASC')->pluck('name', 'id')->toArray();
 
 		return view('stockrequisition.index')
 			->with('districts', $districts)
