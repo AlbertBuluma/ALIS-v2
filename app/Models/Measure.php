@@ -317,6 +317,6 @@ class Measure extends Model
 
     public function measureNameMapping()
     {
-        return $this->hasOne('MeasureNameMapping');
+        return $this->hasOne('App\Models\MeasureNameMapping');
     }
 }
