@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-		  <li><a href="{{ URL::route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a></li>
 		  <li class="active">{{trans('messages.import-results-title')}}</li>
 		</ol>
 	</div>
@@ -36,30 +36,30 @@
 			<div class="panel-body">
 
 					<div class="input-group image-preview">
-						{{ Form::label('filename', 'File name', array('class'=>'control-label hidden')) }}						
-                		{{ Form::text('filename', Input::old('filename'), array('class' => 'form-control image-preview-filename','readonly'=>'readonly')) }}
-						<!-- don't give a name === doesn't send on POST/GET --> 
-						<span class="input-group-btn"> 
+						{{ Form::label('filename', 'File name', array('class'=>'control-label hidden')) }}
+                		{{ Form::text('filename', old('filename'), array('class' => 'form-control image-preview-filename','readonly'=>'readonly')) }}
+						<!-- don't give a name === doesn't send on POST/GET -->
+						<span class="input-group-btn">
 						<!-- image-preview-input -->
-						<div class="btn btn-default image-preview-input file"> <span class="glyphicon glyphicon-folder-open"></span> <span class="image-preview-input-title">Browse</span>							
-							{{ Form::label('file', 'File', array('class'=>'control-label hidden')) }}		
+						<div class="btn btn-default image-preview-input file"> <span class="glyphicon glyphicon-folder-open"></span> <span class="image-preview-input-title">Browse</span>
+							{{ Form::label('file', 'File', array('class'=>'control-label hidden')) }}
 							<input type="file" class="file" accept=".csv" name="file" id="filez"/>
-							<!-- rename it --> 
+							<!-- rename it -->
 						</div>
 						<button type="submit" class="btn btn-labeled btn-default"> <span class="btn-label"><i class="glyphicon glyphicon-upload"></i> </span>Upload</button>
-						</span> 
+						</span>
 					</div>
-					<!-- /input-group image-preview [TO HERE]--> 
+					<!-- /input-group image-preview [TO HERE]-->
 					</br></br>
 
 					@if ($failed_import)
 					<!-- Upload Finished -->
 <!-- 						<div class="js-upload-finished">
 							<h4>Failed upload results list</h4>
-							<ul class="list-group"> 
-								
-									<li class="list-group-item list-group-item-danger"> {{implode("</br>",$failed_import)}} </li> 
-								
+							<ul class="list-group">
+
+									<li class="list-group-item list-group-item-danger"> {{implode("</br>",$failed_import)}} </li>
+
 						</ul> -->
 					@endif
 		{{ Form::close() }}
@@ -69,8 +69,8 @@
 <script type="text/javascript">
 
 $('.file').change(function(e){
-	
-	    
+
+
         $('#filename').val(e.target.files[0].name);
 });
 
