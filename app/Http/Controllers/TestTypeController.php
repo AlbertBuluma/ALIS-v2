@@ -1,17 +1,29 @@
 <?php
 
+namespace App\Http\Controllers;
+
+use App\Models\Measure;
+use App\Models\MeasureType;
+use App\Models\Organism;
+use App\Models\SpecimenType;
+use App\Models\TestCategory;
+use App\Models\TestType;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use MeasureController;
 
 /**
  *Contains functions for managing test types
  *
  */
-class TestTypeController extends \BaseController {
+class TestTypeController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
@@ -19,13 +31,13 @@ class TestTypeController extends \BaseController {
 			$testtypes = TestType::orderBy('name', 'ASC')->get();
 
 		// Load the view and pass the testtypes
-		return View::make('testtype.index')->with('testtypes', $testtypes);
+		return view('testtype.index')->with('testtypes', $testtypes);
 	}
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function create()
 	{
@@ -36,7 +48,7 @@ class TestTypeController extends \BaseController {
         $organisms = Organism::orderBy('name')->get();
 
 		//Create TestType
-		return View::make('testtype.create')
+		return view('testtype.create')
 					->with('testcategory', $testcategory)
 					->with('measures', $measures)
        				->with('measuretype', $measuretype)
@@ -44,12 +56,13 @@ class TestTypeController extends \BaseController {
 					->with('organisms', $organisms);
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return Response
+     */
+	public function store(Request $request)
 	{
 		//
 		$rules = array(
@@ -59,34 +72,34 @@ class TestTypeController extends \BaseController {
 			'new-measures' => 'required',
 			'targetTAT' => 'required',
 			'targetTAT_unit'=>'required'
-			
+
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 			//array to be split here and sent to appropriate place! man! with ids and all possibilities
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::route('testtype.create')->withErrors($validator);
+			return redirect('testtype.create')->withErrors($validator);
 		} else {
-			// store 
+			// store
 			$testtype = new TestType;
-			$testtype->name = trim(Input::get('name'));
-			$testtype->description = Input::get('description');
-			$testtype->test_category_id = Input::get('test_category_id');
-			$testtype->targetTAT = Input::get('targetTAT');
-			$testtype->targetTAT_unit = Input::get('targetTAT_unit');
-			$testtype->prevalence_threshold = Input::get('prevalence_threshold');
-			$testtype->orderable_test = Input::get('orderable_test');
-			$testtype->accredited = Input::get('accredited');
+			$testtype->name = trim($request->get('name'));
+			$testtype->description = $request->get('description');
+			$testtype->test_category_id = $request->get('test_category_id');
+			$testtype->targetTAT = $request->get('targetTAT');
+			$testtype->targetTAT_unit = $request->get('targetTAT_unit');
+			$testtype->prevalence_threshold = $request->get('prevalence_threshold');
+			$testtype->orderable_test = $request->get('orderable_test');
+			$testtype->accredited = $request->get('accredited');
 			try{
 				$testtype->save();
 				$measureIds = array();
-				$inputNewMeasures = Input::get('new-measures');
-				
+				$inputNewMeasures = $request->get('new-measures');
+
 				$measures = New MeasureController;
 				$measureIds = $measures->store($inputNewMeasures);
 				$testtype->setMeasures($measureIds);
-				$testtype->setSpecimenTypes(Input::get('specimentypes'));
+				$testtype->setSpecimenTypes($request->get('specimentypes'));
 				// todo: this command is broken rework it
 				// $testtype->setOrganisms(Input::get('organisms'));
 
@@ -94,7 +107,7 @@ class TestTypeController extends \BaseController {
 			}catch(QueryException $e){
 				Log::error($e);
 			}
-				return Redirect::route('testtype.index')
+				return redirect('testtype.index')
 					->with('message', trans('messages.success-creating-test-type'));
 		}
 	}
@@ -103,7 +116,7 @@ class TestTypeController extends \BaseController {
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function show($id)
 	{
@@ -111,14 +124,14 @@ class TestTypeController extends \BaseController {
 		$testtype = TestType::find($id);
 
 		//Show the view and pass the $testtype to it
-		return View::make('testtype.show')->with('testtype', $testtype);
+		return view('testtype.show')->with('testtype', $testtype);
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
@@ -131,7 +144,7 @@ class TestTypeController extends \BaseController {
 		$organisms = Organism::orderBy('name')->get();
 
 		//Open the Edit View and pass to it the $testtype
-		return View::make('testtype.edit')
+		return view('testtype.edit')
 					->with('testtype', $testtype)
 					->with('testcategory', $testcategory)
 					->with('measures', $measures)
@@ -141,13 +154,14 @@ class TestTypeController extends \BaseController {
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function update(Request $request, $id)
 	{
 		$rules = array(
 			'name' => 'required',
@@ -156,38 +170,38 @@ class TestTypeController extends \BaseController {
 			'targetTAT' => 'required',
 			'targetTAT_unit'=>'required'
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator);
+			return redirect()->back()->withErrors($validator);
 		} else {
 			// Update
 			$testtype = TestType::find($id);
-			$testtype->name = trim(Input::get('name'));
-			$testtype->description = Input::get('description');
-			$testtype->test_category_id = Input::get('test_category_id');
-			$testtype->targetTAT = Input::get('targetTAT');
-			$testtype->targetTAT_unit = Input::get('targetTAT_unit');
-			$testtype->prevalence_threshold = Input::get('prevalence_threshold');
-			$testtype->orderable_test = Input::get('orderable_test');
-			$testtype->accredited = Input::get('accredited');
+			$testtype->name = trim($request->get('name'));
+			$testtype->description = $request->get('description');
+			$testtype->test_category_id = $request->get('test_category_id');
+			$testtype->targetTAT = $request->get('targetTAT');
+			$testtype->targetTAT_unit = $request->get('targetTAT_unit');
+			$testtype->prevalence_threshold = $request->get('prevalence_threshold');
+			$testtype->orderable_test = $request->get('orderable_test');
+			$testtype->accredited = $request->get('accredited');
 
 			try{
 				$testtype->save();
 				// todo: this command is broken rework it
 				// $testtype->setOrganisms(Input::get('organisms'));
-				$testtype->setSpecimenTypes(Input::get('specimentypes'));
+				$testtype->setSpecimenTypes($request->get('specimentypes'));
 				$measureIds = array();
-					if (Input::get('new-measures')) {
-						$inputNewMeasures = Input::get('new-measures');
+					if ($request->get('new-measures')) {
+						$inputNewMeasures = $request->get('new-measures');
 
 						$measures = New MeasureController;
 						$measureIds = $measures->store($inputNewMeasures);
 					}
 
-					if (Input::get('measures')) {
-						$inputMeasures = Input::get('measures');
+					if ($request->get('measures')) {
+						$inputMeasures = $request->get('measures');
 						foreach($inputMeasures as $key => $value)
 						{
 						  $measureIds[] = $key;
@@ -201,8 +215,8 @@ class TestTypeController extends \BaseController {
 			}
 
 			// redirect
-			$url = Session::get('SOURCE_URL');
-            
+			$url = $request->session()->get('SOURCE_URL');
+
             return Redirect::to($url)
 						->with('message', trans('messages.success-updating-test-type'))->with('activetesttype', $testtype ->id);
 		}
@@ -219,12 +233,13 @@ class TestTypeController extends \BaseController {
 		//
 	}
 
-	/**
-	 * Remove the specified resource from storage (soft delete).
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+    /**
+     * Remove the specified resource from storage (soft delete).
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
 	public function delete($id)
 	{
 		//Soft delete the testtype
@@ -236,11 +251,11 @@ class TestTypeController extends \BaseController {
 			$testtype->delete();
 		} else {
 		    // The test type is in use
-		    return Redirect::route('testtype.index')
+		    return redirect('testtype.index')
 		    	->with('message', 'messages.failure-test-type-in-use');
 		}
 		// redirect
-		return Redirect::route('testtype.index')
+		return redirect('testtype.index')
 			->with('message', trans('messages.success-deleting-test-type'));
 	}
 }
