@@ -25,23 +25,23 @@
 
 			<div class="form-group">
 				{{ Form::label('name', Lang::choice('messages.name',1)) }}
-				{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+				{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 			</div>
 			<div class="form-group">
 				{{ Form::label('description', trans('messages.description')) }}
-				{{ Form::textarea('description', Input::old('description'), 
+				{{ Form::textarea('description', old('description'),
 					array('class' => 'form-control', 'rows' => '2' )) }}
 			</div>
 			<div class="form-group">
 				{{ Form::label('test_category_id', Lang::choice('messages.test-category',1)) }}
-				{{ Form::select('test_category_id', array(0 => '')+$testcategory->lists('name', 'id'),
-					Input::old('test_category_id'), array('class' => 'form-control')) }}
-			</div> 
+				{{ Form::select('test_category_id', array(0 => '')+$testcategory->pluck('name', 'id')->toArray(),
+					old('test_category_id'), array('class' => 'form-control')) }}
+			</div>
 			<div class="form-group">
 				{{ Form::label('specimen_types', trans('messages.select-specimen-types')) }}
 				<div class="form-pane panel panel-default">
 					<div class="container-fluid">
-						<?php 
+						<?php
 							$cnt = 0;
 							$zebra = "";
 						?>
@@ -53,8 +53,8 @@
 							?>
 							<div class="col-md-3">
 								<label  class="checkbox">
-									<input type="checkbox" name="specimentypes[]" value="{{ $value->id}}" 
-										{{ in_array($value->id, $testtype->specimenTypes->lists('id'))?"checked":"" }} />
+									<input type="checkbox" name="specimentypes[]" value="{{ $value->id}}"
+										{{ in_array($value->id, $testtype->specimenTypes->pluck('id')->toArray()) ? "checked":"" }} />
 										{{$value->name }}
 								</label>
 							</div>
@@ -76,17 +76,17 @@
 			</div>
 			<div class="form-group">
 				{{ Form::label('targetTAT', trans('messages.target-turnaround-time')) }}
-				{{ Form::text('targetTAT', Input::old('targetTAT'), array('class' => 'form-control')) }}
-				{{ Form::select('targetTAT_unit', array('','minutes' => 'Minutes', 'hours' => 'Hours','days'=>'Days'), 
-						Input::old('targetTAT_unit'),array('class' => 'form-control','required' => 'required')) }}
+				{{ Form::text('targetTAT', old('targetTAT'), array('class' => 'form-control')) }}
+				{{ Form::select('targetTAT_unit', array('','minutes' => 'Minutes', 'hours' => 'Hours','days'=>'Days'),
+						old('targetTAT_unit'),array('class' => 'form-control','required' => 'required')) }}
 			</div>
 		<div class="panel-footer">
 			<div class="form-group actions-row">
 				{{ Form::button(
-					'<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'), 
+					'<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'),
 					['class' => 'btn btn-primary', 'onclick' => 'submit()']
 				) }}
-				{{ Form::button(trans('messages.cancel'), 
+				{{ Form::button(trans('messages.cancel'),
 					['class' => 'btn btn-default', 'onclick' => 'javascript:history.go(-1)']
 				) }}
 			</div>

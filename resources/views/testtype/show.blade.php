@@ -26,9 +26,9 @@
 				<p class="view"><strong>{{ Lang::choice('messages.test-category',1) }}</strong>
 					{{ $testtype->testCategory->name }}</p>
 				<p class="view-striped"><strong>{{trans('messages.compatible-specimen')}}</strong>
-					{{ implode(", ", $testtype->specimenTypes->lists('name')) }}</p>
+					{{ implode(", ", $testtype->specimenTypes->pluck('name')->toArray()) }}</p>
 				<p class="view"><strong>{{ Lang::choice('messages.measure',1) }}</strong>
-					{{ implode(", ", $testtype->measures->lists('name')) }}</p>
+					{{ implode(", ", $testtype->measures->pluck('name')->toArray()) }}</p>
 				<p class="view-striped"><strong>{{trans('messages.turnaround-time')}}</strong>
 					{{ $testtype->targetTAT }} {{$testtype->targetTAT_unit}}</p>
 
