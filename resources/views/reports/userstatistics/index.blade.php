@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.report',2) }}</li>
 	  <li class="active">{{ trans('messages.user-statistics-report') }}</li>
 	</ol>
@@ -18,7 +18,7 @@
 					{{ Form::label('start', trans("messages.from")) }}
 				</div>
 				<div class="col-md-10">
-					{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-d'), 
+					{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-d'),
 				        array('class' => 'form-control standard-datepicker')) }}
 			    </div>
 	    	</div><!-- /.row -->
@@ -29,7 +29,7 @@
 			    	{{ Form::label('end', trans("messages.to")) }}
 			    </div>
 				<div class="col-md-8">
-				    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'), 
+				    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'),
 				        array('class' => 'form-control standard-datepicker')) }}
 		        </div>
 	    	</div><!-- /.row -->
@@ -43,7 +43,7 @@
 		        	{{ Form::label('user', Lang::choice('messages.user',1)) }}
 		        </div>
 		        <div class="col-md-10">
-		            {{ Form::select('user', array(0 => '-- All --')+User::all()->sortBy('name')->lists('name','id'),
+		            {{ Form::select('user', array(0 => '-- All --')+ App\Models\User::all()->sortBy('name')->pluck('name','id')->toArray(),
 		            	isset($input['user'])?$input['user']:0, array('class' => 'form-control')) }}
 		        </div>
 	        </div>
@@ -60,7 +60,7 @@
 	        </div>
 	    </div>
 	    <div class="col-md-2">
-		    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'), 
+		    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'),
 		        array('class' => 'btn btn-info', 'id' => 'filter', 'type' => 'submit')) }}
         </div>
 	</div><!-- /.row -->
@@ -80,7 +80,7 @@
 	<div class="panel-body">
 		@if (Session::has('message'))
 			<div class="alert alert-info">{{ trans(Session::get('message')) }}</div>
-		@endif	
+		@endif
 
 		<div class="table-responsive">
 
@@ -132,7 +132,7 @@
 					<tbody>
 						<?php $i = 1;?>
 						@forelse($reportData as $row)
-							<?php $patient = UnhlsPatient::find($row->id);?>
+							<?php $patient = App\Models\UnhlsPatient::find($row->id);?>
 							<tr>
 								<td>{{$i++}}</td>
 								<td>{{$patient->patient_number}}</td>
@@ -160,7 +160,7 @@
 					</thead>
 					<tbody>
 						@forelse($reportData as $row)
-							<?php $specimen = UnhlsSpecimen::find($row->id);?>
+							<?php $specimen = App\Models\UnhlsSpecimen::find($row->id);?>
 							<tr>
 								<td>{{$specimen->id}}</td>
 								<td>{{$specimen->specimenType->name}}</td>
@@ -188,7 +188,7 @@
 					</thead>
 					<tbody>
 						@forelse($reportData as $row)
-							<?php $test = UnhlsTest::find($row->id);?>
+							<?php $test = App\Models\UnhlsTest::find($row->id);?>
 							<tr>
 								<td>{{$test->id}}</td>
 								<td>{{$test->testType->name}}</td>
