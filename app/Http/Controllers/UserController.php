@@ -44,6 +44,68 @@ class UserController extends Controller {
         return view("user.login");
     }
 
+    public function configureFacilitySettings(Request $request)
+
+    {
+        if ($request->server("REQUEST_METHOD") == "POST")
+        {
+            $validator = Validator::make($request->all(), array(
+                "username" => "required|min:4",
+                "password" => "required|min:6",
+                "main_ip" => "required|min:6",
+                "host_ip" => "required|min:6",
+                "main_ip_port_number" => "required|min:6",
+                "host_ip_port_number" => "required|min:6",
+            ));
+
+
+            $facility_settings = $request->all();
+
+            // Format file structure
+            $form_input = array("password=".$request->get('password'),
+                "mainIp=".'http://'.$request->get('main_ip').':'.$request->get('main_ip_port_number'),
+                "hostIp=".'http://'.$request->get('host_ip').':'.$request->get('host_ip_port_number'),
+                "username=".$request->get('username'));
+
+            $contents = implode(PHP_EOL, $form_input);
+            $contents .= PHP_EOL . PHP_EOL;
+            file_put_contents("config.properties", $contents);
+
+            $connection_variables = [
+                'main_ip' => $request->get('main_ip'),
+                'host_ip' => $request->get('host_ip')
+            ];
+
+//                $connection_file = fopen('connection_urls', 'w');
+//                fwrite($connection_file, json_encode($connection_variables));
+
+            return redirect()->route('facility.settings')->withInput($request->except('password'))
+//                ->withErrors($validator)
+                ->with('message', trans('messages.invalid-login'));
+        }
+
+        return view("user.facilitySettings");
+    }
+
+    // Test for connection with CPHL
+    public function testConnection()
+    {
+
+        $client = new \GuzzleHttp\Client();
+
+        // Create a request
+        $request = $client->get('http://localhost:5000/api/testLogin');
+
+        // Get the actual response without headers
+        $response = $request->getBody();
+
+        $response = 'Connection Successful...' ? 'Connection Established' : 'Connection Failed';
+
+        return redirect()->route('facility.settings')
+                            ->with('info', $response);
+
+    }
+
     public function logoutAction(){
         Auth::logout();
         return redirect()->route("user.login");
