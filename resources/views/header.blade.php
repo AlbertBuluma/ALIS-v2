@@ -8,20 +8,20 @@
                     <li>
                         <a href="#">
                             <span><i class="icon ion-chevron-right"></i></span>
-                            {{ \Config::get('constants.DISTRICT_NAME') }}
+                            {{ config('constants.DISTRICT_NAME') }}
                         </a>
                     </li>
                     <li>
                         <a href="#">
                             <span><i class="icon ion-chevron-right"></i></span>
-                            {{ \Config::get('constants.FACILITY_NAME') }}
+                            {{ config('constants.FACILITY_NAME') }}
                         </a>
                     </li>
 
                     <li>
                         <a href="#">
                             <span><i class="icon ion-chevron-right"></i></span>
-                            {{ \Config::get('constants.FIN_YEAR_NAME') }}
+                            {{ config('constants.FIN_YEAR_NAME') }}
                         </a>
                     </li>
 
@@ -33,18 +33,18 @@
                     </li>
 
                 </ul>
-                @if (Auth::check())
+                @if (Illuminate\Support\Facades\Auth::check())
                 <ul class="nav navbar-nav navbar-right">
 
                     <li class="user_menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							    {{ \Config::get('constants.FACILITY_NAME') }} | {{Auth::user()->name}}
+							    {{ config('constants.FACILITY_NAME') }} | {{Illuminate\Support\Facades\Auth::user()->name}}
 							<span class="navbar_el_icon ion-person"></span> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href='{{ URL::to("user/".Auth::user()->id."/edit") }}'>{{trans('messages.edit-profile')}}</a></li>
+                            <li><a href='{{ URL::to("user/".Illuminate\Support\Facades\Auth::user()->id."/edit") }}'>{{trans('messages.edit-profile')}}</a></li>
                             <li class="divider"></li>
-                            <li><a href="{{ URL::route("user.logout") }}">{{trans('messages.logout')}}</a></li>
+                            <li><a href="{{ route("user.logout") }}">{{trans('messages.logout')}}</a></li>
                         </ul>
                     </li>
 
