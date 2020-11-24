@@ -3,9 +3,9 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 		  <li>
-		  	<a href="{{ URL::route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a>
+		  	<a href="{{ route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a>
 		  </li>
 		  <li class="active">{{trans('messages.new-test')}}</li>
 		</ol>
@@ -59,7 +59,7 @@
 									<div class="col-md-12">
 										<div class="form-group">
 												{{ Form::label('visit_lab_number','Visit Lab No:', array('text-align' => 'right')) }}
-												{{ Form::text('visit_lab_number', Input::old('visit_lab_number'), array('class' => 'form-control')) }}
+												{{ Form::text('visit_lab_number', old('visit_lab_number'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::hidden('patient_id', $patient->id) }}
@@ -74,26 +74,27 @@
 										</div>
 										<!--div class="form-group">
 											{{ Form::label('ward_id','Ward/Clinic/Health Unit') }}
-											{{ Form::select('ward_id', $ward, Input::get('ward_id'),
+{{--											{{ Form::select('ward_id', $ward, Input::get('ward_id'),--}}
+											{{ Form::select('ward_id', $ward, old('ward_id'),
 											array('class' => 'form-control')) }}
 										</div-->
 										<div class="form-group">
 												{{ Form::label('bed_no','Bed No:', array('text-align' => 'right')) }}
-												{{ Form::text('bed_no', Input::old('bed_no'), array('class' => 'form-control')) }}
+												{{ Form::text('bed_no', old('bed_no'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('clinical_notes','Clinical Notes',array('class' => 'required')) }}
-											{{ Form::textarea('clinical_notes', Input::old('clinical_notes'), array('class' => 'form-control')) }}
+											{{ Form::textarea('clinical_notes', old('clinical_notes'), array('class' => 'form-control')) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('previous_therapy','Previous Therapy') }}
-											{{ Form::text('previous_therapy', Input::old('previous_therapy'), array('class' => 'form-control')) }}
+											{{ Form::text('previous_therapy', old('previous_therapy'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('current_therapy','Current Therapy', array('text-align' => 'right')) }}
-											{{ Form::text('current_therapy', Input::old('current_therapy'), array('class' => 'form-control')) }}
+											{{ Form::text('current_therapy', old('current_therapy'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('clinician', 'Test Requested By',array('class' => 'required')) }}
@@ -104,12 +105,12 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('cadre', 'Cadre') }}
-											{{Form::text('cadre', Input::old('cadre'), array('class' => 'form-control','id'=>'clinician_cadre_id',
+											{{Form::text('cadre', old('cadre'), array('class' => 'form-control','id'=>'clinician_cadre_id',
 											'name'=>'clinician_cadre'))}}
 										</div>
 										<div class="form-group">
 											{{ Form::label('phone_contact', 'Phone Contact',array('class' => 'required')) }}
-											{{Form::text('phone_contact', Input::old('phone_contact'), array('class' => 'form-control',
+											{{Form::text('phone_contact', old('phone_contact'), array('class' => 'form-control',
 											'id'=>'clinician_phone_id','name'=>'clinician_phone'))}}
 										</div>
 										<div class="form-group">
@@ -141,7 +142,7 @@
 											<div class="form-group">
 												{{Form::label('specimen_type', 'Sample Type')}}
 												{{ Form::select('specimen_type', $specimenType,
-												Input::get('specimenType'),
+												old('specimenType'),
 												['class' => 'form-control specimen-type']) }}
 											</div>
 											<div class="form-group">
@@ -167,7 +168,7 @@
 											<div class="form-group">
 										        {{Form::label('test_type_category', 'Lab Section')}}
 										    	{{ Form::select('test_type_category', $testCategory,
-										        Input::get('testCategory'),
+										        old('testCategory'),
 										        ['class' => 'form-control test-type-category']) }}
 											</div>
 										</div>
@@ -229,5 +230,5 @@
                 title="{{trans('messages.delete')}}">×</button>
         </div>
     </div><!-- Test List Item -->
-</div><!-- Test List Item Loader-->  
+</div><!-- Test List Item Loader-->
 @stop
