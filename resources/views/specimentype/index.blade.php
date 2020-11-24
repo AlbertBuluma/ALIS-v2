@@ -4,7 +4,7 @@
 <div>
 
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 	  <li class="active">{{ Lang::choice('messages.specimen-type',2) }}</li>
 	</ol>
 </div>
@@ -57,8 +57,8 @@
 
 						</a>
 					<!-- delete this specimentype (uses delete method found at GET /specimentype/{id}/delete -->
-						<button class="btn btn-sm btn-danger delete-item-link" 
-							data-toggle="modal" data-target=".confirm-delete-modal"	
+						<button class="btn btn-sm btn-danger delete-item-link"
+							data-toggle="modal" data-target=".confirm-delete-modal"
 							data-id='{{ URL::to("specimentype/" . $value->id . "/delete") }}'>
 							<span class="glyphicon glyphicon-trash"></span>
 							{{trans('messages.delete')}}
