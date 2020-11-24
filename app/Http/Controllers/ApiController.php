@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\UnhlsTest;
+use App\Models\UnhlsTestResult;
 use App\Models\UnhlsVisit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
