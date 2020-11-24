@@ -1,17 +1,24 @@
 <?php
 
+namespace App\Http\Controllers;
+
+use App\Models\SpecimenType;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 /**
- * Contains functions for managing specimen types  
+ * Contains functions for managing specimen types
  *
  */
-class SpecimenTypeController extends \BaseController {
+class SpecimenTypeController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
@@ -19,49 +26,50 @@ class SpecimenTypeController extends \BaseController {
 			$specimentypes = SpecimenType::orderBy('name', 'ASC')->get();
 
 		// Load the view and pass the specimentypes
-		return View::make('specimentype.index')->with('specimentypes', $specimentypes);
+		return view('specimentype.index')->with('specimentypes', $specimentypes);
 	}
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function create()
 	{
 		//Create SpecimenType
-		return View::make('specimentype.create');
+		return view('specimentype.create');
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function store(Request $request)
 	{
 		//
 		$rules = array('name' => 'required|unique:specimen_types,name');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator);
+			return redirect()->back()->withErrors($validator);
 		} else {
 			// store
 			$specimentype = new SpecimenType;
-			$specimentype->name = Input::get('name');
-			$specimentype->description = Input::get('description');
+			$specimentype->name = $request->get('name');
+			$specimentype->description = $request->get('description');
 
 			try{
 				$specimentype->save();
 			$url = Session::get('SOURCE_URL');
-			return Redirect::to($url)
+			return redirect($url)
                     ->with('message', trans('messages.success-creating-specimen-type'));
 			}catch(QueryException $e){
                 Log::error($e);
 			}
-			
+
 			// redirect
 		}
 	}
@@ -70,7 +78,7 @@ class SpecimenTypeController extends \BaseController {
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function show($id)
 	{
@@ -78,14 +86,14 @@ class SpecimenTypeController extends \BaseController {
 		$specimentype = SpecimenType::find($id);
 
 		//Show the view and pass the $specimentype to it
-		return View::make('specimentype.show')->with('specimentype', $specimentype);
+		return view('specimentype.show')->with('specimentype', $specimentype);
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
@@ -93,37 +101,38 @@ class SpecimenTypeController extends \BaseController {
 		$specimentype = SpecimenType::find($id);
 
 		//Open the Edit View and pass to it the $specimentype
-		return View::make('specimentype.edit')->with('specimentype', $specimentype);
+		return view('specimentype.edit')->with('specimentype', $specimentype);
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function update(Request $request, $id)
 	{
 		//
 		$rules = array('name' => 'required');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator);
+			return redirect()->back()->withErrors($validator);
 		} else {
 			// Update
 			$specimentype = SpecimenType::find($id);
-			$specimentype->name = Input::get('name');
-			$specimentype->description = Input::get('description');
+			$specimentype->name = $request->get('name');
+			$specimentype->description = $request->get('description');
 			$specimentype->save();
 
 			// redirect
 			$url = Session::get('SOURCE_URL');
-			
-			return Redirect::to($url)
+
+			return redirect($url)
 			->with('message', trans('messages.success-updating-specimen-type'))->with('activespecimentype', $specimentype ->id);
-		
+
 		}
 	}
 
@@ -138,13 +147,14 @@ class SpecimenTypeController extends \BaseController {
 		//
 	}
 
-	/**
-	 * Remove the specified resource from storage (soft delete).
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function delete($id)
+    /**
+     * Remove the specified resource from storage (soft delete).
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function delete(Request $request, $id)
 	{
 		//Soft delete the specimentype
 		$specimentype = SpecimenType::find($id);
@@ -155,13 +165,13 @@ class SpecimenTypeController extends \BaseController {
 			$specimentype->delete();
 		} else {
 		    // The specimen type is in use
-		    return Redirect::route('specimentype.index')
+		    return redirect()->route('specimentype.index')
 		    	->with('message', trans('messages.failure-specimen-type-in-use'));
 		}
 		// redirect
 		  $url = Session::get('SOURCE_URL');
-			
-			return Redirect::to($url)
+
+			return redirect($url)
 			->with('message', trans('messages.success-updating-specimen-type'));
 	}
 }

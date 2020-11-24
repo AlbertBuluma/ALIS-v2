@@ -1,18 +1,24 @@
 <?php
 
+namespace App\Http\Controllers;
+
+use App\Models\Measure;
+use App\Models\MeasureRange;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use Illuminate\Database\QueryException;
 
 /**
- * Contains measure resources  
+ * Contains measure resources
  * Measures are standard units and ranges of test results
  */
-class MeasureController extends \BaseController {
+class MeasureController extends Controller {
 
     /**
      * Store a newly created resource in storage.
      *
-     * @return Response
+     * @param $measures
+     * @return array
      */
     public function store($measures)
     {
@@ -30,7 +36,7 @@ class MeasureController extends \BaseController {
             }catch(QueryException $e){
                 Log::error($e);
             }
-            
+
             if ($measure->isNumeric()) {
                 $val['agemin'] = $data['agemin'];
                 $val['agemax'] = $data['agemax'];
@@ -40,7 +46,7 @@ class MeasureController extends \BaseController {
                 $val['interpretation'] = $data['interpretation'];
 
                 // Add ranges for this measure
-                for ($i=0; $i < count($val['agemin']); $i++) { 
+                for ($i=0; $i < count($val['agemin']); $i++) {
                     $measurerange = new MeasureRange;
                     $measurerange->measure_id = $measure->id;
                     $measurerange->age_min = $val['agemin'][$i];
@@ -54,7 +60,7 @@ class MeasureController extends \BaseController {
             }else if( $measure->isAlphanumeric() || $measure->isAutocomplete() ) {
                 $val['val'] = $data['val'];
                 $val['interpretation'] = $data['interpretation'];
-                for ($i=0; $i < count($val['val']); $i++) { 
+                for ($i=0; $i < count($val['val']); $i++) {
                     $measurerange = new MeasureRange;
                     $measurerange->measure_id = $measure->id;
                     $measurerange->alphanumeric = $val['val'][$i];
@@ -69,8 +75,8 @@ class MeasureController extends \BaseController {
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param $measure
+     * @return void
      */
     public function update($measure)
 
@@ -143,7 +149,7 @@ class MeasureController extends \BaseController {
      * Remove the specified resource from storage (soft delete).
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function delete($id)
     {
@@ -156,11 +162,11 @@ class MeasureController extends \BaseController {
             $measure->delete();
         } else {
             // The measure is in use
-            return Redirect::route('measure.index')
+            return redirect()->route('measure.index')
                 ->with('message', trans('messages.failure-test-measure-in-use'));
         }
         // redirect
-        return Redirect::route('measure.index')
+        return redirect()->route('measure.index')
             ->with('message', trans('messages.success-deleting-measure'));
     }
 }
