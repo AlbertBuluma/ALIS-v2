@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}} </a></li>
-		  <li><a href="{{ URL::route('user.index') }}">{{ Lang::choice('messages.user',1) }}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}} </a></li>
+		  <li><a href="{{ route('user.index') }}">{{ Lang::choice('messages.user',1) }}</a></li>
 		  <li class="active">{{trans('messages.edit-user')}}</li>
 		</ol>
 	</div>
@@ -57,17 +57,17 @@
 											</div>
 											<div class="form-group">
 												{{ Form::label('email', trans('messages.email-address')) }}
-												{{ Form::email('email', Input::old('email'),
+												{{ Form::email('email', old('email'),
 													["placeholder" => "",
 													'class' => 'form-control']) }}
 											</div>
 											<div class="form-group">
 												{{ Form::label('phone_contact', 'Phone Contact') }}
-												{{ Form::text('phone_contact', Input::old('phone_contact'), ['class' => 'form-control']) }}
+												{{ Form::text('phone_contact', old('phone_contact'), ['class' => 'form-control']) }}
 											</div>
 											<div class="form-group">
 												{{ Form::label('designation', trans('messages.designation')) }}
-												{{ Form::text('designation', Input::old('designation'),
+												{{ Form::text('designation', old('designation'),
 													["placeholder" => "Lab Technologist", 'class' => 'form-control'])}}
 											</div>
 							                <div class="form-group">
