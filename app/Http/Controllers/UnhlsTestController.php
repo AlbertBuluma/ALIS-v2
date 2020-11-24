@@ -539,10 +539,15 @@ class UnhlsTestController extends Controller {
 		}
 
 		//Create a Lab categories Array
-//        dd(TestCategory::pluck('name', 'id'));
-		$categories = ['Select Lab Section'] + TestCategory::pluck('name', 'id');
-		$wards = ['Select Sample Origin'] + Ward::lists('name', 'id');
-		$clinicians = ['Select clinician'] + Clinician::lists('name', 'id');
+        $categories = $wards = $clinicians = [];
+		$categories = TestCategory::pluck('name', 'id')->toArray();
+		array_unshift($categories, 'Select Lab Section');
+
+		$wards = Ward::pluck('name', 'id')->toArray();
+        array_unshift($wards, 'Select Sample Origin');
+
+		$clinicians = Clinician::pluck('name', 'id')->toArray();
+        array_unshift($wards, 'Select clinician');
 
 		// sample collection default details
 		$now = new DateTime();
@@ -557,7 +562,8 @@ class UnhlsTestController extends Controller {
 			$input =$request->except('_token');
 		}
 
-		$specimenTypes = ['select Specimen Type'] + SpecimenType::lists('name', 'id');
+		$specimenTypes = SpecimenType::pluck('name', 'id')->toArray();
+		array_unshift($specimenTypes, 'select Specimen Type');
 
 		$patient = UnhlsPatient::find($patientID);
 
@@ -615,11 +621,11 @@ class UnhlsTestController extends Controller {
 
 		);
 		$validator = Validator::make($request->all(), $rules);
-
 		// process the login
 		if ($validator->fails()) {
-			return redirect('unhls_test.create',
-				array($request->get('patient_id')))->withInput()->withErrors($validator);
+			return redirect()->route('unhls_test.create', array($request->get('patient_id')))
+                                ->withInput()
+                                ->withErrors($validator);
 		} else {
 
 			$visitType = ['2' => 'Out-patient','1' => 'In-patient'];
@@ -770,9 +776,9 @@ class UnhlsTestController extends Controller {
 		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return redirect('unhls_test.reject', array($request->get('test_id')))
-				->withInput()
-				->withErrors($validator);
+			return redirect()->route('unhls_test.reject', array($request->get('test_id')))
+                            ->withInput()
+                            ->withErrors($validator);
 		} else {
 			$test = UnhlsTest::find($request->get('test_id'));
 			// this refers to analytic rejection of specimen
@@ -824,7 +830,7 @@ class UnhlsTestController extends Controller {
 		$specimen->time_accepted = date('Y-m-d H:i:s');
 		$specimen->save();
 
-		return redirect('unhls_test.index')
+		return redirect()->route('unhls_test.index')
 			->with('message', 'You have successfully captured specimen collection details');
 	}
 
@@ -853,7 +859,7 @@ class UnhlsTestController extends Controller {
 		$specimen->specimen_type_id = $request->get('specimen_type');
 		$specimen->save();
 
-		return redirect('unhls_test.viewDetails', array($specimen->test->id));
+		return redirect()->route('unhls_test.viewDetails', array($specimen->test->id));
 	}
 
 	/**
@@ -883,9 +889,9 @@ class UnhlsTestController extends Controller {
 		$test = UnhlsTest::find($testID);
 		// if the test being carried out requires a culture worksheet
 		if ($test->testType->isCulture()) {
-			return redirect('culture.edit', [$test->id]);
+			return redirect()->route('culture.edit', [$test->id]);
 		}elseif ($test->testType->isGramStain()) {
-			return redirect('gramstain.edit', [$test->id]);
+			return redirect()->route('gramstain.edit', [$test->id]);
 		}else{
 			return view('unhls_test.enterResults')->with('test', $test);
 		}
@@ -948,7 +954,7 @@ class UnhlsTestController extends Controller {
 			$validator = Validator::make($request->all(), $rules);
 
 			if ($validator->fails()) {
-				return redirect()->back()->withErrors($validator)->withInput(Input::all());
+				return redirect()->back()->withErrors($validator)->withInput($request->all());
 			} else {
 				$testResult->save();
 			}
@@ -993,9 +999,9 @@ class UnhlsTestController extends Controller {
 		$test = UnhlsTest::find($testID);
 		// if the test being carried out requires a culture worksheet
 		if ($test->testType->name == 'Culture and Sensitivity') {
-			return redirect('culture.edit', [$test->id]);
+			return redirect()->route('culture.edit', [$test->id]);
 		}elseif ($test->testType->name == 'Gram Staining') {
-			return redirect('gramstain.edit', [$test->id]);
+			return redirect()->route('gramstain.edit', [$test->id]);
 		}else{
 			return view('unhls_test.edit')->with('test', $test);
 		}
@@ -1114,7 +1120,7 @@ class UnhlsTestController extends Controller {
 
 		if ($validator->fails())
 		{
-			return redirect('unhls_test.refer', array($specimenId))
+			return redirect()->route('unhls_test.refer', array($specimenId))
                         ->withInput()
                         ->withErrors($validator);
 		}
@@ -1152,7 +1158,7 @@ class UnhlsTestController extends Controller {
 		//Return view
 		$url = $request->session()->get('SOURCE_URL');
 
-		return Redirect::to($url)->with('message', trans('messages.specimen-successful-refer'))
+		return redirect($url)->with('message', trans('messages.specimen-successful-refer'))
 					->with('activeTest', array($specimen->tests->first()->id));
 	}
 
@@ -1172,11 +1178,11 @@ class UnhlsTestController extends Controller {
 			$test->delete();
 		} else {
 			// The test is in use
-			return Redirect::route('visit.show', [$test->visit_id])
+			return redirect()->route('visit.show', [$test->visit_id])
 				->with('message', 'Test can NOT be Deleted (has results)!');
 		}
 		// redirect
-		return Redirect::route('visit.show', [$test->visit_id])
+		return redirect()->route('visit.show', [$test->visit_id])
 			->with('message', 'Test Successfully Deleted!');
 	}
 
@@ -1217,7 +1223,7 @@ class UnhlsTestController extends Controller {
 			        //check for sample id in tests
 					$patient = DB::table('poc_tables')->where('sample_id','=',$value->sample_id)->select('id', 'sample_id')->first();
 
-					if(count($patient)>0)
+					if(count($patient->get())>0)
 					{
 								//avoid duplicate sample id insert
 								$result_exists = POCResult::where('patient_id','=',trim($patient->id))->get();
