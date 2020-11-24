@@ -941,8 +941,10 @@ Route::group(array("before" => "auth"), function()
 });
 
 
-// DATA WARE HOUSE API ENDPOINTS
+// DATA WARE HOUSE API ENDPOINTS    //TODO Integrate Laravel Passport for API Authentication
 
+Route::get('/facility_settings', 'ApiController@facilitySettings');
 
+Route::get('/getvisits/{visit_id}/{poc_id}/{clin_id}/{user_id}', 'ApiController@getChunkedVisits');
 
 
