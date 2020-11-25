@@ -2,9 +2,9 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-		<li><a href="{{{URL::route('bbincidence.create')}}}">{{trans('Register New BB Incident')}}</a></li>
-		<li><a href="{{ URL::route('bbincidence.bbfacilityreport') }}">Facility Report</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		<li><a href="{{{route('bbincidence.create')}}}">{{trans('Register New BB Incident')}}</a></li>
+		<li><a href="{{ route('bbincidence.bbfacilityreport') }}">Facility Report</a></li>
 	  <li class="active">BB Incidents</li>
 	</ol>
 </div>
@@ -56,12 +56,12 @@
 		List of BB Incidents  ({{ count($bbincidences) }})
 		@if(Entrust::can('create_bbincidences'))
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ URL::route('bbincidence.create') }}">
+			<a class="btn btn-sm btn-info" href="{{ route('bbincidence.create') }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				{{ trans('messages.new-bbincidence') }}
 			</a>
 
-			<a class="btn btn-sm btn-info" href="{{ URL::route('bbincidence.index') }}"> Clear Filters </a>
+			<a class="btn btn-sm btn-info" href="{{ route('bbincidence.index') }}"> Clear Filters </a>
 		</div>
 		@endif
 	</div>
@@ -109,25 +109,25 @@
 					<td>'{{ $bbincidence->description }}'</td>
 
 					<td>
-					<a class="btn btn-sm btn-success" href="{{ URL::route('bbincidence.show', array($bbincidence->id)) }}" >
+					<a class="btn btn-sm btn-success" href="{{ route('bbincidence.show', array($bbincidence->id)) }}" >
 							<span class="glyphicon glyphicon-eye-open"></span>
 							<!--{{trans('messages.edit')}}-->
 							View
 						</a>
-						<a class="btn btn-sm btn-info" href="{{ URL::route('bbincidence.edit', array($bbincidence->id)) }}" >
+						<a class="btn btn-sm btn-info" href="{{ route('bbincidence.edit', array($bbincidence->id)) }}" >
 							<span class="glyphicon glyphicon-edit"></span>
 							Edit
 							<!--{{trans('messages.edit')}}-->
 						</a>
-						<a class="btn btn-sm btn-info" href="{{ URL::route('bbincidence.clinicaledit', array($bbincidence->id)) }}" >
+						<a class="btn btn-sm btn-info" href="{{ route('bbincidence.clinicaledit', array($bbincidence->id)) }}" >
 							<span class="glyphicon glyphicon-list-alt"></span>
 							Clinical Intervention
 						</a>
-						<a class="btn btn-sm btn-info" href="{{ URL::route('bbincidence.analysisedit', array($bbincidence->id)) }}" >
+						<a class="btn btn-sm btn-info" href="{{ route('bbincidence.analysisedit', array($bbincidence->id)) }}" >
 							<span class="glyphicon glyphicon-th-list"></span>
 							Incident Analysis
 						</a>
-						<a class="btn btn-sm btn-warning" href="{{ URL::route('bbincidence.responseedit', array($bbincidence->id)) }}" >
+						<a class="btn btn-sm btn-warning" href="{{ route('bbincidence.responseedit', array($bbincidence->id)) }}" >
 							<span class="glyphicon glyphicon-th"></span>
 							Emergency Incident Response
 						</a>
@@ -136,11 +136,11 @@
 							 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
 							 <span class="caret"></span></button>
 							 <ul class="dropdown-menu">
-								 <li><a href="{{ URL::route('bbincidence.show', array($bbincidence->id)) }}">{{trans('messages.view')}}</a></li>
-								 <li><a href="{{ URL::route('bbincidence.edit', array($bbincidence->id)) }}">Update Incident Information</a></li>
-								 <li><a href="{{ URL::route('bbincidence.clinicaledit', array($bbincidence->id)) }}">Update Clinical Intervention</a></li>
-								 <li><a href="{{ URL::route('bbincidence.analysisedit', array($bbincidence->id)) }}">Update Incident Analysis</a></li>
-								 <li><a href="{{ URL::route('bbincidence.responseedit', array($bbincidence->id)) }}">Update BRM Response</a></li>
+								 <li><a href="{{ route('bbincidence.show', array($bbincidence->id)) }}">{{trans('messages.view')}}</a></li>
+								 <li><a href="{{ route('bbincidence.edit', array($bbincidence->id)) }}">Update Incident Information</a></li>
+								 <li><a href="{{ route('bbincidence.clinicaledit', array($bbincidence->id)) }}">Update Clinical Intervention</a></li>
+								 <li><a href="{{ route('bbincidence.analysisedit', array($bbincidence->id)) }}">Update Incident Analysis</a></li>
+								 <li><a href="{{ route('bbincidence.responseedit', array($bbincidence->id)) }}">Update BRM Response</a></li>
 							 </ul>
 					 </div>-->
 

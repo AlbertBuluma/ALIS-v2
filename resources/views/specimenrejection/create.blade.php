@@ -27,14 +27,14 @@
 
 				<div class="form-group">
 					{{ Form::label('reason', trans('messages.rejection-reason')) }}
-					{{ Form::text('reason', Input::old('reason'), array('class' => 'form-control')) }}
+					{{ Form::text('reason', old('reason'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group actions-row">
-					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
 						array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
 				</div>
 
 			{{ Form::close() }}
 		</div>
 	</div>
-@stop	
+@stop

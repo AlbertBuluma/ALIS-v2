@@ -14,6 +14,7 @@ use App\Models\Bbincidence;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -36,18 +37,18 @@ class BbincidenceController extends Controller {
 
 		if(\Entrust::can('manage_national_biorisk')){
 			if($datefrom != ''){
-			$bbincidences = Bbincidence::filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(\Config::get('kblis.page-items'))->appends(Input::except('_token'));
+			$bbincidences = Bbincidence::filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends(Input::except('_token'));
 			}
 			else
-			$bbincidences = Bbincidence::search($search)->orderBy('id','DESC')->paginate(\Config::get('kblis.page-items'))->appends($request->except('_token'));
+			$bbincidences = Bbincidence::search($search)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends($request->except('_token'));
 		}
 		else{
 
 			if($datefrom != ''){
-			$bbincidences = Bbincidence::filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(\Config::get('kblis.page-items'))->appends(Input::except('_token'));
+			$bbincidences = Bbincidence::filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends(Input::except('_token'));
 			}
 			else
-			$bbincidences = Bbincidence::search($search)->orderBy('id','DESC')->paginate(\Config::get('kblis.page-items'))->appends($request->except('_token'));
+			$bbincidences = Bbincidence::search($search)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends($request->except('_token'));
 		}
 
 		if (count($bbincidences) == 0) {
@@ -462,10 +463,10 @@ class BbincidenceController extends Controller {
 		//->where('facility_id', '=', Auth::user()->facility_id)
 
 		if($datefrom != ''){
-			$bbincidences = Bbincidence::facility_filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(\Config::get('kblis.page-items'))->appends(Input::except('_token'));
+			$bbincidences = Bbincidence::facility_filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends(Input::except('_token'));
 		}
 		else{
-			$bbincidences = Bbincidence::facility_search($searchterm)->orderBy('id','DESC')->paginate(\Config::get('kblis.page-items'))->appends(Input::except('_token'));
+			$bbincidences = Bbincidence::facility_search($searchterm)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends(Input::except('_token'));
 		}
 
 		if (count($bbincidences) == 0) {
@@ -526,8 +527,8 @@ class BbincidenceController extends Controller {
 			$bbincidence->save();
 
 			// redirect
-			$url = \Session::get('SOURCE_URL');
-			return Redirect::to($url)
+			$url = Session::get('SOURCE_URL');
+			return redirect($url)
 			->with('message', 'Details for BB Incidence No '.$bbincidence->serial_no.' were successfully updated!') ->with('activebbincidence',$bbincidence ->id);
 
 		}

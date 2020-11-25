@@ -50,23 +50,23 @@
 				<!-- Location, description and first aid information given to victim -->
 				<div class="form-group">
 					{{ Form::label('lab_section', 'Location', array('class' => 'required')) }}
-					{{ Form::text('lab_section', Input::old('lab_section'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('lab_section', old('lab_section'), array('class' => 'form-control col-sm-4')) }}
 
 					{{ Form::label('description', 'Description', array('class' => 'col-sm-2')) }}
-					{{ Form::textarea('description', Input::old('description'), array('size' => '10x2', 'class' => 'form-control col-sm-4')) }}
+					{{ Form::textarea('description', old('description'), array('size' => '10x2', 'class' => 'form-control col-sm-4')) }}
 
 					{{ Form::label('firstaid', 'First Aid / Immediate Actions', array('class' => 'col-sm-2')) }}
-					{{ Form::textarea('firstaid', Input::old('firstaid'), array('size' => '10x2', 'class' => 'form-control col-sm-4')) }}
+					{{ Form::textarea('firstaid', old('firstaid'), array('size' => '10x2', 'class' => 'form-control col-sm-4')) }}
 
 				</div>
 
 				<!-- BB incident occurence date and time details -->
 				<div class="form-group">
 					{{ Form::label('occurrence_date', trans('Occurrence Date'), array('class' => 'required')) }}
-					{{ Form::text('occurrence_date',Input::old('occurrence_date') ,array('class' => 'form-control standard-datepicker col-sm-4')) }}
+					{{ Form::text('occurrence_date',old('occurrence_date') ,array('class' => 'form-control standard-datepicker col-sm-4')) }}
 
 					{{ Form::label('occurrence_time', trans('Occurence Time'), array('class' => 'required col-sm-4'))}}
-					{{ Form::text('occurrence_time', Input::old('occurrence_time'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('occurrence_time', old('occurrence_time'), array('class' => 'form-control col-sm-4')) }}
 
 					<div class='input-group date' id='occurrence_time'>
 						<script type="text/javascript">
@@ -85,18 +85,18 @@
 
 					<div class="form-group">
 						{{ Form::label('personnel_id', 'Victim Identification Number:', array('class' => '')) }}
-						{{ Form::text('personnel_id', Input::old('personnel_id'), array('class' => 'form-control col-sm-4')) }}
+						{{ Form::text('personnel_id', old('personnel_id'), array('class' => 'form-control col-sm-4')) }}
 
 						{{ Form::label('ahpc_reg', 'AHPC Registration No:', array('class' => 'col-sm-2')) }}
-						{{ Form::text('ahpc_reg', Input::old('ahpc_reg'), array('class' => 'form-control col-sm-4')) }}
+						{{ Form::text('ahpc_reg', old('ahpc_reg'), array('class' => 'form-control col-sm-4')) }}
 					</div>
 
 					<div class="form-group">
 						{{ Form::label('personnel_surname', 'Surname', array('class' => 'required')) }}
-						{{ Form::text('personnel_surname', Input::old('personnel_surname'), array('class' => 'form-control col-sm-4')) }}
+						{{ Form::text('personnel_surname', old('personnel_surname'), array('class' => 'form-control col-sm-4')) }}
 
 						{{ Form::label('personnel_othername', 'Other Name', array('class' => 'required col-sm-4')) }}
-						{{ Form::text('personnel_othername', Input::old('personnel_othername'), array('class' => 'form-control col-sm-4')) }}
+						{{ Form::text('personnel_othername', old('personnel_othername'), array('class' => 'form-control col-sm-4')) }}
 
 						{{ Form::label('personnel_gender', 'Gender:', array('class' =>'col-sm-2 required ')) }}
 						<div class="radio-inline">{{ Form::radio('personnel_gender', 'Male', false) }} <span class="input-tag">Male</span></div>
@@ -105,15 +105,15 @@
 
 					<div class="form-group">
 						{{ Form::label('personnel_dob', 'Date of Birth', array('class' => 'required')) }}
-						{{ Form::text('personnel_dob', Input::old('personnel_dob'), array('class' => 'form-control standard-datepicker col-sm-4')) }}
+						{{ Form::text('personnel_dob', old('personnel_dob'), array('class' => 'form-control standard-datepicker col-sm-4')) }}
 
 						{{ Form::label('personnel_age', 'Age', array('class' => 'required col-sm-4')) }}
-						{{ Form::text('personnel_age', Input::old('personnel_age'), array('class' => 'form-control col-sm-4', 'placeholder' => 'If DOB is not known')) }}
+						{{ Form::text('personnel_age', old('personnel_age'), array('class' => 'form-control col-sm-4', 'placeholder' => 'If DOB is not known')) }}
 					</div>
 
 				<div class="form-group">
 					<!--{{ Form::label('personnel_category', 'Victim Category', array('class' => 'col-sm-2')) }}
-					{{ Form::text('personnel_category', Input::old('personnel_category'), array('class' => 'form-control col-sm-4')) }}-->
+					{{ Form::text('personnel_category', old('personnel_category'), array('class' => 'form-control col-sm-4')) }}-->
 
 					{{ Form::label('personnel_category', 'Victim Category', array('class' => 'required')) }}
 					<input list="personnel_category" name="personnel_category" class="form-control" placeholder="Double click for Options or write">
@@ -126,22 +126,22 @@
 											<option value="Bike Rider">
 											</datalist>
 											{{ Form::label('personnel_telephone', 'Telephone', array('class' => 'col-sm-4')) }}
-											{{ Form::text('personnel_telephone', Input::old('personnel_telephone'), array('class' => 'form-control col-sm-4')) }}
+											{{ Form::text('personnel_telephone', old('personnel_telephone'), array('class' => 'form-control col-sm-4')) }}
 											</div>
 										<div class="form-group">
 											{{ Form::label('personnel_email', 'Email', array('class' => '')) }}
-											{{ Form::email('personnel_email', Input::old('personnel_email'), array('class' => 'form-control col-sm-4')) }}
+											{{ Form::email('personnel_email', old('personnel_email'), array('class' => 'form-control col-sm-4')) }}
 
 											{{ Form::label('nok_email', 'Next Of Kin Email', array('class' => 'col-sm-4')) }}
-											{{ Form::email('nok_email', Input::old('nok_email'), array('class' => 'form-control col-sm-4')) }}
+											{{ Form::email('nok_email', old('nok_email'), array('class' => 'form-control col-sm-4')) }}
 										</div>
 											<!--<label style="font-size:15px">Next Of Kin Details</label> <br>-->
 										<div class="form-group">
 											{{ Form::label('nok_name', 'Name Of Next Of Kin', array('class' => '')) }}
-											{{ Form::text('nok_name', Input::old('nok_name'), array('class' => 'form-control col-sm-4')) }}
+											{{ Form::text('nok_name', old('nok_name'), array('class' => 'form-control col-sm-4')) }}
 
 											{{ Form::label('nok_telephone', 'Contact Of Next Of Kin:', array('class' => 'col-sm-2')) }}
-											{{ Form::text('nok_telephone', Input::old('nok_telephone'), array('class' => 'form-control col-sm-4')) }}
+											{{ Form::text('nok_telephone', old('nok_telephone'), array('class' => 'form-control col-sm-4')) }}
 										</div>
 									</div>
 								</div>
@@ -167,7 +167,7 @@
 												</label>-->
 
 												<label  class="checkbox" title="{{ $value->priority}}/{{ $value->class}}">
-													{{ Form::checkbox('nature[]',$value->id,Input::old($value->id),array('title'=>$value->priority.'/'.$value->class)) }}
+													{{ Form::checkbox('nature[]',$value->id,old($value->id),array('title'=>$value->priority.'/'.$value->class)) }}
 													{{$value->name}}
 												</label>
 
@@ -210,37 +210,37 @@
 								<input id="ulin" name="ulin" type="text" value="if no VHF contact, this will be disabled" /> <br>
 
 								<!--	{{ Form::label('ulin', 'Patient ULIN', array('class' => 'col-sm-2')) }}
-									{{ Form::text('ulin', Input::old('ulin'), array('class' => 'form-control col-sm-4','placeholder' => 'If contact with suspected VHF patient')) }}-->
+									{{ Form::text('ulin', old('ulin'), array('class' => 'form-control col-sm-4','placeholder' => 'If contact with suspected VHF patient')) }}-->
 
 									{{ Form::label('task', 'Activity/Procedure/task being performed', array('class' => 'col-sm-2')) }}
-									{{ Form::text('task', Input::old('task'), array('class' => 'form-control col-sm-4')) }}
+									{{ Form::text('task', old('task'), array('class' => 'form-control col-sm-4')) }}
 
 
 								</div>
 
 								<div class="form-group">
 									{{ Form::label('equip_code', 'Equipment Code', array('class' => 'col-sm-2')) }}
-									{{ Form::text('equip_code', Input::old('equip_code'), array('class' => 'form-control col-sm-4')) }}
+									{{ Form::text('equip_code', old('equip_code'), array('class' => 'form-control col-sm-4')) }}
 
 									{{ Form::label('equip_name', 'Equipment Name', array('class' => 'col-sm-2')) }}
-									{{ Form::text('equip_name', Input::old('equip_name'), array('class' => 'form-control col-sm-4')) }}
+									{{ Form::text('equip_name', old('equip_name'), array('class' => 'form-control col-sm-4')) }}
 								</div>
 
 								<span style="font-weight: bold;">Reporting Officer</span>
 								<div class="form-group">
 									{{ Form::label('officer_fname', 'First Name', array('class' => 'required')) }}
-									{{ Form::text('officer_fname', Input::old('officer_fname'), array('class' => 'form-control col-md-4')) }}
+									{{ Form::text('officer_fname', old('officer_fname'), array('class' => 'form-control col-md-4')) }}
 
 									{{ Form::label('officer_lname', 'Last Name', array('class' => 'required')) }}
-									{{ Form::text('officer_lname', Input::old('officer_lname'), array('class' => 'form-control col-sm-4')) }}
+									{{ Form::text('officer_lname', old('officer_lname'), array('class' => 'form-control col-sm-4')) }}
 								</div>
 
 								<div class="form-group">
 									{{ Form::label('officer_cadre', 'Designation', array('class' => 'required')) }}
-									{{ Form::text('officer_cadre', Input::old('officer_cadre'), array('class' => 'form-control col-sm-4')) }}
+									{{ Form::text('officer_cadre', old('officer_cadre'), array('class' => 'form-control col-sm-4')) }}
 
 									{{ Form::label('officer_telephone', 'Telephone', array('class' => 'col-sm-2')) }}
-									{{ Form::text('officer_telephone', Input::old('officer_telephone'), array('class' => 'form-control col-sm-4')) }}
+									{{ Form::text('officer_telephone', old('officer_telephone'), array('class' => 'form-control col-sm-4')) }}
 								</div>
 							</div>
 						</div>

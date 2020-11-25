@@ -18,14 +18,14 @@
     <table width="100%" style="font-size:12px;">
         <thead>
             <tr>
-                <td>{{ HTML::image(Config::get('kblis.organization-logo'),  Config::get('kblis.country') . trans('messages.court-of-arms'), array('width' => '90px')) }}</td>
+                <td>{{ HTML::image(config('kblis.organization-logo'),  config('kblis.country') . trans('messages.court-of-arms'), array('width' => '90px')) }}</td>
                 <td colspan="3" style="text-align:center;">
-                    <strong><p> {{ strtoupper(Config::get('constants.FACILITY_NAME')) }}<br>
-                    {{ strtoupper(Config::get('kblis.address-info')) }}</p>
+                    <strong><p> {{ strtoupper(config('constants.FACILITY_NAME')) }}<br>
+                    {{ strtoupper(config('kblis.address-info')) }}</p>
                     <p>Biosaftey and Biosecurity Incidence Report<br>
                 </td>
                 <td>
-                    {{ HTML::image(Config::get('kblis.organization-logo'),  Config::get('kblis.country') . trans('messages.court-of-arms'), array('width' => '90px')) }}
+                    {{ HTML::image(config('kblis.organization-logo'),  config('kblis.country') . trans('messages.court-of-arms'), array('width' => '90px')) }}
                 </td>
             </tr>
         </thead>

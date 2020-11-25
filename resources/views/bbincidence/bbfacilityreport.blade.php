@@ -2,9 +2,9 @@
 @section("content")
 <div>
   <ol class="breadcrumb">
-    <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-    <li><a href="{{ URL::route('bbincidence.create') }}">Register Incident</a></li>
-    <li><a href="{{ URL::route('bbincidence.index') }}">BB summary</a></li>
+    <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+    <li><a href="{{ route('bbincidence.create') }}">Register Incident</a></li>
+    <li><a href="{{ route('bbincidence.index') }}">BB summary</a></li>
     <li class="active">Facility Report</li>
   </ol>
 </div>
@@ -13,11 +13,13 @@
   'role'=>'form', 'method'=>'GET')) }}
   <div class="form-group">
     {{ Form::label('datefrom', "Date From") }}
-    {{ Form::text('datefrom', Input::get('datefrom'), array('class' => 'form-control test-search standard-datepicker', 'required' => 'required')) }}
+{{--    {{ Form::text('datefrom', Input::get('datefrom'), array('class' => 'form-control test-search standard-datepicker', 'required' => 'required')) }}--}}
+    {{ Form::text('datefrom', old('datefrom'), array('class' => 'form-control test-search standard-datepicker', 'required' => 'required')) }}
   </div>
   <div class="form-group">
     {{ Form::label('dateto', "Date To") }}
-    {{ Form::text('dateto', Input::get('dateto'), array('class' => 'form-control test-search standard-datepicker', 'required' => 'required')) }}
+{{--    {{ Form::text('dateto', Input::get('dateto'), array('class' => 'form-control test-search standard-datepicker', 'required' => 'required')) }}--}}
+    {{ Form::text('dateto', old('dateto'), array('class' => 'form-control test-search standard-datepicker', 'required' => 'required')) }}
   </div>
   <div class="form-group">
     {{ Form::button("<span class='glyphicon glyphicon-search'></span> ".trans('messages.filter'),
@@ -51,7 +53,7 @@
               <td>
                 <table class="table table-bordered table-hover">
                   <?php
-                  $bbincidentnaturecount = Bbincidence::countbbincidentcategories($value->class);
+                  $bbincidentnaturecount = App\Models\Bbincidence::countbbincidentcategories($value->class);
                   ?>
                   @foreach($bbincidentnaturecount as $bbincident => $bbincidents)
                   <tr>
@@ -61,7 +63,7 @@
                   @endforeach
                   <th>Total</th>
                   <td>  <?php
-                  $bbnaturecount = BbincidenceNatureIntermediate::select('bbincidence_id', 'nature_id');
+                  $bbnaturecount = App\Models\BbincidenceNatureIntermediate::select('bbincidence_id', 'nature_id');
                   $sum = $bbnaturecount->groupBy('bbincidence_id', 'nature_id')->count('nature_id');
                   ?>
                   {{ $sum}}</td>
@@ -102,7 +104,7 @@
             <th>Completion Status</th>
 
             <?php
-            $countbbincidentcompletionstatus = Bbincidence::countbbincidentcompletionstatus();
+            $countbbincidentcompletionstatus = App\Models\Bbincidence::countbbincidentcompletionstatus();
             ?>
 
             @foreach($countbbincidentcompletionstatus as $key => $value)
@@ -121,7 +123,7 @@
           <table class="table table-bordered table-hover">
             <thead>
             <?php
-            $bbincidentprevalencecount = Bbincidence::countbbincidentprevalence();
+            $bbincidentprevalencecount = App\Models\Bbincidence::countbbincidentprevalence();
             ?>
 
             @foreach($bbincidentprevalencecount as $k => $v)
@@ -136,7 +138,7 @@
           <h4>SUMMARY ON SPECIFIC CAUSES OF INCIDENTS</h4>
           <table class="table table-bordered table-hover">
             <thead>
-            <?php $bbincidentcausecount = Bbincidence::countbbincidentcauses(); ?>
+            <?php $bbincidentcausecount = App\Models\Bbincidence::countbbincidentcauses(); ?>
             @foreach($bbincidentcausecount as $k => $v)
             <tr><td>{{$v->causename}}</td><td>{{$v->total}}</td></tr>
             @endforeach
@@ -149,7 +151,7 @@
           <h4>SUMMARY ON CORRECTIVE ACTIONS TAKEN TO MANAGE INCIDENTS <i>(depending on cause of incident)</i></h4>
           <table class="table table-bordered table-hover">
             <thead>
-            <?php $bbincidentactioncount = Bbincidence::countbbincidentactions(); ?>
+            <?php $bbincidentactioncount = App\Models\Bbincidence::countbbincidentactions(); ?>
             @foreach($bbincidentactioncount as $k => $v)
             <tr><td>{{$v->actionname}}</td><td>{{$v->total}}</td></tr>
             @endforeach
