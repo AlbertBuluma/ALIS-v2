@@ -24,23 +24,23 @@
 					{{ HTML::ul($errors->all()) }}
 				</div>
 			@endif
-			{{ Form::model($drug, array('route' => array('drug.update', $drug->id), 
+			{{ Form::model($drug, array('route' => array('drug.update', $drug->id),
 				'method' => 'PUT', 'id' => 'form-edit-drug')) }}
 				<div class="form-group">
 					{{ Form::label('name', Lang::choice('messages.name',1)) }}
-					{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+					{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('description', trans('messages.description')) }}
-					{{ Form::textarea('description', Input::old('description'), 
+					{{ Form::textarea('description', old('description'),
 						array('class' => 'form-control', 'rows' => '2')) }}
 				</div>
 				<div class="form-group actions-row">
-					{{ Form::button('<span class="glyphicon glyphicon-save"></span> '. trans('messages.save'), 
+					{{ Form::button('<span class="glyphicon glyphicon-save"></span> '. trans('messages.save'),
 						['class' => 'btn btn-primary', 'onclick' => 'submit()']) }}
 				</div>
 
 			{{ Form::close() }}
 		</div>
 	</div>
-@stop	
+@stop

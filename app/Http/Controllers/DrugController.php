@@ -1,62 +1,71 @@
 <?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Drug;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 /**
- * Contains drugs resources  
- * 
+ * Contains drugs resources
+ *
  */
-class DrugController extends \BaseController {
+class DrugController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
 		//List all drugs
 		$drugs = Drug::orderBy('name', 'ASC')->get();
 		//Load the view and pass the drugs
-		return View::make('drug.index')->with('drugs',$drugs);
+		return view('drug.index')->with('drugs',$drugs);
 	}
 
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function create()
 	{
 		//Create drug
-		return View::make('drug.create');
+		return view('drug.create');
 	}
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function store(Request $request)
 	{
 		//Validation
 		$rules = array('name' => 'required|unique:drugs,name');
-		$validator = Validator::make(Input::all(), $rules);
-	
+		$validator = Validator::make($request->all(), $rules);
+
 		//process
 		if($validator->fails()){
-			return Redirect::back()->withErrors($validator);
+			return redirect()->back()->withErrors($validator);
 		}else{
 			//store
 			$drug = new Drug;
-			$drug->name = Input::get('name');
-			$drug->description = Input::get('description');
+			$drug->name = $request->get('name');
+			$drug->description = $request->get('description');
 			try{
 				$drug->save();
 				$url = Session::get('SOURCE_URL');
-            
-            	return Redirect::to($url)
+
+            	return redirect($url)
 					->with('message', trans('messages.success-creating-drug')) ->with('activedrug', $drug ->id);
 			}catch(QueryException $e){
 				Log::error($e);
@@ -69,14 +78,14 @@ class DrugController extends \BaseController {
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function show($id)
 	{
 		//show a drug
 		$drug = Drug::find($id);
 		//show the view and pass the $drug to it
-		return View::make('drug.show')->with('drug',$drug);
+		return view('drug.show')->with('drug',$drug);
 	}
 
 
@@ -84,7 +93,7 @@ class DrugController extends \BaseController {
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
@@ -92,36 +101,37 @@ class DrugController extends \BaseController {
 		$drug = Drug::find($id);
 
 		//Open the Edit View and pass to it the $drug
-		return View::make('drug.edit')->with('drug', $drug);
+		return view('drug.edit')->with('drug', $drug);
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function update(Request $request, $id)
 	{
 		//Validate
 		$rules = array('name' => 'required');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator)->withInput(Input::except('password'));
+			return redirect()->back()->withErrors($validator)->withInput($request->except('password'));
 		} else {
 			// Update
 			$drug = Drug::find($id);
-			$drug->name = Input::get('name');
-			$drug->description = Input::get('description');
+			$drug->name = $request->get('name');
+			$drug->description = $request->get('description');
 			$drug->save();
 
 			// redirect
 			$url = Session::get('SOURCE_URL');
-            
-            return Redirect::to($url)
+
+            return redirect($url)
 				->with('message', trans('messages.success-updating-drug')) ->with('activetestcategory', $drug ->id);
 		}
 	}
@@ -141,7 +151,7 @@ class DrugController extends \BaseController {
 	 * Remove the specified resource from storage (soft delete).
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
 	public function delete($id)
 	{
@@ -155,14 +165,14 @@ class DrugController extends \BaseController {
 		} else {
 		    // The test category is in use
 		    $url = Session::get('SOURCE_URL');
-            
+
             return Redirect::to($url)
 		    	->with('message', trans('messages.failure-test-category-in-use'));
 		}*/
 		// redirect
 			$url = Session::get('SOURCE_URL');
 
-			return Redirect::to($url)
+			return redirect($url)
 			->with('message', 'Delete Feature Not Functional, Contact Systems Programmer');
 
 /*            return Redirect::to($url)
