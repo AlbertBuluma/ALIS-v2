@@ -17,6 +17,7 @@ class PermissionController extends Controller {
 	{
 		$permissions = Permission::all();
 		$roles = Role::all();
+//		dd($roles->toArray(), $permissions->toArray());
 		$permissionsRolesData = array('permissions' => $permissions,'roles' => $roles,);
 		return view('permission.index', $permissionsRolesData);
 	}
@@ -60,7 +61,7 @@ class PermissionController extends Controller {
 				}
 			}
 		}
-		return redirect('permission.index')->with('message', trans('messages.success-updating-permission'));
+		return redirect()->route('permission.index')->with('message', trans('messages.success-updating-permission'));
 	}
 
 

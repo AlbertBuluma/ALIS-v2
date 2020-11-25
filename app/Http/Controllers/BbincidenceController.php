@@ -35,7 +35,8 @@ class BbincidenceController extends Controller {
 		$datefrom = $request->datefrom;
 		$dateto = $request->dateto;
 
-		if(\Entrust::can('manage_national_biorisk')){
+//		if(\Entrust::can('manage_national_biorisk')){
+		if(Auth::user()->can('manage_national_biorisk')){
 			if($datefrom != ''){
 			$bbincidences = Bbincidence::filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends(Input::except('_token'));
 			}

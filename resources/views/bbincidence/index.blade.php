@@ -54,7 +54,8 @@
 	<div class="panel-heading ">
 		<span class="glyphicon glyphicon-book"></span>
 		List of BB Incidents  ({{ count($bbincidences) }})
-		@if(Entrust::can('create_bbincidences'))
+{{--		@if(Entrust::can('create_bbincidences'))--}}
+		@if(\Illuminate\Support\Facades\Auth::user()->can('create_bbincidences'))
 		<div class="panel-btn">
 			<a class="btn btn-sm btn-info" href="{{ route('bbincidence.create') }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>

@@ -43,7 +43,7 @@
                         <td>{{$permission->display_name}}</td>
                         @forelse($roles as $roleKey => $role)
                         <td>
-                            @if($role == Role::getAdminRole())
+                            @if($role == App\Models\Role::getAdminRole())
                                 <span class="glyphicon glyphicon-lock"></span>
                                 {{ Form::checkbox('permissionRoles['.$permissionKey.']['.$roleKey.']', '1',
                                 $permission->hasRole($role->name), array('style'=>'display:none') )}}
@@ -51,7 +51,7 @@
                                 {{ Form::checkbox('permissionRoles['.$permissionKey.']['.$roleKey.']', '1',
                                 $permission->hasRole($role->name))}}
                             @endif
-                            
+
                         </td>
                         @empty
                             <td>[-]</td>
@@ -59,11 +59,11 @@
                     </tr>
                 @empty
                 <tr><td colspan="2">{{trans('messages.no-permissions-found')}}</td></tr>
-                @endforelse 
+                @endforelse
                 </tbody>
             </table>
             <div class="form-group actions-row">
-                    {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+                    {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
                         array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
             </div>
             {{Form::close()}}
