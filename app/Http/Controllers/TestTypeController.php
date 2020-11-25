@@ -12,7 +12,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use MeasureController;
+use Illuminate\Validation\Rule;
 
 /**
  *Contains functions for managing test types
@@ -60,14 +60,14 @@ class TestTypeController extends Controller {
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
 	public function store(Request $request)
 	{
 		//
 		$rules = array(
 			'name' => 'required|unique:test_types,name',
-			'test_category_id' => 'required|non_zero_key',
+			'test_category_id' => ['required', Rule::notIn([0])],
 			'specimentypes' => 'required',
 			'new-measures' => 'required',
 			'targetTAT' => 'required',
@@ -79,7 +79,7 @@ class TestTypeController extends Controller {
 
 		// process the login
 		if ($validator->fails()) {
-			return redirect('testtype.create')->withErrors($validator);
+			return redirect()->route('testtype.create')->withErrors($validator);
 		} else {
 			// store
 			$testtype = new TestType;
@@ -165,8 +165,8 @@ class TestTypeController extends Controller {
 	{
 		$rules = array(
 			'name' => 'required',
-			'test_category_id' => 'required|non_zero_key',
-			'specimentypes' => 'required',
+//			'test_category_id' => 'required|non_zero_key',
+			'specimentypes' => ['required', Rule::notIn([0])],
 			'targetTAT' => 'required',
 			'targetTAT_unit'=>'required'
 		);
@@ -196,7 +196,7 @@ class TestTypeController extends Controller {
 					if ($request->get('new-measures')) {
 						$inputNewMeasures = $request->get('new-measures');
 
-						$measures = New MeasureController;
+						$measures = new MeasureController;
 						$measureIds = $measures->store($inputNewMeasures);
 					}
 
@@ -217,7 +217,7 @@ class TestTypeController extends Controller {
 			// redirect
 			$url = $request->session()->get('SOURCE_URL');
 
-            return Redirect::to($url)
+            return redirect($url)
 						->with('message', trans('messages.success-updating-test-type'))->with('activetesttype', $testtype ->id);
 		}
 	}
