@@ -27,11 +27,11 @@
 
 				<div class="form-group">
 					{{ Form::label('name', Lang::choice('messages.name',1)) }}
-					{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+					{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('description', trans("messages.description")) }}</label>
-					{{ Form::textarea('description', Input::old('description'), 
+					{{ Form::textarea('description', old('description'),
 						array('class' => 'form-control', 'rows' => '2')) }}
 				</div>
 				<div class="form-group actions-row">
@@ -42,4 +42,4 @@
 			{{ Form::close() }}
 		</div>
 	</div>
-@stop	
+@stop

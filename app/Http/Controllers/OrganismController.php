@@ -1,55 +1,64 @@
 <?php
 
-class OrganismController extends \BaseController {
+namespace App\Http\Controllers;
+
+use App\Models\Organism;
+use App\Models\ZoneDiameter;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+
+class OrganismController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
 		//List all organisms
 		$organisms = Organism::orderBy('name', 'ASC')->get();
 		//Load the view and pass the organisms
-		return View::make('organism.index')->with('organisms',$organisms);
+		return view('organism.index')->with('organisms',$organisms);
 	}
 
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function create()
 	{
-		return View::make('organism.create');
+		return view('organism.create');
 	}
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function store(Request $request)
 	{
 		//Validation
 		$rules = array('name' => 'required|unique:organisms,name');
-		$validator = Validator::make(Input::all(), $rules);
-	
+		$validator = Validator::make($request->all(), $rules);
+
 		//process
 		if($validator->fails()){
-			return Redirect::back()->withErrors($validator);
+			return redirect()->back()->withErrors($validator);
 		}else{
 			//store
 			$organism = new Organism;
-			$organism->name = Input::get('name');
-			$organism->description = Input::get('description');
+			$organism->name = $request->get('name');
+			$organism->description = $request->get('description');
 			$organism->save();
 
 			// todo: put option to redirect to page to add antibiotic with zone diameters, save and add antibiotic
-			return Redirect::to('organism')
+			return redirect('organism')
 				->with('message', trans('messages.success-creating-organism'))->with('activeorganism', $organism->id);
 		}
 	}
@@ -59,7 +68,7 @@ class OrganismController extends \BaseController {
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function show($id)
 	{
@@ -67,14 +76,14 @@ class OrganismController extends \BaseController {
 		$organism = Organism::find($id);
 		//show the view and pass the $organism to it
 		// todo: the loaded page should have add antibiotic
-		return View::make('organism.show')->with('organism',$organism);
+		return view('organism.show')->with('organism',$organism);
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
@@ -82,32 +91,33 @@ class OrganismController extends \BaseController {
 		$organism = Organism::find($id);
 
 		//Open the Edit View and pass to it the $organism
-		return View::make('organism.edit')->with('organism', $organism);
+		return view('organism.edit')->with('organism', $organism);
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function update(Request $request, $id)
 	{
 		//Validate
 		$rules = array('name' => 'required');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator);
+			return redirect()->back()->withErrors($validator);
 		} else {
 			// Update
 			$organism = Organism::find($id);
-			$organism->name = Input::get('name');
-			$organism->description = Input::get('description');
+			$organism->name = $request->get('name');
+			$organism->description = $request->get('description');
 			$organism->save();
-            return Redirect::to('organism')
+            return redirect('organism')
 				->with('message', trans('messages.success-updating-organism')) ->with('activeorganism', $organism->id);
 		}
 	}
@@ -127,7 +137,7 @@ class OrganismController extends \BaseController {
 	 * Remove the specified resource from storage (soft delete).
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
 	public function delete($id)
 	{
@@ -144,12 +154,12 @@ class OrganismController extends \BaseController {
 			// The test category is in use
 			$url = Session::get('SOURCE_URL');
 
-			return Redirect::to($url)
+			return redirect($url)
 				->with('message', 'Delete Action Failed, Organism in Use');
 		}
 			$url = Session::get('SOURCE_URL');
 
-			return Redirect::to($url)
+			return redirect($url)
 				->with('message', trans('messages.success-deleting-organism'));
 	}
 }
