@@ -2,7 +2,7 @@
 @section("content")
 <div>
     <ol class="breadcrumb">
-      <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+      <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
       <li class="active">Health Units</li>
     </ol>
 </div>
@@ -34,7 +34,7 @@
                 <tr>
                     <td>{{ $value->name }}</td>
                     <td>{{ $value->description }}</td>
-                    
+
                     <td>
 
                     <!-- show the ward (uses the show method found at GET /ward/{id} -->
@@ -48,7 +48,7 @@
                             <span class="glyphicon glyphicon-edit"></span>
                             {{ trans('messages.edit') }}
                         </a>
-                        
+
                     <!-- delete this ward (uses delete method found at GET /ward/{id}/delete -->
                         {{ Form::open(['route' => ['ward.destroy', $value->id], 'method' => 'DELETE',
                             'style' => 'display: inline-block;']) }}

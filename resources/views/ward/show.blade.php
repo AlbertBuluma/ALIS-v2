@@ -7,8 +7,8 @@
 
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-          <li><a href="{{ URL::route('ward.index') }}">Health Units</a></li>
+          <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+          <li><a href="{{ route('ward.index') }}">Health Units</a></li>
           <li class="active">Health Unit Details</li>
         </ol>
     </div>
@@ -28,7 +28,7 @@
                 <h3 class="view"><strong>{{ Lang::choice('messages.name',1) }}:</strong>{{ $ward->name }} </h3>
                 <p class="view-striped"><strong>{{ trans('messages.description') }}:</strong>
                     {{ $ward->description }}</p>
-                
+
             </div>
         </div>
     </div>

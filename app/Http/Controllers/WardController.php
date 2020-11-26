@@ -1,62 +1,70 @@
 <?php
 
+namespace App\Http\Controllers;
+
+use App\Models\UnhlsVisit;
+use App\Models\Ward;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Contains wards
  */
-class WardController extends \BaseController {
+class WardController extends Controller {
 
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
  */
     public function index()
     {
         //List all wards
         $ward = Ward::orderBy('name', 'ASC')->get();
         //Load the view and pass the wards
-        return View::make('ward.index')->with('ward',$ward);
+        return view('ward.index')->with('ward',$ward);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
-               
+
         //Create ward
-        return View::make('ward.create')->with('ward_types');
+        return view('ward.create')->with('ward_types');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store()
+    public function store(Request $request)
     {
         //Validation
         $rules = array(
             'name' => 'required|unique:wards,name',
             );
-        $validator = Validator::make(Input::all(), $rules);
-    
+        $validator = Validator::make($request->all(), $rules);
+
         //process
         if($validator->fails()){
-                return Redirect::back()->withErrors($validator);
+                return redirect()->back()->withErrors($validator);
         }else{
             //store
             $ward = new Ward;
-            $ward->name = Input::get('name');
-            $ward->description = Input::get('description');
+            $ward->name = $request->get('name');
+            $ward->description = $request->get('description');
             try{
                 $ward->save();
-            
-                return Redirect::route('ward.index')
+
+                return redirect()->route('ward.index')
                     ->with('message', 'Health Unit Successfully Create');
             }catch(QueryException $e){
                 Log::error($e);
@@ -68,56 +76,57 @@ class WardController extends \BaseController {
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
         //show a ward
         $ward = Ward::find($id);
-        
+
         //show the view and pass the $ward to it
-        return View::make('ward.show')->with('ward',$ward);
+        return view('ward.show')->with('ward',$ward);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
         //Get the patient
         $ward = Ward::find($id);
         //Open the Edit View and pass to it the $patient
-        return View::make('ward.edit')->with('ward', $ward)->with('ward_types');
+        return view('ward.edit')->with('ward', $ward)->with('ward_types');
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($id)
+    public function update(Request $request, $id)
     {
         //Validate
         $rules = array('name' => 'required');
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
         // process the login
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput(Input::except('password'));
+            return redirect()->back()->withErrors($validator)->withInput($request->except('password'));
         } else {
             // Update
             $ward = Ward::find($id);
-            $ward->name = Input::get('name');
-            $ward->description = Input::get('description');
+            $ward->name = $request->get('name');
+            $ward->description = $request->get('description');
             $ward->save();
 
             // redirect
-            
-            return Redirect::route('ward.index')
+
+            return redirect()->route('ward.index')
                 ->with('message', 'Health Unit Successfully Updated') ->with('activeward', $ward ->id);
         }
     }
@@ -126,7 +135,7 @@ class WardController extends \BaseController {
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
@@ -139,12 +148,12 @@ class WardController extends \BaseController {
             $ward->delete();
         } else {
             // The ward is in use
-            
-            return Redirect::route('ward.index')
+
+            return redirect()->route('ward.index')
                 ->with('message', 'This Health Unit is in use');
         }
         // redirect
-            return Redirect::route('ward.index')
+            return redirect()->route('ward.index')
             ->with('message', 'Health Unit Successfully Deleted');
     }
 }
