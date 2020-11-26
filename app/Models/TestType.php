@@ -4,6 +4,7 @@ namespace  App\Models;
 
 use DateInterval;
 use DateTime;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -184,7 +185,7 @@ class TestType extends Model
 	public static function supportPrevalenceCounts()
 	{
 
-		$testTypes = new Illuminate\Database\Eloquent\Collection();
+		$testTypes = new Collection();
 
 		// Get ALPHANUMERIC measures whose possible results (or their interpretation) can be
 		// reduced to either Positive or Negative
@@ -212,11 +213,14 @@ class TestType extends Model
 		 return $testTypes->unique()->sortBy('name');
 	}
 
-	/**
-	* Return the rate of positive test results (Optionally given the year, month, date)
-	*
-	* @param $year, $month, $date
-	*/
+    /**
+     * Return the rate of positive test results (Optionally given the year, month, date)
+     *
+     * @param int $year , $month, $date
+     * @param int $month
+     * @param int $date
+     * @return
+     */
 	public function getPrevalenceCount($year = 0, $month = 0, $date = 0)
 	{
 		$theDate = "";
@@ -260,11 +264,17 @@ class TestType extends Model
 				->get();
 		return $data;
 	}
-	/**
-	* Return the prevalence counts for all TestTypes for the given date range
-	*
-	* @param $from, $to
-	*/
+
+    /**
+     * Return the prevalence counts for all TestTypes for the given date range
+     *
+     * @param $from , $to
+     * @param $to
+     * @param int $testTypeID
+     * @param null $ageRange
+     * @return
+     * @throws \Exception
+     */
 	public static function getPrevalenceCounts($from, $to, $testTypeID = 0, $ageRange=null){
 		$toPlusOne = date_add(new DateTime($to), date_interval_create_from_date_string('1 day'));
 
@@ -322,11 +332,15 @@ class TestType extends Model
 				->get();
 		return $data;
 	}
-	/**
-	* Return the counts for a test type given the test_status_id, and date range for ungrouped tests
-	*
-	* @param $testStatusID, $from, $to
-	*/
+
+    /**
+     * Return the counts for a test type given the test_status_id, and date range for ungrouped tests
+     *
+     * @param $testStatusID , $from, $to
+     * @param null $from
+     * @param null $to
+     * @return
+     */
 	public function countPerStatus($testStatusID, $from = null, $to = null)
 	{
 
@@ -339,11 +353,17 @@ class TestType extends Model
 		return $tests->count();
 
 	}
-	/**
-	* Returns grouped test Counts with optional gender, age range, date range
-	*
-	* @param $testStatusID, $from, $to
-	*/
+
+    /**
+     * Returns grouped test Counts with optional gender, age range, date range
+     *
+     * @param null $gender
+     * @param null $ageRange
+     * @param null $from
+     * @param null $to
+     * @return
+     * @throws \Exception
+     */
 	public function groupedTestCount($gender=null, $ageRange=null, $from=null, $to=null){
 			$tests = UnhlsTest::where('test_type_id', $this->id)
 						 ->whereIn('test_status_id', [UnhlsTest::COMPLETED, UnhlsTest::VERIFIED]);
@@ -405,11 +425,17 @@ class TestType extends Model
 		else
 			return true;
 	}
-	/**
-	 * Get cd4 counts based on either baseline/follow-up and <500/>500
-	 *
-	 * @return counts
-	 */
+
+    /**
+     * Get cd4 counts based on either baseline/follow-up and <500/>500
+     *
+     * @param null $from
+     * @param null $to
+     * @param $range
+     * @param $comment
+     * @return int
+     * @throws \Exception
+     */
 	public function cd4($from = null, $to = null, $range, $comment)
 	{
 		$tests = array();
