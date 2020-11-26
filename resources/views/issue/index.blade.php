@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 	  <li class="active">{{ Lang::choice('messages.issue',2) }}</li>
 	</ol>
 </div>
@@ -15,7 +15,7 @@
 		{{trans('messages.issuesList')}}
 	</div>
 	<div class="panel-body">
-		
+
 <table class="table table-striped table-hover table-condensed search-table">
 			<thead>
 				<tr>
@@ -41,15 +41,15 @@
 					<td>{{ $issue->receipt->expiry_date}}</td>
 					<td>{{ $issue->topupRequest->section->name }}</td>
 					<td>{{ $issue->receiver->name }}</td>
-					<td> 
+					<td>
 						<!-- edit this commodity (uses the edit method found at GET /inventory/{id}/edit -->
 					<a class="btn btn-sm btn-info" href="{{ URL::route('issue.edit', array($issue->id)) }}" >
 							<span class="glyphicon glyphicon-edit"></span>
 							{{trans('messages.edit')}}
 					</a>
 						<!-- delete this commodity (uses the delete method found at GET /inventory/{id}/delete -->
-					<button class="btn btn-sm btn-danger delete-item-link" 
-							data-toggle="modal" data-target=".confirm-delete-modal"	
+					<button class="btn btn-sm btn-danger delete-item-link"
+							data-toggle="modal" data-target=".confirm-delete-modal"
 							data-id="{{ URL::route('issue.delete', array($issue->id)) }}">
 							<span class="glyphicon glyphicon-trash"></span>
 							{{trans('messages.delete')}}

@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 	  <li><a href="{{{URL::route('issue.index')}}}">{{Lang::choice('messages.issue',2)}}</a></li>
 	  <li class="active">{{ trans('messages.edit-issue-details') }}</li>
 	</ol>
@@ -24,7 +24,7 @@
          {{ Form::model($issue, array('route' => array('issue.update', $issue->id), 'method' => 'PUT', 'id' => 'form-edit-issue')) }}
            <div class="form-group">
                 {{ Form::label('commodity', trans('messages.commodity')) }}
-                 {{ Form::select('commodity', array(null => '')+ $commodities, $issue->topupRequest->commodity_id, 
+                 {{ Form::select('commodity', array(null => '')+ $commodities, $issue->topupRequest->commodity_id,
                     array('class' => 'form-control')) }}
             </div>
              <div class="form-group">
@@ -42,7 +42,7 @@
             </div>
             <div class="form-group">
                 {{ Form::label('quantity_issued', trans('messages.qty-issued')) }}
-                {{ Form::text('quantity_issued', Input::old('quantity_issued'),array('class' => 'form-control', 'rows' => '2')) }}
+                {{ Form::text('quantity_issued', old('quantity_issued'),array('class' => 'form-control', 'rows' => '2')) }}
             </div>
             <div class="form-group">
                 {{ Form::label('lab_section ', trans('messages.destination')) }}
@@ -66,4 +66,4 @@
             {{ Form::close() }}
         </div>
     </div>
-@stop   
+@stop
