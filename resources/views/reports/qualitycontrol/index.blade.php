@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.quality-control', 2) }}</li>
 	</ol>
 </div>
@@ -23,7 +23,7 @@
 	        	{{ Form::label('start_date', trans("messages.from")) }}
 	        </div>
 	        <div class="col-md-10">
-	            {{ Form::text('start_date', isset($input['start_date'])?$input['start_date']:date('Y-m-d'), 
+	            {{ Form::text('start_date', isset($input['start_date'])?$input['start_date']:date('Y-m-d'),
 	                array('class' => 'form-control standard-datepicker')) }}
 	        </div>
         </div>
@@ -32,7 +32,7 @@
 	        	{{ Form::label('end_date', trans("messages.to")) }}
 	        </div>
 	        <div class="col-md-10">
-	            {{ Form::text('end_date', isset($input['end_date'])?$input['end_date']:date('Y-m-d'), 
+	            {{ Form::text('end_date', isset($input['end_date'])?$input['end_date']:date('Y-m-d'),
 	                array('class' => 'form-control standard-datepicker')) }}
 	        </div>
         </div>
@@ -46,7 +46,7 @@
 	        </div>
         </div>
         <div class="col-md-2">
-        	{{Form::submit(trans('messages.view'), 
+        	{{Form::submit(trans('messages.view'),
 	        	array('class' => 'btn btn-info', 'id'=>'filter', 'name'=>'filter'))}}
         </div>
   	</div>

@@ -9,7 +9,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 						&times;</button>
 					<h4 class="modal-title" id="myModalLabel">
-						<span class="glyphicon glyphicon-trash"></span> 
+						<span class="glyphicon glyphicon-trash"></span>
 						{{ trans('messages.confirm-delete-title') }}
 					</h4>
 				</div>
@@ -32,13 +32,13 @@
         <div class="col-md-12 row">
         	<div class="col-md-2 col-md-offset-4">
         		<a href="http://health.go.ug/" target="_blank">
-        			<img src="{{ Config::get('kblis.uganda-logo') }}" alt="Government of Uganda">
-        		</a>	
+        			<img src="{{ config('kblis.uganda-logo') }}" alt="Government of Uganda">
+        		</a>
         	</div>
 
             <div class="col-md-2">
                 <a href="http://www.cdc.gov/" target="_blank">
-        			<img src="{{ Config::get('kblis.cdc-logo') }}" alt="Centres for Disease Control and Prevention">
+        			<img src="{{ config('kblis.cdc-logo') }}" alt="Centres for Disease Control and Prevention">
         		</a>
         	</div>
         </div>

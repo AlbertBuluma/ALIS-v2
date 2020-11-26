@@ -44,11 +44,11 @@
              <td colspan="2">
                 @foreach($test->testResults as $result)
                   @if($test->measures->count() > 1)
-                  {{ Measure::find($result->measure_id)->name }}:
+                  {{ App\Models\Measure::find($result->measure_id)->name }}:
                   @endif
                   {{ $result->result }}
-                  {{ Measure::getRange($test->specimen->patient, $result->measure_id) }}
-                  {{ Measure::find($result->measure_id)->unit }}
+                  {{ App\Models\Measure::getRange($test->specimen->patient, $result->measure_id) }}
+                  {{ App\Models\Measure::find($result->measure_id)->unit }}
                 @endforeach
              </td>
           </tr>
@@ -122,7 +122,7 @@
               <tr>
                 <td>{{ $test->culture_observation->observation }}</td>
               </tr>
-        </table> 
+        </table>
         @endif<!--./ if there are comments -->
 
         @endif<!--./ if there are no isolated organisms -->

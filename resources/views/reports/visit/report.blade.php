@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-	  <li class="active"><a href="{{ URL::route('reports.patient.index') }}">{{ Lang::choice('messages.report', 2) }}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+	  <li class="active"><a href="{{ route('reports.patient.index') }}">{{ Lang::choice('messages.report', 2) }}</a></li>
 	  <li class="active">{{ trans('messages.patient-report') }}</li>
 	</ol>
 </div>
@@ -47,7 +47,7 @@
 					<th>{{ trans('messages.patient-lab-number')}}</th>
 					<td>{{ $visit->patient->external_patient_number }}</td>
 					<th>{{ trans('messages.requesting-facility-department')}}</th>
-					<td>{{ Config::get('kblis.organization') }}</td>
+					<td>{{ config('kblis.organization') }}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -67,15 +67,15 @@
 						<tr>
 							<td>{{ $test->specimen->specimenType->name }}</td>
 							<td>{{ $test->testType->name }}</td>
-							@if($test->specimen->specimen_status_id == Specimen::NOT_COLLECTED)
+							@if($test->specimen->specimen_status_id == App\Models\Specimen::NOT_COLLECTED)
 								<td>{{trans('messages.specimen-not-collected')}}</td>
 								<td></td>
 								<td></td>
-							@elseif($test->specimen->specimen_status_id == Specimen::ACCEPTED)
+							@elseif($test->specimen->specimen_status_id == App\Models\Specimen::ACCEPTED)
 								<td>{{trans('messages.specimen-accepted')}}</td>
 								<td>{{$test->specimen->acceptedBy->name}}</td>
 								<td>{{$test->specimen->time_accepted}}</td>
-							@elseif($test->specimen->specimen_status_id == Specimen::REJECTED)
+							@elseif($test->specimen->specimen_status_id == App\Models\Specimen::REJECTED)
 								<td>{{trans('messages.specimen-rejected')}}</td>
 								<td>{{$test->specimen->rejectedBy->name}}</td>
 								<td>{{$test->specimen->time_rejected}}</td>
@@ -110,9 +110,9 @@
 							<td>
 								@foreach($test->testResults as $result)
 									<p>
-										{{ Measure::find($result->measure_id)->name }}: {{ $result->result }}
-										{{ Measure::getRange($test->visit->patient, $result->measure_id) }}
-										{{ Measure::find($result->measure_id)->unit }}
+										{{ App\Models\Measure::find($result->measure_id)->name }}: {{ $result->result }}
+										{{ App\Models\Measure::getRange($test->visit->patient, $result->measure_id) }}
+										{{ App\Models\Measure::find($result->measure_id)->unit }}
 									</p>
 								@endforeach</td>
 							<td>{{ $test->interpretation == '' ? 'N/A' : $test->interpretation }}</td>

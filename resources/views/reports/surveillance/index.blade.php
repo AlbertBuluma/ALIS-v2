@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.report',2) }}</li>
 	  <li class="active">{{ trans('messages.surveillance') }}</li>
 	</ol>
@@ -16,7 +16,7 @@
 					{{ Form::label('start', trans("messages.from")) }}
 				</div>
 				<div class="col-sm-3">
-					{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-01'), 
+					{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-01'),
 				        array('class' => 'form-control standard-datepicker')) }}
 	   			</div>
 	    	</div>
@@ -27,7 +27,7 @@
 					{{ Form::label('end', trans("messages.to")) }}
 				</div>
 				<div class="col-sm-3">
-					{{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'), 
+					{{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'),
 					    array('class' => 'form-control standard-datepicker')) }}
 				</div>
 	    	</div>
@@ -54,10 +54,10 @@
 	<div class="panel-body">
 	@if (Session::has('message'))
 		<div class="alert alert-info">{{ trans(Session::get('message')) }}</div>
-	@endif	
+	@endif
 	@include("reportHeader")
 	<strong>
-		<p> {{ trans('messages.surveillance') }} - 
+		<p> {{ trans('messages.surveillance') }} -
 			<?php $from = isset($input['start'])?$input['start']:date('01-m-Y');?>
 			<?php $to = isset($input['end'])?$input['end']:date('d-m-Y');?>
 			@if($from!=$to)
@@ -86,7 +86,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach(Disease::all() as $disease)
+					@foreach(App\Models\Disease::all() as $disease)
 						<?php if(empty(count($disease->reportDiseases))) continue; ?>
 						<tr>
 							<td>{{ $disease->name }}</td>

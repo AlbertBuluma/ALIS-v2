@@ -6,7 +6,7 @@
 <body>
 	@include("reportHeader")
 	<strong>
-		<p> {{ trans('messages.surveillance') }} - 
+		<p> {{ trans('messages.surveillance') }} -
 			<?php $from = isset($input['start'])?$input['start']:date('01-m-Y');?>
 			<?php $to = isset($input['end'])?$input['end']:date('d-m-Y');?>
 			@if($from!=$to)
@@ -32,10 +32,10 @@
 					<th>{{trans('messages.positive')}}</th>
 					<th>{{trans('messages.tested')}}</th>
 					<th>{{trans('messages.positive')}}</th>
-				</tr> 
+				</tr>
 			</thead>
 			<tbody>
-				@foreach(Disease::all() as $disease)
+				@foreach(App\Models\Disease::all() as $disease)
 					<?php if(empty(count($disease->reportDiseases))) continue; ?>
 					<tr>
 						<td>{{ $disease->name }}</td>
