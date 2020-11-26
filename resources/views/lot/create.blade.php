@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-	  <li><a href="{{ URL::route('instrument.index') }}">{{Lang::choice('messages.lot',2)}}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{ route('instrument.index') }}">{{Lang::choice('messages.lot',2)}}</a></li>
 	  <li class="active">{{trans('messages.add-lot')}}</li>
 	</ol>
 </div>
@@ -15,7 +15,7 @@
 	{{ Form::open(array('route' => array('lot.index'), 'id' => 'form-add-lot')) }}
 		<div class="panel-body" id="lot-create">
 		<!-- if there are creation errors, they will show here -->
-			
+
 			@if($errors->all())
 				<div class="alert alert-danger">
 					{{ HTML::ul($errors->all()) }}
@@ -23,21 +23,21 @@
 			@endif
 			<div class="form-group">
 				{{ Form::label('number', Lang::choice('messages.lot-number',1)) }}
-                {{ Form::text('number', Input::old('number'), array('class' => 'form-control')) }}
+                {{ Form::text('number', old('number'), array('class' => 'form-control')) }}
 			</div>
 			<div class="form-group">
 				{{ Form::label('description', trans('messages.description')) }}
-				{{ Form::textarea('description', Input::old('description'), 
+				{{ Form::textarea('description', old('description'),
 					array('class' => 'form-control', 'rows' => '3' )) }}
 			</div>
 			<div class="form-group">
 				{{ Form::label('expiry', trans('messages.expiry-date')) }}
-				{{ Form::text('expiry', Input::old('expiry'), 
+				{{ Form::text('expiry', old('expiry'),
 					array('class' => 'form-control standard-datepicker', 'rows' => '3' )) }}
 			</div>
 			<div class="form-group">
 				{{ Form::label('instruments', Lang::choice('messages.instrument', 2)) }}
-				{{ Form::select('instrument', array('') + $instruments, Input::old('instrument'), 
+				{{ Form::select('instrument', array('') + $instruments, old('instrument'),
 					array('class' => 'form-control')) }}
 			</div>
 			<div class="form-group" id="edit-control-ranges">
@@ -48,9 +48,9 @@
 				{{ Form::button(
 					'<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'),
 					[
-						'class' => 'btn btn-primary', 
+						'class' => 'btn btn-primary',
 						'onclick' => 'submit()'
-					] 
+					]
 				) }}
 			</div>
 		</div>

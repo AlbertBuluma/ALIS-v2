@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{Lang::choice('messages.lot',2)}}</li>
 	</ol>
 </div>
@@ -39,7 +39,7 @@
 					<th>{{ $lot->instrument->name }}</th>
 					<td>
 						<!-- show the instrument details -->
-						<a class="btn btn-sm btn-success" href="{{ URL::route('lot.show', array($lot->id)) }}">
+						<a class="btn btn-sm btn-success" href="{{ route('lot.show', array($lot->id)) }}">
 							<span class="glyphicon glyphicon-eye-open"></span>
 							{{trans('messages.view')}}
 						</a>

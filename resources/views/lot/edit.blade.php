@@ -3,8 +3,8 @@
 
 	<div>
 		<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		<li><a href="{{{URL::route('lot.index')}}}">{{Lang::choice('messages.lot',2)}}</a></li>
+		<li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{ route('lot.index') }}">{{Lang::choice('messages.lot',2)}}</a></li>
 		<li class="active">{{trans('messages.edit-lot')}}</li>
 		</ol>
 	</div>
@@ -25,20 +25,20 @@
 			{{ Form::model($lot, array('route' => array('lot.update', $lot->id), 'method' => 'PUT', 'id' => 'form-edit-lot')) }}
 				<div class="form-group">
 					{{ Form::label('number', trans('messages.lot-number')) }}
-					{{ Form::text('number', Input::old('number'), array('class' => 'form-control')) }}
+					{{ Form::text('number', old('number'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('description', trans('messages.description')) }}
-					{{ Form::textarea('description', Input::old('description'), array('class' => 'form-control', 'rows' => '3' )) }}
+					{{ Form::textarea('description', old('description'), array('class' => 'form-control', 'rows' => '3' )) }}
 				</div>
 				<div class="form-group">
 				{{ Form::label('expiry', trans('messages.expiry-date')) }}
-				{{ Form::text('expiry', Input::old('expiry'), 
+				{{ Form::text('expiry', old('expiry'),
 					array('class' => 'form-control standard-datepicker', 'rows' => '3' )) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('instruments', Lang::choice('messages.instrument', 1)) }}
-					{{ Form::select('instrument', $instruments, Input::old('instrument'), 
+					{{ Form::select('instrument', $instruments, old('instrument'),
 					array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group actions-row">

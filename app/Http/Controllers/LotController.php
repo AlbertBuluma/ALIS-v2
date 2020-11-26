@@ -1,57 +1,66 @@
 <?php
 
-class LotController extends \BaseController {
+namespace App\Http\Controllers;
+
+use App\Models\Instrument;
+use App\Models\Lot;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+
+class LotController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
 		//Lists all lots
 		$lots = Lot::all();
-		return View::make('lot.index')->with('lots', $lots);
+		return view('lot.index')->with('lots', $lots);
 	}
 
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function create()
 	{
-		$instruments = Instrument::lists('name', 'id');
-		return View::make('lot.create')->with('instruments', $instruments);
+		$instruments = Instrument::pluck('name', 'id')->toArray();
+		return view('lot.create')->with('instruments', $instruments);
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function store(Request $request)
 	{
 		//Validation
 		$rules = array('number' => 'required|unique:lots,number',
 					'instrument' => 'required|non_zero_key');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::route('lot.create')->withErrors($validator)->withInput();
+			return redirect()->route('lot.create')->withErrors($validator)->withInput();
 		} else {
 			// Add
 			$lot = new Lot;
-			$lot->number = Input::get('number');
-			$lot->description = Input::get('description');
-			$lot->expiry = Input::get('expiry');
-			$lot->instrument_id = Input::get('instrument');
+			$lot->number = $request->get('number');
+			$lot->description = $request->get('description');
+			$lot->expiry = $request->get('expiry');
+			$lot->instrument_id = $request->get('instrument');
 
 			$lot->save();
 
 			$url = Session::get('SOURCE_URL');
-			return Redirect::to($url)
+			return redirect($url)
 					->with('message', trans('messages.successfully-created-lot'));
 		}
 	}
@@ -61,12 +70,12 @@ class LotController extends \BaseController {
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function show($id)
 	{
 		$lot = Lot::find($id);
-		return View::make('lot.show')->with('lot', $lot);
+		return view('lot.show')->with('lot', $lot);
 	}
 
 
@@ -74,43 +83,44 @@ class LotController extends \BaseController {
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
 		$lot = Lot::find($id);
 		$instruments = Instrument::lists('name', 'id');
-		return View::make('lot.edit')->with('lot', $lot)->with('instruments', $instruments);
+		return view('lot.edit')->with('lot', $lot)->with('instruments', $instruments);
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function update(Request $request, $id)
 	{
 		//Validation
 		$rules = array('number' => 'required',
 					'instrument' => 'required|non_zero_key');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::to('lot/'.$id.'/edit')->withErrors($validator)->withInput();
+			return redirect('lot/'.$id.'/edit')->withErrors($validator)->withInput();
 		} else {
 			// Add
 			$lot = Lot::find($id);
-			$lot->number = Input::get('number');
-			$lot->description = Input::get('description');
-			$lot->expiry = Input::get('expiry');
-			$lot->instrument_id = Input::get('instrument');
+			$lot->number = $request->get('number');
+			$lot->description = $request->get('description');
+			$lot->expiry = $request->get('expiry');
+			$lot->instrument_id = $request->get('instrument');
 
 			$lot->save();
 
 			$url = Session::get('SOURCE_URL');
-			return Redirect::to($url)
+			return redirect($url)
 					->with('message', trans('messages.successfully-updated-lot'));
 		}
 	}
@@ -131,17 +141,17 @@ class LotController extends \BaseController {
 	 * Remove the specified lot from storage (global UI implementation).
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
 		//Delete the lot
 		$lot = Lot::find($id);
- 
+
 		$lot->delete();
 
 		// redirect
-		return Redirect::route('lot.index')->with('message', trans('messages.success-deleting-lot'));
+		return redirect()->route('lot.index')->with('message', trans('messages.success-deleting-lot'));
 	}
 
 
