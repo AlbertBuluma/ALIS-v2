@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-		  <li><a href="{{ URL::route('lot.index') }}">{{Lang::choice('messages.lot',2)}}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('lot.index') }}">{{Lang::choice('messages.lot',2)}}</a></li>
 		  <li class="active">{{trans('messages.lot-details')}}</li>
 		</ol>
 	</div>
@@ -12,7 +12,7 @@
 			<span class="glyphicon glyphicon-cog"></span>
 			{{trans('messages.lot-details')}}
 			<div class="panel-btn">
-				<a class="btn btn-sm btn-info" href="{{ URL::route('lot.edit', array($lot->id)) }}">
+				<a class="btn btn-sm btn-info" href="{{ route('lot.edit', array($lot->id)) }}">
 					<span class="glyphicon glyphicon-edit"></span>
 					{{trans('messages.edit')}}
 				</a>
