@@ -3,7 +3,7 @@
 
 	<div>
 		<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
 		<li class="active">{{Lang::choice('messages.facility',2)}}</li>
 		</ol>
 	</div>
@@ -25,7 +25,7 @@
 				'method' => 'PUT', 'id' => 'form-edit-facility')) }}
 				<div class="form-group">
 					{{ Form::label('name', trans('messages.name')) }}
-					{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+					{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group actions-row">
 					{{ Form::button('<span class="glyphicon glyphicon-save"></span> '. trans('messages.save'),

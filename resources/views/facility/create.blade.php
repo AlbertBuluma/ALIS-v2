@@ -3,7 +3,7 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 		  <li class="active"><a href="{{ URL::route('facility.index') }}">{{Lang::choice('messages.facility',2)}}</a></li>
 		  <li class="active">{{trans('messages.add-facility')}}</li>
 		</ol>
@@ -25,10 +25,10 @@
 
 				<div class="form-group">
 					{{ Form::label('name', Lang::choice('messages.name',2)) }}
-					{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+					{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group actions-row">
-					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
 						array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
 				</div>
 
