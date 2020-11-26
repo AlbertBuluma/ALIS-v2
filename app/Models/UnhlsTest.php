@@ -1193,7 +1193,7 @@ class UnhlsTest extends Model
 		foreach ($testTypeIds as $testTypeId) {
 
 			$testType = TestType::find($testTypeId);
-			$measureIds = array_merge($measureIds, $testType->measures->lists('id'));
+			$measureIds = array_merge($measureIds, $testType->measures->pluck('id')->toArray());
 		}
 		return $measureIds;
 	}
