@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-		  <li><a href="{{ URL::route('unhls_patient.index') }}">{{ Lang::choice('messages.patient',2)}}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('unhls_patient.index') }}">{{ Lang::choice('messages.patient',2)}}</a></li>
 		  <li class="active">{{trans('messages.edit-patient')}}</li>
 		</ol>
 	</div>
@@ -22,13 +22,13 @@
                     </ul>
                 </div>
             @endif
-			
+
 			{{ Form::model($patient, array('route' => array('unhls_patient.update', $patient->id), 'method' => 'PUT',
 				'id' => 'form-edit-patient')) }}
 
 				<div class="form-group">
 					{{ Form::label('patient_number', trans('messages.patient-number')) }}
-					{{ Form::text('patient_number', old('patient_number'), 
+					{{ Form::text('patient_number', old('patient_number'),
 						array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group">
@@ -96,7 +96,7 @@
 			{{ Form::close() }}
 		</div>
 	</div>
-@stop	
+@stop
 
 
 

@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-	  <li><a href="{{{URL::route('topup.index')}}}">{{trans('messages.topup')}}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{ route('topup.index') }}">{{trans('messages.topup')}}</a></li>
 	  <li class="active">{{ Lang::choice('messages.request-topup',2) }}</li>
 	</ol>
 </div>
@@ -38,11 +38,11 @@
             </div>
             <div class="form-group">
                 {{ Form::label('order_quantity', trans('messages.order-qty')) }}
-                {{ Form::text('order_quantity', Input::old('order_quantity'),array('class' => 'form-control', 'rows' => '2')) }}
+                {{ Form::text('order_quantity', old('order_quantity'),array('class' => 'form-control', 'rows' => '2')) }}
             </div>
             <div class="form-group">
                 {{ Form::label('remarks ', trans('messages.remarks')) }}
-                {{ Form::textarea('remarks', Input::old('remarks'),array('class' => 'form-control', 'rows' => '2')) }}
+                {{ Form::textarea('remarks', old('remarks'),array('class' => 'form-control', 'rows' => '2')) }}
             </div>
             <div class="form-group actions-row">
                     {{ Form::button('<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'),

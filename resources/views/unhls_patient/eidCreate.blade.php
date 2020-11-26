@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{ URL::route('unhls_patient.index') }}">{{ Lang::choice('messages.patient',2) }}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{ route('unhls_patient.index') }}">{{ Lang::choice('messages.patient',2) }}</a></li>
 		  <li class="active">{{trans('messages.create-patient')}}</li>
 		</ol>
 	</div>
@@ -25,7 +25,7 @@
 				<div class="form-group col-md-12">
 					<div class='col-md-4'>
 					{{ Form::label('patient_number', trans('messages.patient-number'), array ('class' => 'col-md-2')) }}
-					{{ Form::text('patient_number', Input::old('patient_number'),
+					{{ Form::text('patient_number', old('patient_number'),
 						array('class' => 'form-control')) }}
 					</div>
 				</div>
@@ -33,12 +33,12 @@
 				<div class="form-group col-md-12">
 					<div class="col-md-4">
 					{{ Form::label('name', "Infant Name", array('class' => 'required col-md-2')) }}
-					{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+					{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 					</div>
 
 					<div class="col-md-4">
 					{{ Form::label('health_unit', "Health Unit:", array('class' => 'required col-md-2')) }}
-					{{ Form::text('health_unit', \Config::get('constants.FACILITY_NAME'), array('class' => 'form-control')) }}
+					{{ Form::text('health_unit', config('constants.FACILITY_NAME'), array('class' => 'form-control')) }}
 					</div>
 				</div>
 
@@ -65,10 +65,10 @@
 
 					<div class="col-md-4">
 						{{ Form::label('district', "District:", array('class' => 'required, col-md-2')) }}
-						{{ Form::text('district', \Config::get('constants.DISTRICT_NAME') , array('class' => 'form-control')) }}
+						{{ Form::text('district', config('constants.DISTRICT_NAME') , array('class' => 'form-control')) }}
 					</div>
 
-					                                      
+
 			</div>
 				<div class="form-group hidden">
 					<label class= 'required' for="dob">Date Of Birth</label>
@@ -78,7 +78,7 @@
 				<div class="form-group col-md-12">
 					<div class="col-md-4">
 					{{ Form::label('exp_no', "EXP No (If Status Known): ", array('class' => 'col-md-2')) }}
-					{{ Form::text('exp_no', Input::old('exp_no'), array('class' => 'form-control')) }}
+					{{ Form::text('exp_no', old('exp_no'), array('class' => 'form-control')) }}
 					</div>
 
 					<div class="col-md-4">
@@ -93,12 +93,12 @@
 				<div class="form-group col-md-12">
 					<div class="col-md-4">
 					{{ Form::label('caretaker_tel_no', "Caretaker Tel. No. ", array('class' => 'col-md-2')) }}
-					{{ Form::text('caretaker_tel_no', Input::old('caretaker_tel_no'), array('class' => 'form-control')) }}
+					{{ Form::text('caretaker_tel_no', old('caretaker_tel_no'), array('class' => 'form-control')) }}
 					</div>
 
 					<div class="col-md-4">
 					{{ Form::label('admission_date', "Admission date:", ['class' => 'col-md-2 control-label']) }}
-					{{ Form::text('admission_date', Input::old('admission_date'), array('class' => 'form-control standard-datepicker purchase-date')) }}
+					{{ Form::text('admission_date', old('admission_date'), array('class' => 'form-control standard-datepicker purchase-date')) }}
 					</div>
 				</div>
 
@@ -106,7 +106,7 @@
 				<div class="form-group col-md-12">
 					<div class="col-md-4">
 					{{ Form::label('entry_point', "Entry Point: ", array('class' => 'col-md-2')) }}
-					{{ Form::select('entry_point', [' ' => '-- Select --','0' => 'Nutrition','1' => 'Pediatric Ward', '2' => 'MBCP', 
+					{{ Form::select('entry_point', [' ' => '-- Select --','0' => 'Nutrition','1' => 'Pediatric Ward', '2' => 'MBCP',
 					'3' => 'OPD', '4' => 'YCC', '5' => 'EPI'], null, array('class' => 'form-control')) }}
 					</div>
 				</div>
@@ -120,7 +120,7 @@
 					<div class="form-group col-md-12">
 						<div class="col-md-4">
 						{{ Form::label('mothers_name', "Mother’s Name:", array('class' => 'required col-md-2')) }}
-						{{ Form::text('mothers_name', Input::old('mothers_name'), array('class' => 'form-control')) }}
+						{{ Form::text('mothers_name', old('mothers_name'), array('class' => 'form-control')) }}
 						</div>
 
 						<div class="col-md-4">
@@ -130,7 +130,7 @@
 
 						<div class="col-md-4">
 						{{ Form::label('sample_date', "Sample collection date: ", ['class' => 'col-md-2 control-label']) }}
-						{{ Form::text('sample_date', Input::old('sample_date'), array('class' => 'form-control standard-datepicker purchase-date')) }}
+						{{ Form::text('sample_date', old('sample_date'), array('class' => 'form-control standard-datepicker purchase-date')) }}
 						</div>
 
 
@@ -139,7 +139,7 @@
 				</div>
 
 				<div class="panel ">
-				<div class="panel-heading "><strong>For known HIV Exposed infants, information to enter on this Request Form should be picked 
+				<div class="panel-heading "><strong>For known HIV Exposed infants, information to enter on this Request Form should be picked
 					from EI register. For all other infants, use the inpatient register (HMIS 054) </strong></div>
 				<div class="panel-body">
 
@@ -171,7 +171,7 @@
 
 						<div class="col-md-12">
 							<p><strong>If Mother is HIV positive, Mother’s PMTCT ARVs (Circle number below)</strong> </p>
-							<div class='col-md-4'>	
+							<div class='col-md-4'>
 							{{ Form::label('ante_natal', "Ante-natal", ['class' => 'col-md-3 control-label']) }}
 							{{ Form::select('ante_natal', [' ' => '-- Select --','0' => 'Lifelong ART','1' => 'No ART', '2' => 'Unknown'], null, array('class' => 'form-control')) }}
 							</div>

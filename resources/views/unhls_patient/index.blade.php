@@ -73,19 +73,19 @@
 
 							<!-- can create visit -->
 							<a class="btn btn-sm btn-info"
-								href="{{ URL::route('unhls_test.create', array('patient_id' => $patient->id)) }}">
+								href="{{ route('unhls_test.create', array('patient_id' => $patient->id)) }}">
 								<span class="glyphicon glyphicon-edit"></span>
 								{{ trans('messages.new-test') }}
 							</a>
 
 							<!-- show the patient (uses the show method found at GET /patient/{id} -->
-							<a class="btn btn-sm btn-success" href="{{ URL::route('unhls_patient.show', array($patient->id)) }}" >
+							<a class="btn btn-sm btn-success" href="{{ route('unhls_patient.show', array($patient->id)) }}" >
 								<span class="glyphicon glyphicon-eye-open"></span>
 								{{trans('messages.view')}}
 							</a>
 
 							<!-- edit this patient (uses the edit method found at GET /patient/{id}/edit -->
-							<a class="btn btn-sm btn-info" href="{{ URL::route('unhls_patient.edit', array($patient->id)) }}" >
+							<a class="btn btn-sm btn-info" href="{{ route('unhls_patient.edit', array($patient->id)) }}" >
 								<span class="glyphicon glyphicon-edit"></span>
 								{{trans('messages.edit')}}
 							</a>

@@ -2,21 +2,21 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{ URL::route('user.home')}}"></a></li>
-		<li><a href="{{ URL::route('resetulin.create')}}"></a></li>
+		<li><a href="{{ route('user.home')}}"></a></li>
+		<li><a href="{{ route('resetulin.create')}}"></a></li>
 
 	</ol>
 </div>
 <div class ="panel panel-primary">
 	<div class="panel-heading"> <span class="glyphicon glyphicon-cog">{{trans('messages.reset-ulin')}}</span>
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ URL::route('unhls_patient.create') }}">
+			<a class="btn btn-sm btn-info" href="{{ route('unhls_patient.create') }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				{{trans('messages.new-patient')}}
 			</a>
 		</div>
 	</div>
-	
+
 	<div class="panel-body">
 		@if (Session::has('message'))
 			<div class="alert alert-info">{{ trans(Session::get('message')) }}</div>
@@ -30,7 +30,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-7">
-					{{ Form::open(array('route' => array('resetulin.reset'), 'id' => 'uuid-set'))}} 
+					{{ Form::open(array('route' => array('resetulin.reset'), 'id' => 'uuid-set'))}}
 						<div class="form-group">
 							<div class="panel-btn">
 								<a href="javascript:void(0)" class="btn btn-link link-tip" role="button" data-toggle="modal" data-placement="bottom" title="Please note the value should be greater than the last Lab ID" data-target="#reset" >
@@ -74,7 +74,7 @@
       <div class="modal-body">
 			<div class="form-group">
 				{{ Form::label('incrementNum', 'Enter reset number:')}}
-				{{ Form::text('incrementNum',  Input::old('incrementNum'), array('class' => 'form-control'))}}
+				{{ Form::text('incrementNum',  old('incrementNum'), array('class' => 'form-control'))}}
 
 			</div>
 	  </div>
@@ -98,7 +98,7 @@
       <div class="modal-body">
 			<div class="alert alert-danger">
 				{{Form::hidden('incrementNum', '0')}}
-				{{ 'This will reset your Lab ID to 1. Are you sure you want to proceed? This Action is irreversible!'}}				
+				{{ 'This will reset your Lab ID to 1. Are you sure you want to proceed? This Action is irreversible!'}}
 			</div>
 	  </div>
       <div class="modal-footer">
