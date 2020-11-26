@@ -3,8 +3,8 @@
 
 	<div>
 		<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		 <li><a href="{{ URL::route('control.resultsIndex') }}">{{ Lang::choice('messages.controlresults',2) }}</a></li>
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		 <li><a href="{{ route('control.resultsIndex') }}">{{ Lang::choice('messages.controlresults',2) }}</a></li>
 		<li class="active">{{trans('messages.control-results-edit')}}</li>
 		</ol>
 	</div>
@@ -22,7 +22,7 @@
 					{{ HTML::ul($errors->all()) }}
 				</div>
 			@endif
-			
+
 				<div class="container-fluid">
                 <div class="row">
                     <div class="col-md-7">
@@ -37,7 +37,7 @@
                                         }
                                     }
                                 ?>
-                                @if ( $controlMeasure->isNumeric() ) 
+                                @if ( $controlMeasure->isNumeric() )
                                     {{ Form::label("m_".$controlMeasure->id , $controlMeasure->name) }}
                                     {{ Form::text("m_".$controlMeasure->id, $ans, array(
                                         'class' => 'form-control result-interpretation-trigger'))
@@ -45,13 +45,13 @@
                                     <span class='units'>
                                         {{$controlMeasure->controlMeasureRanges->first()->getRangeUnit()}}
                                     </span>
-                                @else ( $controlMeasure->isAlphanumeric() ) 
+                                @else ( $controlMeasure->isAlphanumeric() )
                                     {{ Form::label("m_".$controlMeasure->id , $controlMeasure->name) }}
                                     {{ Form::select("m_".$controlMeasure->id, array(null => '') +$controlMeasure->controlMeasureRanges->lists('alphanumeric', 'alphanumeric'), $ans,
                                         array('class' => 'form-control result-interpretation-trigger',
-                                        'data-url' => URL::route('unhls_test.resultinterpretation'),
+                                        'data-url' => route('unhls_test.resultinterpretation'),
                                         'data-measureid' => $controlMeasure->id
-                                        )) 
+                                        ))
                                     }}
                                 @endif
                             </div>

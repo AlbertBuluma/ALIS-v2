@@ -2,8 +2,8 @@
 @section("content")
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-          <li><a href="{{ URL::route('control.resultsIndex') }}">{{ Lang::choice('messages.controlresults',2) }}</a></li>
+          <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+          <li><a href="{{ route('control.resultsIndex') }}">{{ Lang::choice('messages.controlresults',2) }}</a></li>
           <li class="active">{{ trans('messages.enter-control-results') }}</li>
         </ol>
     </div>
@@ -24,7 +24,7 @@
         </div>
         <div class="panel-body">
         <!-- if there are creation errors, they will show here -->
-            
+
             @if($errors->all())
                 <div class="alert alert-danger">
                     {{ HTML::ul($errors->all()) }}
@@ -37,24 +37,24 @@
                         'id' => 'form-enter-results')) }}
                         @foreach($control->controlMeasures as $key => $controlMeasure)
                             <div class="form-group">
-                                @if ( $controlMeasure->isNumeric() ) 
+                                @if ( $controlMeasure->isNumeric() )
                                     {{ Form::label("m_".$controlMeasure->id , $controlMeasure->name) }}
-                                    {{ Form::text("m_".$controlMeasure->id, Input::old("m_".$controlMeasure->id), array(
+                                    {{ Form::text("m_".$controlMeasure->id, old("m_".$controlMeasure->id), array(
                                         'class' => 'form-control result-interpretation-trigger'))
                                     }}
                                     <span class='units'>
                                         {{$controlMeasure->controlMeasureRanges->first()->getRangeUnit()}}
                                     </span>
-                                @elseif ( $controlMeasure->isAlphanumeric() ) 
+                                @elseif ( $controlMeasure->isAlphanumeric() )
                                     {{ Form::label("m_".$controlMeasure->id , $controlMeasure->name) }}
                                     {{ Form::select("m_".$controlMeasure->id, array(null => '') +$controlMeasure->controlMeasureRanges->lists('alphanumeric', 'alphanumeric'),
-                                    Input::old('instrument'),
+                                    old('instrument'),
                                         array('class' => 'form-control result-interpretation-trigger',
-                                        'data-url' => URL::route('unhls_test.resultinterpretation'),
+                                        'data-url' => route('unhls_test.resultinterpretation'),
                                         'data-measureid' => $controlMeasure->id
-                                        )) 
+                                        ))
                                     }}
-                                @else 
+                                @else
                                     {{ Form::label("m_".$controlMeasure->id, $controlMeasure->name) }}
                                     {{Form::text("m_".$controlMeasure->id, $ans, array('class' => 'form-control'))}}
                                 @endif

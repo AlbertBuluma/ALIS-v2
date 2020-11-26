@@ -2,8 +2,8 @@
 @section("content")
 <div>
     <ol class="breadcrumb">
-      <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-      <li><a href="{{ URL::route('control.resultsIndex') }}">{{ Lang::choice('messages.controlresults',2) }}</a></li>
+      <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+      <li><a href="{{ route('control.resultsIndex') }}">{{ Lang::choice('messages.controlresults',2) }}</a></li>
       <li class="active">{{trans('messages.show-results')}}</li>
     </ol>
 </div>

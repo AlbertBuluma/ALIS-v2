@@ -9,64 +9,66 @@ use App\Models\Control;
 use App\Models\Lot;
 use App\Models\MeasureType;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ControlController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
 		$controls = Control::orderBy('id')->get();
-		return View::make('control.index')->with('controls', $controls);
+		return view('control.index')->with('controls', $controls);
 	}
 
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function create()
 	{
 		$lots = Lot::lists('number', 'id');
 		$measureTypes = MeasureType::orderBy('id')->take(2)->get();
 
-		return View::make('control.create')->with('lots', $lots) ->with('measureTypes', $measureTypes);
+		return view('control.create')->with('lots', $lots) ->with('measureTypes', $measureTypes);
 	}
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function store(Request $request)
 	{
 		//Validation -checking that name is unique among the un soft-deleted ones
 		$rules = array('name' => 'required|unique:controls,name,NULL,id,deleted_at,null',
 		 			'lot' => 'required|non_zero_key',
 		 			'new-measures' => 'required');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::route('control.create')->withErrors($validator)->withInput();
+			return redirect()->route('control.create')->withErrors($validator)->withInput();
 		} else {
 			// Add
 			$control = new Control;
-			$control->name = Input::get('name');
-			$control->description = Input::get('description');
-			$control->lot_id = Input::get('lot');
+			$control->name = $request->get('name');
+			$control->description = $request->get('description');
+			$control->lot_id = $request->get('lot');
 
-			if (Input::get('new-measures')) {
-					$newMeasures = Input::get('new-measures');
+			if ($request->get('new-measures')) {
+					$newMeasures = $request->get('new-measures');
 					$controlMeasure = New ControlMeasureController;
 					$controlMeasure->saveMeasuresRanges($newMeasures, $control);
 			}
 			// redirect
-			return Redirect::to('control')
+			return redirect('control')
 					->with('message', trans('messages.successfully-added-control'))
 					->with('activeControl', $control ->id);
 		}
@@ -89,56 +91,57 @@ class ControlController extends Controller {
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
 		$lots = Lot::lists('number', 'id');
 		$control = Control::find($id);
 		$measureTypes = MeasureType::all();
-		return View::make('control.edit')->with('control',$control)->with('lots', $lots)
+		return view('control.edit')->with('control',$control)->with('lots', $lots)
 				->with('measureTypes', $measureTypes);
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function update(Request $request, $id)
 	{
 		$rules = array(
 			'name' => 'unique:controls,name,NULL,id,deleted_at,null',
 			'lot' => 'required|non_zero_key',
 			'measures' => 'required',
 		);
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator)->withInput();
+			return redirect()->back()->withErrors($validator)->withInput();
 		} else {
 			// Update
 			$control = Control::find($id);
-			$control->name = Input::get('name');
-			$control->description = Input::get('description');
-			$control->lot_id = Input::get('lot');
+			$control->name = $request->get('name');
+			$control->description = $request->get('description');
+			$control->lot_id = $request->get('lot');
 
-			if (Input::get('new-measures')) {
-				$inputNewMeasures = Input::get('new-measures');
+			if ($request->get('new-measures')) {
+				$inputNewMeasures = $request->get('new-measures');
 				$measures = New ControlMeasureController;
 				$measureIds = $measures->saveMeasuresRanges($inputNewMeasures, $control);
 			}
 
-			if (Input::get('measures')) {
-				$inputMeasures = Input::get('measures');
+			if ($request->get('measures')) {
+				$inputMeasures = $request->get('measures');
 				$measures = New ControlMeasureController;
 				$measures->editMeasuresRanges($inputMeasures, $control);
 			}
 			// redirect
-			return Redirect::back()->with('message', trans('messages.success-updating-control'));
+			return redirect()->back()->with('message', trans('messages.success-updating-control'));
 		}
 	}
 
@@ -147,7 +150,7 @@ class ControlController extends Controller {
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function destroy($id)
 	{
@@ -155,62 +158,63 @@ class ControlController extends Controller {
 		$control = Control::find($id);
 		$control->delete();
 		// redirect
-		return Redirect::route('control.index')->with('message', trans('messages.success-deleting-control'));
+		return redirect()->route('control.index')->with('message', trans('messages.success-deleting-control'));
 	}
 
 	/**
 	 * Return resultsindex page
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function resultsIndex()
 	{
 		$controls = Control::all();
-		return View::make('control.resultsIndex')->with('controls', $controls);
+		return view('control.resultsIndex')->with('controls', $controls);
 	}
 
 	/**
 	 * Return resultsindex page
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function resultsEntry($controlId)
 	{
 		$control = Control::find($controlId);
-		return View::make('control.resultsEntry')->with('control', $control);
+		return view('control.resultsEntry')->with('control', $control);
 	}
 
 	/**
 	 * Return resultshow page
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 
 	public function resultsList($controlId)
 	{
 		$control = Control::find($controlId);
-		return View::make('control.resultsList')->with('control',$control);
+		return view('control.resultsList')->with('control',$control);
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function resultsEdit($controlTestId)
 	{
 		$controlTest = ControlTest::find($controlTestId);
-		return View::make('control.resultsEdit', compact('controlTest'));
+		return view('control.resultsEdit', compact('controlTest'));
 	}
 
-	/**
-	* Saves control results
-	*
-	* @param Input, result inputs
-	* @return Validation errors or response
-	*/
-	public function saveResults($controlId)
+    /**
+     * Saves control results
+     *
+     * @param Request $request
+     * @param Input, result inputs
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function saveResults(Request $request, $controlId)
 	{
 		//Validate
 		$control = Control::find($controlId);
@@ -222,11 +226,11 @@ class ControlController extends Controller {
 
 		foreach ($control->controlMeasures as $controlMeasure) {
 			$controlResult = new ControlMeasureResult;
-			$controlResult->results = Input::get('m_'.$controlMeasure->id);
+			$controlResult->results = $request->get('m_'.$controlMeasure->id);
 			$controlResult->control_measure_id = $controlMeasure->id;
 			$controlResult->control_test_id = $controlTest->id;
 			$controlResult->save();
 		}
-		return Redirect::route('control.resultsIndex')->with('message', trans('messages.success-adding-control-result'));
+		return redirect()->route('control.resultsIndex')->with('message', trans('messages.success-adding-control-result'));
 	}
 }
