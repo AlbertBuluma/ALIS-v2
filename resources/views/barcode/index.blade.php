@@ -3,10 +3,10 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{ URL::route('user.home')}}}">{{trans('messages.home') }}</a></li>
-		  <li><a href="{{ URL::route('barcode.index') }}">{{trans('messages.barcode-settings') }}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home') }}</a></li>
+		  <li><a href="{{ route('barcode.index') }}">{{trans('messages.barcode-settings') }}</a></li>
 		</ol>
-	</div>	
+	</div>
 	<div class="panel panel-primary">
 		<div class="panel-heading ">
 			<span class="glyphicon glyphicon-edit"></span>
@@ -22,31 +22,31 @@
 				<div class="alert alert-info">{{ Session::get('message') }}</div>
 			@endif
 			<div class="row">
-				<div class="col-md-7"> 
-				{{ Form::model($barcode, array('route' => array('barcode.update', $barcode->id), 
+				<div class="col-md-7">
+				{{ Form::model($barcode, array('route' => array('barcode.update', $barcode->id),
 					'method' => 'PUT', 'id' => 'form-edit-barcode')) }}
 					<div class="form-group">
 						{{ Form::label('encoding_format', trans('messages.encoding-format')) }}
 						{{ Form::select('encoding_format', $encoding_format,
-							Input::old('encoding_format'), array('class' => 'form-control')) }}
+							old('encoding_format'), array('class' => 'form-control')) }}
 					</div>
 					<div class="form-group">
 						{{ Form::label('barcode_width', trans('messages.barcode-width')) }}
 						{{ Form::select('barcode_width', $barcode_width,
-							Input::old('barcode_width'), array('class' => 'form-control')) }}
+							old('barcode_width'), array('class' => 'form-control')) }}
 					</div>
 					<div class="form-group">
 						{{ Form::label('barcode_height', trans('messages.barcode-height')) }}
 						{{ Form::select('barcode_height', $barcode_height,
-							Input::old('barcode_height'), array('class' => 'form-control')) }}
+							old('barcode_height'), array('class' => 'form-control')) }}
 					</div>
 					<div class="form-group">
 						{{ Form::label('text_size', trans('messages.text-size')) }}
 						{{ Form::select('text_size', $text_size,
-							Input::old('text_size'), array('class' => 'form-control')) }}
+							old('text_size'), array('class' => 'form-control')) }}
 					</div>
 					<div class="form-group actions-row">
-						{{ Form::button('<span class="glyphicon glyphicon-save"></span> '. trans('messages.save'), 
+						{{ Form::button('<span class="glyphicon glyphicon-save"></span> '. trans('messages.save'),
 							['class' => 'btn btn-primary', 'onclick' => 'submit()']) }}
 					</div>
 
@@ -64,4 +64,4 @@
 		</div>
 		{{ Session::put('SOURCE_URL', URL::full()) }}
 	</div>
-@stop	
+@stop

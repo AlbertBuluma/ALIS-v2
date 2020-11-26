@@ -14,7 +14,7 @@
 		<span class="glyphicon glyphicon-user"></span>
 		{{trans('messages.receiptsList')}}
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ URL::route('receipt.create') }}">
+			<a class="btn btn-sm btn-info" href="{{ route('receipt.create') }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				{{trans('messages.add-receipts')}}
 			</a>
@@ -49,14 +49,14 @@
 					<td>{{ $receipt->user->name}}</td>
 					<td>
 						<!-- edit this commodity (uses the edit method found at GET /inventory/{id}/edit -->
-						<a class="btn btn-sm btn-info" href="{{ URL::route('receipt.edit', array($receipt->id)) }}" >
+						<a class="btn btn-sm btn-info" href="{{ route('receipt.edit', array($receipt->id)) }}" >
 								<span class="glyphicon glyphicon-edit"></span>
 								{{trans('messages.edit')}}
 						</a>
 							<!-- delete this commodity (uses the delete method found at GET /inventory/{id}/delete -->
 						<button class="btn btn-sm btn-danger delete-item-link"
 								data-toggle="modal" data-target=".confirm-delete-modal"
-								data-id="{{ URL::route('receipt.delete', array($receipt->id)) }}">
+								data-id="{{ route('receipt.delete', array($receipt->id)) }}">
 								<span class="glyphicon glyphicon-trash"></span>
 								{{trans('messages.delete')}}
 						</button>

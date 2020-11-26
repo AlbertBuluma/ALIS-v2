@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barcode;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class BarcodeController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
@@ -26,13 +28,13 @@ class BarcodeController extends Controller {
 		$text_size = self::keyval($font);
 		//	Get already set barcode
 		$barcode = Barcode::first();
-		return View::make('barcode.index')->with('encoding_format', $encoding_format)->with('barcode_width', $barcode_width)->with('barcode_height', $barcode_height)->with('text_size', $text_size)->with('barcode', $barcode);
+		return view('barcode.index')->with('encoding_format', $encoding_format)->with('barcode_width', $barcode_width)->with('barcode_height', $barcode_height)->with('text_size', $text_size)->with('barcode', $barcode);
 	}
 
 	/**
 	 * Display key=>value pair given an array
 	 *
-	 * @return Response
+	 * @return array
 	 */
 	public function keyval($arr)
 	{
@@ -90,26 +92,27 @@ class BarcodeController extends Controller {
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function update(Request $request, $id)
 	{
 		// Update
 		$barcode = Barcode::find($id);
-		$barcode->encoding_format = Input::get('encoding_format');
-		$barcode->barcode_width = Input::get('barcode_width');
-		$barcode->barcode_height = Input::get('barcode_height');
-		$barcode->text_size = Input::get('text_size');
+		$barcode->encoding_format = $request->get('encoding_format');
+		$barcode->barcode_width = $request->get('barcode_width');
+		$barcode->barcode_height = $request->get('barcode_height');
+		$barcode->text_size = $request->get('text_size');
 		$barcode->save();
 
 		// redirect
 		$url = Session::get('SOURCE_URL');
 
-        return Redirect::to($url)
+        return redirect($url)
 			->with('message', trans('messages.barcode-update-success')) ->with('activebarcode', $barcode ->id);
 	}
 
