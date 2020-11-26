@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-		  <li><a href="{{ URL::route('instrument.index') }}">{{Lang::choice('messages.instrument',2)}}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('instrument.index') }}">{{Lang::choice('messages.instrument',2)}}</a></li>
 		  <li class="active">{{trans('messages.instrument-details')}}</li>
 		</ol>
 	</div>
@@ -12,7 +12,7 @@
 			<span class="glyphicon glyphicon-cog"></span>
 			{{trans('messages.instrument-details')}}
 			<div class="panel-btn">
-				<a class="btn btn-sm btn-info" href="{{ URL::route('instrument.edit', array($instrument->id)) }}">
+				<a class="btn btn-sm btn-info" href="{{ route('instrument.edit', array($instrument->id)) }}">
 					<span class="glyphicon glyphicon-edit"></span>
 					{{trans('messages.edit')}}
 				</a>
@@ -28,7 +28,7 @@
 				<p class="view-striped"><strong>{{trans('messages.host-name')}}</strong>
 					{{ $instrument->hostname }}</p>
 				<p class="view-striped"><strong>{{trans('messages.compatible-test-types')}}</strong>
-					{{ implode(", ", $instrument->testTypes->lists('name')) }}</p>
+					{{ implode(", ", $instrument->testTypes->pluck('name')->toArray()) }}</p>
 				<p class="view-striped"><strong>{{trans('messages.date-created')}}</strong>
 					{{ $instrument->created_at }}</p>
 			</div>

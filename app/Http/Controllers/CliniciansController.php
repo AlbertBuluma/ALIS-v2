@@ -3,63 +3,68 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clinician;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class CliniciansController extends Controller {
 
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
  */
     public function index()
     {
         //List all wards
         $clinicians = Clinician::orderBy('name', 'ASC')->get();
         //Load the view and pass the wards
-        return View::make('clinicians.index')->with('clinicians',$clinicians);
+        return view('clinicians.index')->with('clinicians',$clinicians);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
 
 
         //Create ward
-        return View::make('clinicians.create');
+        return view('clinicians.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store()
+    public function store(Request $request)
     {
         //Validation
         $rules = array(
             'name' => 'required|unique:clinicians,name',
             'phone' => 'required'
             );
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
         //process
         if($validator->fails()){
-                return Redirect::back()->withErrors($validator);
+                return redirect()->back()->withErrors($validator);
         }else{
             //store
             $clinician = new Clinician;
-            $clinician->name = Input::get('name');
-            $clinician->cadre = Input::get('cadre');
-            $clinician->phone = Input::get('phone');
-            $clinician->email = Input::get('email');
+            $clinician->name = $request->get('name');
+            $clinician->cadre = $request->get('cadre');
+            $clinician->phone = $request->get('phone');
+            $clinician->email = $request->get('email');
             try{
                 $clinician->save();
 
-                return Redirect::route('clinicians.index')
+                return redirect()->route('clinicians.index')
                     ->with('message', 'Clinician Successfully Created');
             }catch(QueryException $e){
                 Log::error($e);
@@ -71,7 +76,7 @@ class CliniciansController extends Controller {
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
@@ -79,14 +84,14 @@ class CliniciansController extends Controller {
         $clinician = Clinician::find($id);
 
         //show the view and pass the $ward to it
-        return View::make('clinicians.show')->with('clinician',$clinician);
+        return view('clinicians.show')->with('clinician',$clinician);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
@@ -94,37 +99,38 @@ class CliniciansController extends Controller {
         $clinician = Clinician::find($id);
 
         //Open the Edit View and pass to it the $patient
-        return View::make('clinicians.edit')->with('clinician', $clinician);
+        return view('clinicians.edit')->with('clinician', $clinician);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($id)
+    public function update(Request $request, $id)
     {
         //Validate
         $rules = array('name' => 'required|unique:clinicians,name',
             'phone' => 'required');
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
 
         // process the login
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput(Input::except('password'));
+            return redirect()->back()->withErrors($validator)->withInput($request->except('password'));
         } else {
             // Update
             $clinician = Clinician::find($id);
-            $clinician->name = Input::get('name');
-            $clinician->cadre = Input::get('cadre');
-            $clinician->phone = Input::get('phone');
-            $clinician->email = Input::get('email');
+            $clinician->name = $request->get('name');
+            $clinician->cadre = $request->get('cadre');
+            $clinician->phone = $request->get('phone');
+            $clinician->email = $request->get('email');
            	$clinician->save();
 
             // redirect
 
-            return Redirect::route('clinicians.index')
+            return redirect()->route('clinicians.index')
                 ->with('message', 'Clinician Successfully Updated') ->with('activeclinician', $clinician ->id);
         }
     }

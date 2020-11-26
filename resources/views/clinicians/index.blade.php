@@ -2,7 +2,7 @@
 @section("content")
 <div>
     <ol class="breadcrumb">
-      <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+      <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
       <li class="active">Clinicians</li>
     </ol>
 </div>
@@ -51,7 +51,7 @@
                             <span class="glyphicon glyphicon-edit"></span>
                             {{ trans('messages.edit') }}
                         </a>
-                        
+
                     <!-- delete this clinician (uses delete method found at GET /ward/{id}/delete -->
                        <!-- {{ Form::open(['route' => ['clinicians.destroy', $value->id], 'method' => 'DELETE',
                             'style' => 'display: inline-block;']) }}

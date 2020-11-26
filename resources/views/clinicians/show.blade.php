@@ -7,8 +7,8 @@
 
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-          <li><a href="{{ URL::route('clinicians.index') }}">Clinicians</a></li>
+          <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+          <li><a href="{{ route('clinicians.index') }}">Clinicians</a></li>
           <li class="active">Clinicians</li>
         </ol>
     </div>
@@ -17,7 +17,7 @@
             <span class="glyphicon glyphicon-adjust"></span>
             Clinician Details
             <div class="panel-btn">
-                <a class="btn btn-sm btn-info" href="{{ URL::route('clinicians.edit', array($clinician->id)) }}">
+                <a class="btn btn-sm btn-info" href="{{ route('clinicians.edit', array($clinician->id)) }}">
                     <span class="glyphicon glyphicon-edit"></span>
                     {{ trans('messages.edit') }}
                 </a>

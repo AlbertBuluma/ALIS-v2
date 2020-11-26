@@ -3,9 +3,9 @@
 
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+          <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
           <li>
-            <a href="{{ URL::route('clinicians.index') }}">Clinicians</a>
+            <a href="{{ route('clinicians.index') }}">Clinicians</a>
           </li>
           <li class="active">Create Clinician</li>
         </ol>
@@ -27,25 +27,25 @@
 
                 <div class="form-group">
                     {{ Form::label('name', Lang::choice('messages.name',1)) }}
-                    {{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+                    {{ Form::text('name', old('name'), array('class' => 'form-control')) }}
                 </div>
                 <div class="form-group">
                     {{ Form::label('cadre', "Cadre") }}</label>
-                    {{ Form::text('cadre', Input::old('cadre'), 
+                    {{ Form::text('cadre', old('cadre'),
                         array('class' => 'form-control')) }}
                 </div>
                 <div class="form-group">
                     {{ Form::label('phone', "Phone") }}</label>
-                    {{ Form::text('phone', Input::old('phone'), 
+                    {{ Form::text('phone', old('phone'),
                         array('class' => 'form-control')) }}
                 </div>
                 <div class="form-group">
                     {{ Form::label('email', "Email") }}</label>
-                    {{ Form::text('email', Input::old('email'), 
+                    {{ Form::text('email', old('email'),
                         array('class' => 'form-control')) }}
                 </div>
                 <div class="form-group actions-row">
-                    {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+                    {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
                         array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
                 </div>
 
