@@ -2,11 +2,11 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
 		  <li class="active">{{ Lang::choice('messages.report', 2) }}</li>
 		</ol>
 	</div>
-	
+
 <div class="panel panel-primary">
 	<div class="panel-heading ">
 		<span class="glyphicon glyphicon-user"> {{$patient->name}} </span>
@@ -22,14 +22,14 @@
 	    	<table  id="patient_visits_datatable" class="row-border hover table table-bordered table-condensed table-striped" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Visit Lab Number</th>  
-                        <th>Visit Date</th>                   
+                        <th>Visit Lab Number</th>
+                        <th>Visit Date</th>
                         <th>Actions</th>
-                       
+
                     </tr>
                 </thead>
-                   <tbody>                                
-                         
+                   <tbody>
+
 
                       @forelse($visits as $key => $visit)
 				      <tr>
@@ -47,9 +47,9 @@
 					<tr>
 						<td colspan="5">{{trans('messages.no-records-found')}}</td>
 					</tr>
-				@endforelse               
+				@endforelse
                   </tbody>
-                 
+
             </table>
 
 </div>

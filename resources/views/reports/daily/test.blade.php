@@ -141,11 +141,11 @@
 					@endif
 
 					@if($testCategory)
-						{{' - '.TestCategory::find($testCategory)->name}}
+						{{' - '.App\Models\TestCategory::find($testCategory)->name}}
 					@endif
 
 					@if($testType)
-						{{' ('.TestType::find($testType)->name.') '}}
+						{{' ('.App\Models\TestType::find($testType)->name.') '}}
 					@endif
 					{{ Lang::choice('messages.total',1).' '.$counts .'<br>'}}
 					<?php $from = isset($input['start'])?$input['start']:date('d-m-Y');?>
@@ -185,7 +185,7 @@
 						<td>{{ $test->testedBy->name or trans('messages.pending') }}</td>
 						<td>
 							@foreach($test->testResults as $result)
-								<p>{{Measure::find($result->measure_id)->name}}: {{$result->result}}</p>
+								<p>{{App\Models\Measure::find($result->measure_id)->name}}: {{$result->result}}</p>
 							@endforeach
 						</td>
 						<td>{{ $test->interpretation }}</td>

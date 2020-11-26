@@ -8,12 +8,12 @@
 <div id="content">
 	<strong>
 		<p>
-			{{trans('messages.rejected-specimen')}} 
+			{{trans('messages.rejected-specimen')}}
 			@if($testCategory)
-				{{' - '.TestCategory::find($testCategory)->name}}
+				{{' - '.App\Models\TestCategory::find($testCategory)->name}}
 			@endif
 			@if($testType)
-				{{' ('.TestType::find($testType)->name.') '}}
+				{{' ('.App\Models\TestType::find($testType)->name.') '}}
 			@endif
 			<?php $from = isset($input['start'])?$input['start']:date('Y-m-d'); ?>
 			<?php $to = isset($input['end'])?$input['end']:date('Y-m-d'); ?>

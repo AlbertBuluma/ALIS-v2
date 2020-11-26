@@ -15,7 +15,7 @@
 	        	{{ Form::label('start', trans("messages.from")) }}
 	        </div>
 	        <div class="col-md-10">
-	            {{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-d'), 
+	            {{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-d'),
 	                array('class' => 'form-control standard-datepicker')) }}
 	        </div>
         </div>
@@ -24,7 +24,7 @@
 	        	{{ Form::label('to', trans("messages.to")) }}
 	        </div>
 	        <div class="col-md-10">
-	            {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'), 
+	            {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'),
 	                array('class' => 'form-control standard-datepicker')) }}
 	        </div>
         </div>
@@ -33,12 +33,12 @@
 	        	{{ Form::label('test_type', Lang::choice('messages.test-type',1)) }}
 	        </div>
 	        <div class="col-md-9">
-	            {{ Form::select('test_type', array(0 => '-- All Tests --')+TestType::supportPrevalenceCounts()->lists('name','id'),
+	            {{ Form::select('test_type', array(0 => '-- All Tests --')+App\Models\TestType::supportPrevalenceCounts()->pluck('name','id')->toArray(),
 	            	isset($input['test_type'])?$input['test_type']:0, array('class' => 'form-control')) }}
 	        </div>
         </div>
         <div class="col-md-2">
-        	{{Form::submit(trans('messages.view'), 
+        	{{Form::submit(trans('messages.view'),
 	        	array('class' => 'btn btn-info', 'id'=>'filter', 'name'=>'filter'))}}
         </div>
   	</div>

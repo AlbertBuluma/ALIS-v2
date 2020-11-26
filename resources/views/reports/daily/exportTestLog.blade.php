@@ -8,7 +8,7 @@
 <div id="content" class="Section2">
 	<strong>
 		<p>
-			{{trans('messages.test-records')}} 
+			{{trans('messages.test-records')}}
 
 			@if($pendingOrAll == 'pending')
 				{{' - '.trans('messages.pending-only')}}
@@ -19,11 +19,11 @@
 			@endif
 
 			@if($testCategory)
-				{{' - '.TestCategory::find($testCategory)->name}}
+				{{' - '.App\Models\TestCategory::find($testCategory)->name}}
 			@endif
 
 			@if($testType)
-				{{' ('.TestType::find($testType)->name.') '}}
+				{{' ('.App\Models\TestType::find($testType)->name.') '}}
 			@endif
 
 			<?php $from = isset($input['start'])?$input['start']:date('01-m-Y');?>
@@ -61,7 +61,7 @@
 				<td>{{ $test->testType->name }}</td>
 				<td>{{ $test->testedBy->name or trans('messages.pending') }}</td>
 				<td>@foreach($test->testResults as $result)
-					<p>{{Measure::find($result->measure_id)->name}}: {{$result->result}}</p>
+					<p>{{App\Models\Measure::find($result->measure_id)->name}}: {{$result->result}}</p>
 				@endforeach</td>
 				<td>{{ $test->interpretation }}</td>
 				<td>{{ $test->time_completed or trans('messages.pending') }}</td>
