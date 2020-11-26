@@ -62,17 +62,17 @@
 </table>
 <table style="border-bottom: 1px solid #cecfd5;">
 		@forelse($tests as $test)
-				<tr>	
+				<tr>
 					<td colspan="2">{{ $test->specimen->specimenType->name }}</td>
-					@if($test->specimen->specimen_status_id == UnhlsSpecimen::NOT_COLLECTED)
+					@if($test->specimen->specimen_status_id == App\Models\UnhlsSpecimen::NOT_COLLECTED)
 						<td colspan="2"></td>
 						<td colspan="2"></td>
 						<td colspan="2">{{trans('messages.specimen-not-collected')}}</td>
-					@elseif($test->specimen->specimen_status_id == UnhlsSpecimen::ACCEPTED)
+					@elseif($test->specimen->specimen_status_id == App\Models\UnhlsSpecimen::ACCEPTED)
 						<td colspan="2">{{$test->specimen->acceptedBy->name}}</td>
 						<td colspan="2">{{$test->specimen->time_accepted}}</td>
 						<td colspan="2">{{trans('messages.specimen-accepted')}}</td>
-					@elseif($test->test_status_id == UnhlsTest::REJECTED)
+					@elseif($test->test_status_id == App\Models\UnhlsTest::REJECTED)
 						<td colspan="2">{{$test->specimen->rejectedBy->name}}</td>
 						<td colspan="2">{{$test->specimen->time_rejected}}</td>
 						<td colspan="2">{{trans('messages.specimen-rejected')}}</td>
@@ -115,17 +115,17 @@
 					<tr>
 						@if($test->testType->measures->count() > 1)
 						<td>
-							{{ Measure::find($result->measure_id)->name }}:
+							{{ App\Models\Measure::find($result->measure_id)->name }}:
 						</td>
 						@endif
 						<td>
 						{{ $result->result }}
 						</td>
 						<td>
-							{{ Measure::getRange($test->visit->patient, $result->measure_id) }}
+							{{ App\Models\Measure::getRange($test->visit->patient, $result->measure_id) }}
 						</td>
 						<td>
-							{{ Measure::find($result->measure_id)->unit }}
+							{{ App\Models\Measure::find($result->measure_id)->unit }}
 						</td>
 					</tr>
 					@endif

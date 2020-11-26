@@ -17,9 +17,9 @@
 	    <tr>
 	            <th width="20%"><strong>Sample Type</strong></th>
 	            <th width="20%"><strong>Date Collected</strong></th>
-	            
+
 	            <th width="20%"><strong>Date Received</strong></th>
-	            
+
 	            <th width="20%"><strong>{{ Lang::choice('messages.test-category', 1)}}</strong></th>
 	            <th width="20%"><strong>Tests Requested</strong></th>
 	        </tr>
@@ -27,21 +27,21 @@
 	<tbody>
 	    @if(isset($tests))
 	        @forelse($tests as $test)
-	                <tr>    
+	                <tr>
 	                    <td>{{ isset($test->specimen->specimenType->name)? $test->specimen->specimenType->name : ''}}</td>
 
-	                    @if($test->specimen->specimen_status_id == UnhlsSpecimen::NOT_COLLECTED)
-	                        
+	                    @if($test->specimen->specimen_status_id == App\Models\UnhlsSpecimen::NOT_COLLECTED)
+
 	                        <td>{{trans('messages.specimen-not-collected')}}</td>
 	                        <td>not received</td>
-	                    @elseif($test->specimen->specimen_status_id == UnhlsSpecimen::ACCEPTED)
+	                    @elseif($test->specimen->specimen_status_id == App\Models\UnhlsSpecimen::ACCEPTED)
 	                        <td >{{ ($test->specimen->time_collected)?$test->specimen->time_collected:'' }}</td>
 	                        <td >{{isset($test->specimen->time_accepted)?$test->specimen->time_accepted : ''}}</td>
-	                        
-	                    @elseif($test->test_status_id == UnhlsTest::REJECTED)
+
+	                    @elseif($test->test_status_id == App\Models\UnhlsTest::REJECTED)
 	                        <td >{{trans('messages.specimen-not-collected')}}</td>
 	                        <td >{{isset($test->specimen->time_rejected)?$test->specimen->time_rejected:''}}</td>
-	                        
+
 	                    @endif
 
 	                    <td >{{ isset($test->testType->testCategory->name)?$test->testType->testCategory->name:'' }}</td>
@@ -62,9 +62,9 @@
 <table style="border-bottom: 1px solid #cecfd5; font-size:8px;font-family: 'Courier New',Courier;">
 	<tr>
 		<td colspan="2"><b>{{Lang::choice('messages.test-type', 1)}}</b></td>
-		
+
 		<td colspan="2"><b>TEST RESULTS</b></td>
-		
+
 	</tr>
 </table>
 @forelse($tests as $test)
@@ -89,20 +89,20 @@
 							<!-- show only parameters with values -->
 							@if($result->result != '')
 							<tr>
-								
+
 								<td>@if($test->testType->measures->count() > 1)
-									{{ Measure::find($result->measure_id)->name }}:
+									{{ App\Models\Measure::find($result->measure_id)->name }}:
                                     @endif
 								</td>
-								
+
 								<td>
 								{{ $result->result }}
 								</td>
 								<td>
-									{{ Measure::getRange($test->visit->patient, $result->measure_id) }}
+									{{ App\Models\Measure::getRange($test->visit->patient, $result->measure_id) }}
 								</td>
 								<td>
-									{{ Measure::find($result->measure_id)->unit }}
+									{{ App\Models\Measure::find($result->measure_id)->unit }}
 								</td>
 								<td></td><!-- Diagnostic Flag column for results-->
 							</tr>
@@ -117,14 +117,14 @@
 								<td width="100%"><br><br>
 									<b>{{trans('messages.comments')}}:</b> {{ $test->interpretation == '' ? 'Suitable for the test' : $test->interpretation }}
 								</td>
-								
+
 							</tr>
 	                        <!--tr>
 								<td width="100%"><br><br>
-									<b>Expert Interpretation:</b> 
+									<b>Expert Interpretation:</b>
 									<br>
 								</td>
-								
+
 							</tr-->
 							<tr>
 								<td width="50%" style="font-size:8px">
@@ -133,22 +133,22 @@
 									<b>{{trans('messages.tested-by')}}</b>:
 									{{ $test->testedBy->name}}
 								</td>
-								
+
 							</tr>
-							
+
 							<tr>
 								<td width="50%"><b>Reviewed by</b>:{{$test->verifiedBy->name}}</td>
 								<td width="50%"><b>Date Reviewed</b>:{{$test->time_verified}}</td>
-								
+
 							</tr>
-							
-							
+
+
 						@endif
 						</tbody>
 				</table>
 			</td>
-			
-			
+
+
 		</tr>
 
 	</table>
@@ -239,11 +239,11 @@
 	<tr>
 		<td>
 			<strong>Approved By :
-				
+
 			  @if(isset($tests))
                 @if(!empty($tests->first()))
                     @if(!empty($tests->first()->isApproved()))
-                        
+
                         {{$tests->first()->approvedBy->name}}
                     @else
 

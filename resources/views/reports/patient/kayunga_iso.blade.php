@@ -85,7 +85,7 @@
 </table>
 <table style="border-bottom: 1px solid #cecfd5;">
 		@forelse($tests as $test)
-				<tr>	
+				<tr>
 					<td colspan="2">{{ $test->specimen->specimenType->name }}</td>
 					@if($test->specimen->specimen_status_id == UnhlsSpecimen::NOT_COLLECTED)
 						<td colspan="2"></td>
@@ -141,17 +141,17 @@
 					<tr>
 						@if($test->testType->measures->count() > 1)
 						<td>
-							{{ Measure::find($result->measure_id)->name }}:
+							{{ App\Models\Measure::find($result->measure_id)->name }}:
 						</td>
 						@endif
 						<td>
 						{{ $result->result }}
 						</td>
 						<td>
-							{{ Measure::getRange($test->visit->patient, $result->measure_id) }}
+							{{ App\Models\Measure::getRange($test->visit->patient, $result->measure_id) }}
 						</td>
 						<td>
-							{{ Measure::find($result->measure_id)->unit }}
+							{{ App\Models\Measure::find($result->measure_id)->unit }}
 						</td>
 					</tr>
 					@endif
