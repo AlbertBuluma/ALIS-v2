@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 	  <li class="active">{{Lang::choice('messages.instrument',2)}}</li>
 	</ol>
 </div>
@@ -19,7 +19,7 @@
 		<span class="glyphicon glyphicon-cog"></span>
 		{{trans('messages.list-instruments')}}
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ URL::route('instrument.create') }}" >
+			<a class="btn btn-sm btn-info" href="{{ route('instrument.create') }}" >
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				{{trans('messages.new-instrument')}}
 			</a>
@@ -49,20 +49,20 @@
 					<td>
 
 						<!-- show the instrument details -->
-						<a class="btn btn-sm btn-success" href="{{ URL::route('instrument.show', array($value->id)) }}">
+						<a class="btn btn-sm btn-success" href="{{ route('instrument.show', array($value->id)) }}">
 							<span class="glyphicon glyphicon-eye-open"></span>
 							{{trans('messages.view')}}
 						</a>
 
 						<!-- edit this instrument  -->
-						<a class="btn btn-sm btn-info" href="{{ URL::route('instrument.edit', array($value->id)) }}" >
+						<a class="btn btn-sm btn-info" href="{{ route('instrument.edit', array($value->id)) }}" >
 							<span class="glyphicon glyphicon-edit"></span>
 							{{trans('messages.edit')}}
 						</a>
 						<!-- delete this instrument -->
 						<button class="btn btn-sm btn-danger delete-item-link"
-							data-toggle="modal" data-target=".confirm-delete-modal"	
-							data-id="{{ URL::route('instrument.delete', array($value->id)) }}">
+							data-toggle="modal" data-target=".confirm-delete-modal"
+							data-id="{{ route('instrument.delete', array($value->id)) }}">
 							<span class="glyphicon glyphicon-trash"></span>
 							{{trans('messages.delete')}}
 						</button>

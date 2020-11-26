@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-	  <li><a href="{{ URL::route('instrument.index') }}">{{Lang::choice('messages.instrument',2)}}</a></li>
+	  <li><a href="{{  route('user.home') }}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{  route('instrument.index') }}">{{Lang::choice('messages.instrument',2)}}</a></li>
 	  <li class="active">{{trans('messages.add-instrument')}}</li>
 	</ol>
 </div>
@@ -15,7 +15,7 @@
 	{{ Form::open(array('route' => array('instrument.index'), 'id' => 'form-add-instrument')) }}
 		<div class="panel-body">
 		<!-- if there are creation errors, they will show here -->
-			
+
 			@if($errors->all())
 				<div class="alert alert-danger">
 					{{ HTML::ul($errors->all()) }}
@@ -23,11 +23,11 @@
 			@endif
 			<div class="form-group">
 				{{ Form::label('name', Lang::choice('messages.name',1)) }}
-                {{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+                {{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 			</div>
 			<div class="form-group">
 				{{ Form::label('description', trans('messages.description')) }}
-				{{ Form::textarea('description', Input::old('description'), 
+				{{ Form::textarea('description', old('description'),
 					array('class' => 'form-control', 'rows' => '3' )) }}
 			</div>
 		</div>
@@ -36,9 +36,9 @@
 				{{ Form::button(
 					'<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'),
 					[
-						'class' => 'btn btn-primary', 
+						'class' => 'btn btn-primary',
 						'onclick' => 'submit()'
-					] 
+					]
 				) }}
 			</div>
 		</div>
