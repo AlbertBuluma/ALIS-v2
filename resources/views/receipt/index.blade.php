@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 	  <li class="active">{{ Lang::choice('messages.receipt',2) }}</li>
 	</ol>
 </div>
@@ -21,7 +21,7 @@
 		</div>
 	</div>
 	<div class="panel-body">
-		
+
 <table class="table table-striped table-hover table-condensed search-table">
 			<thead>
 				<tr>
@@ -47,15 +47,15 @@
 					<td>{{ $receipt->batch_no }}</td>
 					<td>{{ $receipt->expiry_date }}</td>
 					<td>{{ $receipt->user->name}}</td>
-					<td> 
+					<td>
 						<!-- edit this commodity (uses the edit method found at GET /inventory/{id}/edit -->
 						<a class="btn btn-sm btn-info" href="{{ URL::route('receipt.edit', array($receipt->id)) }}" >
 								<span class="glyphicon glyphicon-edit"></span>
 								{{trans('messages.edit')}}
 						</a>
 							<!-- delete this commodity (uses the delete method found at GET /inventory/{id}/delete -->
-						<button class="btn btn-sm btn-danger delete-item-link" 
-								data-toggle="modal" data-target=".confirm-delete-modal"	
+						<button class="btn btn-sm btn-danger delete-item-link"
+								data-toggle="modal" data-target=".confirm-delete-modal"
 								data-id="{{ URL::route('receipt.delete', array($receipt->id)) }}">
 								<span class="glyphicon glyphicon-trash"></span>
 								{{trans('messages.delete')}}
