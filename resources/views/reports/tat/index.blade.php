@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-	  <li class="active"><a href="{{ URL::route('reports.patient.index') }}">{{ Lang::choice('messages.report', 2) }}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+	  <li class="active"><a href="{{ route('reports.patient.index') }}">{{ Lang::choice('messages.report', 2) }}</a></li>
 	  <li class="active">{{ trans('messages.turnaround-time') }}</li>
 	</ol>
 </div>
@@ -16,7 +16,7 @@
 						{{ Form::label('start', trans("messages.from")) }}
 					</div>
 					<div class="col-sm-3">
-						{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-01'), 
+						{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-01'),
 					        array('class' => 'form-control standard-datepicker')) }}
 				    </div>
 		    	</div>
@@ -27,13 +27,13 @@
 				    	{{ Form::label('end', trans("messages.to")) }}
 				    </div>
 					<div class="col-sm-3">
-					    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'), 
+					    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'),
 					        array('class' => 'form-control standard-datepicker')) }}
 			        </div>
 		    	</div>
 		    </div>
 		    <div class="col-sm-2">
-			    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'), 
+			    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'),
 			        array('class' => 'btn btn-info', 'id' => 'filter', 'type' => 'submit')) }}
 		    </div>
 		</div>
@@ -44,8 +44,8 @@
 						{{ Form::label('description',  Lang::choice('messages.test-category', 2)) }}
 					</div>
 					<div class="col-sm-2">
-						{{ Form::select('section_id', array(''=>trans('messages.select-lab-section'))+$labSections, 
-							    		Request::old('testCategory') ? Request::old('testCategory') : $testCategory, 
+						{{ Form::select('section_id', array(''=>trans('messages.select-lab-section'))+$labSections,
+							    		Request::old('testCategory') ? Request::old('testCategory') : $testCategory,
 											array('class' => 'form-control', 'id' => 'section_id')) }}
 				    </div>
 		    	</div>
@@ -56,8 +56,8 @@
 				    	{{ Form::label('description', Lang::choice('messages.test-type', 1)) }}
 				    </div>
 					<div class="col-sm-2">
-					    {{ Form::select('test_type', array('' => trans('messages.select-test-type'))+$testTypes, 
-							    		Request::old('testType') ? Request::old('testType') : $testType, 
+					    {{ Form::select('test_type', array('' => trans('messages.select-test-type'))+$testTypes,
+							    		Request::old('testType') ? Request::old('testType') : $testType,
 											array('class' => 'form-control', 'id' => 'test_type')) }}
 			        </div>
 		    	</div>
@@ -69,7 +69,7 @@
 				    </div>
 					<div class="col-sm-2">
 					    {{ Form::select('period', array('' => trans('messages.select-interval'), 'M'=>trans('messages.monthly'), 'W'=>trans('messages.weekly'), 'D'=>trans('messages.daily')),
-					    	Request::old('interval') ? Request::old('interval') : $interval,  
+					    	Request::old('interval') ? Request::old('interval') : $interval,
 							array('class' => 'form-control', 'id'=>'period')) }}
 			        </div>
 		    	</div>
@@ -159,7 +159,7 @@
 				}
 			}
 		}
-		
+
 		for(var i=0;i<progressTrendsData[0].length;i++) {
 			tmp = (progressTrendsData[0][i]);
 			expectedTAT[i] = [tmp[0], <?php echo $testETAT; ?>];
@@ -174,7 +174,7 @@
 			 text: <?php echo '"'.trans("messages.turnaround-time").'"'; ?>//'TurnAroundTime Rate'
 		  },
 		  subtitle: {
-		        text: <?php 
+		        text: <?php
 		        			$subtitle = '';
 		        			$from = isset($input['start'])?$input['start']:date('d-m-Y');
 							$to = isset($input['end'])?$input['end']:date('d-m-Y');
@@ -186,13 +186,13 @@
 								$subtitle.= ' ('.trans("messages.monthly").') ';
 							else if($interval=='D')
 								$subtitle.= ' ('.trans("messages.daily").') ';
-							else 
+							else
 								$subtitle.= ' ('.trans("messages.weekly").') ';
 
 							if($testCategory)
-								$subtitle.= ' - '.TestCategory::find($testCategory)->name;
+								$subtitle.= ' - '.App\Models\TestCategory::find($testCategory)->name;
 							if($testType)
-								$subtitle.= '('.TestType::find($testType)->name.')';
+								$subtitle.= '('.App\Models\TestType::find($testType)->name.')';
 							echo '"'.$subtitle.'"';
 						?>
 		   },
@@ -201,7 +201,7 @@
 		  },
 		  xAxis: {
 			 type: 'datetime',
-			 dateTimeLabelFormats: { 
+			 dateTimeLabelFormats: {
 				month: '%e. %b',
 				year: '%b'
 			 },
@@ -232,7 +232,7 @@
 	   };
 
 		progressTrendsData.unshift(expectedTAT);
-		
+
 		for(var i=0;i<namesArray.length;i++) {
 			if (progressTrendsData[i].length > 0) {
 				options.series.push({
@@ -248,6 +248,6 @@
 		});
 		new Highcharts.Chart(options);
 	}
-		
+
 	</script>
 @stop

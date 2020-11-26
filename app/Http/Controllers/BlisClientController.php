@@ -3,29 +3,31 @@
 namespace App\Http\Controllers;
 use App\Models\BlisClient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BlisClientController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
 		//	Get available equipment
-		$client = BlisClient::lists('equipment_name', 'id');
-		return View::make('instrument.blisClient')->with('client', $client);
+		$client = BlisClient::pluck('equipment_name', 'id')->toArray();
+		return view('instrument.blisClient')->with('client', $client);
 	}
 
-	/**
-	 * Get details of the given client
-	 *
-	 * @return Response
-	 */
-	public function details()
+    /**
+     * Get details of the given client
+     *
+     * @param Request $request
+     * @return false|string
+     */
+	public function details(Request $request)
 	{
-		$id = Input::get('equip');
+		$id = $request->get('equip');
 		$client = BlisClient::find($id);
 		$client->feed = $client->feed($client->feed_source);
 		$client->comm = $client->comm($client->comm_type);
@@ -33,14 +35,15 @@ class BlisClientController extends Controller {
 		return json_encode($client);
 	}
 
-	/**
-	 * Get config properties of the given client
-	 *
-	 * @return Response
-	 */
-	public function properties()
+    /**
+     * Get config properties of the given client
+     *
+     * @param Request $request
+     * @return false|string
+     */
+	public function properties(Request $request)
 	{
-		$id = Input::get('client');
+		$id = $request->get('client');
 		$client = BlisClient::find($id);
 		$properties = DB::table('equip_config')->where('equip_id', $client->id)->get();
 		foreach ($properties as $property)
