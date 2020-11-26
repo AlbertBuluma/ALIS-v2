@@ -32,7 +32,7 @@ class ControlController extends Controller {
 	 */
 	public function create()
 	{
-		$lots = Lot::lists('number', 'id');
+		$lots = Lot::pluck('number', 'id')->toArray();
 		$measureTypes = MeasureType::orderBy('id')->take(2)->get();
 
 		return view('control.create')->with('lots', $lots) ->with('measureTypes', $measureTypes);
@@ -95,7 +95,7 @@ class ControlController extends Controller {
 	 */
 	public function edit($id)
 	{
-		$lots = Lot::lists('number', 'id');
+		$lots = Lot::pluck('number', 'id')->toArray();
 		$control = Control::find($id);
 		$measureTypes = MeasureType::all();
 		return view('control.edit')->with('control',$control)->with('lots', $lots)

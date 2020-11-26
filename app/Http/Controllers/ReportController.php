@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -547,7 +548,7 @@ class ReportController extends Controller {
 					"Content-type"=>"text/html",
 					"Content-Disposition"=>"attachment;Filename=".$fileName
 				);
-				$content = View('reports.daily.exportPatientLog')
+				$content = view('reports.daily.exportPatientLog')
 								->with('visits', $visits)
 								->with('accredited', $accredited)
 								->withInput($request->all());
@@ -743,7 +744,7 @@ class ReportController extends Controller {
 			$periodStart = $test->min('time_created'); //Get the minimum date
 			$periodEnd = $test->max('time_created'); //Get the maximum date
 			$data = TestType::getPrevalenceCounts($periodStart, $periodEnd);
-			$chart = self::getPrevalenceRatesChart();
+			$chart = self::getPrevalenceRatesChart($request);
 		}
 
 		return view('reports.prevalence.index')
@@ -769,7 +770,7 @@ class ReportController extends Controller {
 			$tests = $tests->whereBetween('time_created', array($from, $toPlusOne));
 		}
 
-		$allDates = $tests->lists('time_created');
+		$allDates = $tests->pluck('time_created')->toArray();
 		asort($allDates);
 		$yearMonth = function($value){return strtotime(substr($value, 0, 7));};
 		$allDates = array_map($yearMonth, $allDates);
@@ -796,7 +797,7 @@ class ReportController extends Controller {
 		$from = $request->get('start');
 		$to = $request->get('end');
 		$months = json_decode(self::getMonths($from, $to));
-		$testTypes = new Illuminate\Database\Eloquent\Collection();
+		$testTypes = new Collection();
 
 		if($testTypeID == 0){
 
@@ -2043,7 +2044,7 @@ class ReportController extends Controller {
 						->where('test_type_id',$test_type_id)->where('test_type_id',$test_type_id);
 					$testTypeCountArray[$testSystemName][$measureSystemName]['total'] = $testTypeCount->sum('all');
 
-					$negatives = DailyNegativeGramStain::lists('gram_stain_range_id');
+					$negatives = DailyNegativeGramStain::pluck('gram_stain_range_id')->toArray();
 					$testTypeCount  = DailyTestTypeCount::with('dailyGramStainResultCount','dailyGramStainResultCount.gramStainRange')
 						->where('date', 'like', '%'.$month.'%')->where('gender',UnhlsPatient::BOTH)
 						->where('age_upper_limit','>=',100)->where('age_lower_limit','=',0)
@@ -2068,7 +2069,7 @@ class ReportController extends Controller {
 						->where('test_type_id',$test_type_id)->where('test_type_id',$test_type_id);
 					$testTypeCountArray[$testSystemName][$measureSystemName]['total'] = $testTypeCount->sum('all');
 
-					$negatives = DailyNegativeCulture::lists('organism_id');
+					$negatives = DailyNegativeCulture::pluck('organism_id')->toArray();
 					$testTypeCount  = DailyTestTypeCount::with('dailyOrganismCount')
 						->where('date', 'like', '%'.$month.'%')->where('gender',UnhlsPatient::BOTH)
 						->where('age_upper_limit','>=',100)->where('age_lower_limit','=',0)

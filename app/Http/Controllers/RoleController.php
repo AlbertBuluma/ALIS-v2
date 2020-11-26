@@ -135,12 +135,12 @@ class RoleController extends Controller {
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
 		$role = Role::find($id);
-		return View::make('role.edit')->with('role', $role);
+		return view('role.edit')->with('role', $role);
 	}
 
 
