@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
         "maatwebsite/excel": "^3.1",
+        "onokumus/metismenu": "^3.0",
         "spatie/laravel-permission": "^3.17",
         "tecnickcom/tcpdf": "^6.3"
     },
