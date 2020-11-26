@@ -3,9 +3,9 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 		  <li>
-		  	<a href="{{ URL::route('visit.index') }}">Visits</a>
+		  	<a href="{{ route('visit.index') }}">Visits</a>
 		  </li>
 		  <li class="active">{{trans('messages.new-test')}}</li>
 		</ol>
@@ -61,35 +61,35 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											{{ Form::label('clinical_notes','Clinical Notes') }}
-											{{ Form::textarea('clinical_notes', Input::old('clinical_notes'), array('class' => 'form-control')) }}
+											{{ Form::textarea('clinical_notes', old('clinical_notes'), array('class' => 'form-control')) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('previous_therapy','Previous Therapy') }}
-											{{ Form::text('previous_therapy', Input::old('previous_therapy'), array('class' => 'form-control')) }}
+											{{ Form::text('previous_therapy', old('previous_therapy'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('current_therapy','Current Therapy', array('text-align' => 'right')) }}
-											{{ Form::text('current_therapy', Input::old('current_therapy'), array('class' => 'form-control')) }}
+											{{ Form::text('current_therapy', old('current_therapy'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('physician', 'Test Requested By') }}
-											{{Form::text('physician', Input::old('physician'), array('class' => 'form-control'))}}
+											{{Form::text('physician', old('physician'), array('class' => 'form-control'))}}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('cadre', 'Cadre') }}
-											{{Form::text('cadre', Input::old('physician'), array('class' => 'form-control'))}}
+											{{Form::text('cadre', old('physician'), array('class' => 'form-control'))}}
 										</div>
 										<div class="form-group">
 											{{ Form::label('phone_contact', 'Phone Contact') }}
-											{{Form::text('phone_contact', Input::old('phone_contact'), array('class' => 'form-control'))}}
+											{{Form::text('phone_contact', old('phone_contact'), array('class' => 'form-control'))}}
 										</div>
 										<div class="form-group">
 											{{ Form::label('email', 'E-mail') }}
-											{{Form::email('email', Auth::user()->email, array('class' => 'form-control', 'placeholder' =>Auth::user()->email))}}
+											{{Form::email('email', Illuminate\Support\Facades\Auth::user()->email, array('class' => 'form-control', 'placeholder' =>Auth::user()->email))}}
 										</div>
 									</div>
 									<div class="form-pane panel panel-default">
@@ -185,5 +185,5 @@
                 title="{{trans('messages.delete')}}">×</button>
         </div>
     </div><!-- Test List Item -->
-</div><!-- Test List Item Loader-->  
+</div><!-- Test List Item Loader-->
 @stop

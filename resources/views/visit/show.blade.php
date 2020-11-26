@@ -2,8 +2,8 @@
 @section("content")
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-          <li><a href="{{ URL::route('visit.index') }}">Visits</a></li>
+          <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
+          <li><a href="{{ route('visit.index') }}">Visits</a></li>
           <li class="active">Show</li>
         </ol>
     </div>
@@ -16,10 +16,10 @@
                 <div class="row less-gutter">
                         <span class="glyphicon glyphicon-filter"></span>
                         Patient Visit
-                        @if(Auth::user()->can('request_test'))
+                        @if(Illuminate\Support\Facades\Auth::user()->can('request_test'))
                         <div class="panel-btn">
                             <a class="btn btn-sm btn-info"
-                                href="{{ URL::route('visit.addtest', [$visit->id]) }}">
+                                href="{{ route('visit.addtest', [$visit->id]) }}">
                                 <span class="glyphicon glyphicon-plus-sign"></span>
                                 Add New Test
                             </a>
@@ -63,13 +63,13 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                        {{$visit->patient->patient_number}}    
+                                        {{$visit->patient->patient_number}}
                                         </td>
                                         <td>
                                         {{$visit->patient->name}}
                                         </td>
                                         <td>
-                                        {{$visit->patient->getAge()}}   
+                                        {{$visit->patient->getAge()}}
                                         </td>
                                         <td>
                                         {{$visit->patient->gender==0?trans("messages.male"):trans("messages.female")}}
@@ -106,8 +106,8 @@
                         <!-- ACTION BUTTONS -->
                         <td>
                             <a class="btn btn-sm btn-danger"
-                                href="{{ URL::route('unhls_test.delete', $test->id) }}"
-                                id="view-details-{{$test->id}}-link" 
+                                href="{{ route('unhls_test.delete', $test->id) }}"
+                                id="view-details-{{$test->id}}-link"
                                 title="Delete Test">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 Delete

@@ -2,7 +2,7 @@
 @section("content")
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+          <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
           <li class="active">Visits</li>
         </ol>
     </div>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class='col-md-3'>
-                    @if(Auth::user()->can('manage_visits'))
+                    @if(Illuminate\Support\Facades\Auth::user()->can('manage_visits'))
                          <div class='col-md-5'>
                             {{ Form::label('visit_status', trans('messages.visit-status')) }}
                         </div>
@@ -100,27 +100,27 @@
                         <td>{{ $visit->visit_type }}</td> <!--Visit Type -->
                         <td>
                             @if($clinicianUI)<!-- for clinician -->
-                                @if($visit->isAppointment() && Auth::user()->can('make_labrequests'))<!-- for clinician -->
-                                <a class="btn btn-sm btn-info" href="{{ URL::route('visit.edit',[$visit->id]) }}" >
+                                @if($visit->isAppointment() && Illuminate\Support\Facades\Auth::user()->can('make_labrequests'))<!-- for clinician -->
+                                <a class="btn btn-sm btn-info" href="{{ route('visit.edit',[$visit->id]) }}" >
                                     <span class="glyphicon glyphicon-edit"></span>Make Tests Request
                                 </a>
                                 @endif
-                                @if($visit->isRequest() && Auth::user()->can('accept_test_specimen'))<!-- for phlebotomist -->
-                                <a class="btn btn-sm btn-info" href="{{ URL::route('visit.edit',[$visit->id]) }}" >
+                                @if($visit->isRequest() && Illuminate\Support\Facades\Auth::user()->can('accept_test_specimen'))<!-- for phlebotomist -->
+                                <a class="btn btn-sm btn-info" href="{{ route('visit.edit',[$visit->id]) }}" >
                                     <span class="glyphicon glyphicon-edit"></span>Recieve Specimen
                                 </a>
                                 @endif
-                                @if(Auth::user()->can('manage_appointments') && $visit->isAppointment())
+                                @if(Illuminate\Support\Facades\Auth::user()->can('manage_appointments') && $visit->isAppointment())
                                     <button class="btn btn-sm btn-danger delete-item-link"
                                         data-toggle="modal" data-target=".confirm-delete-modal"
-                                        data-id="{{ URL::route('visit.destroy',[$visit->id])}}">
+                                        data-id="{{ route('visit.destroy',[$visit->id])}}">
                                         <span class="glyphicon glyphicon-trash"></span>
                                         Delete Appointment
                                     </button>
                                 @endif
                             @endif
                             <!-- restrictions are in the view -->
-                            <a class="btn btn-sm btn-success" href="{{ URL::route('visit.show',[$visit->id]) }}">
+                            <a class="btn btn-sm btn-success" href="{{ route('visit.show',[$visit->id]) }}">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 Tests
                             </a>
@@ -143,11 +143,11 @@
                 @endforeach
                 </tbody>
             </table>
-          
+
             {{ $visits->links() }}
         {{ Session::put('SOURCE_URL', URL::full()) }}
         {{ Session::put('TESTS_FILTER_INPUT', Input::except('_token')); }}
-      
+
         </div>
     </div>
     <!-- jQuery barcode script -->

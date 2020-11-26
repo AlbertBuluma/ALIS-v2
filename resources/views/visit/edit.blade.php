@@ -3,9 +3,9 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 		  <li>
-		  	<a href="{{ URL::route('visit.index') }}">Visits</a>
+		  	<a href="{{  route('visit.index') }}">Visits</a>
 		  </li>
 		  <li class="active">{{trans('messages.new-test')}}</li>
 		</ol>
@@ -15,7 +15,7 @@
 			<div class="container-fluid">
 				<div class="row less-gutter">
 					<span class="glyphicon glyphicon-adjust"></span>
-					@if(Auth::user()->can('request_test'))
+					@if(Illuminate\Support\Facades\Auth::user()->can('request_test'))
 					{{trans('messages.new-test')}}
 					@else
 					Reveive Specimen
@@ -64,39 +64,39 @@
 								</div>
 									<div class="panel-body inline-display-details">
 										<!-- for clinician -->
-									@if(Auth::user()->can('request_test') && $visit->isAppointment()) 
+									@if(Auth::user()->can('request_test') && $visit->isAppointment())
 										<div class="col-md-6">
 											<div class="form-group">
 												{{ Form::label('clinical_notes','Clinical Notes') }}
-												{{ Form::textarea('clinical_notes', Input::old('clinical_notes'), array('class' => 'form-control')) }}
+												{{ Form::textarea('clinical_notes', old('clinical_notes'), array('class' => 'form-control')) }}
 											</div>
 										</div>
 										<div class="col-md-6">
-											<!-- 
+											<!--
 											<div class="form-group">
 												{{ Form::label('previous_therapy','Previous Therapy') }}
-												{{ Form::text('previous_therapy', Input::old('previous_therapy'), array('class' => 'form-control')) }}
+												{{ Form::text('previous_therapy', old('previous_therapy'), array('class' => 'form-control')) }}
 											</div>
 											<div class="form-group">
 												{{ Form::label('current_therapy','Current Therapy', array('text-align' => 'right')) }}
-												{{ Form::text('current_therapy', Input::old('current_therapy'), array('class' => 'form-control')) }}
+												{{ Form::text('current_therapy', old('current_therapy'), array('class' => 'form-control')) }}
 											</div>
 											 -->
 											<div class="form-group">
 												{{ Form::label('physician', 'Test Requested By') }}
-												{{Form::text('physician', Auth::user()->name, array('class' => 'form-control'))}}
+												{{Form::text('physician', Illuminate\Support\Facades\Auth::user()->name, array('class' => 'form-control'))}}
 											</div>
 											<div class="form-group">
 												{{ Form::label('cadre', 'Cadre') }}
-												{{Form::text('cadre', Auth::user()->designation, array('class' => 'form-control'))}}
+												{{Form::text('cadre', Illuminate\Support\Facades\Auth::user()->designation, array('class' => 'form-control'))}}
 											</div>
 											<div class="form-group">
 												{{ Form::label('phone_contact', 'Phone Contact') }}
-												{{Form::text('phone_contact', Auth::user()->phone_contact, array('class' => 'form-control'))}}
+												{{Form::text('phone_contact', Illuminate\Support\Facades\Auth::user()->phone_contact, array('class' => 'form-control'))}}
 											</div>
 											<div class="form-group">
 												{{ Form::label('email', 'E-mail') }}
-												{{Form::email('email', Auth::user()->email, array('class' => 'form-control', 'placeholder' =>Auth::user()->email))}}
+												{{Form::email('email', Illuminate\Support\Facades\Auth::user()->email, array('class' => 'form-control', 'placeholder' =>Illuminate\Support\Facades\Auth::user()->email))}}
 											</div>
 										</div>
 
@@ -135,7 +135,7 @@
 										</div>
 										@endif
 										<!-- for clinician -->
-										@if(Auth::user()->can('accept_test_specimen') && $visit->hasRequests())
+										@if(Illuminate\Support\Facades\Auth::user()->can('accept_test_specimen') && $visit->hasRequests())
 										<!-- for phlebotomist -->
 										<div class="form-pane panel panel-default">
 											<div class="col-md-6">

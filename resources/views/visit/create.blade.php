@@ -3,9 +3,9 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 		  <li>
-		  	<a href="{{ URL::route('visit.index') }}">Visits</a>
+		  	<a href="{{ route('visit.index') }}">Visits</a>
 		  </li>
 		  <li class="active">{{trans('messages.new-test')}}</li>
 		</ol>
@@ -59,7 +59,7 @@
 											</div>
 											<div class="form-group">
 													{{ Form::label('bed_no','Bed No:', array('text-align' => 'right')) }}
-													{{ Form::text('bed_no', Input::old('bed_no'), array('class' => 'form-control')) }}
+													{{ Form::text('bed_no', old('bed_no'), array('class' => 'form-control')) }}
 											</div>
 										</div>
 									</div>
