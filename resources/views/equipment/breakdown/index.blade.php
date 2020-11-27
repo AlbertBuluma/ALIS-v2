@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
 
 	  <li class="active">{{ Lang::choice('messages.equipment-breakdown',2) }}</li>
 	</ol>
@@ -16,7 +16,7 @@
 		{{trans('messages.equipment-breakdown')}}
 		<div class="panel-btn">
 
-			<a href="{{ URL::route("equipmentbreakdown.create")}}" class="btn btn-sm btn-info">
+			<a href="{{ route("equipmentbreakdown.create")}}" class="btn btn-sm btn-info">
                                 <span class="glyphicon glyphicon-plus-sign"></span>
                                 {{trans('messages.add')}}
                             </a>
@@ -62,7 +62,7 @@
 				<!-- <td class="col-sm-1">  {{$item->restored_by!=null?($item->staff($item->restored_by)) :"" }}</td> -->
 				<td>
 				@if($item->restore_date==null)
-					<a class="btn btn-sm btn-info" href="{{ URL::route('equipmentbreakdown.restore', array($item->id)) }}" >
+					<a class="btn btn-sm btn-info" href="{{ route('equipmentbreakdown.restore', array($item->id)) }}" >
 							<span class="glyphicon glyphicon-edit"></span>
 
 					</a>

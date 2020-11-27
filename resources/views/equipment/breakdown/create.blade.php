@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-		<li><a href="{{{URL::route('equipmentsupplier.index')}}}">{{trans('messages.equipment-breakdown-list')}}</a></li>
+		<li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+		<li><a href="{{ route('equipmentsupplier.index') }}">{{trans('messages.equipment-breakdown-list')}}</a></li>
 		<li class="active">{{ Lang::choice('messages.equipment-breakdown',2) }}</li>
 	</ol>
 
@@ -53,7 +53,7 @@
 
 
 						{{ Form::label('report_date', 'Date Of Report', ['class' => 'col-lg-2 control-label']) }}
-						{{ Form::text('report_date', Input::old('report_date'), array('class' => 'form-control col-sm-4 standard-datepicker', 'id' => 'report_date','required'=>'required')) }}
+						{{ Form::text('report_date', old('report_date'), array('class' => 'form-control col-sm-4 standard-datepicker', 'id' => 'report_date','required'=>'required')) }}
 					</div>
 				</div>
 
@@ -62,14 +62,14 @@
 
 					<div class="form-group">
 						{{  Form::label('equipment_code', 'Equipment Code:',['class'=>'col-lg-2 control-label']) }}
-						{{ Form::text('equipment_code',Input::old('equipment_id'), array('class' => 'form-control col-sm-4')) }}
+						{{ Form::text('equipment_code',old('equipment_id'), array('class' => 'form-control col-sm-4')) }}
 
 
 						{{  Form::label('equipment_type', 'Equipment Type', array('class'=>'col-lg-2')) }}
-						{{ Form::select('equipment_type', array(null => 'Select')+UNHLSEquipmentInventory::lists('name','id'), Input::old('equipment_id'), array('class' => 'form-control col-sm-4', 'id' => 'equipment_id', 'required'=>'required')) }}
+						{{ Form::select('equipment_type', array(null => 'Select')+App\Models\UNHLSEquipmentInventory::pluck('name','id')->toArray(), old('equipment_id'), array('class' => 'form-control col-sm-4', 'id' => 'equipment_id', 'required'=>'required')) }}
 
 						{{  Form::label('equipment_id', 'Equipment Name', array('class'=>'col-lg-2')) }}
-						{{ Form::select('equipment_id', array(null => 'Select')+UNHLSEquipmentInventory::lists('name','id'), Input::old('equipment_id'), array('class' => 'form-control col-sm-4', 'id' => 'equipment_id', 'required'=>'required')) }}
+						{{ Form::select('equipment_id', array(null => 'Select')+App\Models\UNHLSEquipmentInventory::pluck('name','id')->toArray(), old('equipment_id'), array('class' => 'form-control col-sm-4', 'id' => 'equipment_id', 'required'=>'required')) }}
 
 
 
@@ -81,7 +81,7 @@
 					</div>
 					<div class="form-group">
 						{{  Form::label('problem', 'Description of Problem:',['class'=>' col-lg-2 control-label']) }}
-						{{ Form::textarea('problem',Input::old('problem'), array('class' => 'form-control col-sm-4','rows'=>'2')) }}
+						{{ Form::textarea('problem',old('problem'), array('class' => 'form-control col-sm-4','rows'=>'2')) }}
 					</div>
 					<br>
 					<div class="form-inline">
@@ -102,17 +102,17 @@
 
 					<div class="form-group">
 						{{  Form::label('action_taken', 'Actions taken at facility lab:', ['class'=>' col-lg-2 control-label']) }}
-						{{ Form::textarea('action_taken',Input::old('action_taken'), array('class' => 'form-control col-sm-4','rows'=>'2')) }}
+						{{ Form::textarea('action_taken',old('action_taken'), array('class' => 'form-control col-sm-4','rows'=>'2')) }}
 					</div>
 					<div class="form-group">
 						{{  Form::label('reporting_office', 'Name of reporting Officer:',['class'=>' col-lg-2 control-label']) }}
-						{{ Form::text('reporting_officer',Input::old('reporting_officer'), array('class' => 'form-control col-sm-4')) }}
+						{{ Form::text('reporting_officer',old('reporting_officer'), array('class' => 'form-control col-sm-4')) }}
 
 						{{  Form::label('reporting_officer_contact', 'Mobile Telephone:',['class'=>' col-lg-2 control-label']) }}
-						{{ Form::text('reporting_officer_contact',Input::old('reporting_officer_contact'), array('class' => 'form-control col-sm-4')) }}
+						{{ Form::text('reporting_officer_contact',old('reporting_officer_contact'), array('class' => 'form-control col-sm-4')) }}
 
 						{{  Form::label('reporting_officer_email', 'Email Contact:',['class'=>' col-lg-2 control-label']) }}
-						{{ Form::text('reporting_officer_email',Input::old('reporting_officer_email'), array('class' => 'form-control col-sm-4')) }}
+						{{ Form::text('reporting_officer_email',old('reporting_officer_email'), array('class' => 'form-control col-sm-4')) }}
 
 					</div>
 				</div>
@@ -137,10 +137,10 @@
 
 						<div class="form-group">
 							{{ Form::label('action_taken', 'Actions Taken:', ['class' => 'col-lg-2 control-label']) }}
-							{{ Form::textarea('action_taken',Input::old('action_taken'), array('class' => 'form-control col-sm-4','rows'=>'2')) }}
+							{{ Form::textarea('action_taken',old('action_taken'), array('class' => 'form-control col-sm-4','rows'=>'2')) }}
 
 							{{ Form::label('conclusion', 'Conclusion / Reccomendations:', ['class' => 'col-lg-2 control-label']) }}
-							{{ Form::textarea('conclusion',Input::old('conclusion'), array('class' => 'form-control col-sm-4','rows'=>'2')) }}
+							{{ Form::textarea('conclusion',old('conclusion'), array('class' => 'form-control col-sm-4','rows'=>'2')) }}
 
 						</div>
 					</div>
@@ -156,7 +156,7 @@
 						{{ Form::text('verified_by',null,['class' => 'form-control','rows'=>'5']) }}
 
 						{{ Form::label('verification_date', 'Verification Date:', ['class' => 'col-lg-2 control-label']) }}
-						{{ Form::text('verification_date', Input::old('verification_date'), array('class' => 'form-control standard-datepicker', 'id' => 'report_date','required'=>'required')) }}
+						{{ Form::text('verification_date', old('verification_date'), array('class' => 'form-control standard-datepicker', 'id' => 'report_date','required'=>'required')) }}
 					</div>
 
 				</div>

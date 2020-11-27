@@ -2,8 +2,8 @@
 @section("content")
 <div>
     <ol class="breadcrumb">
-        <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-        <li><a href="{{{URL::route('equipmentsupplier.index')}}}">{{trans('messages.equipment-breakdown-list')}}</a></li>
+        <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+        <li><a href="{{ route('equipmentsupplier.index') }}">{{trans('messages.equipment-breakdown-list')}}</a></li>
         <li class="active">{{ Lang::choice('messages.equipment-breakdown',2) }}</li>
     </ol>
 
@@ -25,18 +25,18 @@
     </div>
     <div class="panel-body">
 
-    
+
       {{ Form::open(array('url' => 'equipmentbreakdown/saveRestore', 'autocomplete' => 'off', 'class' => 'form-horizontal', 'data-toggle' => 'validator')) }}
 
-                            <fieldset> 
+                            <fieldset>
 
 
-                               
+
                                 <div class="form-group">
                                 {{  Form::label('equipment_id', 'Equipment', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('equipment_id', UNHLSEquipmentInventory::lists('name','id'), $breakdown->equipment_id, array('class' => 'form-control', 'id' => 'equipment_id', 'disabled'=>'disabled')) }}  
-                                      
+                                        {{ Form::select('equipment_id', App\Models\UNHLSEquipmentInventory::pluck('name','id')->toArray(), $breakdown->equipment_id, array('class' => 'form-control', 'id' => 'equipment_id', 'disabled'=>'disabled')) }}
+
                                         @if ($errors->has('equipment_id'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('equipment_id') }}</strong>
@@ -44,7 +44,7 @@
                                         @endif
 
                                   </div>
-                                </div>  
+                                </div>
 
 
                                 <div class="form-group">
@@ -89,13 +89,13 @@
                                         @endif
 
                                   </div>
-                                </div>        
+                                </div>
 
                                 <div class="form-group">
                                 {{  Form::label('priority', 'Priority', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('priority', [''=>'Select','1'=>'High','2'=>'Moderate','3'=>'Low'], $breakdown->priority, array('class' => 'form-control', 'id' => 'priority', 'disabled'=>'disabled')) }}  
-                                      
+                                        {{ Form::select('priority', [''=>'Select','1'=>'High','2'=>'Moderate','3'=>'Low'], $breakdown->priority, array('class' => 'form-control', 'id' => 'priority', 'disabled'=>'disabled')) }}
+
                                         @if ($errors->has('priority'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('priority') }}</strong>
@@ -103,15 +103,15 @@
                                         @endif
 
                                   </div>
-                                </div>  
+                                </div>
 
 
 
                                 <div class="form-group">
                                 {{  Form::label('in_charge', 'In - charge', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('in_charge', array('' => 'Select in charge') + UNHLSStaff::select(DB::raw('concat (firstName," ",lastName) as full_name,id'))->lists('full_name', 'id'), $breakdown->in_charge_id, array('class' => 'form-control', 'id' => 'in_charge', 'disabled'=>'disabled')) }}  
-                                      
+                                        {{ Form::select('in_charge', array('' => 'Select in charge') + UNHLSStaff::select(DB::raw('concat (firstName," ",lastName) as full_name,id'))->lists('full_name', 'id'), $breakdown->in_charge_id, array('class' => 'form-control', 'id' => 'in_charge', 'disabled'=>'disabled')) }}
+
                                         @if ($errors->has('in_charge'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('in_charge') }}</strong>
@@ -119,15 +119,15 @@
                                         @endif
 
                                   </div>
-                                </div>                                                       
+                                </div>
 
 
                                 <div class="form-group">
                                 {{  Form::label('report_date', 'Date reported', array('class'=>'control-label col-lg-2')) }}
                                   <div class="col-lg-7">
-                                        {{ Form::text('report_date',  $breakdown->report_date!=null?(date('d M Y', strtotime($breakdown->report_date))):'', array('class' => 'form-control standard-datepicker', 'id' => 'report_date','disabled'=>'disabled')) }} 
+                                        {{ Form::text('report_date',  $breakdown->report_date!=null?(date('d M Y', strtotime($breakdown->report_date))):'', array('class' => 'form-control standard-datepicker', 'id' => 'report_date','disabled'=>'disabled')) }}
 
-                                      
+
                                         @if ($errors->has('report_date'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('report_date') }}</strong>
@@ -135,7 +135,7 @@
                                         @endif
 
                                   </div>
-                                </div>                                                          
+                                </div>
 
                              <div class="form-group">
                                 {{ Form::label('review_comment', 'Comment', ['class' => 'col-lg-2 control-label']) }}
@@ -149,13 +149,13 @@
                                         @endif
 
                                   </div>
-                                </div> 
+                                </div>
 
                                 <div class="form-group">
                                 {{  Form::label('reviewed_by', 'Reviewed by', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('reviewed_by', array('' => 'Select reviewed by') + UNHLSStaff::select(DB::raw('concat (firstName," ",lastName) as full_name,id'))->lists('full_name', 'id'), Input::old('reviewed_by'), array('class' => 'form-control', 'id' => 'reviewed_by', 'required'=>'required')) }}  
-                                      
+                                        {{ Form::select('reviewed_by', array('' => 'Select reviewed by') + UNHLSStaff::select(DB::raw('concat (firstName," ",lastName) as full_name,id'))->lists('full_name', 'id'), old('reviewed_by'), array('class' => 'form-control', 'id' => 'reviewed_by', 'required'=>'required')) }}
+
                                         @if ($errors->has('reviewed_by'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('reviewed_by') }}</strong>
@@ -163,15 +163,15 @@
                                         @endif
 
                                   </div>
-                                </div>                                                       
+                                </div>
 
 
                                 <div class="form-group">
                                 {{  Form::label('review_date', 'Date reviewed', array('class'=>'control-label col-lg-2')) }}
                                   <div class="col-lg-7">
-                                        {{ Form::text('review_date', Input::old('review_date'), array('class' => 'form-control standard-datepicker', 'id' => 'review_date','required'=>'required')) }} 
+                                        {{ Form::text('review_date', old('review_date'), array('class' => 'form-control standard-datepicker', 'id' => 'review_date','required'=>'required')) }}
 
-                                      
+
                                         @if ($errors->has('review_date'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('review_date') }}</strong>
@@ -179,38 +179,38 @@
                                         @endif
 
                                   </div>
-                                </div> 
+                                </div>
 
                                 <div class="form-group hidden">
                                 {{  Form::label('breakdown_id', 'ID', array('class'=>'control-label col-lg-2')) }}
                                   <div class="col-lg-7">
-                                        {{ Form::text('breakdown_id', $breakdown->id, array('class' => 'form-control standard-datepicker', 'id' => 'breakdown_id','required'=>'required')) }} 
+                                        {{ Form::text('breakdown_id', $breakdown->id, array('class' => 'form-control standard-datepicker', 'id' => 'breakdown_id','required'=>'required')) }}
 
-                                      
+
                                         @if ($errors->has('breakdown_id'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('breakdown_id') }}</strong>
                                             </span>
                                         @endif
-
                                   </div>
-                                </div>                                                          
+                                </div>
 
+                                <div>
                                     <div class="form-group">
                                       <div class="col-lg-7 col-lg-offset-2">
                                         <a href="{{url('/equipmentbreakdown')}}" class="btn btn-default">Cancel</a>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                       </div>
                                     </div>
-                                </div>                                
+                                </div>
 
                             </fieldset>
-        
+
         {{ Form::close() }}
 
-        <?php  
+        <?php
         Session::put('SOURCE_URL', URL::full());?>
     </div>
-    
+
 </div>
 @stop

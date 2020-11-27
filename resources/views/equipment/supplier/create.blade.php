@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-        <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-        <li><a href="{{{URL::route('equipmentsupplier.index')}}}">{{trans('messages.supplier-list')}}</a></li>
+        <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+        <li><a href="{{ route('equipmentsupplier.index') }}">{{trans('messages.supplier-list')}}</a></li>
         <li class="active">{{ Lang::choice('messages.supplier',2) }}</li>
 	</ol>
 
@@ -25,10 +25,10 @@
 	</div>
 	<div class="panel-body">
 
-	
+
       {{ Form::open(array('url' => 'equipmentsupplier/store', 'autocomplete' => 'off', 'class' => 'form-horizontal', 'data-toggle' => 'validator')) }}
 
-                            <fieldset> 
+                            <fieldset>
 
 
                                 <div class="form-group">
@@ -92,15 +92,15 @@
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                       </div>
                                     </div>
-                                </div>                                
+                                </div>
 
                             </fieldset>
-        
+
         {{ Form::close() }}
 
-		<?php  
+		<?php
 		Session::put('SOURCE_URL', URL::full());?>
 	</div>
-	
+
 </div>
 @stop

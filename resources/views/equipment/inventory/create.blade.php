@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-        <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-        <li><a href="{{{URL::route('equipmentinventory.index')}}}">{{trans('messages.equipment-list')}}</a></li>
+        <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+        <li><a href="{{ route('equipmentinventory.index') }}">{{trans('messages.equipment-list')}}</a></li>
         <li class="active">{{ Lang::choice('messages.equipment',2) }}</li>
 	</ol>
 
@@ -25,10 +25,10 @@
 	</div>
 	<div class="panel-body">
 
-	
+
       {{ Form::open(array('url' => 'equipmentinventory/store', 'autocomplete' => 'off', 'class' => 'form-horizontal', 'data-toggle' => 'validator')) }}
 
-                            <fieldset> 
+                            <fieldset>
 
 
                                 <div class="form-group">
@@ -76,8 +76,8 @@
                                 <div class="form-group">
                                 {{  Form::label('location', 'Location', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('location', array_merge(array(null => 'Select'), $location_list), Input::old('location'), array('class' => 'form-control', 'id' => 'location_id')) }}  
-                                      
+                                        {{ Form::select('location', array_merge(array(null => 'Select'), $location_list), old('location'), array('class' => 'form-control', 'id' => 'location_id')) }}
+
                                         @if ($errors->has('location'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('location') }}</strong>
@@ -85,13 +85,13 @@
                                         @endif
 
                                   </div>
-                                </div>  
+                                </div>
 
                                 <div class="form-group">
                                 {{  Form::label('procurement_type', 'Procurement type', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('procurement_type', array(null => 'Select')+ array('0' => 'Placement', '1' => 'Procured', '2' => 'Donation'), Input::old('procurement_type'), array('class' => 'form-control', 'id' => 'procurement_type_id')) }}  
-                                      
+                                        {{ Form::select('procurement_type', array(null => 'Select')+ array('0' => 'Placement', '1' => 'Procured', '2' => 'Donation'), old('procurement_type'), array('class' => 'form-control', 'id' => 'procurement_type_id')) }}
+
                                         @if ($errors->has('procurement_type'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('procurement_type') }}</strong>
@@ -99,12 +99,12 @@
                                         @endif
 
                                   </div>
-                                </div>  
+                                </div>
 
                                 <div class="form-group">
                                 {{ Form::label('purchase_date', 'Purchase date', ['class' => 'col-md-2 control-label']) }}
                                   <div class="col-md-4">
-                                        {{ Form::text('purchase_date', Input::old('purchase_date'),array('class' => 'form-control standard-datepicker purchase-date','required'=>'required')) }}
+                                        {{ Form::text('purchase_date', old('purchase_date'),array('class' => 'form-control standard-datepicker purchase-date','required'=>'required')) }}
 
                                         @if ($errors->has('purchase_date'))
                                             <span class="text-danger">
@@ -119,7 +119,7 @@
                                 <div class="form-group">
                                 {{ Form::label('delivery_date', 'Delivery date', ['class' => 'col-md-2 control-label']) }}
                                   <div class="col-md-4">
-                                        {{ Form::text('delivery_date', Input::old('delivery_date'),array('class' => 'form-control standard-datepicker delivery-date','required'=>'required')) }}
+                                        {{ Form::text('delivery_date', old('delivery_date'),array('class' => 'form-control standard-datepicker delivery-date','required'=>'required')) }}
 
                                         @if ($errors->has('delivery_date'))
                                             <span class="text-danger">
@@ -134,7 +134,7 @@
                                 <div class="form-group">
                                 {{ Form::label('verification_date', 'Verification date', ['class' => 'col-md-2 control-label']) }}
                                   <div class="col-md-4">
-                                        {{ Form::text('verification_date', Input::old('verification_date'),array('class' => 'form-control standard-datepicker verification-date','required'=>'required')) }}
+                                        {{ Form::text('verification_date', old('verification_date'),array('class' => 'form-control standard-datepicker verification-date','required'=>'required')) }}
 
                                         @if ($errors->has('verification_date'))
                                             <span class="text-danger">
@@ -149,7 +149,7 @@
                                 <div class="form-group">
                                 {{ Form::label('installation_date', 'Installation date', ['class' => 'col-md-2 control-label']) }}
                                   <div class="col-md-4">
-                                        {{ Form::text('installation_date', Input::old('installation_date'),array('class' => 'form-control standard-datepicker installation-date','required'=>'required')) }}
+                                        {{ Form::text('installation_date', old('installation_date'),array('class' => 'form-control standard-datepicker installation-date','required'=>'required')) }}
 
                                         @if ($errors->has('installation_date'))
                                             <span class="text-danger">
@@ -163,8 +163,8 @@
                                 <div class="form-group">
                                 {{  Form::label('spare_parts', 'Spare parts', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('spare_parts', array(null => 'Select')+ $yes_no_list, Input::old('spare_parts'), array('class' => 'form-control', 'id' => 'spare_parts_id','required'=>'required')) }}  
-                                      
+                                        {{ Form::select('spare_parts', array(null => 'Select')+ $yes_no_list, old('spare_parts'), array('class' => 'form-control', 'id' => 'spare_parts_id','required'=>'required')) }}
+
                                         @if ($errors->has('spare_parts'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('spare_parts') }}</strong>
@@ -172,13 +172,13 @@
                                         @endif
 
                                   </div>
-                                </div>                                  
+                                </div>
 
                                 <div class="form-group">
                                 {{  Form::label('warranty', 'Warranty period', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('warranty', array(null => 'Select')+ $warranty_list, Input::old('warranty'), array('class' => 'form-control', 'id' => 'warranty_id','required'=>'required')) }}  
-                                      
+                                        {{ Form::select('warranty', array(null => 'Select')+ $warranty_list, old('warranty'), array('class' => 'form-control', 'id' => 'warranty_id','required'=>'required')) }}
+
                                         @if ($errors->has('warranty'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('warranty') }}</strong>
@@ -186,7 +186,7 @@
                                         @endif
 
                                   </div>
-                                </div> 
+                                </div>
 
                                 <div class="form-group">
                                 {{ Form::label('life_time', 'Lifetime', ['class' => 'col-md-2 control-label']) }}
@@ -204,13 +204,13 @@
                                         @endif
 
                                   </div>
-                                </div>  
+                                </div>
 
                                 <div class="form-group">
                                 {{  Form::label('service_frequency', 'Service frequency', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('service_frequency', array(null => 'Select')+ $service_frequency_list, Input::old('service_frequency'), array('class' => 'form-control', 'id' => 'service_frequency_id','required'=>'required')) }}  
-                                      
+                                        {{ Form::select('service_frequency', array(null => 'Select')+ $service_frequency_list, old('service_frequency'), array('class' => 'form-control', 'id' => 'service_frequency_id','required'=>'required')) }}
+
                                         @if ($errors->has('service_frequency'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('service_frequency') }}</strong>
@@ -218,13 +218,13 @@
                                         @endif
 
                                   </div>
-                                </div> 
+                                </div>
 
                                 <div class="form-group">
                                 {{  Form::label('service_contract', 'Service Contract', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('service_contract', array(null => 'Select')+ $yes_no_list, Input::old('service_contract'), array('class' => 'form-control', 'id' => 'service_contract_id','required'=>'required')) }}  
-                                      
+                                        {{ Form::select('service_contract', array(null => 'Select')+ $yes_no_list, old('service_contract'), array('class' => 'form-control', 'id' => 'service_contract_id','required'=>'required')) }}
+
                                         @if ($errors->has('service_contract'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('service_contract') }}</strong>
@@ -232,14 +232,14 @@
                                         @endif
 
                                   </div>
-                                </div>  
-                                        
+                                </div>
+
 
                                 <div class="form-group">
                                 {{  Form::label('supplier_id', 'Supplier', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('supplier_id', array(null => 'Select')+ $supplier_list, Input::old('supplier'), array('class' => 'form-control', 'id' => 'service_contract_id','required'=>'required')) }}  
-                                      
+                                        {{ Form::select('supplier_id', array(null => 'Select')+ $supplier_list, old('supplier'), array('class' => 'form-control', 'id' => 'service_contract_id','required'=>'required')) }}
+
                                         @if ($errors->has('supplier_id'))
                                             <span class="text-danger">
                                                 <strong>{{ $errors->first('supplier_id') }}</strong>
@@ -247,7 +247,7 @@
                                         @endif
 
                                   </div>
-                                </div>                                                              
+                                </div>
 
                                     <div class="form-group">
                                       <div class="col-lg-10 col-lg-offset-2">
@@ -255,16 +255,16 @@
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                       </div>
                                     </div>
-                                </div>                                
+                                </div>
 
                             </fieldset>
-        
+
         {{ Form::close() }}
 
-		<?php  
+		<?php
 		Session::put('SOURCE_URL', URL::full());?>
 	</div>
-	
+
 </div>
 
 <script>
@@ -275,7 +275,7 @@ $(".purchase-date").datepicker({
     onSelect: function(dateText, inst){
      $(".verification-date,.delivery-date").datepicker("option","minDate",
      $("#purchase_date").datepicker("getDate"));
-  
+
   }
 });
 
@@ -285,7 +285,7 @@ $(".purchase-date").datepicker({
         dateFormat:"yy-mm-dd",
         onSelect: function(dateText, inst){
          $(".installation-date").datepicker("option","minDate",
-         $("#delivery_date").datepicker("getDate"));    
+         $("#delivery_date").datepicker("getDate"));
       }
 
     });

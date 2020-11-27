@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-	 
+	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+
 	  <li class="active">{{ Lang::choice('messages.equipment-maintenance',2) }}</li>
 	</ol>
 </div>
@@ -16,11 +16,11 @@
 		{{trans('messages.equipment-maintenance')}}
 		<div class="panel-btn">
 
-			<a href="{{ URL::route("equipmentmaintenance.create")}}" class="btn btn-sm btn-info">
+			<a href="{{ route("equipmentmaintenance.create")}}" class="btn btn-sm btn-info">
                                 <span class="glyphicon glyphicon-plus-sign"></span>
                                 {{trans('messages.add')}}
                             </a>
-			
+
 		</div>
 	</div>
 
@@ -37,9 +37,9 @@
 					<th>Serviced by</th>
 					<th>Contact</th>
 					<th>Supplier</th>
-					<th>Comment</th>																			
+					<th>Comment</th>
 				</tr>
-			</thead>			
+			</thead>
 			<tbody>
 			@foreach($list as $item)
 				<tr>
@@ -60,7 +60,7 @@
 
 		<?php Session::put('SOURCE_URL', URL::full());?>
 	</div>
-	
+
 </div>
 
 
