@@ -25,19 +25,19 @@
 				<div class="form-group">
 					{{ Form::label('test_type_id', 'Test Type') }}
 					{{ Form::select('test_type_id', $testTypes,
-						Input::old('test_type_id'), array('class' => 'form-control')) }}
+						old('test_type_id'), array('class' => 'form-control')) }}
 				</div>
 
 				<div class="form-group">
 					{{ Form::label('standard_name', 'Standard Name') }}
-					{{ Form::text('standard_name', Input::old('standard_name'), array('class' => 'form-control')) }}
+					{{ Form::text('standard_name', old('standard_name'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('system_name', 'System Name') }}
-					{{ Form::text('system_name', Input::old('system_name'), array('class' => 'form-control')) }}
+					{{ Form::text('system_name', old('system_name'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group actions-row">
-					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
 						array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
 				</div>
 

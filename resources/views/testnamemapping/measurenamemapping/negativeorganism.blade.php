@@ -27,10 +27,10 @@
 				<div class="form-group">
 					{{ Form::label('organism_id', 'Negative Organisms') }}
 					{{ Form::select('organism_id', $organisms,
-						Input::old('organism_id'), array('class' => 'form-control')) }}
+						old('organism_id'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group actions-row">
-					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
 						array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
 				</div>
 

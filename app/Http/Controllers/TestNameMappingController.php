@@ -1,57 +1,70 @@
 <?php
 
-class TestNameMappingController extends \BaseController {
+namespace App\Http\Controllers;
+
+use App\Models\DailyNegativeCulture;
+use App\Models\DailyNegativeGramStain;
+use App\Models\TestNameMapping;
+use App\Models\TestType;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+
+class TestNameMappingController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
 		//List all facilities
 		$testNameMappings = TestNameMapping::all();
 		//Load the view and pass the testNameMappings
-		return View::make('testnamemapping.index')->with('testNameMappings',$testNameMappings);
+		return view('testnamemapping.index')->with('testNameMappings',$testNameMappings);
 	}
 
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function create()
 	{
-		$testTypes = TestType::orderBy('name')->lists('name', 'id');
-		return View::make('testnamemapping.create')
+		$testTypes = TestType::orderBy('name')->pluck('name', 'id')->toArray();
+		return view('testnamemapping.create')
 				->with('testTypes', $testTypes);
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function store(Request $request)
 	{
 		//Validation
 		$rules = array('system_name' => 'required');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::route('testnamemapping.index')->withErrors($validator)->withInput();
+			return redirect()->route('testnamemapping.index')->withErrors($validator)->withInput();
 		} else {
 			// Add
 			$testNameMapping = new TestNameMapping;
-			$testNameMapping->test_type_id = Input::get('test_type_id');
-			$testNameMapping->standard_name = Input::get('standard_name');
-			$testNameMapping->system_name = Input::get('system_name');
+			$testNameMapping->test_type_id = $request->get('test_type_id');
+			$testNameMapping->standard_name = $request->get('standard_name');
+			$testNameMapping->system_name = $request->get('system_name');
 			// redirect
 			try{
 				$testNameMapping->save();
 				$url = Session::get('SOURCE_URL');
-				return Redirect::to($url)
+				return redirect($url)
 					->with('message', 'Successfully Created Measure Name Mapping')
 					->with('activefacility', $testNameMapping ->id);
 			} catch(QueryException $e){
@@ -64,7 +77,7 @@ class TestNameMappingController extends \BaseController {
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function show($id)
 	{
@@ -72,17 +85,17 @@ class TestNameMappingController extends \BaseController {
 		// if culture
 		if ($testNameMapping->system_name == 'culture_sensitivity') {
 			$negativeOrganisms = DailyNegativeCulture::all();
-			return View::make('testnamemapping.measurenamemapping.negativeorganisms')
+			return view('testnamemapping.measurenamemapping.negativeorganisms')
 				->with('negativeOrganisms',$negativeOrganisms)
 				->with('testNameMapping',$testNameMapping);
 		// if gram stain
 		}elseif ($testNameMapping->system_name == 'gram_stain') {
 			$negativeGramStains = DailyNegativeGramStain::all();
-			return View::make('testnamemapping.measurenamemapping.negativegramstains')
+			return view('testnamemapping.measurenamemapping.negativegramstains')
 				->with('negativeGramStains',$negativeGramStains)
 				->with('testNameMapping',$testNameMapping);
 		}else {
-			return View::make('testnamemapping.measurenamemapping.index')->with('testNameMapping',$testNameMapping);
+			return view('testnamemapping.measurenamemapping.index')->with('testNameMapping',$testNameMapping);
 		}
 	}
 
@@ -91,42 +104,43 @@ class TestNameMappingController extends \BaseController {
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
 		$testNameMapping = TestNameMapping::find($id);
-		$testTypes = TestType::orderBy('name')->lists('name', 'id');
+		$testTypes = TestType::orderBy('name')->pluck('name', 'id')->toArray();
 
-		return View::make('testnamemapping.edit')
+		return view('testnamemapping.edit')
 				->with('testNameMapping', $testNameMapping)
 				->with('testTypes', $testTypes);
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function update(Request $request, $id)
 	{
 		//Validate and check
 		$rules = array('system_name' => 'required');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::route('testnamemapping.index')->withErrors($validator)->withInput();
+			return redirect()->route('testnamemapping.index')->withErrors($validator)->withInput();
 		} else {
 			// Update
 			$testNameMapping = TestNameMapping::find($id);
-			$testNameMapping->test_type_id = Input::get('test_type_id');
-			$testNameMapping->standard_name = Input::get('standard_name');
-			$testNameMapping->system_name = Input::get('system_name');
+			$testNameMapping->test_type_id = $request->get('test_type_id');
+			$testNameMapping->standard_name = $request->get('standard_name');
+			$testNameMapping->system_name = $request->get('system_name');
 			$testNameMapping->save();
 			// redirect
-			return Redirect::route('testnamemapping.index')
+			return redirect()->route('testnamemapping.index')
 				->with('message', 'Successfully Updated Measure Name Mapping');
 		}
 	}
@@ -136,7 +150,7 @@ class TestNameMappingController extends \BaseController {
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
@@ -147,7 +161,7 @@ class TestNameMappingController extends \BaseController {
 		$testNameMapping->delete();
 
 		// redirect
-		return Redirect::route('testnamemapping.index')
+		return redirect()->route('testnamemapping.index')
 			->with('message', 'Successfully Deleted Measure Name Mapping');
 	}
 

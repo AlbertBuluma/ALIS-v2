@@ -25,10 +25,10 @@
 				<div class="form-group">
 					{{ Form::label('gram_stain_range_id', 'Negative Gram Stain Range') }}
 					{{ Form::select('gram_stain_range_id', $gramStainRanges,
-						Input::old('gram_stain_range_id'), array('class' => 'form-control')) }}
+						old('gram_stain_range_id'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group actions-row">
-					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
 						array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
 				</div>
 

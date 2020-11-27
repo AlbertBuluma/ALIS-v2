@@ -29,10 +29,10 @@
 				<div class="form-group">
 					{{ Form::label('result_interpretation_id', 'Result Interpretaion') }}
 					{{ Form::select('result_interpretation_id', $resultInterpretations,
-						Input::old('result_interpretation_id'), array('class' => 'form-control')) }}
+						old('result_interpretation_id'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group actions-row">
-					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+					{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
 						array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
 				</div>
 
