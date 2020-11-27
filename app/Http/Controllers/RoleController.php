@@ -96,7 +96,7 @@ class RoleController extends Controller {
 
 		if($validator->fails())
 		{
-			return redirect('role.create')->withInput()->withErrors($validator);
+			return redirect()->route('role.create')->withInput()->withErrors($validator);
 		}
 		else
 		{
@@ -144,32 +144,33 @@ class RoleController extends Controller {
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function update(Request $request, $id)
 	{
 		$rules = array('name' => "required|unique:roles,name,$id|min:3", 'description' => 'max:200');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if($validator->fails())
 		{
-			return Redirect::route('role.edit', array($id))->withInput()->withErrors($validator);
+			return redirect()->route('role.edit', array($id))->withInput()->withErrors($validator);
 		}
 		else
 		{
 			$role = Role::find($id);
-			$role->name = Input::get('name');
-			$role->description = Input::get('description');
+			$role->name = $request->get('name');
+			$role->description = $request->get('description');
 
 			try
 			{
 				$role->save();
 				$url = Session::get('SOURCE_URL');
-				return Redirect::to($url)->with('message', trans('messages.success-updating-role'))
+				return redirect($url)->with('message', trans('messages.success-updating-role'))
 							->with('activerole', $role ->id);
 			}
 			catch (QueryException $e)
@@ -183,7 +184,7 @@ class RoleController extends Controller {
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
 	public function delete($id)
 	{
@@ -194,7 +195,7 @@ class RoleController extends Controller {
 
         $url = Session::get('SOURCE_URL');
 
-		return Redirect::to($url)->with('message', trans('messages.success-deleting-role'));
+		return redirect($url)->with('message', trans('messages.success-deleting-role'));
 	}
 
 	/**
