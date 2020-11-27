@@ -35,6 +35,7 @@ use App\Models\UnhlsSpecimen;
 use App\Models\UnhlsTest;
 use App\Models\UnhlsVisit;
 use DateTime;
+use InterimReportPdf;
 use Maatwebsite\Excel\Facades\Excel;
 
 set_time_limit(0); //60 seconds = 1 minute
@@ -1684,7 +1685,7 @@ class ReportController extends Controller {
 		}
 		$diseases = Disease::all();
 
-		return View('reportconfig.disease')
+		return view('reportconfig.disease')
 					->with('diseases', $diseases);
 	}
 
