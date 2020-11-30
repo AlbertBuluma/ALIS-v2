@@ -42,7 +42,7 @@ class PocController extends Controller {
 
 		// Load the view and pass the patients
 		$antenatal = array('0'=>'Lifelong ART', '1' => 'No ART', '2' => 'UNKNOWN');
-		return View('poc.index')
+		return view('poc.index')
 		->with('antenatal',$antenatal)
 		// ->with('facility',$facility)
 		// ->with('district',$district)
@@ -128,7 +128,7 @@ class PocController extends Controller {
 			try{
 				$patient->save();
 
-				return redirect('poc.index')
+				return redirect()->route('poc.index')
 				->with('message', 'Successfully saved patient information:!');
 
 			}catch(QueryException $e){
@@ -166,7 +166,6 @@ class PocController extends Controller {
 		$patient = POC::leftjoin('poc_results as pr', 'pr.patient_id', '=', 'poc_tables.id')
 						->select('poc_tables.*','pr.results', 'pr.test_date', 'pr.equipment_used', 'tested_by')
 						->from('poc_tables')->find($id);
-
 //		$patient = DB::table('poc_tables')
 //                    ->where('id', '=', $id)
 //                    ->leftJoin('poc_results as pr', function ($join){
@@ -174,7 +173,7 @@ class PocController extends Controller {
 //                    })
 //                    ->select('poc_tables.*','pr.results', 'pr.test_date', 'pr.equipment_used', 'tested_by');
 		// ->paginate(Config::get('kblis.page-items'))->appends(Input::except('_token'));
-		if (count($patient) == 0) {
+		if (count($patient->get()) == 0) {
             $request->session()->flash('message', trans('messages.no-match'));
 		}
 
@@ -257,7 +256,7 @@ class PocController extends Controller {
 			$patient->save();
 
 			// redirect
-			return redirect('poc.index')
+			return redirect()->route('poc.index')
 			->with('message', 'The patient details were successfully updated!') ->with('activepatient',$patient ->id);
 
 		}
@@ -333,7 +332,7 @@ class PocController extends Controller {
 			$result->dispatched_date = $request->get('dispatched_date');
 			try{
 				$result->save();
-				return redirect('poc.index')
+				return redirect()->route('poc.index')
 				->with('message', 'Successfully saved results information!');
 
 			}catch(QueryException $e){
@@ -368,7 +367,7 @@ class PocController extends Controller {
 			$result->error_code = $request->get('error_code');
 			try{
 				$result->save();
-				return redirect('poc.index')
+				return redirect()->route('poc.index')
 				->with('message', 'Successfully updated esults information:!');
 
 			}catch(QueryException $e){
