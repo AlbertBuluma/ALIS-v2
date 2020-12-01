@@ -22,36 +22,9 @@ use App\Models\UnhlsVisit;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
-Route::group(array("before" => "guest"), function()
-{
-    /*
-    |-----------------------------------------
-    | API route
-    |-----------------------------------------
-    | Proposed route for the BLIS api, we will receive api calls
-    | from other systems from this route.
-    */
-    Route::post('/api/receiver', array(
-        "as" => "api.receiver",
-        "uses" => "InterfacerController@receiveLabRequest"
-    ));
-    Route::post('/api/testinfo', array(
-        "uses" => "InterfacerController@getTestInfo"
-    ));
-    Route::post('/api/searchtests', array(
-        "uses" => "InterfacerController@getTests"
-    ));
-    Route::post('/api/saveresults', array(
-        "uses" => "InterfacerController@saveTestResults"
-    ));
-    Route::any('/', array(
-        "as" => "user.login",
-        "uses" => "UserController@loginAction"
-    ));
 
-});
 /* Routes accessible AFTER logging in */
-Route::group(array("before" => "auth"), function()
+Route::middleware('auth')->group(function()
 {
     Route::any('/home', array(
         "as" => "user.home",
