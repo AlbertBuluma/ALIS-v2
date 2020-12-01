@@ -1,6 +1,18 @@
 <?php
 
-class InterfacerController extends \BaseController{
+namespace App\Http\Controllers;
+
+use App\Models\TestType;
+use App\Models\UnhlsPatient;
+use App\Models\UnhlsTest;
+use App\Models\UnhlsTestResult;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+use PHPUnit\Framework\TestResult;
+
+class InterfacerController extends Controller{
 
     public function receiveLabRequest()
     {
@@ -41,18 +53,18 @@ class InterfacerController extends \BaseController{
     * @param testId Id of test
     * @param measureid measure of result to be saved
     * @param result result to be saved
-    * @return json with success or failure
+    * @return \Illuminate\Http\JsonResponse
     **/
-    public function saveTestResults()
+    public function saveTestResults(Request $request)
     {
         //Auth
-        $authKey = Input::get('key');
+        $authKey = $request->get('key');
         if(!$this->authenticate($authKey)){
             return json_encode(array('error' => 'Authentication failed'));
         }
         //save results
-        // $result = Input::get('result');
-        $results = Input::get('results');
+        // $result = $request->get('result');
+        $results = $request->get('results');
         $resultsArray = explode(", ", $results);
         foreach ($resultsArray as $key => $result) {
             $ms = explode(":", $result);
@@ -82,7 +94,7 @@ class InterfacerController extends \BaseController{
                     return Response::json(array('Ignored'));
                 }
             }
-            catch(\QueryException $qe){
+            catch(QueryException $qe){
                 return Response::json(array('Failed'));
             }
         }
@@ -174,19 +186,19 @@ class InterfacerController extends \BaseController{
     * Get test, specimen, measure info related to a test
     * @param key For authentication
     * @param Filters to get specific info
-    * @return json of the test info
+    * @return \Illuminate\Http\JsonResponse
     */
-    public function getTests()
+    public function getTests(Request $request)
     {
         //Auth
-        $authKey = Input::get('key');
+        $authKey = $request->get('key');
         if(!$this->authenticate($authKey)){
             return Response::json(array('error' => 'Authentication failed'), '403');
         }
         //Validate params
-        $testType = Input::get('testtype');
-        $dateFrom = Input::get('datefrom');
-        $dateTo = Input::get('dateto');
+        $testType = $request->get('testtype');
+        $dateFrom = $request->get('datefrom');
+        $dateTo = $request->get('dateto');
 
         if( empty($testType))
         {
@@ -217,7 +229,7 @@ class InterfacerController extends \BaseController{
     {
         //Auth
 
-        /*$authKey = Input::get('key');
+        /*$authKey = $request->get('key');
         if(!$this->authenticate($authKey)){
             return Response::json(array('error' => 'Authentication failed'), '403');
         }*/
@@ -294,10 +306,10 @@ $dateTo = date('Y-m-d');
     * @param testId testID to get the measure info for
     * @return json of the test info
     */
-    public function getTestInfo()
+    public function getTestInfo(Request $request)
     {
-        $key = Input::get('key');
-        $testId = Input::get('testId');
+        $key = $request->get('key');
+        $testId = $request->get('testId');
         //Auth
         $authKey = $key;
         if(!$this->authenticate($authKey)){
