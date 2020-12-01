@@ -75,7 +75,7 @@ class PocController extends Controller {
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
 	public function store(Request $request)
 	{
@@ -99,8 +99,8 @@ class PocController extends Controller {
 
 
 			$patient = new POC;
-			// $patient->district_id = \Config::get('constants.DISTRICT_ID');
-			// $patient->facility_id = \Config::get('constants.FACILITY_ID');
+			// $patient->district_id = config('constants.DISTRICT_ID');
+			// $patient->facility_id = config('constants.FACILITY_ID');
 			$patient->gender	= $request->get('gender');
 			$patient->age	= $request->get('age');
 			$patient->exp_no = $request->get('exp_no');
@@ -470,7 +470,7 @@ class PocController extends Controller {
 	// 	else{
 	// 		$lastInsertId = DB::table('unhls_patients')->max('id')+1;
 	// 	}
-	// 	$fcode = \Config::get('constants.FACILITY_CODE');
+	// 	$fcode = config('constants.FACILITY_CODE');
 	// 	$num = $year.str_pad($lastInsertId, 6, '0', STR_PAD_LEFT);
 	// 	return $fcode.'-'.$num;
 	// }

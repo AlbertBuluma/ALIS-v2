@@ -237,22 +237,23 @@ class UnhlsPatientController extends Controller {
 			$patient->delete();
 		} else {
 			// The has visit
-			return redirect('unhls_patient.index')
+			return redirect()->route('unhls_patient.index')
 				            ->with('message', 'This Patient has visits, not Deleted!');
 		}
 		// redirect
-		return redirect('unhls_patient.index')
+		return redirect()->route('unhls_patient.index')
 			            ->with('message', 'Patient Successfully Deleted!');
 	}
 
-	/**
-	 * Return a Patients collection that meets the searched criteria as JSON.
-	 *
-	 * @return Response
-	 */
-	public function search()
+    /**
+     * Return a Patients collection that meets the searched criteria as JSON.
+     *
+     * @param Request $request
+     * @return Response
+     */
+	public function search(Request $request)
 	{
-        return UnhlsPatient::search(Input::get('text'))->take(config('kblis.limit-items'))->get()->toJson();
+        return UnhlsPatient::search($request->get('text'))->take(config('kblis.limit-items'))->get()->toJson();
 	}
 
 	/**

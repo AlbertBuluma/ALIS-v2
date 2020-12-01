@@ -37,12 +37,12 @@
                     </div>
                     <div class='col-md-7'>
                         {{ Form::select('test_status', $testStatus,
-                            $request->test_status, array('class' => 'form-control')) }}
+                            $request['test_status'], array('class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class='col-md-2'>
                         {{ Form::label('search', trans('messages.search'), array('class' => 'sr-only')) }}
-                        {{ Form::text('search', $request->search,
+                        {{ Form::text('search', $request['search'],
                             array('class' => 'form-control', 'placeholder' => 'Search')) }}
                 </div>
                 <div class='col-md-1'>
@@ -60,7 +60,8 @@
                 <div class="row less-gutter">
                     <div class="col-md-11">
                         <span class="glyphicon glyphicon-filter"></span>{{trans('messages.list-tests')}}
-                        @if(Auth::user()->can('request_test'))
+{{--                        @if(Auth::user()->can('request_test'))--}}
+                        @can('request_test'))
                         <div class="panel-btn">
                             <a class="btn btn-sm btn-info" href="javascript:void(0)"
                                 data-toggle="modal" data-target="#new-test-modal-unhls">
@@ -68,7 +69,8 @@
                                 {{trans('messages.new-test')}}
                             </a>
                         </div>
-                        @endif
+                        @endcan
+{{--                        @endif--}}
                     </div>
                     <div class="col-md-1">
                         <a class="btn btn-sm btn-primary pull-right" href="#" onclick="window.history.back();return false;"
@@ -126,7 +128,7 @@
                         <!-- ACTION BUTTONS -->
                         <td>
                             <a class="btn btn-sm btn-success"
-                                href="{{ URL::route('unhls_test.viewDetails', $test->id) }}"
+                                href="{{ route('unhls_test.viewDetails', $test->id) }}"
                                 id="view-details-{{$test->id}}-link"
                                 title="{{trans('messages.view-details-title')}}">
                                 <span class="glyphicon glyphicon-eye-open"></span>
@@ -144,40 +146,39 @@
                                 </a> -->
                             @endif
                         @elseif ($test->specimen->isNotCollected())
-                            @if(Auth::user()->can('accept_test_specimen'))
+                            @can('accept_test_specimen')
                                 <a class="btn btn-sm btn-info" href="#accept-specimen-modal"
-                                    data-toggle="modal" data-url="{{ URL::route('unhls_test.collectSpecimen') }}" data-specimen-id="{{$test->specimen->id}}" data-target="#accept-specimen-modal"
+                                    data-toggle="modal" data-url="{{ route('unhls_test.collectSpecimen') }}" data-specimen-id="{{$test->specimen->id}}" data-target="#accept-specimen-modal"
                                     title="{{trans('messages.accept-specimen-title')}}">
                                     <span class="glyphicon glyphicon-thumbs-up"></span>
                                     {{trans('messages.accept-specimen')}}
                                 </a>
-
-                            @endif
+                            @endcan
                         @endif
                         @if (!$test->isNotReceived() && $test->specimen->isAccepted() && !($test->isVerified()))
-                            @if(Auth::user()->can('reject_test_specimen') && !($test->specimen->isReferred()))
+                            @can('reject_test_specimen' && !($test->specimen->isReferred()))
                                 @if(!($test->specimenIsRejected()))
                                 <a class="btn btn-sm btn-danger" id="reject-{{$test->id}}-link"
-                                    href="{{URL::route('unhls_test.reject', array($test->id))}}"
+                                    href="{{ route('unhls_test.reject', array($test->id)) }}"
                                     title="{{trans('messages.reject-title')}}">
                                     <span class="glyphicon glyphicon-thumbs-down"></span>
                                     {{trans('messages.reject')}}
                                 </a>
-                                @endif
+                                @endcan
                                 <a class="btn btn-sm btn-midnight-blue barcode-button" onclick="print_barcode({{ "'".$test->specimen->id."'".', '."'".$barcode->encoding_format."'".', '."'".$barcode->barcode_width."'".', '."'".$barcode->barcode_height."'".', '."'".$barcode->text_size."'" }})" title="{{trans('messages.barcode')}}">
                                     <span class="glyphicon glyphicon-barcode"></span>
                                     {{trans('messages.barcode')}}
                                 </a>
                             @endif
                             @if ($test->isPending())
-                                @if(Auth::user()->can('start_test'))
+                                @can('start_test')
                                     <a class="btn btn-sm btn-warning start-test" href="javascript:void(0)"
                                         data-test-id="{{$test->id}}" data-url="{{ route('unhls_test.start') }}"
                                         title="{{trans('messages.start-test-title')}}">
                                         <span class="glyphicon glyphicon-play"></span>
                                         {{trans('messages.start-test')}}
                                     </a>
-                                @endif
+                                @endcan
                                 @if(Auth::user()->can('refer_specimens') && !($test->isExternal()) && !($test->specimen->isReferred()))
                                     <a class="btn btn-sm btn-info" href="{{ route('unhls_test.refer', array($test->specimen_id)) }}">
                                         <span class="glyphicon glyphicon-edit"></span>
@@ -185,23 +186,23 @@
                                     </a>
                                 @endif
                             @elseif ($test->isStarted())
-                                @if(Auth::user()->can('enter_test_results'))
+                                @can('enter_test_results')
                                     <a class="btn btn-sm btn-info" id="enter-results-{{$test->id}}-link"
                                         href="{{ route('unhls_test.enterResults', array($test->id)) }}"
                                         title="{{trans('messages.enter-results-title')}}">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                         {{trans('messages.enter-results')}}
                                     </a>
-                                @endif
+                                @endcan
                             @elseif ($test->isCompleted())
-                                @if(Auth::user()->can('edit_test_results'))
+                                @can('edit_test_results')
                                     <a class="btn btn-sm btn-info" id="edit-{{$test->id}}-link"
                                         href="{{ route('unhls_test.edit', array($test->id)) }}"
                                         title="{{trans('messages.edit-test-results')}}">
                                         <span class="glyphicon glyphicon-edit"></span>
                                         {{trans('messages.edit')}}
                                     </a>
-                                @endif
+                                @endcan
                                 @if(Auth::user()->can('verify_test_results') && Auth::user()->id != $test->tested_by)
                                     <a class="btn btn-sm btn-success" id="verify-{{$test->id}}-link"
                                         href="{{ route('unhls_test.viewDetails', array($test->id)) }}"
@@ -250,9 +251,9 @@
                                         @elseif($test->specimen->isReferred())
                                             <span class='label label-primary'>
                                                 {{trans('messages.specimen-referred-label') }}
-                                                @if($test->specimen->referral->status == Referral::REFERRED_IN)
+                                                @if($test->specimen->referral->status == App\Models\Referral::REFERRED_IN)
                                                     {{ trans("messages.in") }}
-                                                @elseif($test->specimen->referral->status == Referral::REFERRED_OUT)
+                                                @elseif($test->specimen->referral->status == App\Models\Referral::REFERRED_OUT)
                                                     {{ trans("messages.out") }}
                                                 @endif
                                             </span>
@@ -274,7 +275,7 @@
             </table>
             {{ $testSet->links() }}
         {{ Session::put('SOURCE_URL', URL::full()) }}
-        {{ Session::put('TESTS_FILTER_INPUT', $request->except_token) }}
+        {{ Session::put('TESTS_FILTER_INPUT', $request['token']) }}
 
         </div>
     </div>

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Exception;
@@ -45,7 +46,6 @@ class UserController extends Controller {
     }
 
     public function configureFacilitySettings(Request $request)
-
     {
         if ($request->server("REQUEST_METHOD") == "POST")
         {
@@ -221,7 +221,7 @@ class UserController extends Controller {
         $user = User::find($id);
 
         //Show the view and pass the $user to it
-        return View('user.show')->with('user', $user);
+        return view('user.show')->with('user', $user);
     }
 
     /**
@@ -236,7 +236,7 @@ class UserController extends Controller {
         $user = User::find($id);
 
         //Open the Edit View and pass to it the $user
-        return View('user.edit')->with('user', $user);
+        return view('user.edit')->with('user', $user);
     }
 
     /**
