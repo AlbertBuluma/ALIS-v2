@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::group(array("before" => "guest"), function()
+Route::middleware('api')->group(function()
 {
     /*
     |-----------------------------------------
@@ -28,17 +28,17 @@ Route::group(array("before" => "guest"), function()
     | Proposed route for the BLIS api, we will receive api calls
     | from other systems from this route.
     */
-    Route::post('/api/receiver', array(
+    Route::post('receiver', array(
         "as" => "api.receiver",
         "uses" => "InterfacerController@receiveLabRequest"
     ));
-    Route::post('/api/testinfo', array(
+    Route::post('testinfo', array(
         "uses" => "InterfacerController@getTestInfo"
     ));
-    Route::post('/api/searchtests', array(
+    Route::post('searchtests', array(
         "uses" => "InterfacerController@getTests"
     ));
-    Route::post('/api/saveresults', array(
+    Route::post('saveresults', array(
         "uses" => "InterfacerController@saveTestResults"
     ));
     Route::any('/', array(
