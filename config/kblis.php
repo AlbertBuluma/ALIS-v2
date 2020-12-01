@@ -17,7 +17,7 @@ return array(
 	|
 	*/
 
-	'version' => 'v1.0',
+	'version' => 'v3.0',
 
 	/*
 
