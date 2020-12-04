@@ -25,7 +25,7 @@
                 </div>
 
                 {{ Form::open(array(
-                    "route"        => "user.login",
+                    "route"        => "login",
                     "autocomplete" => "off",
                     "class" => "form-horizontal",
                     "role" => "form"
