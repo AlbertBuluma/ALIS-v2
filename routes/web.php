@@ -11,18 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-/* Routes accessible before logging in */
-
-use App\Http\Controllers\ApiController;
-use App\Models\UnhlsVisit;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
+Route::any('/', array(
+    "as" => "user.login",
+    "uses" => "UserController@home"
+));
+
+Auth::routes();
 /* Routes accessible AFTER logging in */
 Route::middleware('auth')->group(function()
 {
