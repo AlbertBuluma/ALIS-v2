@@ -22,27 +22,38 @@ use Illuminate\Support\MessageBag;
  */
 class UserController extends Controller {
 
+
+    public function home()
+    {
+        return view('user.login');
+    }
+
     //Function for user authentication logic
     public function loginAction(Request $request){
 
-        if ($request->isMethod('post')) {
-			$this->validate($request, [
-				"username" => "required|min:4",
-                "password" => "required|min:6"
-        	]);
+        if ($request->server("REQUEST_METHOD") == "POST")
+        {
+            if ($request->isMethod('post')) {
+                $this->validate($request, [
+                    "username" => "required|min:4",
+                    "password" => "required|min:6"
+                ]);
 
-			$credentials = array(
-				"username" => $request->username,
-				"password" => $request->password
-				);
+                $credentials = array(
+                    "username" => $request->username,
+                    "password" => $request->password
+                );
 
-			if(Auth::attempt($credentials)){
-				return redirect()->route("user.home");
-			}
+                if(Auth::attempt($credentials)){
+                    return redirect()->route("user.home");
+                }
 
+            }
+
+            return view("user.login");
         }
 
-        return view("user.login");
+//        return view("user.login");
     }
 
     public function configureFacilitySettings(Request $request)
