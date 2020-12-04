@@ -499,6 +499,7 @@ class ReportController extends Controller {
      */
 	public function dailyLog(Request $request)
 	{
+//	    dd($request->all());
 		$from = $request->get('start');
 		$to = $request->get('end');
 		$pendingOrAll = $request->get('pending_or_all');
@@ -610,7 +611,7 @@ class ReportController extends Controller {
 					"Content-type"=>"text/html",
 					"Content-Disposition"=>"attachment;Filename=".$fileName
 				);
-				$content = View('reports.daily.exportSpecimenLog')
+				$content = view('reports.daily.exportSpecimenLog')
 								->with('specimens', $specimens)
 								->with('testCategory', $testCategory)
 								->with('testType', $testType)
