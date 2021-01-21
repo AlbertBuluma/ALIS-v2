@@ -11,7 +11,9 @@
 |
 */
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,6 +22,14 @@ Route::any('/', array(
     "uses" => "UserController@home"
 ));
 
+Route::get('changepassword', function() {
+    $user = User::where('username', 'administrator')->first();
+    $user->password = Hash::make('123456');
+    $user->save();
+
+    echo 'Password changed successfully.';
+});
+
 Auth::routes();
 /* Routes accessible AFTER logging in */
 Route::middleware('auth')->group(function()
@@ -27,6 +37,16 @@ Route::middleware('auth')->group(function()
     Route::any('/home', array(
         "as" => "user.home",
         "uses" => "UserController@homeAction"
+    ));
+
+    Route::any('/settings', array(
+        "as" => "facility.settings",
+        "uses" => "UserController@configureFacilitySettings"
+    ));
+
+    Route::get('/connection', array(
+        "as" => "facility.connection",
+        "uses" => "UserController@testConnection"
     ));
 
     Route::any('/dashboard', array(
@@ -68,6 +88,11 @@ Route::middleware('auth')->group(function()
         "uses" => "UnhlsPatientController@search"
     ));
 
+    //Microbiology specimens Controller
+    Route::resource('microbio', 'MicrobiologyController');
+
+    // specimens and patients information
+    Route::resource('unhls_specimens', 'UnhlsSpecimenController');
 
     //POC routes start here
     Route::resource('poc', 'PocController');
@@ -115,6 +140,11 @@ Route::middleware('auth')->group(function()
         "uses" => "PocController@download"
     ));
 
+    Route::get("/pocoldform", array(
+        "as"   => "poc.oldform",
+        "uses" => "PocController@oldForm"
+    ));
+
     Route::get("unhls_test/importPoc", array(
         "as" => "unhls_test.importPoc",
         "uses" => "UnhlsTestController@importPoc"));
@@ -122,6 +152,86 @@ Route::middleware('auth')->group(function()
     Route::post("unhls_test/uploadPoCResults", array(
         "as" => "unhls_test.uploadPoCResults",
         "uses" => "UnhlsTestController@uploadPoCResults"));
+
+    Route::get("/unhls_test/{test}/delete", array(
+        "as"   => "unhls_test.delete",
+        "uses" => "UnhlsTestController@delete"
+    ));
+    Route::get("unhls_test/completed", array(
+        "as" => "unhls_test.completed",
+        "uses" => "UnhlsTestController@completed"));
+    Route::get("unhls_test/pending", array(
+        "as" => "unhls_test.pending",
+        "uses" => "UnhlsTestController@pending"));
+    Route::get("unhls_test/started", array(
+        "as" => "unhls_test.started",
+        "uses" => "UnhlsTestController@started"));
+    Route::get("unhls_test/notrecieved", array(
+        "as" => "unhls_test.notrecieved",
+        "uses" => "UnhlsTestController@notRecieved"));
+    Route::get("unhls_test/verified", array(
+        "as" => "unhls_test.verified",
+        "uses" => "UnhlsTestController@verified"));
+    Route::get("/unhls_test/{test}/viewdetails", array(
+        "as"   => "unhls_test.viewDetails",
+        "uses" => "UnhlsTestController@viewDetails"
+    ));
+    Route::post("/unhls_test/start", array(
+        "before" => "checkPerms:start_test",
+        "as"   => "unhls_test.start",
+        "uses" => "UnhlsTestController@start"
+    ));
+    Route::any("rejection/{id}/{visit}/{testId?}", [
+        "as"   => 'rejection.report',
+        'uses' => 'UnhlsTestController@rejectionReport']);
+    //});
+
+    /*Visit Management*/
+    Route::any("/visit", array(
+        "as"   => "visit.index",
+        "uses" => "VisitController@index"
+    ));
+    Route::get("/visit/show/{visit_id}", array(
+        "as"   => "visit.show",
+        "uses" => "VisitController@show"
+    ));
+    Route::get("/visit/create/{patient_id}", array(
+        "as"   => "visit.create",
+        "uses" => "VisitController@create"
+    ));
+    Route::post("/visit/store", array(
+        "as"   => "visit.store",
+        "uses" => "VisitController@store"
+    ));
+    Route::post("/visit/update/{visit_id}", array(
+        "as"   => "visit.update",
+        "uses" => "VisitController@update"
+    ));
+    Route::get("/visit/edit/{visit_id}", array(
+        "as"   => "visit.edit",
+        "uses" => "VisitController@edit"
+    ));
+    Route::get("/visit/destroy/{visit_id}", array(
+        "as"   => "visit.destroy",
+        "uses" => "VisitController@destroy"
+    ));
+    Route::post("/visit/testlist", array(
+        "as"   => "visit.testList",
+        "uses" => "VisitController@testList"
+    ));
+    Route::get("/visit/addtest/{visit_id}", array(
+        "as"   => "visit.addtest",
+        "uses" => "VisitController@getAddTest"
+    ));
+    Route::post("/visit/clinicianaddtest/{visit_id}", array(
+        "as"   => "visit.clinicianpostaddtest",
+        "uses" => "VisitController@clinicianPostAddTest"
+    ));
+    Route::post("/visit/technologistaddtest/{visit_id}", array(
+        "as"   => "visit.technologistpostaddtest",
+        "uses" => "VisitController@technologistPostAddTest"
+    ));
+    Route::get('barcode/barcode', 'BarcodeController@barcode');
 
     //Unhls patiend routes end
 
@@ -181,6 +291,7 @@ Route::middleware('auth')->group(function()
     {
         Route::resource('instrument', 'InstrumentController');
         Route::resource('ward', 'WardController');
+        Route::resource('referral', 'ReferralController');
         Route::resource('clinicians', 'CliniciansController');
         Route::resource('testnamemapping', 'TestNameMappingController');
 
@@ -219,8 +330,17 @@ Route::middleware('auth')->group(function()
         "as"   => "unhls_test.index",
         "uses" => "UnhlsTestController@index"
     ));
-    Route::post("/unhls_test/testlist", array(
-        "as"   => "unhls_test.testList",
+    //  Route::any("/unhls_test/{id}", array(
+    //     "as"   => "unhls_test.list_tests_in_visit",
+    //     "uses" => "UnhlsTestController@getTestVisit"
+    // ));
+
+    Route::any("/unhls_test/cancel/{id}", array(
+        "as"   => "unhls_test.cancel_test",
+        "uses" => "UnhlsTestController@cancelTest"
+    ));
+    Route::post("/load_test_list", array(
+        "as"   => "unhls_test.loadTestList",
         "uses" => "UnhlsTestController@testList"
     ));
     Route::post("/unhls_test/resultinterpretation", array(
@@ -250,9 +370,14 @@ Route::middleware('auth')->group(function()
         "as"   => "unhls_test.create",
         "uses" => "UnhlsTestController@create"
     ));
-    Route::post("/unhls_test/savenewtest", array(
+    Route::any("/create_test", array(
         "before" => "checkPerms:request_test",
-        "as"   => "unhls_test.saveNewTest",
+        "as"   => "create_test",
+        "uses" => "UnhlsTestController@create"
+    ));
+    Route::post("/submit_test", array(
+        "before" => "checkPerms:request_test",
+        "as"   => "submit_test",
         "uses" => "UnhlsTestController@saveNewTest"
     ));
     Route::post("/unhls_test/acceptspecimen", array(
@@ -260,15 +385,15 @@ Route::middleware('auth')->group(function()
         "as"   => "unhls_test.acceptSpecimen",
         "uses" => "UnhlsTestController@acceptSpecimenAction"
     ));
-    Route::get("/unhls_test/{id}/refer", array(
+    Route::get("/unhls_test/{testid}/refer", array(
         "before" => "checkPerms:refer_specimens",
         "as"   => "unhls_test.refer",
         "uses" => "UnhlsTestController@showRefer"
     ));
-    Route::post("/unhls_test/referaction", array(
+    Route::post("/refer_action", array(
         "before" => "checkPerms:refer_specimens",
-        "as"   => "unhls_test.referAction",
-        "uses" => "UnhlsTestController@referAction"
+        "as"   => "refer_action",
+        "uses" => "UnhlsTestController@refer_action"
     ));
     Route::get("/unhls_test/{id}/reject", array(
         "before" => "checkPerms:reject_test_specimen",
@@ -290,9 +415,9 @@ Route::middleware('auth')->group(function()
         "as"   => "unhls_test.updateSpecimenType",
         "uses" => "UnhlsTestController@updateSpecimenType"
     ));
-    Route::post("/unhls_test/start", array(
+    Route::post("/test/start", array(
         "before" => "checkPerms:start_test",
-        "as"   => "unhls_test.start",
+        "as"   => "test.start",
         "uses" => "UnhlsTestController@start"
     ));
     Route::get("/unhls_test/{test}/enterresults", array(
@@ -311,10 +436,21 @@ Route::middleware('auth')->group(function()
         "as"   => "unhls_test.saveResults",
         "uses" => "UnhlsTestController@saveResults"
     ));
+    Route::post("/unhls_test/{test}/saverevisedresults", array(
+        "before" => "checkPerms:edit_test_results",
+        "as"   => "unhls_test.saveRevisedResults",
+        "uses" => "UnhlsTestController@saveRevisedResults"
+    ));
     Route::get("/test/{test}/viewdetails", array(
         "as"   => "test.viewDetails",
         "uses" => "TestController@viewDetails"
     ));
+    Route::get("/unhls_test/{test}/collectsample", array( //This is meant to use a normal blade page
+        "as" => "unhls_test.collectSample",
+        "uses" => "UnhlsTestController@collectSpecimen"));
+    Route::post("/unhls_test/collectsamplemodal", array( //This is the route used via ajax call to load data in modal
+        "as" => "unhls_test.collectSampleModal",
+        "uses" => "UnhlsTestController@collectSpecimenModal"));
     Route::post("unhls_test/collectspecimen", array(
         "as" => "unhls_test.collectSpecimen",
         "uses" => "UnhlsTestController@acceptSpecimen"));
@@ -323,20 +459,20 @@ Route::middleware('auth')->group(function()
         "as"   => "unhls_test.collectSpecimenAction",
         "uses" => "UnhlsTestController@collectSpecimenAction"
     ));
-    Route::get("unhls_test/completed", array(
-        "as" => "unhls_test.completed",
+    Route::get("test/completed", array(
+        "as" => "test.completed",
         "uses" => "UnhlsTestController@completed"));
-    Route::get("unhls_test/pending", array(
-        "as" => "unhls_test.pending",
+    Route::get("test/pending", array(
+        "as" => "test.pending",
         "uses" => "UnhlsTestController@pending"));
-    Route::get("unhls_test/started", array(
-        "as" => "unhls_test.started",
+    Route::get("test/started", array(
+        "as" => "test.started",
         "uses" => "UnhlsTestController@started"));
-    Route::get("unhls_test/notrecieved", array(
-        "as" => "unhls_test.notrecieved",
+    Route::get("test/notrecieved", array(
+        "as" => "test.notrecieved",
         "uses" => "UnhlsTestController@notRecieved"));
-    Route::get("unhls_test/verified", array(
-        "as" => "unhls_test.verified",
+    Route::get("test/verified", array(
+        "as" => "test.verified",
         "uses" => "UnhlsTestController@verified"));
     //Test viewDetails start
     Route::get("/unhls_test/{test}/viewdetails", array(
@@ -353,6 +489,10 @@ Route::middleware('auth')->group(function()
         "before" => "checkPerms:approve_test_results",
         "as"   => "test.approve",
         "uses" => "UnhlsTestController@approve"
+    ));
+    Route::get("/print/{id}", array(
+        "as"   => "visit.print",
+        "uses" => "ReportController@print_visit"
     ));
     Route::resource('culture', 'CultureController');
     Route::resource('cultureobservation', 'CultureObservationController');
@@ -441,6 +581,18 @@ Route::middleware('auth')->group(function()
             "as"   => "reportconfig.store",
             "uses" => "DailyReportController@store"
         ));
+        Route::any('/newulin', array(
+            "as" => "resetulin.create",
+            "uses" => "UuidGeneratorController@create"
+        ));
+        Route::post('/resetulin', array(
+            "as" => "resetulin.reset",
+            "uses" => "UuidGeneratorController@reset"
+        ));
+        Route::post('/specimencollection', array(
+            "as" => "resetulin.specimen_collection",
+            "uses" => "UuidGeneratorController@specimen_collection"
+        ));
     });
 
     //  Check if able to manage reports
@@ -451,6 +603,10 @@ Route::middleware('auth')->group(function()
         Route::any("/patientreport", array(
             "as"   => "reports.patient.index",
             "uses" => "ReportController@loadPatients"
+        ));
+        Route::any("/patientreports", array(
+            "as"   => "reports.patient.merged",
+            "uses" => "ReportController@loadPatientss"
         ));
         Route::any("/patientreport/{id}", array(
             "as" => "reports.patient.report",
@@ -464,10 +620,31 @@ Route::middleware('auth')->group(function()
             "as" => "reports.patient.visit.report",
             "uses" => "ReportController@viewPatientVisitReport"
         ));
+
+        Route::any("/patientrequestform/{id}", array(
+            "as" => "reports.patient.visit.report",
+            "uses" => "ReportController@viewPatientVisitRequestForm"
+        ));
+
+        Route::any("/patientvisitreport/recall/{id}", array(
+            "as" => "reports.patient.visit.report.recall",
+            "uses" => "ReportController@recallPatientVisitReport"
+        ));
+        Route::any("/patientvisitreport/recall/test/{id}", array(
+            "as" => "reports.patient.visit.report.recall.test",
+            "uses" => "ReportController@recallPatientTest"
+        ));
+        Route::post("/patientvisitreport/{test}/saveresults", array(
+            "before" => "checkPerms:recall_report",
+            "as"   => "reports.recallResults",
+            "uses" => "ReportController@recallResults"
+        ));
+
         Route::any("/patient_final_report/{id}/{visit}", array(
             "as" => "reports.patient.report",
             "uses" => "ReportController@viewFinalPatientReport"
         ));
+
         Route::any("/patient_interim_report/{id}/{visit}", array(
             "as" => "reports.patient.interim.report",
             "uses" => "ReportController@viewInterimPatientReport"
@@ -509,6 +686,10 @@ Route::middleware('auth')->group(function()
             "as"   => "reports.aggregate.tat",
             "uses" => "ReportController@turnaroundTime"
         ));
+        // Route::any("/tat2", array(
+        //     "as"   => "reports.aggregate.tat",
+        //     "uses" => "ReportController@turnaroundTimeTestype"
+        // ));
         Route::any("/infection", array(
             "as"   => "reports.aggregate.infection",
             "uses" => "ReportController@infectionReport"
@@ -527,7 +708,10 @@ Route::middleware('auth')->group(function()
             "as"   => "reports.aggregate.hmis105",
             "uses" => "ReportController@hmis105"
         ));
-
+        Route::any("report/hmis105/{month?}", array(
+            "as"   => "report.hmis105",
+            "uses" => "HmisReportController@hmis105"
+        ));
         Route::any("/cd4", array(
             "as"   => "reports.aggregate.cd4",
             "uses" => "ReportController@cd4"
@@ -548,6 +732,30 @@ Route::middleware('auth')->group(function()
         Route::post("/inventory", array(
             "as"   => "reports.inventory",
             "uses" => "ReportController@stockLevel"
+        ));
+        Route::get("/microbiology/search", array(
+            "as"   => "reports.microbiology.search",
+            "uses" => "ReportController@searchMicrobiology"
+        ));
+        Route::post("/microbiology/download", array(
+            "as"   => "reports.microbiology.download",
+            "uses" => "ReportController@downloadMicrobiology"
+        ));
+        Route::any("/equipment_register", array(
+            "as"   => "reports.registers.equipment_maintenance",
+            "uses" => "ReportController@equipment_maintenance_register"
+        ));
+        Route::any("/bb_register", array(
+            "as"   => "reports.registers.biosafety_biosecurity",
+            "uses" => "ReportController@bb_register"
+        ));
+        Route::any("/quaterlyreport", array(
+            "as"   => "reports.quaterlyreport",
+            "uses" => "ReportController@quaterly_report"
+        ));
+        Route::any("/vl_tb_register", array(
+            "as"   => "reports.registers.vl_tb_register",
+            "uses" => "ReportController@vl_tb_register"
         ));
     });
     Route::group(array("before" => "checkPerms:manage_qc"), function()
@@ -640,6 +848,7 @@ Route::middleware('auth')->group(function()
             "as"   => "supplier.delete",
             "uses" => "SupplierController@delete"
         ));
+
         //Receipts
         Route::resource('receipt', 'ReceiptController');
         Route::get("/receipt/{id}/delete", array(
@@ -683,6 +892,53 @@ Route::middleware('auth')->group(function()
             "uses" => "StockRequisitionController@delete"
         ));
         Route::resource('stockrequisition', 'StockRequisitionController');
+
+        Route::resource('item', 'ItemController');
+
+        Route::get("/item/{id}/delete", array(
+            "as"   => "item.delete",
+            "uses" => "ItemController@delete"
+        ));
+
+        Route::resource('request', 'TopupController');
+        Route::get("/request/{id}/delete", array(
+            "as"   => "request.delete",
+            "uses" => "TopupController@delete"
+        ));
+
+        /*
+        *   Routes for stocks
+        */
+        Route::resource('stock', 'StockController');
+        Route::any("stock/{id}/log", array(
+            "as"   => "stocks.log",
+            "uses" => "StockController@index"
+        ));
+        Route::any("stock/{id}/create", array(
+            "as"   => "stocks.create",
+            "uses" => "StockController@create"
+        ));
+        Route::any("stock/{id}/usage/{req?}", array(
+            "as"   => "stocks.usage",
+            "uses" => "StockController@usage"
+        ));
+        Route::post("stock/saveusage", array(
+            "as"   => "stock.saveUsage",
+            "uses" => "StockController@stockUsage"
+        ));
+        Route::any("stock/{id}/show", array(
+            "as"   => "stocks.show",
+            "uses" => "StockController@show"
+        ));
+        Route::any("stock/{id}/lot", array(
+            "as"   => "stocks.lot",
+            "uses" => "StockController@lot"
+        ));
+        Route::any("lt/usage", array(
+            "as"   => "lt.update",
+            "uses" => "StockController@lotUsage"
+        ));
+
 
 
         //Equipment supplier form
@@ -830,6 +1086,11 @@ Route::middleware('auth')->group(function()
         ));
 
     });
+    Route::resource('testpurpose', 'UnhlsPurposeController');
+    Route::get("/testpurpose/{id}/delete", array(
+        "as"   => "testpurpose.delete",
+        "uses" => "UnhlsPurposeController@delete"
+    ));
 
     //Bike Management
     Route::resource('bike', 'BikeController');
@@ -911,6 +1172,17 @@ Route::middleware('auth')->group(function()
 
 });
 
+// Attachment of files
+Route::resource('fileupload', 'FileAttachmentController');
+Route::get("/resultupload/", array(
+    "as"   => "fileupload.resultupload",
+    "uses" => "FileAttachmentController@result_upload"
+));
+
+Route::post("/updateupload/", array(
+    "as"   => "fileupload.updateupload",
+    "uses" => "FileAttachmentController@updateupload"
+));
 
 // DATA WARE HOUSE API ENDPOINTS    //TODO Integrate Laravel Passport for API Authentication
 

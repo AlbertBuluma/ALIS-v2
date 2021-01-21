@@ -51,11 +51,11 @@
                     </tr>
                 @empty
                 <tr><td colspan="2">{{ trans('messages.no-users-found')}}</td></tr>
-                @endforelse 
+                @endforelse
                 </tbody>
             </table>
             <div class="form-group actions-row">
-                    {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+                    {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
                         array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
             </div>
             {{Form::close()}}
