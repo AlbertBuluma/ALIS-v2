@@ -71,6 +71,11 @@ class UnhlsTest extends Model
 		return $this->belongsTo('App\Models\Clinician','clinician_id');
 	}
 
+    public function clinicians()
+    {
+        return $this->belongsTo('App\Models\Clinician', 'clinician_id', 'id');
+    }
+
 	public function getClinician()
 	{
 		return Clinician::find($this->clinician_id);
@@ -141,6 +146,10 @@ class UnhlsTest extends Model
 	{
 		return $this->belongsTo('App\Models\TestType');
 	}
+
+    public function equipment(){
+        return $this->belongsTo('App\Models\Instrument', 'instrument_id');
+    }
 
 	/**
 	 * Specimen relationship
@@ -298,6 +307,13 @@ class UnhlsTest extends Model
 			return false;
 	}
 
+    public function isCompletedVerifiedorApproved()
+    {
+        if($this->test_status_id == UnhlsTest::COMPLETED || $this->test_status_id == UnhlsTest::VERIFIED || $this->test_status_id == UnhlsTest::APPROVED)
+            return true;
+        else
+            return false;
+    }
 	/**
 	 * Helper function: check if the Test status is VERIFIED
 	 *
@@ -599,10 +615,10 @@ class UnhlsTest extends Model
 	* @param String $dateTo
 	* @return Collection
 	*/
-	public static function search($searchString = '', $testStatusId = 0, $dateFrom = NULL, $dateTo = NULL)
+	public static function search($searchString = '', $testStatusId = 0, $testCategoryId = 0, $dateFrom = NULL, $dateTo = NULL)
 	{
 
-		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'specimen', 'testStatus', 'testStatus.testPhase')
+		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'testType.testCategory', 'specimen', 'testStatus', 'testStatus.testPhase')
 			->where(function($q) use ($searchString){
 
 			$q->whereHas('visit', function($q) use ($searchString)
@@ -642,6 +658,16 @@ class UnhlsTest extends Model
 				});
 			});
 		}
+
+        if($testCategoryId > 0){
+            // $condition = $condition." AND tt.test_category_id = ".$testCategoryId;
+            $tests = $tests->where(function($q) use ($testCategoryId)
+            {
+                $q->whereHas('testType.testCategory', function($q) use ($testCategoryId){
+                    $q->where('id','=', $testCategoryId);//Filter by test status
+                });
+            });
+        }
 
 		if ($dateFrom||$dateTo) {
 			$tests = $tests->where(function($q) use ($dateFrom, $dateTo)
@@ -696,10 +722,10 @@ class UnhlsTest extends Model
 	* @return \Illuminate\Database\Eloquent\Builder
 	*/
 	// todo: =this should include verified tests
-	public static function completedTests($searchString = '', $testStatusId = 4, $dateFrom = NULL, $dateTo = NULL)
+	public static function completedTests($searchString = '', $testStatusId = 4, $testCategoryId = 0, $dateFrom = NULL, $dateTo = NULL)
 	{
 
-		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'specimen', 'testStatus', 'testStatus.testPhase')
+		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'testType.testCategory', 'specimen', 'testStatus', 'testStatus.testPhase')
 			->where(function($q) use ($searchString){
 
 			$q->whereHas('visit', function($q) use ($searchString)
@@ -744,6 +770,16 @@ class UnhlsTest extends Model
 				});
 			});
 		}
+
+        if($testCategoryId > 0){
+            // $condition = $condition." AND tt.test_category_id = ".$testCategoryId;
+            $tests = $tests->where(function($q) use ($testCategoryId)
+            {
+                $q->whereHas('testType.testCategory', function($q) use ($testCategoryId){
+                    $q->where('id','=', $testCategoryId);//Filter by test status
+                });
+            });
+        }
 
 		if ($dateFrom||$dateTo) {
 			$tests = $tests->where(function($q) use ($dateFrom, $dateTo)
@@ -771,10 +807,10 @@ class UnhlsTest extends Model
 	* @param String $dateTo
 	* @return Collection
 	*/
-	public static function pendingTests($searchString = '', $testStatusId = 2, $dateFrom = NULL, $dateTo = NULL)
+	public static function pendingTests($searchString = '', $testStatusId = 2, $testCategoryId = 0, $dateFrom = NULL, $dateTo = NULL)
 	{
 
-		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'specimen', 'testStatus', 'testStatus.testPhase')
+		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'testType.testCategory', 'specimen', 'testStatus', 'testStatus.testPhase')
 			->where(function($q) use ($searchString){
 
 			$q->whereHas('visit', function($q) use ($searchString)
@@ -819,6 +855,16 @@ class UnhlsTest extends Model
 				});
 			});
 		}
+
+        if($testCategoryId > 0){
+            // $condition = $condition." AND tt.test_category_id = ".$testCategoryId;
+            $tests = $tests->where(function($q) use ($testCategoryId)
+            {
+                $q->whereHas('testType.testCategory', function($q) use ($testCategoryId){
+                    $q->where('id','=', $testCategoryId);//Filter by test status
+                });
+            });
+        }
 
 		if ($dateFrom||$dateTo) {
 			$tests = $tests->where(function($q) use ($dateFrom, $dateTo)
@@ -846,10 +892,10 @@ class UnhlsTest extends Model
 	* @param String $dateTo
 	* @return Collection
 	*/
-	public static function startedTests($searchString = '', $testStatusId = 3, $dateFrom = NULL, $dateTo = NULL)
+	public static function startedTests($searchString = '', $testStatusId = 3, $testCategoryId = 0, $dateFrom = NULL, $dateTo = NULL)
 	{
 
-		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'specimen', 'testStatus', 'testStatus.testPhase')
+		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'testType.testCategory', 'specimen', 'testStatus', 'testStatus.testPhase')
 			->where(function($q) use ($searchString){
 
 			$q->whereHas('visit', function($q) use ($searchString)
@@ -894,6 +940,16 @@ class UnhlsTest extends Model
 				});
 			});
 		}
+
+        if($testCategoryId > 0){
+            // $condition = $condition." AND tt.test_category_id = ".$testCategoryId;
+            $tests = $tests->where(function($q) use ($testCategoryId)
+            {
+                $q->whereHas('testType.testCategory', function($q) use ($testCategoryId){
+                    $q->where('id','=', $testCategoryId);//Filter by test status
+                });
+            });
+        }
 
 		if ($dateFrom||$dateTo) {
 			$tests = $tests->where(function($q) use ($dateFrom, $dateTo)
@@ -921,10 +977,10 @@ class UnhlsTest extends Model
 	* @param String $dateTo
 	* @return Collection
 	*/
-	public static function notRecieved($searchString = '', $testStatusId = 1, $dateFrom = NULL, $dateTo = NULL)
+	public static function notRecieved($searchString = '', $testStatusId = 1, $testCategoryId = 0, $dateFrom = NULL, $dateTo = NULL)
 	{
 
-		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'specimen', 'testStatus', 'testStatus.testPhase')
+		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'testType.testCategory', 'specimen', 'testStatus', 'testStatus.testPhase')
 			->where(function($q) use ($searchString){
 
 			$q->whereHas('visit', function($q) use ($searchString)
@@ -969,6 +1025,16 @@ class UnhlsTest extends Model
 				});
 			});
 		}
+
+        if($testCategoryId > 0){
+            // $condition = $condition." AND tt.test_category_id = ".$testCategoryId;
+            $tests = $tests->where(function($q) use ($testCategoryId)
+            {
+                $q->whereHas('testType.testCategory', function($q) use ($testCategoryId){
+                    $q->where('id','=', $testCategoryId);//Filter by test status
+                });
+            });
+        }
 
 		if ($dateFrom||$dateTo) {
 			$tests = $tests->where(function($q) use ($dateFrom, $dateTo)
@@ -996,10 +1062,10 @@ class UnhlsTest extends Model
 	* @param String $dateTo
 	* @return Collection
 	*/
-	public static function verified($searchString = '', $testStatusId = 5, $dateFrom = NULL, $dateTo = NULL)
+	public static function verified($searchString = '', $testStatusId = 5, $testCategoryId = 0, $dateFrom = NULL, $dateTo = NULL)
 	{
 
-		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'specimen', 'testStatus', 'testStatus.testPhase')
+		$tests = UnhlsTest::with('visit', 'visit.patient', 'testType', 'testType.testCategory', 'specimen', 'testStatus', 'testStatus.testPhase')
 			->where(function($q) use ($searchString){
 
 			$q->whereHas('visit', function($q) use ($searchString)
@@ -1044,6 +1110,16 @@ class UnhlsTest extends Model
 				});
 			});
 		}
+
+        if($testCategoryId > 0){
+            // $condition = $condition." AND tt.test_category_id = ".$testCategoryId;
+            $tests = $tests->where(function($q) use ($testCategoryId)
+            {
+                $q->whereHas('testType.testCategory', function($q) use ($testCategoryId){
+                    $q->where('id','=', $testCategoryId);//Filter by test status
+                });
+            });
+        }
 
 		if ($dateFrom||$dateTo) {
 			$tests = $tests->where(function($q) use ($dateFrom, $dateTo)
@@ -1261,56 +1337,6 @@ class UnhlsTest extends Model
     {
       return ($this->testType->name == 'HIV') ? true : false;
     }
-
-    public static function getRecalledTestRevisions($test_id){
-		$revisions = $revisions = DB::select("SELECT * from unhls_recalled_test_results WHERE unhls_test_id=".$test_id);
-		return $revisions;
-	}
-
-    /*
-    *
-    *
-    */
-    public function revisions()
-	{
-		return $this->hasMany('App\Models\UnhlsRecalledTestResult', 'unhls_test_id','id');
-	}
-
-//	public static function latestRevision($test_id){
-	public function latestRevision($test_id){
-
-		$revisions = DB::select("SELECT * revisions from unhls_recalled_test_results WHERE unhls_test_id=".$test_id);
-
-		$number_of_revisions = $this->numberOfRevisions($test_id);
-		$last_index = $number_of_revisions - 1;
-		if($last_index > 0)
-			return null;
-
-		//return $revisions[$last_index];
-		return "positive gram stain";
-	}
-
-	public static function numberOfRevisions($test_id){
-
-
-
-		$revisions = DB::select("SELECT count(*) revisions from unhls_recalled_test_results WHERE unhls_test_id=".$test_id);
-
-
-		return $revisions[0]->revisions;
-
-	}
-
-	public function recalledTestResults(){
-		return $this->hasMany('App\Models\UnhlsRecalledTestResult');
-	}
-
-	public static function getMeasure($measure_id){
-		$measureInstance = Measure::find($measure_id);
-
-		return $measureInstance;
-	}
-
 
 
 }

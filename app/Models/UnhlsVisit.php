@@ -39,6 +39,21 @@ class UnhlsVisit extends Model
 		return $this->belongsTo('App\Models\Ward', 'ward_id');
 	}
 
+    /**
+     * User relationship
+     */
+    public function printBy()
+    {
+        return $this->belongsTo('App\Models\User', 'printed_by');
+    }
+    /**
+     * Refferral Facility relationship
+     */
+    public function facility()
+    {
+        return $this->belongsTo('App\Models\Facility', 'facility_id');
+    }
+
 	/**
 	 * Patient relationship
 	 */
@@ -124,6 +139,54 @@ class UnhlsVisit extends Model
 		return $ward_name;
 
 	}
+
+    public function exactAge($format = "YYMM", $at = NULL)
+    {
+        if(!$at)$at = new DateTime($this->created_at);
+
+        $dateOfBirth = new DateTime($this->patient->dob);
+        $interval = $dateOfBirth->diff($at);
+        $age = "";
+
+        switch ($format) {
+            case 'ref_range_Y':
+                $seconds = ($interval->days * 24 * 3600) + ($interval->h * 3600) + ($interval->i * 60) + ($interval->s);
+                $age = $seconds/(365*24*60*60);
+                break;
+            case 'Y':
+
+                $age = $interval->y;break;
+            case 'YY':
+
+                $age = $interval->y ." years ";break;
+            default:
+                if($interval->y == 0){
+
+
+                    if($interval->format('%a') > 31){
+                        $age = $interval->format('%m months');
+                    }else{
+                        $age = $interval->format('%a days');
+                    }
+                }
+                elseif($interval->y > 0 && $interval->y <= 2){
+
+                    $age = $interval->format('%m') + 12 * $interval->format('%y')." months";
+                }
+                else{
+
+                    $age=$interval->y." years ";
+
+                    $seconds = ($interval->days * 24 * 3600) + ($interval->h * 3600) + ($interval->i * 60) + ($interval->s);
+                    $age = round($seconds/(365*24*60*60), 1)." years ";
+                }
+
+                break;
+        }
+
+        return $age;
+    }
+
 	/**
 	 * Search for visits meeting the given criteria
 	 *
@@ -165,7 +228,7 @@ class UnhlsVisit extends Model
 			});
 		}
 
-		$visits = $visits->orderBy('created_at', 'ASC');
+		$visits = $visits->orderBy('id', 'DESC');
 
 		return $visits;
 	}
