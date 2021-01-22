@@ -68,7 +68,7 @@ class ControlController extends Controller {
 					$controlMeasure->saveMeasuresRanges($newMeasures, $control);
 			}
 			// redirect
-			return redirect('control')
+			return redirect()->route('control')
 					->with('message', trans('messages.successfully-added-control'))
 					->with('activeControl', $control ->id);
 		}

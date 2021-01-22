@@ -1,6 +1,14 @@
 <?php
 
-class GramStainResultController extends \BaseController {
+namespace App\Http\Controllers;
+
+use App\Models\GramStainRange;
+use App\Models\GramStainResult;
+use App\Models\UnhlsTest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class GramStainResultController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -24,17 +32,18 @@ class GramStainResultController extends \BaseController {
 		//
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return GramStainResult
+     */
+	public function store(Request $request)
 	{
 		$gramStainResult = new GramStainResult;
-		$gramStainResult->test_id = Input::get('test_id');
+		$gramStainResult->test_id = $request->get('test_id');
 		$gramStainResult->user_id = Auth::user()->id;
-		$gramStainResult->gram_stain_range_id = Input::get('gram_stain_range_id');
+		$gramStainResult->gram_stain_range_id = $request->get('gram_stain_range_id');
 		$gramStainResult->save();
 		return $gramStainResult->load('gramStainRange');
 	}
@@ -55,14 +64,14 @@ class GramStainResultController extends \BaseController {
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($testId)
 	{
 		//Get the gram stain ranges for gram stain
 		$test = UnhlsTest::find($testId);
-		$gramStainRanges = ['']+GramStainRange::lists('name', 'id');
-		return View::make('unhls_test.gramstain')
+		$gramStainRanges = ['']+GramStainRange::pluck('name', 'id')->toArray();
+		return view('unhls_test.gramstain')
 			->with('gramStainRanges', $gramStainRanges)
 			->with('test', $test);
 	}
