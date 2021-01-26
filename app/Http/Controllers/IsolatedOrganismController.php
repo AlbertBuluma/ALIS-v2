@@ -1,6 +1,12 @@
 <?php
 
-class IsolatedOrganismController extends \BaseController {
+namespace App\Http\Controllers;
+
+use App\Models\IsolatedOrganism;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class IsolatedOrganismController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -26,17 +32,18 @@ class IsolatedOrganismController extends \BaseController {
 	}
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return IsolatedOrganism
+     */
+	public function store(Request $request)
 	{
 		$isolatedOrganism = new IsolatedOrganism;
 		$isolatedOrganism->user_id = Auth::user()->id;
-		$isolatedOrganism->test_id = Input::get('test_id');
-		$isolatedOrganism->organism_id = Input::get('organism_id');
+		$isolatedOrganism->test_id = $request->get('test_id');
+		$isolatedOrganism->organism_id = $request->get('organism_id');
 		$isolatedOrganism->save();
 		return $isolatedOrganism->load('test','organism');
 	}
@@ -66,18 +73,19 @@ class IsolatedOrganismController extends \BaseController {
 	}
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+	public function update(Request $request, $id)
 	{
 		$isolatedOrganism = IsolatedOrganism::find($id);
 		$isolatedOrganism->user_id = Auth::user()->id;
-		$isolatedOrganism->test_id = Input::get('test_id');
-		$isolatedOrganism->organism_id = Input::get('organism_id');
+		$isolatedOrganism->test_id = $request->get('test_id');
+		$isolatedOrganism->organism_id = $request->get('organism_id');
 		$isolatedOrganism->save();
 		return $isolatedOrganism->load('test','organism');
 	}

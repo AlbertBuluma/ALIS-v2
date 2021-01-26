@@ -1,17 +1,24 @@
 <?php
 
+namespace App\Http\Controllers;
+
+use App\Models\UnhlsSpecimen;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 /**
- * Contains functions for managing specimen types  
+ * Contains functions for managing specimen types
  *
  */
-class SpecimenController extends \BaseController {
+class SpecimenController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
@@ -19,49 +26,50 @@ class SpecimenController extends \BaseController {
 			$specimens = UnhlsSpecimen::orderBy('name', 'ASC')->get();
 
 		// Load the view and pass the specimens
-		return View::make('specimen.index')->with('specimens', $specimens);
+		return view('specimen.index')->with('specimens', $specimens);
 	}
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function create()
 	{
 		//Create Specimen
-		return View::make('specimen.create');
+		return view('specimen.create');
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function store(Request $request)
 	{
 		//
 		$rules = array('name' => 'required|unique:specimen_types,name');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator);
+			return redirect()->back()->withErrors($validator);
 		} else {
 			// store
 			$specimen = new UnhlsSpecimen;
-			$specimen->name = Input::get('name');
-			$specimen->description = Input::get('description');
+			$specimen->name = $request->get('name');
+			$specimen->description = $request->get('description');
 
 			try{
 				$specimen->save();
 			$url = Session::get('SOURCE_URL');
-			return Redirect::to($url)
+			return redirect()->to($url)
                     ->with('message', trans('messages.success-creating-specimen-type'));
 			}catch(QueryException $e){
                 Log::error($e);
 			}
-			
+
 			// redirect
 		}
 	}
@@ -70,7 +78,7 @@ class SpecimenController extends \BaseController {
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function show($id)
 	{
@@ -78,14 +86,14 @@ class SpecimenController extends \BaseController {
 		$specimen = UnhlsSpecimen::find($id);
 
 		//Show the view and pass the $specimen to it
-		return View::make('specimen.show')->with('specimen', $specimen);
+		return view('specimen.show')->with('specimen', $specimen);
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
@@ -93,37 +101,38 @@ class SpecimenController extends \BaseController {
 		$specimen = UnhlsSpecimen::find($id);
 
 		//Open the Edit View and pass to it the $specimen
-		return View::make('specimen.edit')->with('specimen', $specimen);
+		return view('specimen.edit')->with('specimen', $specimen);
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function update(Request $request, $id)
 	{
 		//
 		$rules = array('name' => 'required');
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator);
+			return redirect()->back()->withErrors($validator);
 		} else {
 			// Update
 			$specimen = UnhlsSpecimen::find($id);
-			$specimen->name = Input::get('name');
-			$specimen->description = Input::get('description');
+			$specimen->name = $request->get('name');
+			$specimen->description = $request->get('description');
 			$specimen->save();
 
 			// redirect
 			$url = Session::get('SOURCE_URL');
-			
-			return Redirect::to($url)
+
+			return redirect()->to($url)
 			->with('message', trans('messages.success-updating-specimen-type'))->with('activespecimen', $specimen ->id);
-		
+
 		}
 	}
 
@@ -142,7 +151,7 @@ class SpecimenController extends \BaseController {
 	 * Remove the specified resource from storage (soft delete).
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
@@ -155,13 +164,13 @@ class SpecimenController extends \BaseController {
 			$specimen->delete();
 		} else {
 		    // The specimen type is in use
-		    return Redirect::route('specimen.index')
+		    return redirect()->route('specimen.index')
 		    	->with('message', trans('messages.failure-specimen-type-in-use'));
 		}
 		// redirect
 		  $url = Session::get('SOURCE_URL');
-			
-			return Redirect::to($url)
+
+			return redirect()->to($url)
 			->with('message', trans('messages.success-updating-specimen-type'));
 	}
 }
