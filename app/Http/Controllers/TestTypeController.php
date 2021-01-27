@@ -7,6 +7,7 @@ use App\Models\MeasureType;
 use App\Models\Organism;
 use App\Models\SpecimenType;
 use App\Models\TestCategory;
+use App\Models\TestNameMapping;
 use App\Models\TestType;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -46,11 +47,12 @@ class TestTypeController extends Controller {
 		$testcategory = TestCategory::all();
         $measuretype = MeasureType::all()->sortBy('id');
         $organisms = Organism::orderBy('name')->get();
-
+        $standardnames = TestNameMapping::all();
 		//Create TestType
 		return view('testtype.create')
 					->with('testcategory', $testcategory)
 					->with('measures', $measures)
+       				->with('standardnames', $standardnames)
        				->with('measuretype', $measuretype)
 					->with('specimentypes', $specimentypes)
 					->with('organisms', $organisms);
@@ -67,7 +69,7 @@ class TestTypeController extends Controller {
 		//
 		$rules = array(
 			'name' => 'required|unique:test_types,name',
-			'test_category_id' => ['required', Rule::notIn([0])],
+			'test_category_id' => 'required|non_zero_key',
 			'specimentypes' => 'required',
 			'new-measures' => 'required',
 			'targetTAT' => 'required',
@@ -107,7 +109,7 @@ class TestTypeController extends Controller {
 			}catch(QueryException $e){
 				Log::error($e);
 			}
-				return redirect('testtype.index')
+				return redirect()->route('testtype.index')
 					->with('message', trans('messages.success-creating-test-type'));
 		}
 	}
@@ -142,13 +144,14 @@ class TestTypeController extends Controller {
 		$specimentypes = SpecimenType::orderBy('name')->get();
 		$testcategory = TestCategory::all();
 		$organisms = Organism::orderBy('name')->get();
-
+		$standardnames = TestNameMapping::all();
 		//Open the Edit View and pass to it the $testtype
 		return view('testtype.edit')
 					->with('testtype', $testtype)
 					->with('testcategory', $testcategory)
 					->with('measures', $measures)
        				->with('measuretype', $measuretype)
+       				->with('standardnames', $standardnames)
 					->with('specimentypes', $specimentypes)
 					->with('organisms', $organisms);
 	}
@@ -165,8 +168,8 @@ class TestTypeController extends Controller {
 	{
 		$rules = array(
 			'name' => 'required',
-//			'test_category_id' => 'required|non_zero_key',
-			'specimentypes' => ['required', Rule::notIn([0])],
+			'test_category_id' => 'required|non_zero_key',
+			'specimentypes' => 'required',
 			'targetTAT' => 'required',
 			'targetTAT_unit'=>'required'
 		);
@@ -181,6 +184,7 @@ class TestTypeController extends Controller {
 			$testtype->name = trim($request->get('name'));
 			$testtype->description = $request->get('description');
 			$testtype->test_category_id = $request->get('test_category_id');
+            $testtype->parentId = $request->get('parentId');
 			$testtype->targetTAT = $request->get('targetTAT');
 			$testtype->targetTAT_unit = $request->get('targetTAT_unit');
 			$testtype->prevalence_threshold = $request->get('prevalence_threshold');
@@ -251,11 +255,11 @@ class TestTypeController extends Controller {
 			$testtype->delete();
 		} else {
 		    // The test type is in use
-		    return redirect('testtype.index')
+		    return redirect()->route('testtype.index')
 		    	->with('message', 'messages.failure-test-type-in-use');
 		}
 		// redirect
-		return redirect('testtype.index')
+		return redirect()->route('testtype.index')
 			->with('message', trans('messages.success-deleting-test-type'));
 	}
 }

@@ -1,16 +1,18 @@
 <?php
+
 namespace App\Http\Controllers;
-class UnhlsElsController extends BaseController {
+
+class UnhlsElsController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function index()
 	{
 
-		return View('unhls_els.index');
+		return view('unhls_els.index');
 	}
 	/**
 	 * Remove the specified resource from storage.
