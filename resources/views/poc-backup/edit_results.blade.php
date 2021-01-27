@@ -12,11 +12,13 @@ if($result->results=='Positive'){
 ?>
 
 <?php
-$res_alere = $res_sambai = $res_sambaii = $res_genexpert = false;
+$res_alere = $res_mpima = $res_sambai = $res_sambaii = $res_genexpert = false;
 if($result->equipment_used =='Alere q'){
 	$res_sambai = true;
 }elseif($result->equipment_used =='SAMBA I'){
 	$res_sambaii = true;
+}elseif($result->equipment_used =='m-PIMA'){
+	$res_mpima = true;
 }elseif($result->equipment_used =='SAMBA II'){
 	$res_sambii = true;
 }
@@ -98,7 +100,7 @@ elseif($result->equipment_used =='GeneXpert'){
 <span class="input-tag">Alere q</span></div>
 <div class="radio-inline">
 {{ Form::radio("equipment_used", 'SAMBA I', $res_sambai) }} <span class="input-tag">SAMBA I</span></div>
-
+<div class="radio-inline">{{ Form::radio('equipment_used', 'm-PIMA', $res_mpima) }} <span class="input-tag">m-PIMA</span></div>
 <div class="radio-inline">
 {{ Form::radio("equipment_used", 'SAMBA II', $res_sambaii) }} <span class="input-tag">SAMBA II</span>
 </div>
