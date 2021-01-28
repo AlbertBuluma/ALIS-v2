@@ -7,8 +7,8 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{{URL::route('supplier.index')}}}">{{ Lang::choice('messages.supplier', 2) }}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{{route('supplier.index')}}}">{{ Lang::choice('messages.supplier', 2) }}</a></li>
 		  <li class="active">{{ trans('messages.supplier').' '.trans('messages.details') }}</li>
 		</ol>
 	</div>
@@ -17,7 +17,7 @@
 			<span class="glyphicon glyphicon-adjust"></span>
 			{{ Lang::choice('messages.supplier', 1).' '.trans('messages.details') }}
 			<div class="panel-btn">
-				<a class="btn btn-sm btn-info" href="{{ URL::route('supplier.edit', array($supplier->id)) }}">
+				<a class="btn btn-sm btn-info" href="{{ route('supplier.edit', array($supplier->id)) }}">
 					<span class="glyphicon glyphicon-edit"></span>
 					{{ trans('messages.edit') }}
 				</a>
@@ -32,7 +32,7 @@
 					{{ $supplier->email }}</p>
 				<p class="view-striped"><strong>{{ trans('messages.address') }}:</strong>
 					{{ $supplier->address }}</p>
-				
+
 			</div>
 		</div>
 	</div>

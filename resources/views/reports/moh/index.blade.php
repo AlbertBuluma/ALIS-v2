@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-	  <li><a href="{{{URL::route('reports.patient.index')}}}">{{ Lang::choice('messages.report',2) }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{{route('reports.patient.index')}}}">{{ Lang::choice('messages.report',2) }}</a></li>
 	  <li class="active">{{ trans('messages.moh-706') }}</li>
 	</ol>
 </div>
@@ -32,11 +32,11 @@
 		<div class="col-sm-4">
 	    	<div class="row">
 				<div class="col-sm-3">
-				  	{{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'), 
+				  	{{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'),
 		                array('class' => 'btn btn-info', 'id' => 'filter', 'type' => 'submit')) }}
 		        </div>
 		        <div class="col-sm-1">
-					{{Form::submit('Export to Excel', 
+					{{Form::submit('Export to Excel',
 			    		array('class' => 'btn btn-success', 'id'=>'excel', 'name'=>'excel'))}}
 				</div>
 			</div>
@@ -53,7 +53,7 @@
 	<div class="panel-body">
 	@if (Session::has('message'))
 		<div class="alert alert-info">{{ trans(Session::get('message')) }}</div>
-	@endif	
+	@endif
 		<table width="100%">
 			<thead>
 	            <tr>
@@ -66,12 +66,12 @@
 		</table>
 		<div class="table-responsive">
 			<div class='container-fluid'>
-				<strong>{{ Lang::choice('messages.facility', 1) }}: </strong><u>{{ strtoupper(Config::get('kblis.organization')) }}</u><strong> {{ Lang::choice('messages.reporting-period', 1) }} {{ Lang::choice('messages.begin-end', 1) }}: </strong><u>{{ $from }}</u>
+				<strong>{{ Lang::choice('messages.facility', 1) }}: </strong><u>{{ strtoupper(config('kblis.organization')) }}</u><strong> {{ Lang::choice('messages.reporting-period', 1) }} {{ Lang::choice('messages.begin-end', 1) }}: </strong><u>{{ $from }}</u>
 				<strong> {{ Lang::choice('messages.begin-end', 2) }}: </strong><u>{{ $end }}</u><strong> {{ Lang::choice('messages.affiliation', 1) }}: </strong><u>{{ Lang::choice('messages.gok', 1) }}: </u>
 				<br />
 				<p>{{ Lang::choice('messages.no-service', 1) }}</p>
 				<div class='row'>
-					{{ $table }}					
+					{{ $table }}
 				</div>
 			</div>
 		</div>

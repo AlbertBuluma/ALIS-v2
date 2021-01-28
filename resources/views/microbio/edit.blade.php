@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		<li><a href="{{ URL::route('unhls_patient.index') }}">{{ Lang::choice('messages.patient',2) }}</a></li>
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{ route('unhls_patient.index') }}">{{ Lang::choice('messages.patient',2) }}</a></li>
 		<li class="active">{{trans('Edit')}}</li>
 	</ol>
 </div>
@@ -27,8 +27,8 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-						
-			<div class="form-pane panel panel-default">			
+
+			<div class="form-pane panel panel-default">
 				<div class="col-md-6">
 					<div class="form-group">
 						{{ Form::label('patient_name','Patient Name', array('text-align' => 'right', 'class' => 'required')) }}
@@ -55,10 +55,10 @@
 					</div>
 				</div>
 				<div class="col-md-12">
-					
+
 					<div class="form-group">
 						{{ Form::label('dob','Date Of Birth', array('class' => 'required')) }}
-						{{ Form::text('dob', Input::old('dob'), array('class' => 'form-control input-sm')) }}
+						{{ Form::text('dob', old('dob'), array('class' => 'form-control input-sm')) }}
 					</div>
 					<div class="form-group">
 						<label for="age">Age</label>
@@ -86,22 +86,22 @@
 							{{ Form::select('facility', $facilities, $patient->visits, array('class' => 'form-control')) }}
 						</div>
 				</div>
-				<div class="col-md-6">	
+				<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('ward','Ward/Clinic/Health Unit') }}
-							{{ Form::select('ward', $ward, Input::old('ward_id'), array('class' => 'form-control')) }}
-						</div>				
+							{{ Form::select('ward', $ward, old('ward_id'), array('class' => 'form-control')) }}
+						</div>
 						<div class="form-group">
 							{{ Form::label('bed_no','Bed No:', array('text-align' => 'right')) }}
-							{{ Form::text('bed_no', Input::old('bed_no'), array('class' => 'form-control')) }}
-						</div>						
+							{{ Form::text('bed_no', old('bed_no'), array('class' => 'form-control')) }}
+						</div>
 						<div class="form-group">
 							{{ Form::label('facility_lab_number','Facility Lab No:', array('text-align' => 'right')) }}
-							{{ Form::text('facility_lab_number', Input::old('facility_lab_number'), array('class' => 'form-control')) }}
-						</div>					
+							{{ Form::text('facility_lab_number', old('facility_lab_number'), array('class' => 'form-control')) }}
+						</div>
 				</div>
 			</div>
-			<div class="form-pane panel panel-default">	
+			<div class="form-pane panel panel-default">
 					<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('district_residence', 'District of Residence') }}
@@ -113,7 +113,7 @@
 						</div>
 						<div class="form-group">
 							{{ Form::label('village_residence', 'Village of Residence') }}
-							{{ Form::text('village_residence', Input::old('village_residence'), array('class' => 'form-control', 'placeholder' => 'village of residence')) }}
+							{{ Form::text('village_residence', old('village_residence'), array('class' => 'form-control', 'placeholder' => 'village of residence')) }}
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -127,7 +127,7 @@
 						</div>
 						<div class="form-group">
 							{{ Form::label('village_workplace', trans('messages.workplace-village')) }}
-							{{ Form::text('village_workplace', Input::old('village_workplace'), array('class' => 'form-control', 'placeholder' => 'village of workplace')) }}
+							{{ Form::text('village_workplace', old('village_workplace'), array('class' => 'form-control', 'placeholder' => 'village of workplace')) }}
 						</div>
 					</div>
 					<div class="form-group">
@@ -149,7 +149,7 @@
 			<div class="panel-heading">
 				<h3 class="panel-title"><b>{{"Clinical Information"}}</b></h3>
 			</div>
-				<div class="form-pane panel panel-default">								
+				<div class="form-pane panel panel-default">
 					<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('admission_date', 'Admission Date') }}
@@ -169,7 +169,7 @@
 								<span class="input-tag">Yes</span></div>
 								<div>{{ Form::radio('hospitalized', '0', ($visits->hospitalized == 0) ? 'checked' : '' ) }}
 								<span class="input-tag">No</span></div>
-						</div>						
+						</div>
 						<div class="form-group">
 							{{ Form::label('onAntibiotics', 'Has the patient been on antibiotics during the infection') }}
 								<div>{{ Form::radio('onAntibiotics', '1',  ($visits->on_antibiotics == 1) ? 'checked' : '' ) }}
@@ -187,7 +187,7 @@
 						<div id="list_antibiotics" class="form-group @if($visits->on_antibiotics != 1) hidden @endif ">
 							<div class="form-group">
 							{{Form::label('drug', 'List Antibiotics')}}
-							{{ Form::select('antibiotic[drug][]', $antibiotics, 
+							{{ Form::select('antibiotic[drug][]', $antibiotics,
 							$patientAntibiotics, ['class' => 'form-control', 'id' => 'select2']) }}
 							</div>
 							<div class="form-group">
@@ -219,7 +219,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 							{{ Form::label('testpurpose', 'Purpose of Test') }}
-							{{Form::select('testpurpose', $testpurpose, Input::old('testpurpose'), ['class' => 'form-control']) }}
+							{{Form::select('testpurpose', $testpurpose, old('testpurpose'), ['class' => 'form-control']) }}
 							</div>
 						</div>
 					<div class="form-pane panel panel-default">
@@ -300,12 +300,12 @@
 				                title="{{trans('messages.delete')}}">×</button>
 				        </div>
 				    </div><!-- Test List Item -->
-				</div><!-- Test List Item Loader-->  
+				</div><!-- Test List Item Loader-->
 			</div>
 		</div>
 	</div>
 	{{ Form::close() }}
 	</div>
 </div>
-	
+
 @stop

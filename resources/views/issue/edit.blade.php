@@ -3,7 +3,7 @@
 <div>
 	<ol class="breadcrumb">
 	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
-	  <li><a href="{{{URL::route('issue.index')}}}">{{Lang::choice('messages.issue',2)}}</a></li>
+	  <li><a href="{{{route('issue.index')}}}">{{Lang::choice('messages.issue',2)}}</a></li>
 	  <li class="active">{{ trans('messages.edit-issue-details') }}</li>
 	</ol>
 </div>

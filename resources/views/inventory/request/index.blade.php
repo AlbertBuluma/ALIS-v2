@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.request', 2) }}</li>
 	</ol>
 </div>
@@ -14,7 +14,7 @@
 		<span class="glyphicon glyphicon-user"></span>
 		{{ Lang::choice('messages.request', 2) }}
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ URL::route('request.create') }}">
+			<a class="btn btn-sm btn-info" href="{{ route('request.create') }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				{{ trans('messages.add').' '.Lang::choice('messages.request', 1) }}
 			</a>
@@ -49,15 +49,15 @@
                  	<td>@if(!$value->usage->first())<span class="label label-default">{{ trans('messages.not-issued') }}</span>@else <button class="btn btn-success btn-sm" type="button"> {{ trans('messages.issued') }} <span class="badge">{{ $value->issued() }}</span></button> @endif</td>
                  	<td>{{ $value->user->name }}</td>
                  	<td>{{ $value->remarks }}</td>
-                 	
+
 					<td>
 					<!-- show the request (uses the show method found at GET /request/{id} -->
 						<a class="btn btn-sm btn-success" href="{{ URL::to("request/" . $value->id) }}" >
 							<span class="glyphicon glyphicon-eye-open"></span>
 							{{ trans('messages.view') }}
-						</a> 
+						</a>
 					<!-- edit this commodity (uses the edit method found at GET /inventory/{id}/edit -->
-					<a class="btn btn-sm btn-info" href="{{ URL::route('request.edit', array($value->id)) }}" >
+					<a class="btn btn-sm btn-info" href="{{ route('request.edit', array($value->id)) }}" >
 							<span class="glyphicon glyphicon-edit"></span>
 							{{ trans('messages.edit') }}
 					</a>
@@ -68,9 +68,9 @@
 						{{ trans('messages.update-stock') }}
 					</a>
 						<!-- delete this commodity (uses the delete method found at GET /inventory/{id}/delete -->
-					<button class="btn btn-sm btn-danger delete-item-link" 
-							data-toggle="modal" data-target=".confirm-delete-modal"	
-							data-id="{{ URL::route('request.delete', array($value->id)) }}">
+					<button class="btn btn-sm btn-danger delete-item-link"
+							data-toggle="modal" data-target=".confirm-delete-modal"
+							data-id="{{ route('request.delete', array($value->id)) }}">
 							<span class="glyphicon glyphicon-trash"></span>
 							{{ trans('messages.delete') }}
 					</button>

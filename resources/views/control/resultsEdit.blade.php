@@ -47,7 +47,7 @@
                                     </span>
                                 @else ( $controlMeasure->isAlphanumeric() )
                                     {{ Form::label("m_".$controlMeasure->id , $controlMeasure->name) }}
-                                    {{ Form::select("m_".$controlMeasure->id, array(null => '') +$controlMeasure->controlMeasureRanges->lists('alphanumeric', 'alphanumeric'), $ans,
+                                    {{ Form::select("m_".$controlMeasure->id, array(null => '') +$controlMeasure->controlMeasureRanges->pluck('alphanumeric', 'alphanumeric')->toArray(), $ans,
                                         array('class' => 'form-control result-interpretation-trigger',
                                         'data-url' => route('unhls_test.resultinterpretation'),
                                         'data-measureid' => $controlMeasure->id

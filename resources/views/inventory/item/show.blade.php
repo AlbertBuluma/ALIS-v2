@@ -7,8 +7,8 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{{URL::route('item.index')}}}">{{ Lang::choice('messages.item', 2) }}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{{route('item.index')}}}">{{ Lang::choice('messages.item', 2) }}</a></li>
 		  <li class="active">{{ Lang::choice('messages.item', 1).' '.trans('messages.details') }}</li>
 		</ol>
 	</div>
@@ -17,7 +17,7 @@
 			<span class="glyphicon glyphicon-adjust"></span>
 			{{ Lang::choice('messages.item', 1).' '.trans('messages.details') }}
 			<div class="panel-btn">
-				<a class="btn btn-sm btn-info" href="{{ URL::route('item.edit', array($item->id)) }}">
+				<a class="btn btn-sm btn-info" href="{{ route('item.edit', array($item->id)) }}">
 					<span class="glyphicon glyphicon-edit"></span>
 					{{ trans('messages.edit') }}
 				</a>
@@ -43,7 +43,7 @@
 					{{ $item->remarks }}</p>
 					<p class="view-striped"><strong>{{ trans('messages.storage') }}:</strong>
 					{{ $item->storage_req }}</p>
-				
+
 			</div>
 		</div>
 	</div>

@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.supplier', 2) }}</li>
 	</ol>
 </div>
@@ -14,7 +14,7 @@
 		<span class="glyphicon glyphicon-user"></span>
 		{{ Lang::choice('messages.supplier', 2) }}
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ URL::route('supplier.create') }}">
+			<a class="btn btn-sm btn-info" href="{{ route('supplier.create') }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				{{ trans('messages.add').' '.Lang::choice('messages.supplier', 1) }}
 			</a>
@@ -41,22 +41,22 @@
                  	<td>{{ $value->	phone }}</td>
                  	<td>{{ $value->address }}</td>
                  	<td>{{ $value->email }}</td>
-                 	
+
 					<td>
 					<!-- show the supplier (uses the show method found at GET /supplier/{id} -->
 						<a class="btn btn-sm btn-success" href="{{ URL::to("supplier/" . $value->id) }}" >
 							<span class="glyphicon glyphicon-eye-open"></span>
 							{{ trans('messages.view') }}
-						</a> 
+						</a>
 					<!-- edit this commodity (uses the edit method found at GET /inventory/{id}/edit -->
-					<a class="btn btn-sm btn-info" href="{{ URL::route('supplier.edit', array($value->id)) }}" >
+					<a class="btn btn-sm btn-info" href="{{ route('supplier.edit', array($value->id)) }}" >
 							<span class="glyphicon glyphicon-edit"></span>
 							{{ trans('messages.edit') }}
 					</a>
 						<!-- delete this commodity (uses the delete method found at GET /inventory/{id}/delete -->
-					<button class="btn btn-sm btn-danger delete-item-link" 
-							data-toggle="modal" data-target=".confirm-delete-modal"	
-							data-id="{{ URL::route('supplier.delete', array($value->id)) }}">
+					<button class="btn btn-sm btn-danger delete-item-link"
+							data-toggle="modal" data-target=".confirm-delete-modal"
+							data-id="{{ route('supplier.delete', array($value->id)) }}">
 							<span class="glyphicon glyphicon-trash"></span>
 							{{ trans('messages.delete') }}
 					</button>

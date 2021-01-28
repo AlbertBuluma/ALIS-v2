@@ -2,15 +2,15 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		<li><a href="{{ URL::route('poc.index') }}">EID Patient list</a></li>
-		<!-- <li><a href="{{ URL::route('bbincidence.bbfacilityreport') }}">Facility Report</a></li> -->
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{ route('poc.index') }}">EID Patient list</a></li>
+		<!-- <li><a href="{{ route('bbincidence.bbfacilityreport') }}">Facility Report</a></li> -->
 		<li class="active">New Patient </li>
 	</ol>
 </div>
 <div class="panel panel-primary">
 	<div class="panel-heading ">
-	FACILITY:: {{ \Config::get('constants.FACILITY_NAME') }} || DISTRICT:: {{ \Config::get('constants.DISTRICT_NAME') }}
+	FACILITY:: {{ old('constants.FACILITY_NAME') }} || DISTRICT:: {{ old('constants.DISTRICT_NAME') }}
 	</div>
 	<div class="panel-body">
 
@@ -32,7 +32,7 @@
 			<div class="panel-heading "><strong>Patient Details</strong></div>
 			<div class="panel-body">
 				<div class="form-group">
-				
+
 				<div class="form-group">
 					{{ Form::label('infant_name', 'Infant Name', array('class' =>'col-sm-2 required ')) }}
 					{{ Form::text('infant_name', Input::old('infant_name'), array('class' => 'form-control col-sm-4')) }}
@@ -63,7 +63,7 @@
 				{{ Form::label('caretaker_number', 'Caretaker Tel. No.', array('class' =>'col-sm-2 ')) }}
 				{{ Form::text('caretaker_number', Input::old('caretaker_number'), array('class' => 'form-control col-sm-4')) }}
 			</div>
-			<div class="form-group"> 
+			<div class="form-group">
 				{{ Form::label('admission_date', 'Admission Date', array('class' =>'col-sm-2 ')) }}
 				{{ Form::text('admission_date', Input::old('admission_date'), array('class' => 'form-control standard-datepicker standard-datepicker-nofuture col-sm-4', 'placeholder' => 'Ignore if not admitted', )) }}
 
@@ -128,7 +128,7 @@
 				<div class="radio-inline col-sm-4">{{ Form::radio("feeding_status", 'No longer breastfeeding', false) }} <span class="input-tag"><b>NLB</b> No longer breastfeeding</span></div>
 				</div>
 			</div>
- 
+
 			<div class="form-group">
 				<br>
 				<span>
@@ -136,7 +136,7 @@
 				</span>
 				<br>
 				<br>
-				<div class="form-group"> 
+				<div class="form-group">
 				{{ Form::label('mother_name', 'Mothers HTS No', array('class' =>'col-sm-2 ')) }}
 				{{ Form::text('mother_name', Input::old('mother_name'), array('class' => 'form-control col-sm-2')) }}
 				</div>
@@ -183,7 +183,7 @@
 				</div>
 
 		 <div class="form-group">
-					
+
 				{{ Form::label('pmtct_antenatal', 'PMTCT Antenatal', array('class' =>'col-sm-2')) }}
 				<div class="radio-inline">{{ Form::radio('pmtct_antenatal', 'Lifelong ART', false) }} <span class="input-tag">Lifelong ART</span></div>
 				<div class="radio-inline">{{ Form::radio("pmtct_antenatal", 'No ART', false) }} <span class="input-tag">No Art</span></div>
@@ -201,7 +201,7 @@
 				</div>
 
 					<div class="form-group">
-					
+
 
 					{{ Form::label('pmtct_postnatal', 'PMTCT Postnatal', array('class' =>'col-sm-2')) }}
 					<div class="radio-inline">{{ Form::radio('pmtct_postnatal', 'Lifelong ART', false) }} <span class="input-tag">Lifelong ART</span></div>
@@ -246,7 +246,7 @@
 
 						{{ Form::label('clinician_phone', 'Mobile Number:', array('class' =>'col-sm-2 ')) }}
 						{{ Form::text('clinician_phone', Auth::user()->phone_contact, array('class' => 'form-control col-sm-4')) }}
-						
+
 					</div>
 					<br>
 			<div class="form-group actions-row" style="text-align:right;">

@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <!-- <li><a href="{{ URL::route('fileupload.index') }}">HPV list</a></li> -->
+		  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <!-- <li><a href="{{ route('fileupload.index') }}">HPV list</a></li> -->
 		</ol>
 	</div>
 
@@ -17,18 +17,18 @@
 			Result Upload window
 		</div>
 		<div class="panel-body">
-			
+
 			@if($errors->all())
 				<div class="alert alert-danger">
 					{{ HTML::ul($errors->all()) }}
 				</div>
 			@endif
-			
+
 			{{ Form::model('', array('files'=>true,'route' => array('fileupload.updateupload'), 'method' => 'POST', 'enctype'=> "multipart/form-data",
 				'id' => 'form-edit-eventreport')) }}
 
-			
- 
+
+
 			<div class="form-group row">
 				{{ Form::label('report', 'Select file to upload', array('class' => 'col-sm-2')) }}
 				<div class="panel panel-default col-md-4">
@@ -37,10 +37,10 @@
 			</div>
 
 			<div class="form-group actions-row" style="text-align:centre;">
-				{{ Form::button('<span class="glyphicon glyphicon-save"></span> '.'UPLOAD', 
+				{{ Form::button('<span class="glyphicon glyphicon-save"></span> '.'UPLOAD',
 				['class' => 'btn btn-primary', 'onclick' => 'submit()']) }}
 			</div>
-			
+
 {{ Form::close() }}
 
-@stop	
+@stop

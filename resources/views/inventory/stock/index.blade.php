@@ -2,7 +2,7 @@
 @section("content")
 
 <style>
-    
+
     .highliht{
     color: red;
 }
@@ -16,7 +16,7 @@ $date = new DateTime();
 ?>
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.stock', 2) }}</li>
 	</ol>
 </div>
@@ -66,15 +66,15 @@ $date = new DateTime();
 					<td>{{ $value->supplier->name }}</td>
 					<td>{{ $value->date_of_reception }}</td>
 					<td>{{ $value->remarks }}</td>
-                 	
+
 					<td>
 					<!-- show the stock (uses the show method found at GET /stock/{id} -->
 						<a class="btn btn-sm btn-success" href="{{ URL::to("stock/" . $value->id) }}" >
 							<span class="glyphicon glyphicon-eye-open"></span>
 							{{ trans('messages.view') }}
-						</a> 
+						</a>
 						<!-- edit this commodity (uses the edit method found at GET /inventory/{id}/edit -->
-						<a class="btn btn-sm btn-info" href="{{ URL::route('stock.edit', array($value->id)) }}" >
+						<a class="btn btn-sm btn-info" href="{{ route('stock.edit', array($value->id)) }}" >
 								<span class="glyphicon glyphicon-edit"></span>
 								{{ trans('messages.edit') }}
 						</a>
@@ -106,7 +106,7 @@ $date = new DateTime();
 	</div>
 </div>
 <!-- Barcode begins -->
-    
+
 <div id="count" style='display:none;'>0</div>
 <div id ="barcodeList" style="display:none;"></div>
 <!-- jQuery barcode script -->

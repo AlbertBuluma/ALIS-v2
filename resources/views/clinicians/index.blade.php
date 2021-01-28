@@ -28,7 +28,7 @@
                     <th>Cadre</th>
                     <th>Phone</th>
                     <th>Email</th>
-                    <th></th>
+                    <th>Active</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,6 +38,11 @@
                     <td>{{ $value->cadre }}</td>
                     <td>{{ $value->phone }}</td>
                     <td>{{ $value->email }}</td>
+                    <td>@if($value->active == 0)
+                    ON
+                    @else
+                    OFF
+                    @endif</td>
                     <td>
 
                     <!-- show the clinician (uses the show method found at GET /ward/{id} -->

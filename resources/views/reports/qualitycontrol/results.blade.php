@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.quality-control', 2) }}</li>
 	</ol>
 </div>
@@ -14,7 +14,7 @@
 	        	{{ Form::label('start_date', trans("messages.from")) }}
 	        </div>
 	        <div class="col-md-10">
-	            {{ Form::text('start_date', isset($input['start_date'])?$input['start_date']:date('Y-m-d'), 
+	            {{ Form::text('start_date', isset($input['start_date'])?$input['start_date']:date('Y-m-d'),
 	                array('class' => 'form-control standard-datepicker')) }}
 	        </div>
         </div>
@@ -23,7 +23,7 @@
 	        	{{ Form::label('end_date', trans("messages.to")) }}
 	        </div>
 	        <div class="col-md-10">
-	            {{ Form::text('end_date', isset($input['end_date'])?$input['end_date']:date('Y-m-d'), 
+	            {{ Form::text('end_date', isset($input['end_date'])?$input['end_date']:date('Y-m-d'),
 	                array('class' => 'form-control standard-datepicker')) }}
 	        </div>
         </div>
@@ -32,12 +32,12 @@
 	        	{{ Form::label('control', Lang::choice('messages.control',1)) }}
 	        </div>
 	        <div class="col-md-9">
-	            {{ Form::select('control', array(null => '')+ $control->lists('name', 'id'),
+	            {{ Form::select('control', array(null => '')+ $control->pluck('name', 'id')->toArray(),
 	            	isset($input['control'])?$input['control']:0, array('class' => 'form-control')) }}
 	        </div>
         </div>
         <div class="col-md-2">
-        	{{Form::submit(trans('messages.view'), 
+        	{{Form::submit(trans('messages.view'),
 	        	array('class' => 'btn btn-info', 'id'=>'filter', 'name'=>'filter'))}}
         </div>
   	</div>
@@ -110,7 +110,7 @@ function createLJChart(chartdata, chartdivid){
 		},
 		yAxis: {
 			title: {
-				text: 'Control results '.concat(chartdata.controlUnit) 
+				text: 'Control results '.concat(chartdata.controlUnit)
 			},
 			max: chartdata.average + (chartdata.standardDeviation * 3),
 			min: chartdata.average - (chartdata.standardDeviation * 3),
@@ -194,7 +194,7 @@ function createLJChart(chartdata, chartdivid){
 				value: chartdata.minustwosd ,// Need to set this probably as a var.
 				label: {
 					text: '-2 SD ('+ chartdata.minustwosd +')',
-					align: "right", 
+					align: "right",
 					style: {
 						fontSize: 12,
 						color: '#606060'
@@ -219,7 +219,7 @@ function createLJChart(chartdata, chartdivid){
 			]
         },
         tooltip: {
-            valueSuffix: ' '+chartdata.controlUnit 
+            valueSuffix: ' '+chartdata.controlUnit
         },
         legend: {
             layout: 'vertical',

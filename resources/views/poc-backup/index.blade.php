@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		<li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
 		<li class="active">{{ Lang::choice('messages.patient',2) }}</li>
 	</ol>
 </div>
@@ -36,7 +36,7 @@
 		<span class="glyphicon glyphicon-user"></span>
 		POC / EID Patient List
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ URL::route('poc.create') }}">
+			<a class="btn btn-sm btn-info" href="{{ route('poc.create') }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				{{trans('messages.new-patient')}}
 			</a>
@@ -82,12 +82,12 @@
 					@endif
 					<td>{{ $patient->results}}</td>
 					<td>{{ $patient->test_date}}</td>
-				
+
 
 					<td>
 
 						@if($patient->results == "")
-						<a class="btn btn-sm btn-warning" href="{{ URL::route('poc.enter_results', array($patient->id)) }}"
+						<a class="btn btn-sm btn-warning" href="{{ route('poc.enter_results', array($patient->id)) }}"
 							<span class="glyphicon glyphicon-edit"></span>
 							Enter Results
 						</a>
@@ -95,12 +95,12 @@
 
 						@if($patient->results != '')
 						<!-- show the patient (uses the show method found at GET /patient/{id} -->
-						<a class="btn btn-sm btn-success" href="{{ URL::route('poc.show', array($patient->id)) }}" >
+						<a class="btn btn-sm btn-success" href="{{ route('poc.show', array($patient->id)) }}" >
 							<span class="glyphicon glyphicon-eye-open"></span>
 							{{trans('messages.view')}}
 						</a>
 
-						<a class="btn btn-sm btn-info" href="{{ URL::route('poc.edit_results', array($patient->id)) }}"
+						<a class="btn btn-sm btn-info" href="{{ route('poc.edit_results', array($patient->id)) }}"
 							<span class="glyphicon glyphicon-edit"></span>
 							Edit Results
 						</a>
@@ -109,7 +109,7 @@
 
 						@else
 						<!-- edit this patient (uses the edit method found at GET /patient/{id}/edit -->
-						<a class="btn btn-sm btn-info" href="{{ URL::route('poc.edit', array($patient->id)) }}" >
+						<a class="btn btn-sm btn-info" href="{{ route('poc.edit', array($patient->id)) }}" >
 							<span class="glyphicon glyphicon-edit"></span>
 							{{trans('messages.edit')}}
 						</a>

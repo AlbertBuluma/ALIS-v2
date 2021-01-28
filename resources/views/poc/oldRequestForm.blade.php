@@ -2,16 +2,16 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		<li><a href="{{ URL::route('poc.index') }}">EID Patient list</a></li>
-		<!-- <li><a href="{{ URL::route('bbincidence.bbfacilityreport') }}">Facility Report</a></li> -->
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{ route('poc.index') }}">EID Patient list</a></li>
+		<!-- <li><a href="{{ route('bbincidence.bbfacilityreport') }}">Facility Report</a></li> -->
 		<li class="active">New Patient </li>
 	</ol>
 </div>
 <div class="panel panel-primary">
 	<div class="panel-heading ">
 
-		Facility:: {{ \Config::get('constants.FACILITY_NAME') }} || DISTRICT:: {{ \Config::get('constants.DISTRICT_NAME') }}
+		Facility:: {{ config('constants.FACILITY_NAME') }} || DISTRICT:: {{ config('constants.DISTRICT_NAME') }}
 	</div>
 	<div class="panel-body">
 

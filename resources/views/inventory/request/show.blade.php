@@ -7,8 +7,8 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{{URL::route('request.index')}}}">{{ Lang::choice('messages.request', 2) }}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{{route('request.index')}}}">{{ Lang::choice('messages.request', 2) }}</a></li>
 		  <li class="active">{{ Lang::choice('messages.request', 1).' '.trans('messages.details') }}</li>
 		</ol>
 	</div>
@@ -17,7 +17,7 @@
 			<span class="glyphicon glyphicon-adjust"></span>
 			{{ Lang::choice('messages.request', 1).' '.trans('messages.details') }}
 			<div class="panel-btn">
-				<a class="btn btn-sm btn-info" href="{{ URL::route('request.edit', array($request->id)) }}">
+				<a class="btn btn-sm btn-info" href="{{ route('request.edit', array($request->id)) }}">
 					<span class="glyphicon glyphicon-edit"></span>
 					{{ trans('messages.edit') }}
 				</a>

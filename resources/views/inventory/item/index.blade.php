@@ -2,7 +2,7 @@
 @section("content")
 
 <style>
-    
+
     .highliht{
     color: red;
 }
@@ -14,7 +14,7 @@
 </style>
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 		<li class="active">{{ Lang::choice('messages.item', 2) }}</li>
 	</ol>
 </div>
@@ -26,7 +26,7 @@
 		<span class="glyphicon glyphicon-user"></span>
 		{{ Lang::choice('messages.item', 2) }}
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ URL::route('item.create') }}">
+			<a class="btn btn-sm btn-info" href="{{ route('item.create') }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				{{ trans('messages.add').' '.Lang::choice('messages.item', 1) }}
 			</a>
@@ -68,7 +68,7 @@
 						{{ trans('messages.view') }}
 					</a>
 					<!-- edit this commodity (uses the edit method found at GET /inventory/{id}/edit -->
-					<a class="btn btn-sm btn-info" href="{{ URL::route('item.edit', array($value->id)) }}" >
+					<a class="btn btn-sm btn-info" href="{{ route('item.edit', array($value->id)) }}" >
 						<span class="glyphicon glyphicon-edit"></span>
 						{{ trans('messages.edit') }}
 					</a>
@@ -90,7 +90,7 @@
 					<!-- delete this commodity (uses the delete method found at GET /inventory/{id}/delete -->
 					<button class="btn btn-sm btn-danger delete-item-link"
 					data-toggle="modal" data-target=".confirm-delete-modal"
-					data-id="{{ URL::route('item.delete', array($value->id)) }}">
+					data-id="{{ route('item.delete', array($value->id)) }}">
 					<span class="glyphicon glyphicon-trash"></span>
 					{{ trans('messages.delete') }}
 				</button>

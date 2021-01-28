@@ -30,9 +30,9 @@ elseif($result->equipment_used =='GeneXpert'){
 
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		<li><a href="{{ URL::route('poc.index') }}">EID Patient list</a></li>
-		<!-- <li><a href="{{ URL::route('bbincidence.bbfacilityreport') }}">Facility Report</a></li> -->
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{ route('poc.index') }}">EID Patient list</a></li>
+		<!-- <li><a href="{{ route('bbincidence.bbfacilityreport') }}">Facility Report</a></li> -->
 		<li class="active">Patient Results</li>
 	</ol>
 </div>
@@ -94,7 +94,7 @@ elseif($result->equipment_used =='GeneXpert'){
 {{ Form::label('equipment_used', 'POC Device Used for EID test (Select one):', array('class' =>'col-sm-2')) }}
 
 <div class="radio-inline">
-{{ Form::radio('equipment_used', 'Alere q', $res_alere) }} 
+{{ Form::radio('equipment_used', 'Alere q', $res_alere) }}
 
 
 <span class="input-tag">Alere q</span></div>
@@ -124,7 +124,7 @@ elseif($result->equipment_used =='GeneXpert'){
 
 
 
-				
+
 
 			<div class="form-group actions-row">
 				{{ Form::button('UPDATE RESULTS',

@@ -2,8 +2,8 @@
 @section("content")
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-          <li><a href="{{ URL::route('poc.index') }}">{{ Lang::choice('messages.patient',2) }}</a></li>
+          <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+          <li><a href="{{ route('poc.index') }}">{{ Lang::choice('messages.patient',2) }}</a></li>
           <li class="active">{{ trans('messages.patient-details') }}</li>
         </ol>
     </div>
@@ -12,13 +12,13 @@
             <span class="glyphicon glyphicon-user"></span> <br>
           Full Infant Details
             <div class="panel-btn">
-                <a class="btn btn-sm btn-info" href="{{ URL::route('poc.edit', array($patient->id)) }}">
+                <a class="btn btn-sm btn-info" href="{{ route('poc.edit', array($patient->id)) }}">
                     <span class="glyphicon glyphicon-edit"></span>
                     {{ trans('messages.edit') }}
                 </a>
                 @if(Auth::user()->can('request_test'))
                 <a class="btn btn-sm btn-info"
-                    href="{{ URL::route('poc.create', array('patient_id' => $patient->id)) }}">
+                    href="{{ route('poc.create', array('patient_id' => $patient->id)) }}">
                     <span class="glyphicon glyphicon-edit"></span>
                     {{ trans('messages.new-test') }}
                 </a>

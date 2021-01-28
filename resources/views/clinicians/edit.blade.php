@@ -45,6 +45,13 @@
                     {{ Form::text('email', old('email'),
                         array('class' => 'form-control')) }}
                 </div>
+                <div class="form-group">
+                    {{ Form::label('active', "Activate/Deactivate") }}</label>
+                   <div>{{ Form::radio('active', '0', true) }}
+                    <span class="input-tag">Activate</span></div>
+                    <div>{{ Form::radio("active", '1', false) }}
+                    <span class="input-tag">Deactivate</span></div>
+                </div>
                 <div class="form-group actions-row">
                     {{ Form::button('<span class="glyphicon glyphicon-save"></span> '. trans('messages.save'),
                         ['class' => 'btn btn-primary', 'onclick' => 'submit()']) }}

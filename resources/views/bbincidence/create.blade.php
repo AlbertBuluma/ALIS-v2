@@ -2,9 +2,9 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		<li><a href="{{ URL::route('bbincidence.index') }}">BB Incidents</a></li>
-		<li><a href="{{ URL::route('bbincidence.bbfacilityreport') }}">Facility Report</a></li>
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{ route('bbincidence.index') }}">BB Incidents</a></li>
+		<li><a href="{{ route('bbincidence.bbfacilityreport') }}">Facility Report</a></li>
 		<li class="active">New BB Incident</li>
 	</ol>
 </div>
@@ -206,7 +206,7 @@
 								name="patient_ulin"
 								onClick="toggle('patient_ulin', 'ulin')"
 								type="checkbox" value="1" /> Yes <br />
-								<label> Patient ULIN:</labe>
+								<label> Patient ULIN:</label>
 								<input id="ulin" name="ulin" type="text" value="if no VHF contact, this will be disabled" /> <br>
 
 								<!--	{{ Form::label('ulin', 'Patient ULIN', array('class' => 'col-sm-2')) }}

@@ -101,15 +101,15 @@
 				<tr>
 					<td>{{ isset($test->specimen->specimenType->name)? $test->specimen->specimenType->name : ''}}</td>
 
-					@if($test->specimen->specimen_status_id == UnhlsSpecimen::NOT_COLLECTED)
+					@if($test->specimen->specimen_status_id == App\Models\UnhlsSpecimen::NOT_COLLECTED)
 
 						<td>{{trans('messages.specimen-not-collected')}}</td>
 						<td>not received</td>
-					@elseif($test->specimen->specimen_status_id == UnhlsSpecimen::ACCEPTED)
+					@elseif($test->specimen->specimen_status_id == App\Models\UnhlsSpecimen::ACCEPTED)
 						<td >{{ ($test->specimen->time_collected)?$test->specimen->time_collected:'' }}</td>
 						<td >{{isset($test->specimen->time_accepted)?$test->specimen->time_accepted : ''}}</td>
 
-					@elseif($test->test_status_id == UnhlsTest::REJECTED)
+					@elseif($test->test_status_id == App\Models\UnhlsTest::REJECTED)
 						<td >{{trans('messages.specimen-not-collected')}}</td>
 						<td >{{isset($test->specimen->time_rejected)?$test->specimen->time_rejected:''}}</td>
 

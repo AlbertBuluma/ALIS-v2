@@ -7,8 +7,8 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{{URL::route('item.index')}}}">{{ Lang::choice('messages.stock', 2) }}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{{route('item.index')}}}">{{ Lang::choice('messages.stock', 2) }}</a></li>
 		  <li class="active">{{ Lang::choice('messages.lot', 1).' '.trans('messages.details') }}</li>
 		</ol>
 	</div>
@@ -58,7 +58,7 @@
 							<td>{{ $value->issued_by }}</td>
 							<td>{{ $value->received_by }}</td>
 							<td>{{ $value->remarks }}</td>
-		                 	
+
 							<td>
 								<a class="btn btn-sm btn-info" href="{{ URL::to("stock/" . $value->id . "/lot") }}" >
 										<span class="glyphicon glyphicon-edit"></span>

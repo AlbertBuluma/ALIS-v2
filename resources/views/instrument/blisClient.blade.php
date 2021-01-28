@@ -3,10 +3,10 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{ URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{ URL::route('blisclient.index') }}">{{ trans('messages.interfaced-equipment') }}</a></li>
+		  <li><a href="{{{ route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{ route('blisclient.index') }}">{{ trans('messages.interfaced-equipment') }}</a></li>
 		</ol>
-	</div>	
+	</div>
 	<div class="panel panel-primary">
 		<div class="panel-heading ">
 			<span class="glyphicon glyphicon-edit"></span>
@@ -21,7 +21,7 @@
 			@if (Session::has('message'))
 				<div class="alert alert-info">{{ Session::get('message') }}</div>
 			@endif
-				<div class="col-md-7"> 
+				<div class="col-md-7">
 				{{ Form::open(array('method' => 'PUT', 'id' => 'form-edit-client')) }}
 					<div class="form-group">
 						{{ Form::label('equipment', trans('messages.equipment')) }}
@@ -43,4 +43,4 @@
 			</div>
 		{{ Session::put('SOURCE_URL', URL::full()) }}
 	</div>
-@stop	
+@stop

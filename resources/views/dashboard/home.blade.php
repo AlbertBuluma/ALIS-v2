@@ -5,9 +5,9 @@
 	<div class="row"> <!--beggining of upper row -->
 		<div class="container-fluid">
 			<div class="row">
-				{{Form::open(array('route' =>array('user.dashboard')))}}
+				{{Form::open(array('route' =>array('dashboard.index')))}}
 					<div class="col col-md-4">
-						<span style="font-weight: bold; color:blue;">DATA BELOW IS FOR THE CURRENT MONTH - <?php echo date('01-m-Y'); ?> to 
+						<span style="font-weight: bold; color:blue;">DATA BELOW IS FOR THE CURRENT MONTH - <?php echo date('01-m-Y'); ?> to
 							<?php echo date('d-m-Y'); ?></span><br> <strong>To view older stats please select a date range</strong>
 					</div>
 					<div class="col col-md-3">
@@ -15,9 +15,9 @@
 							<span style="font-weight: bold; color:blue;">{{Form::label('From', 'From')}}</span>
 						</div>
 						<div class="col-md-7">
-							<span style="font-weight: bold; color:blue;"> {{Form::text('date_from', $dateFrom, array('class' => 'form-control standard-datepicker') )}}</span>                         
+							<span style="font-weight: bold; color:blue;"> {{Form::text('date_from', $dateFrom, array('class' => 'form-control standard-datepicker') )}}</span>
 						</div>
-					</div>	
+					</div>
 					<div class="col col-md-3">
 						<div class="col-md-2">
 							<span style="font-weight: bold; color:blue;">{{Form::label('To', 'To')}}</span>
@@ -30,9 +30,45 @@
 						{{ Form::button("<span class='glyphicon glyphicon-filter'>
 						</span> ".trans('messages.view'), array('class' => 'btn btn-primary', 'id' => 'filter', 'type' => 'submit')) }}
 					</div>
-				{{Form::close()}}		
-			</div>	
-		</div>  <!--end of inner container -->        
+				{{Form::close()}}
+			</div>
+		</div>  <!--end of inner container -->
+	</div> <!--End of upper row -->
+	@extends("layout")
+@section("content")
+
+<div class="container-fluid">
+	<div class="row"> <!--beggining of upper row -->
+		<div class="container-fluid">
+			<div class="row">
+				{{Form::open(array('route' =>array('dashboard.index')))}}
+					<div class="col col-md-4">
+						<span style="font-weight: bold; color:blue;">DATA BELOW IS FOR THE CURRENT MONTH - <?php echo date('01-m-Y'); ?> to
+							<?php echo date('d-m-Y'); ?></span><br> <strong>To view older stats please select a date range</strong>
+					</div>
+					<div class="col col-md-3">
+						<div class="col-md-2">
+							<span style="font-weight: bold; color:blue;">{{Form::label('From', 'From')}}</span>
+						</div>
+						<div class="col-md-7">
+							<span style="font-weight: bold; color:blue;"> {{Form::text('date_from', $dateFrom, array('class' => 'form-control standard-datepicker') )}}</span>
+						</div>
+					</div>
+					<div class="col col-md-3">
+						<div class="col-md-2">
+							<span style="font-weight: bold; color:blue;">{{Form::label('To', 'To')}}</span>
+						</div>
+						<div class="col-md-7">
+							<span style="font-weight: bold; color:blue;">{{Form::text('date_to', $dateTo, array('class' => 'form-control standard-datepicker') )}}</span>
+						</div>
+					</div>
+					<div class="btn col-md-2">
+						{{ Form::button("<span class='glyphicon glyphicon-filter'>
+						</span> ".trans('messages.view'), array('class' => 'btn btn-primary', 'id' => 'filter', 'type' => 'submit')) }}
+					</div>
+				{{Form::close()}}
+			</div>
+		</div>  <!--end of inner container -->
 	</div> <!--End of upper row -->
 	<div class="container-fluid col-md-12">
 		<div class="row">
@@ -42,28 +78,31 @@
 						<div class="stat_box">
 							<div class="stat_ico color_a"><i class="ion-ios-people"></i></div>
 							<div class="stat_content">
-								<span class="stat_count">{{$testAnalytics['patientCnts']}} ({{$testAnalytics['opd']}}% OPD)</span>
-								<span class="stat_name">Number of patients</span>
+								<span class="stat_count">{{$patientCount}} ({{$outPatients}}% OPD)</span>
+								<span class="stat_name">Number of patient Visits</span>
 							</div>
 
 						</div>
 						<div class="stat_box">
 							<div class="stat_ico color_a"><i class="ion-ios-flask"></i></div>
 							<div class="stat_content">
-								<span class="stat_count">{{$testAnalytics['testCnts']}}</span>
+								<span class="stat_count">{{$testCounts}}</span>
 								<span class="stat_name">Tests completed</span>
 							</div>
-							
+
 						</div>
 						<div class="stat_box">
 							<div class="stat_ico color_a"><i class="ion-plane"></i></div>
 							<div class="stat_content">
-								<span class="stat_count">{{ $testAnalytics['testsReffered']}}</span>
+								@if(UnhlsTest::where('test_status_id','=', 4)->whereMonth('time_created', '=', Carbon::today()->month)->count() > 0)
+								<span class="stat_count">{{round(Referral::whereMonth('created_at', '=', Carbon::today()->month)->count()/
+									UnhlsTest::where('test_status_id','=', 4)->whereMonth('time_created', '=', Carbon::today()->month)->count()/100, 2)}}%</span>
+								@endif
 								<span class="stat_name">Tests referred</span>
 							</div>
-							
-						</div>	
-					</div>										
+
+						</div>
+					</div>
 				</div> <!--end of panel-->
 			</div>
 
@@ -73,25 +112,25 @@
 						<div class="stat_box">
 							<div class="stat_ico color_b"><i class="ion-ios-personadd"></i></div>
 							<div class="stat_content">
-								<span class="stat_count"> {{$testAnalytics['hiv']}} % </span>
+								<span class="stat_count"> {{$hiv}} % </span>
 								<span class="stat_name">HIV Prevalence</span>
 							</div>
 						</div>
 						<div class="stat_box">
 							<div class="stat_ico color_b"><i class="ion-ios-personadd"></i></div>
 							<div class="stat_content">
-								<span class="stat_count"> {{$testAnalytics['malaria']}}% </span>
+								<span class="stat_count"> {{$malaria}}% </span>
 								<span class="stat_name">Malaria Prevalence</span>
 							</div>
 						</div>
 						<div class="stat_box">
 							<div class="stat_ico color_b"><i class="ion-ios-personadd"></i></div>
 							<div class="stat_content">
-								<span class="stat_count">{{$testAnalytics['tb']}}% </span>
+								<span class="stat_count">{{$tb}}% </span>
 								<span class="stat_name">TB Prevalence</span>
 							</div>
 						</div>
-					</div>																				
+					</div>
 				</div> <!--end of panel-->
 			</div>
 
@@ -101,21 +140,21 @@
 						<div class="stat_box">
 							<div class="stat_ico color_a"><i class="ion-ios-medkit"></i></div>
 							<div class="stat_content">
-								<span class="stat_count">{{$testAnalytics['sampleCnts']}}</span>
+								<span class="stat_count">{{$sampleCounts}}</span>
 								<span class="stat_name">Samples collected</span>
 							</div>
 						</div>
 						<div class="stat_box">
 							<div class="stat_ico color_c"><i class="ion-ios-close"></i></div>
 							<div class="stat_content">
-								<span class="stat_count">{{$testAnalytics['samplesRejected']}}</span>
-								<span class="stat_name">Rejected at Analysis</span>
+								<span class="stat_count">{{$samplesRejected}}</span>
+								<span class="stat_name">Samples Rejected</span>
 							</div>
 						</div>
 						<div class="stat_box">
 							<div class="stat_ico color_d"><i class="ion-ios-checkmark"></i></div>
 							<div class="stat_content">
-								<span class="stat_count">{{$testAnalytics['samplesAccepted'] }}%</span>
+								<span class="stat_count">{{$samplesAccepted }}%</span>
 								<span class="stat_name">Samples accepted</span>
 							</div>
 						</div>
@@ -124,7 +163,7 @@
 			</div>
 
 		</div>
-								
+
 	<div class="row"> <!--start of commodity row -->
 		<div class="col-lg-4 col-md-6">
 			<div class="panel panel-default"><b>Commodities</b>
@@ -132,7 +171,7 @@
 				<div class="stat_box">
 					<div class="stat_ico color_d"><i class="ion-ios-list"></i></div>
 					<div class="stat_content">
-						<span class="stat_count">5</span>
+						<span class="stat_count">{{ 0 }}</span>
 						<span class="stat_name">Number of expired tracer items</span>
 					</div>
 
@@ -140,10 +179,11 @@
 				<div class="stat_box">
 					<div class="stat_ico color_d"><i class="ion-ios-list"></i></div>
 					<div class="stat_content">
-						<span class="stat_count">3</span>
+						<span class="stat_count">{{ 0}}</span>
+						<span class="stat_count"></span>
 						<span class="stat_name">Number of stocked out tracer items</span>
 					</div>
-					
+
 				</div>
 				<div class="stat_box">
 					<div class="stat_ico color_d"><i class="ion-gear-b"></i></div>
@@ -151,9 +191,9 @@
 						<span class="stat_count">0</span>
 						<span class="stat_name">Non functional equipment</span>
 					</div>
-					
-				</div>	
-				</div>									
+
+				</div>
+				</div>
 			</div>
 		</div>
 
@@ -172,7 +212,7 @@
 						<div class="stat_content">
 							<span class="stat_count">
 								{{count(App\Models\Bbincidence::countbbincidents_major())}}
-								<?php if((count(App\Models\Bbincidence::countbbincidents_all()))>0){ ?> 
+								<?php if((count(App\Models\Bbincidence::countbbincidents_all()))>0){ ?>
 								({{round ((count(App\Models\Bbincidence::countbbincidents_major())/count(App\Models\Bbincidence::countbbincidents_all())*100),2) }} %)
 								<?php } ?>
 							</span>
@@ -184,14 +224,14 @@
 						<div class="stat_content">
 							<span class="stat_count">
 								{{count(App\Models\Bbincidence::countbbincidents_minor())}}
-								<?php if((count(App\Models\Bbincidence::countbbincidents_all()))>0){ ?> 
+								<?php if((count(App\Models\Bbincidence::countbbincidents_all()))>0){ ?>
 								({{round ((count(App\Models\Bbincidence::countbbincidents_minor())/count(App\Models\Bbincidence::countbbincidents_all())*100),2) }} %)
 								<?php } ?>
 								</span>
 							<span class="stat_name">Minor incidents</span>
 						</div>
-					</div>	
-				</div>																			
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -216,7 +256,7 @@
 			</div>
 		</div>
 
-	</div>	<!--end of commodity row -->							
+	</div>	<!--end of commodity row -->
 	</div>
 </div>
 

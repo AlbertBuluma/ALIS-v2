@@ -3,7 +3,7 @@
 
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+          <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
           <li class="active">Microbiolgy Export</li>
         </ol>
     </div>
@@ -24,20 +24,20 @@
 
                 <div class="form-group">
                     {{ Form::label('date_from', trans('messages.from')) }}
-                    {{ Form::text('date_from', $dateFrom, 
+                    {{ Form::text('date_from', $dateFrom,
                         array('class' => 'form-control standard-datepicker')) }}
                 </div>
                 <div class="form-group">
                     {{ Form::label('date_to', trans('messages.to')) }}
-                    {{ Form::text('date_to', $dateTo, 
+                    {{ Form::text('date_to', $dateTo,
                         array('class' => 'form-control standard-datepicker')) }}
                 </div>
                 <div class="form-group actions-row">
-                    {{ Form::button("<span class='glyphicon glyphicon-download'></span> Download", 
+                    {{ Form::button("<span class='glyphicon glyphicon-download'></span> Download",
                         array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
                 </div>
 
             {{ Form::close() }}
         </div>
     </div>
-@stop   
+@stop

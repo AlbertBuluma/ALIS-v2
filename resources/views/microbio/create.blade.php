@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{ URL::route('unhls_patient.index') }}">{{ Lang::choice('messages.patient',2) }}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{ route('unhls_patient.index') }}">{{ Lang::choice('messages.patient',2) }}</a></li>
 		  <li class="active">{{trans('messages.sample-patient')}}</li>
 		</ol>
 	</div>
@@ -27,18 +27,18 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-						
+
 			<fieldset class="scheduler-border">
-		    	<legend class="scheduler-border">Patient Information</legend>		
+		    	<legend class="scheduler-border">Patient Information</legend>
 				<div class="col-md-6">
 					<div class="form-group">
 						{{ Form::label('patient_name','Patient Name', array('text-align' => 'right', 'class' => 'required')) }}
-						{{ Form::text('patient_name', Input::old('patient_name'), array('class' => 'form-control')) }}
+						{{ Form::text('patient_name', old('patient_name'), array('class' => 'form-control')) }}
 					</div>
 					<div class="form-group">
 						{{ Form::label('ulin', trans('messages.ulin'), array('class' => 'required')) }}
 						@if($ulinFormat == 'Manual')
-						{{ Form::text('ulin', Input::old('ulin'),array('class' => 'form-control')) }}
+						{{ Form::text('ulin', old('ulin'),array('class' => 'form-control')) }}
 						@else
 						{{ Form::text('ulin', '',
 						array('class' => 'form-control', 'readonly' =>'true', 'placeholder' => 'Auto generated upon succesfull save!')) }}
@@ -55,15 +55,15 @@
 					</div>
 					<div class="form-group">
 						{{ Form::label('nationality', trans('Nationality'), array('class' => 'required')) }}
-						{{ Form::select('nationality',  array_merge(array(' ' => '--- Select Nationality ---'), $nation), 
+						{{ Form::select('nationality',  array_merge(array(' ' => '--- Select Nationality ---'), $nation),
 						Input::get('nationality'),['class' => 'form-control'])  }}
 					</div>
 				</div>
 				<div class="col-md-12">
-					
+
 					<div class="form-group">
 						{{ Form::label('dob','Date Of Birth', array('class' => 'required')) }}
-						{{ Form::text('dob', Input::old('dob'), array('class' => 'form-control input-sm')) }}
+						{{ Form::text('dob', old('dob'), array('class' => 'form-control input-sm')) }}
 					</div>
 					<div class="form-group">
 						<label for="age">Age</label>
@@ -78,27 +78,27 @@
 				<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('phone_number', trans('messages.phone-number')) }}
-							{{ Form::text('phone_number', Input::old('phone_number'), array('class' => 'form-control', 'placeholder' => 'Patient phone number')) }}
+							{{ Form::text('phone_number', old('phone_number'), array('class' => 'form-control', 'placeholder' => 'Patient phone number')) }}
 						</div>
 						<div class="form-group">
 							{{ Form::label('visit_type', trans("messages.visit-type")) }}
-							{{ Form::select('visit_type',array_merge(array(' ' => '--- Select visit type  ---'), $visitType), 
+							{{ Form::select('visit_type',array_merge(array(' ' => '--- Select visit type  ---'), $visitType),
 							Input::get('visit_type'),['class' => 'form-control'])  }}
-						</div>	
+						</div>
 				</div>
-				<div class="col-md-6">	
+				<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('ward','Ward/Clinic/Health Unit') }}
 							{{ Form::select('ward', $ward, Input::get('ward'), array('class' => 'form-control')) }}
 						</div>
 						<div class="form-group">
 							{{ Form::label('patient_number', trans('messages.patient-number'), array('class' => 'required')) }}
-							{{ Form::text('patient_number', Input::old('patient_number'), array('class' => 'form-control')) }}
-						</div>							
+							{{ Form::text('patient_number', old('patient_number'), array('class' => 'form-control')) }}
+						</div>
 				</div>
 			</fieldset>
 			<fieldset class="scheduler-border">
-		    	<legend class="scheduler-border">Resident Details</legend>	
+		    	<legend class="scheduler-border">Resident Details</legend>
 					<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('district_residence', 'District of Residence') }}
@@ -106,11 +106,11 @@
 						</div>
 						<div class="form-group">
 							{{ Form::label('sub_county_residence', 'Sub County of Residence') }}
-							{{ Form::text('sub_county_residence', Input::old('sub_county_residence'), array('class' => 'form-control', 'placeholder' => 'sub county of residence')) }}
+							{{ Form::text('sub_county_residence', old('sub_county_residence'), array('class' => 'form-control', 'placeholder' => 'sub county of residence')) }}
 						</div>
 						<div class="form-group">
 							{{ Form::label('village_residence', 'Village of Residence') }}
-							{{ Form::text('village_residence', Input::old('village_residence'), array('class' => 'form-control', 'placeholder' => 'village of residence')) }}
+							{{ Form::text('village_residence', old('village_residence'), array('class' => 'form-control', 'placeholder' => 'village of residence')) }}
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -120,11 +120,11 @@
 						</div>
 						<div class="form-group">
 							{{ Form::label('sub_county_workplace', 'Sub County of Work Place') }}
-							{{ Form::text('sub_county_workplace', Input::old('sub_county_workplace'), array('class' => 'form-control', 'placeholder' => 'sub county of workplace')) }}
+							{{ Form::text('sub_county_workplace', old('sub_county_workplace'), array('class' => 'form-control', 'placeholder' => 'sub county of workplace')) }}
 						</div>
 						<div class="form-group">
 							{{ Form::label('village_workplace', trans('messages.workplace-village')) }}
-							{{ Form::text('village_workplace', Input::old('village_workplace'), array('class' => 'form-control', 'placeholder' => 'village of workplace')) }}
+							{{ Form::text('village_workplace', old('village_workplace'), array('class' => 'form-control', 'placeholder' => 'village of workplace')) }}
 						</div>
 					</div>
 					<div class="form-group">
@@ -133,29 +133,29 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('name_next_kin', 'Name') }}
-							{{ Form::text('name_next_kin', Input::old('name_next_kin'), array('class' => 'form-control')) }}
+							{{ Form::text('name_next_kin', old('name_next_kin'), array('class' => 'form-control')) }}
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('contact_next_kin', 'Contact Number') }}
-							{{ Form::text('contact_next_kin', Input::old('contact_next_kin'), array('class' => 'form-control')) }}
+							{{ Form::text('contact_next_kin', old('contact_next_kin'), array('class' => 'form-control')) }}
 						</div>
 					</div>
 			</fieldset>
 
 			<fieldset class="scheduler-border">
-		    	<legend class="scheduler-border">Clinical Information</legend>							
+		    	<legend class="scheduler-border">Clinical Information</legend>
 					<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('admission_date', 'Admission Date') }}
-							{{ Form::text('admission_date', Input::old('admission_date'), array('class' => 'form-control standard-datepicker', 'placeholder' => 'Ignore if not admitted')) }}
+							{{ Form::text('admission_date', old('admission_date'), array('class' => 'form-control standard-datepicker', 'placeholder' => 'Ignore if not admitted')) }}
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('facility_transfered', 'Facility Patient transfered from') }}
-							{{ Form::text('facility_transfered', Input::old('facility_transfered'), array('class' => 'form-control')) }}
+							{{ Form::text('facility_transfered', old('facility_transfered'), array('class' => 'form-control')) }}
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -165,7 +165,7 @@
 								<span class="input-tag">Yes</span></div>
 								<div>{{ Form::radio("hospitalized", '0', false) }}
 								<span class="input-tag">No</span></div>
-						</div>						
+						</div>
 						<div class="form-group">
 							{{ Form::label('onAntibiotics', 'Has the patient been on antibiotics during the infection') }}
 								<div>{{ Form::radio('onAntibiotics', '1',  false) }}
@@ -183,41 +183,41 @@
 						<div id="list_antibiotics" class="form-group hidden">
 							<div class="form-group">
 							{{Form::label('drug', 'List Antibiotics')}}
-							{{ Form::select('antibiotic[drug][]', $antibiotics, 
+							{{ Form::select('antibiotic[drug][]', $antibiotics,
 							Input::get('antibiotic'), ['class' => 'form-control', 'id' => 'select2']) }}
 							</div>
 							<div class="form-group">
 							{{ Form::label('antibiotic_days', 'Days on Antibiotic') }}
-							{{Form::text('antibiotic_days', Input::old('antibiotic_days'), array('class' => 'form-control'))}}
+							{{Form::text('antibiotic_days', old('antibiotic_days'), array('class' => 'form-control'))}}
 							</div>
 						</div>
 					</div>
 						<div class="col-md-6">
 							<div class="form-group">
 							{{ Form::label('requested_by', 'Requested By') }}
-							{{Form::text('requested_by', Input::old('physician'), array('class' => 'form-control'))}}
+							{{Form::text('requested_by', old('physician'), array('class' => 'form-control'))}}
 							</div>
 							<div class="form-group">
 							{{ Form::label('phone_contact', 'Phone Contact') }}
-							{{Form::text('phone_contact', Input::old('phone_contact'), array('class' => 'form-control'))}}
+							{{Form::text('phone_contact', old('phone_contact'), array('class' => 'form-control'))}}
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
 							{{ Form::label('clinical_notes', 'Provisional diagnosis') }}
-							{{Form::textarea('clinical_notes', Input::old('physician'), array('class' => 'form-control', 'rows'=>'2', 'placeholder' => 'Provisional diagnosis'))}}
+							{{Form::textarea('clinical_notes', old('physician'), array('class' => 'form-control', 'rows'=>'2', 'placeholder' => 'Provisional diagnosis'))}}
 							</div>
 						</div>
 				</fieldset>
-			
+
 						<!-- <div class="col-md-6">
 							<div class="form-group">
 							{{ Form::label('testpurpose', 'Purpose of Test') }}
-							{{Form::select('testpurpose', $testpurpose, Input::old('testpurpose'), ['class' => 'form-control']) }}
+							{{Form::select('testpurpose', $testpurpose, old('testpurpose'), ['class' => 'form-control']) }}
 							</div>
 						</div> -->
 				<fieldset class="scheduler-border">
-		    	<legend class="scheduler-border">Specimen Details</legend>		
+		    	<legend class="scheduler-border">Specimen Details</legend>
 					<div class="form-pane panel panel-default">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -297,7 +297,7 @@
 				                title="{{trans('messages.delete')}}">×</button>
 				        </div>
 				    </div><!-- Test List Item -->
-				</div><!-- Test List Item Loader-->  
+				</div><!-- Test List Item Loader-->
 			</div>
 		</div>
 	</div>

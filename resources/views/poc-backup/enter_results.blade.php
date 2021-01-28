@@ -2,9 +2,9 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		<li><a href="{{ URL::route('poc.index') }}">EID Patient list</a></li>
-		<!-- <li><a href="{{ URL::route('bbincidence.bbfacilityreport') }}">Facility Report</a></li> -->
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{ route('poc.index') }}">EID Patient list</a></li>
+		<!-- <li><a href="{{ route('bbincidence.bbfacilityreport') }}">Facility Report</a></li> -->
 		<li class="active">Patient Results</li>
 	</ol>
 </div>
@@ -49,20 +49,20 @@
 
 			<div class="form-group">
 				{{ Form::label('error_code', 'Error Code:', array('class' =>'col-sm-2 ')) }}
-				{{ Form::text('error_code', Input::old('error_code'), array('class' => 'form-control  col-sm-4')) }}
+				{{ Form::text('error_code', old('error_code'), array('class' => 'form-control  col-sm-4')) }}
 			</div>
 
 <div class="form-group">
 				{{ Form::label('tested_by', 'Tested By:', array('class' =>'col-sm-2 ')) }}
-				{{ Form::text('tested_by', Input::old('tested_by'), array('class' => 'form-control  col-sm-4')) }}
+				{{ Form::text('tested_by', old('tested_by'), array('class' => 'form-control  col-sm-4')) }}
 			</div>
 
 
-		
+
 
 			<div class="form-group">
 				{{ Form::label('test_date', 'Test Date:', array('class' =>'col-sm-2 ')) }}
-				{{ Form::text('test_date', Input::old('test_date'), array('class' => 'form-control standard-datepicker standard-datepicker-nofuture  col-sm-4')) }}
+				{{ Form::text('test_date', old('test_date'), array('class' => 'form-control standard-datepicker standard-datepicker-nofuture  col-sm-4')) }}
 			</div>
 <div class="form-group">
 
@@ -75,13 +75,13 @@
 
 			<div class="form-group">
 				{{ Form::label('dispatched_by', 'Results reviewed & dispatched By:', array('class' =>'col-sm-2 ')) }}
-				{{ Form::text('dispatched_by', Input::old('dispatched_by'), array('class' => 'form-control  col-sm-4')) }}
+				{{ Form::text('dispatched_by', old('dispatched_by'), array('class' => 'form-control  col-sm-4')) }}
 			</div>
 
 
 			<div class="form-group">
 				{{ Form::label('dispatched_date', 'Dispatched Date:', array('class' =>'col-sm-2 ')) }}
-				{{ Form::text('dispatched_date', Input::old('dispatched_date'), array('class' => 'form-control standard-datepicker standard-datepicker-nofuture col-sm-4', 'placeholder' => 'YYYY-MM-DD')) }}
+				{{ Form::text('dispatched_date', old('dispatched_date'), array('class' => 'form-control standard-datepicker standard-datepicker-nofuture col-sm-4', 'placeholder' => 'YYYY-MM-DD')) }}
 
 			</div>
 

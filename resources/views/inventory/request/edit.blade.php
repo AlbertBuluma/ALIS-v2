@@ -2,8 +2,8 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-       <li><a href="{{{URL::route('request.index')}}}">{{ Lang::choice('messages.request', 2) }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+       <li><a href="{{{route('request.index')}}}">{{ Lang::choice('messages.request', 2) }}</a></li>
 	 	  <li class="active">{{ trans('messages.edit').' '.Lang::choice('messages.request', 1) }}</li>
 	</ol>
 </div>
@@ -29,30 +29,30 @@
             </div>
             <div class="form-group">
                 {{ Form::label('quantity-remaining', trans('messages.quantity-remaining')) }}
-                {{ Form::text('quantity_remaining', Input::old('quantity_remaining'), array('class' => 'form-control')) }}
+                {{ Form::text('quantity_remaining', old('quantity_remaining'), array('class' => 'form-control')) }}
             </div>
             <div class="form-group">
                 {{ Form::label('test-category', Lang::choice('messages.test-category', 1)) }}
-                {{ Form::select('test_category_id', $testCategories, Input::old('testCategory') ? Input::old('testCategory') : $testCategory, array('class' => 'form-control')) }}
-            </div>            
+                {{ Form::select('test_category_id', $testCategories, old('testCategory') ? old('testCategory') : $testCategory, array('class' => 'form-control')) }}
+            </div>
             <div class="form-group">
                 {{ Form::label('tests', trans('messages.tests-done')) }}
-                {{ Form::text('tests_done', Input::old('tests_done'), array('class' => 'form-control')) }}
-            </div>           
+                {{ Form::text('tests_done', old('tests_done'), array('class' => 'form-control')) }}
+            </div>
             <div class="form-group">
                 {{ Form::label('quantity', trans('messages.order-quantity')) }}
-                {{ Form::text('quantity_ordered', Input::old('quantity_ordered'), array('class' => 'form-control')) }}
+                {{ Form::text('quantity_ordered', old('quantity_ordered'), array('class' => 'form-control')) }}
             </div>
              <div class="form-group">
                 {{ Form::label('remarks', trans('messages.remarks')) }}
-                {{ Form::textarea('remarks', Input::old('remarks'), array('class' => 'form-control', 'rows' => '2')) }}
+                {{ Form::textarea('remarks', old('remarks'), array('class' => 'form-control', 'rows' => '2')) }}
             </div>
             <div class="form-group actions-row">
-                {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.update'), 
+                {{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.update'),
                     array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
             </div>
         {{ Form::close() }}
 	</div>
-	
+
 </div>
 @stop
