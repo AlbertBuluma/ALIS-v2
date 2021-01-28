@@ -16,6 +16,11 @@
 									<a href="{{ route("stockcard.index")}}">
 									<span class="glyphicon glyphicon-tag"></span> {{trans('messages.stock-card')}}</a>
 								</li>
+								<li>
+
+									<a href="{{ route("request.index")}}">
+									<span class="glyphicon glyphicon-tag"></span>Request For Commodities</a>
+								</li>
 							<li>
 								<a href="{{ route("stockrequisition.index")}}">
 								<span class="glyphicon glyphicon-tag"></span> Stockbook</a>

@@ -13,19 +13,19 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <strong>{{trans('messages.specimen-number')}}</strong>
+                <strong>{{trans('messages.time-specimen-collected')}}</strong>
             </div>
             <div class="col-md-8">
-                {{$specimen->id}}
+                <input class="form-control" data-format="YYYY-MM-DD HH:mm" data-template="DD / MM / YYYY HH : mm" 
+                    name="collection_date" type="text" id="collection-date" value="{{$collectionDate}}">
             </div>
         </div><br />
         <div class="row">
             <div class="col-md-4">
-                <strong>{{trans('messages.time-collected')}}</strong>
+                <strong>{{trans('Sample Collected by:')}}</strong>
             </div>
             <div class="col-md-8">
-                <!-- {{$specimen->time_accepted}} -->
-                 <?php $date = date('Y-m-d H:i:s');  echo $date; ?>
+                <input class="form-control" name="sample_obtainer" type="text" value="{{Auth::user()->name}}">
             </div>
         </div><br />
         <div class="row">

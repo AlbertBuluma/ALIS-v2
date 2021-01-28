@@ -43,13 +43,13 @@
                     <td>{{ $topupRequest->user->name }}</td>
                     <td>{{ $topupRequest->remarks }}</td>
                     <td>
-                    @if(Entrust::can('manage_inventory'))
+                    @can('manage_inventory'))
                         <!-- allows inventory manager to fullfil issue request -->
                         <a class="btn btn-sm btn-info" href="{{ route('issue.dispatch', array($topupRequest->id)) }}" >
                                 <span class="glyphicon glyphicon-edit"></span>
                                 {{Lang::choice('messages.issue', 1)}}
                         </a>
-                    @endif
+                    @endcan
                         <!-- edit this commodity (uses the edit method found at GET /inventory/{id}/edit -->
                         <a class="btn btn-sm btn-info" href="{{ route('topup.edit', array($topupRequest->id)) }}" >
                                 <span class="glyphicon glyphicon-edit"></span>

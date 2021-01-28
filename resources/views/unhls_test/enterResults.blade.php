@@ -2,8 +2,8 @@
 @section("content")
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-          <li><a href="{{ URL::route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a></li>
+          <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+          <li><a href="{{ route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a></li>
           <li class="active">{{ trans('messages.enter-test-results') }}</li>
         </ol>
     </div>
@@ -18,7 +18,7 @@
                             <a class="btn btn-sm btn-info fetch-test-data" href="javascript:void(0)"
                                 title="{{trans('messages.fetch-test-data-title')}}"
                                 data-test-type-id="{{$test->testType->id}}"
-                                data-url="{{URL::route('instrument.getResult')}}"
+                                data-url="{{route('instrument.getResult')}}"
                                 data-instrument-count="{{$test->testType->instruments->count()}}">
                                 <span class="glyphicon glyphicon-plus-sign"></span>
                                 {{trans('messages.fetch-test-data')}}
@@ -36,7 +36,7 @@
         </div>
         <div class="panel-body">
         <!-- if there are creation errors, they will show here -->
-            
+
             @if($errors->all())
                 <div class="alert alert-danger">
                     {{ HTML::ul($errors->all()) }}
@@ -131,9 +131,9 @@
                                                 <p><strong>{{trans("messages.specimen-referred-label")}}</strong></p>
                                             </div>
                                             <div class="col-md-8">
-                                                @if($test->specimen->referral->status == Referral::REFERRED_IN)
+                                                @if($test->specimen->referral->status == App\Models\Referral::REFERRED_IN)
                                                     {{ trans("messages.in") }}
-                                                @elseif($test->specimen->referral->status == Referral::REFERRED_OUT)
+                                                @elseif($test->specimen->referral->status == App\Models\Referral::REFERRED_OUT)
                                                     {{ trans("messages.out") }}
                                                 @endif
                                             </div>
@@ -190,11 +190,11 @@
                                 }
                                 $fieldName = "m_".$measure->id;
                                 ?>
-                                @if ( $measure->isNumeric() ) 
+                                @if ( $measure->isNumeric() )
                                     {{ Form::label($fieldName , $measure->name) }}
                                     {{ Form::text($fieldName, $ans, array(
                                         'class' => 'form-control result-interpretation-trigger',
-                                        'data-url' => URL::route('unhls_test.resultinterpretation'),
+                                        'data-url' => route('unhls_test.resultinterpretation'),
                                         'data-age' => $test->visit->patient->dob,
                                         'data-gender' => $test->visit->patient->gender,
                                         'data-measureid' => $measure->id
@@ -202,10 +202,10 @@
                                     }}
                                     <span class='units'>
 
-                                        {{Measure::getRange($test->visit->patient, $measure->id)}}
+                                        {{App\Models\Measure::getRange($test->visit->patient, $measure->id)}}
                                         {{$measure->unit}}
                                     </span>
-                                @elseif ( $measure->isAlphanumeric() || $measure->isAutocomplete() ) 
+                                @elseif ( $measure->isAlphanumeric() || $measure->isAutocomplete() )
                                     <?php
                                     $measure_values = array();
                                     $measure_values[] = '';
@@ -216,11 +216,11 @@
                                     {{ Form::label($fieldName , $measure->name) }}
                                     {{ Form::select($fieldName, $measure_values, array_search($ans, $measure_values),
                                         array('class' => 'form-control result-interpretation-trigger',
-                                        'data-url' => URL::route('unhls_test.resultinterpretation'),
+                                        'data-url' => route('unhls_test.resultinterpretation'),
                                         'data-measureid' => $measure->id
-                                        )) 
+                                        ))
                                     }}
-                                @elseif ( $measure->isFreeText() ) 
+                                @elseif ( $measure->isFreeText() )
                                     {{ Form::label($fieldName, $measure->name) }}
                                     <?php
                                         $sense = '';
@@ -233,7 +233,7 @@
                         @endforeach
                         <div class="form-group">
                             {{ Form::label('comment', trans('messages.comments')) }}
-                            {{ Form::textarea('interpretation', $test->interpretation, 
+                            {{ Form::textarea('interpretation', $test->interpretation,
                                 array('class' => 'form-control result-interpretation', 'rows' => '2')) }}
                         </div>
                         <div class="form-group actions-row">
@@ -262,16 +262,16 @@
                                         @if(($observations = $test->culture) != null)
                                             @foreach($observations as $observation)
                                             <tr>
-                                                <td>{{ Culture::showTimeAgo($observation->created_at) }}</td>
-                                                <td>{{ User::find($observation->user_id)->name }}</td>
+                                                <td>{{ App\Models\Culture::showTimeAgo($observation->created_at) }}</td>
+                                                <td>{{ App\Models\User::find($observation->user_id)->name }}</td>
                                                 <td>{{ $observation->observation }}</td>
                                                 <td></td>
                                             </tr>
                                             @endforeach
                                             <tr>
-                                                <td>{{ Culture::showTimeAgo(date('Y-m-d H:i:s')) }}</td>
+                                                <td>{{ App\Models\Culture::showTimeAgo(date('Y-m-d H:i:s')) }}</td>
                                                 <td>{{ Auth::user()->name }}</td>
-                                                <td>{{ Form::textarea('observation', $test->interpretation, 
+                                                <td>{{ Form::textarea('observation', $test->interpretation,
                                                     array('class' => 'form-control result-interpretation', 'rows' => '2', 'id' => 'observation_'.$test->id)) }}
                                                 </td>
                                                 <td><a class="btn btn-xs btn-success" href="javascript:void(0)" onclick="saveObservation(<?php echo $test->id; ?>, <?php echo Auth::user()->id; ?>, <?php echo "'".Auth::user()->name."'"; ?>)">
@@ -282,7 +282,7 @@
                                             <tr>
                                                 <td>{{ Culture::showTimeAgo(date('Y-m-d H:i:s')) }}</td>
                                                 <td>{{ Auth::user()->name }}</td>
-                                                <td>{{ Form::textarea('observation', '', 
+                                                <td>{{ Form::textarea('observation', '',
                                                     array('class' => 'form-control result-interpretation', 'rows' => '2', 'id' => 'observation_'.$test->id)) }}
                                                 </td>
                                                 <td><a class="btn btn-xs btn-success" href="javascript:void(0)" onclick="saveObservation(<?php echo $test->id; ?>, <?php echo Auth::user()->id; ?>, <?php echo "'".Auth::user()->name."'"; ?>)">
@@ -296,10 +296,10 @@
                                 <div class="form-group">
                                     <div class="form-pane panel panel-default">
                                         <div class="container-fluid">
-                                            <?php 
+                                            <?php
                                                 $cnt = 0;
                                                 $zebra = "";
-                                                $checked=false; 
+                                                $checked=false;
                                                 $checker = '';
                                                 $susOrgIds = array();
                                             ?>
@@ -382,7 +382,7 @@
                         @endif
                         <div class="col-md-6">
                         <!--this was the original holder for Patient details, specimen details and test results -->
-                        </div>                    
+                        </div>
                     </div>
                 </div>
             </div>
