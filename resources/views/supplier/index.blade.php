@@ -35,8 +35,8 @@
 			@foreach($suppliers as $key => $value)
 				<tr>
                  	<td>{{ $value->name}}</td>
-                 	<td>{{ $value->	phone_no}}</td>
-                 	<td>{{ $value->physical_address}}</td>
+                 	<td>{{ $value->	phone}}</td>
+                 	<td>{{ $value->address}}</td>
                  	<td>{{ $value->email}}</td>
 
 					<td>

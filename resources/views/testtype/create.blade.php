@@ -3,8 +3,7 @@
 <div>
 	<ol class="breadcrumb">
 	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
-	  <li><a href="{{ route('testtype.index') }}">{{ Lang::choice('messages.test-type',1) }}</a></li>
-	  <li class="active">{{trans('messages.create-test-type')}}</li>
+	  <li><a href="{{ route('testtype.index') }}">{{ Lang::choice('messages.test-type',1) }}</a<li class="active">{{trans('messages.create-test-type')}}</li>
 	</ol>
 </div>
 <div class="panel panel-primary">
@@ -25,6 +24,10 @@
 			<div class="form-group">
 				{{ Form::label('name', Lang::choice('messages.name',1)) }}
 				{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
+			</div>
+			<div class="form-group">
+				{{ Form::label('parentId','Standard name') }}
+				{{ Form::select('parentId', array(0 => '')+$standardnames->pluck('standard_name', 'id')->toArray(), old('parentId'), array('class' => 'form-control')) }}
 			</div>
 			<div class="form-group">
 				{{ Form::label('description', trans('messages.description')) }}

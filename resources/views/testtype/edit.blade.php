@@ -27,6 +27,10 @@
 				{{ Form::label('name', Lang::choice('messages.name',1)) }}
 				{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 			</div>
+			<!-- <div class="form-group">
+				{{ Form::label('parentId','Standard name') }}
+				{{ Form::select('parentId', array(0 => '')+$standardnames->pluck('standard_name', 'id')->toArray(), old('parentId'), array('class' => 'form-control')) }}
+			</div> -->
 			<div class="form-group">
 				{{ Form::label('description', trans('messages.description')) }}
 				{{ Form::textarea('description', old('description'),

@@ -2,9 +2,9 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		<li><a href="{{ URL::route('testnamemapping.index') }}">Test Name Mappings</a></li>
-		<li><a href="{{ URL::route('testnamemapping.show',[$testNameMapping->id]) }}">Measure Name Mappings</a></li>
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{ route('testnamemapping.index') }}">Test Name Mappings</a></li>
+		<li><a href="{{ route('testnamemapping.show',[$testNameMapping->id]) }}">Measure Name Mappings</a></li>
 		<li class="active">Negative Organism</li>
 	</ol>
 </div>
@@ -16,7 +16,7 @@
 		<span class="glyphicon glyphicon-adjust"></span>
 		Negative Organisms
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ URL::route('measureranges.getnegativeorganism',[$testNameMapping->id]) }}">
+			<a class="btn btn-sm btn-info" href="{{ route('measureranges.getnegativeorganism',[$testNameMapping->id]) }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				Add Negative Organism
 			</a>

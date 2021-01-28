@@ -3,9 +3,9 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
 		  <li>
-		  	<a href="{{ URL::route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a>
+		  	<a href="{{ route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a>
 		  </li>
 		  <li class="active">{{trans('messages.new-test')}}</li>
 		</ol>
@@ -37,7 +37,7 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-12">
-							
+
 							<div class="form-group">
 							<div class="panel panel-info">
 								<div class="panel-heading">
@@ -48,22 +48,22 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('patient_number', trans('messages.patient-number')) }}
-											{{ Form::text('patient_number', Input::old('patient_number'),
+											{{ Form::text('patient_number', old('patient_number'),
 											array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('name', trans('messages.names'), array('class' => 'required')) }}
-											{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
-										
+											{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
+
 										</div>
 										<div class="form-group">
 											{{ Form::label('nin', trans('messages.national-id')) }}
-											{{ Form::text('nin', Input::old('nin'), array('class' => 'form-control')) }}
+											{{ Form::text('nin', old('nin'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('ulin', trans('messages.ulin'), array('class' => 'required')) }}
 										@if($ulinFormat == 'Manual')
-											{{ Form::text('ulin', Input::old('ulin'),array('class' => 'form-control')) }}
+											{{ Form::text('ulin', old('ulin'),array('class' => 'form-control')) }}
 										@else
 											{{ Form::text('ulin', '',
 											array('class' => 'form-control', 'readonly' =>'true', 'placeholder' => 'Auto generated upon succesfull save!')) }}
@@ -81,7 +81,7 @@
 												<option value="D">Days</option>
 											</select>
 										</div>
-									
+
 									 	<div class="form-group">
 											<label class= 'required' for="dob">Date Of Birth</label>
 											<input type="text" name="dob" id="dob" class="form-control input-sm" size="11">
@@ -96,8 +96,8 @@
 										</div>
 										<div class="form-group">
 											{{ Form::label('village_residence', trans('messages.residence-village')) }}
-											{{ Form::text('village_residence', Input::old('village_residence'), array('class' => 'form-control')) }}
-										</div>	
+											{{ Form::text('village_residence', old('village_residence'), array('class' => 'form-control')) }}
+										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
@@ -115,11 +115,11 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('nationality', trans('Nationality')) }}
-											{{ Form::text('nationality', Input::old('nationality'), array('class' => 'form-control')) }}
+											{{ Form::text('nationality', old('nationality'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('phone_number', trans('messages.phone-number')) }}
-											{{ Form::text('phone_number', Input::old('phone_number'), array('class' => 'form-control')) }}
+											{{ Form::text('phone_number', old('phone_number'), array('class' => 'form-control')) }}
 										</div>
 									</div>
 
@@ -127,13 +127,13 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('bed_no','Bed No:', array('text-align' => 'right')) }}
-											{{ Form::text('bed_no', Input::old('bed_no'), array('class' => 'form-control')) }}
+											{{ Form::text('bed_no', old('bed_no'), array('class' => 'form-control')) }}
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('clinical_notes','Clinical Notes') }}
-											{{ Form::textarea('clinical_notes', Input::old('clinical_notes'),['class' => 'form-control','rows'=>'2', 'placeholder' => 'clinical notes']) }}
+											{{ Form::textarea('clinical_notes', old('clinical_notes'),['class' => 'form-control','rows'=>'2', 'placeholder' => 'clinical notes']) }}
 										</div>
 									</div>
 
@@ -141,11 +141,11 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('previous_therapy','Previous Therapy') }}
-											{{ Form::text('previous_therapy', Input::old('previous_therapy'), array('class' => 'form-control')) }}
+											{{ Form::text('previous_therapy', old('previous_therapy'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('current_therapy','Current Therapy', array('text-align' => 'right')) }}
-											{{ Form::text('current_therapy', Input::old('current_therapy'), array('class' => 'form-control')) }}
+											{{ Form::text('current_therapy', old('current_therapy'), array('class' => 'form-control')) }}
 										</div>
 										<div class="form-group">
 											{{ Form::label('clinician', 'Test Requested By',array('class' => 'required')) }}
@@ -156,12 +156,12 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											{{ Form::label('cadre', 'Cadre') }}
-											{{Form::text('cadre', Input::old('cadre'), array('class' => 'form-control','id'=>'clinician_cadre_id',
+											{{Form::text('cadre', old('cadre'), array('class' => 'form-control','id'=>'clinician_cadre_id',
 											'name'=>'clinician_cadre'))}}
 										</div>
 										<div class="form-group">
 											{{ Form::label('phone_contact', 'Phone Contact',array('class' => 'required')) }}
-											{{Form::text('phone_contact', Input::old('phone_contact'), array('class' => 'form-control',
+											{{Form::text('phone_contact', old('phone_contact'), array('class' => 'form-control',
 											'id'=>'clinician_phone_id','name'=>'clinician_phone'))}}
 										</div>
 										<div class="form-group">
@@ -281,5 +281,5 @@
                 title="{{trans('messages.delete')}}">×</button>
         </div>
     </div><!-- Test List Item -->
-</div><!-- Test List Item Loader-->  
+</div><!-- Test List Item Loader-->
 @stop

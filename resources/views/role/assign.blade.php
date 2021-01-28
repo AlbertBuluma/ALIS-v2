@@ -2,7 +2,7 @@
 @section("content")
 <div>
     <ol class="breadcrumb">
-      <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+      <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
       <li class="active">{{trans('messages.access-controls')}}</li>
     </ol>
 </div>
@@ -37,7 +37,7 @@
                         <td>{{$user->username}}</td>
                         @forelse($roles as $roleKey=>$role)
                         <td>
-                            @if ($role == Role::getAdminRole() && $user == User::getAdminUser())
+                            @if ($role == App\Models\Role::getAdminRole() && $user == App\Models\User::getAdminUser())
                                 <span class="glyphicon glyphicon-lock"></span>
                                 {{ Form::checkbox('userRoles['.$userKey.']['.$roleKey.']', '1', $user->hasRole($role->name),
                                 array('style'=>'display:none')) }}
