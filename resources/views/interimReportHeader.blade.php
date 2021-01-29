@@ -15,17 +15,17 @@
     <table style="text-align:center;" >
             <tr>
                 <td colspan="12" style="text-align:center;">
-                    <!-- {{ @HTML::image(Config::get('kblis.organization-logo'),  Config::get('kblis.country') . trans('messages.court-of-arms'), array('width' => '70px')) }} -->
+                    <!-- {{ @HTML::image(config('kblis.organization-logo'),  config('kblis.country') . trans('messages.court-of-arms'), array('width' => '70px')) }} -->
                 </td>
             </tr>
-            <tr>               
+            <tr>
                 <td colspan="12" style="text-align:center;"><b>
                     <span style="font-size:12px">
-                        {{ strtoupper(Config::get('constants.FACILITY_NAME')) }}<br>
-                    </span> 
-                     {{Config::get('kblis.address-info')}}
+                        {{ strtoupper(config('constants.FACILITY_NAME')) }}<br>
+                    </span>
+                     {{config('kblis.address-info')}}
                     </b>
-                     {{Config::get('kblis.interim-report-name')}}
+                     {{config('kblis.interim-report-name')}}
                 </td>
             </tr>
         </thead>
@@ -56,7 +56,7 @@
                     @endif
             @endif
             @endif
-        </td> 
+        </td>
 
         <td width="20%"><strong>Officer's Contact</strong>:{{ is_null($tests->first()->therapy->contact)? '': $tests->first()->therapy->contact}}</td>
         <td width="30%">
@@ -70,7 +70,7 @@
                 @endif
             @endif
         </td>
-    </tr>       
+    </tr>
     <tr>
         <td width="20%"><strong>Facility/Dept</strong>:</td>
         <td width="30%">
@@ -91,7 +91,7 @@
             {{ is_null($tests->first()->visit) ? '':$tests->first()->visit->facility_lab_number }}
             @endif
         @endif
-              
+
         </td>
     </tr>
 </table> -->

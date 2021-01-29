@@ -1,6 +1,7 @@
 @section("footer")
 	<!-- Begin footer section -->
 	<!-- Delete Modal-->
+	<br>
 	<div class="modal fade confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
 			aria-hidden="true">
 		<div class="modal-dialog">
@@ -44,7 +45,7 @@
         </div>
 
         <div>
-                <a href="http://www.cphl.go.ug" target="_blank">UNHLS &copy; {{date("Y")}}</a>
+        		{{ HTML::link('http://www.cphl.go.ug', 'UNHLS &copy; ' . date("Y"))}}
         </div>
     </footer>
 

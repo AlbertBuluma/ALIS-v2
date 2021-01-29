@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AdhocConfig;
 use Illuminate\Http\Request;
 
+
 class AdhocConfigController extends Controller {
 
 	/**

@@ -66,12 +66,7 @@
 									{{trans('messages.user-statistics-report')}}</a>
 								</div>
 							</li>
-							<li>
-								<div><a href="{{ route('reports.aggregate.hmis105')}}">
-									<span class="glyphicon glyphicon-tag"></span>
-									HMIS 105</a>
-								</div>
-							</li>
+
 						</ul>
 						<h4 class="panel_heading panel_heading_first">{{trans('messages.inventory-reports')}}</h4>
 						<ul>
