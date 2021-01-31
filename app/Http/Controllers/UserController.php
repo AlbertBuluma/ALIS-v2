@@ -169,7 +169,7 @@ class UserController extends Controller {
             'username' => 'alpha_num|required|unique:users,username|min:4',
             'password' => 'confirmed|required|min:6',
             'full_name' => 'required',
-            //'email' => 'required|email'
+            'email' => 'required|email'
         );
         $validator = Validator::make($request->all(), $rules);
 

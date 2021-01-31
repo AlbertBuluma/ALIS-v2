@@ -55,7 +55,7 @@
             @endforelse
             </tbody>
         </table>
-        <?php echo $roles->links();
+<!--        --><?php //echo $roles->links();
         Session::put('SOURCE_URL', URL::full());?>
     </div>
 </div>

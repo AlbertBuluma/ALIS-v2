@@ -1,7 +1,38 @@
 <?php
 
+use App\Models\Barcode;
+use App\Models\BbincidenceAction;
+use App\Models\BbincidenceCause;
+use App\Models\BbincidenceNature;
+use App\Models\Disease;
+use App\Models\District;
+use App\Models\DrugSusceptibilityMeasure;
+use App\Models\GramStainRange;
+use App\Models\Instrument;
+use App\Models\Measure;
+use App\Models\MeasureRange;
+use App\Models\MeasureType;
+use Spatie\Permission\Models\Permission;
+use App\Models\RejectionReason;
+use App\Models\ReportDisease;
+use App\Models\Role;
+use App\Models\SpecimenStatus;
+use App\Models\SpecimenType;
+use App\Models\TestCategory;
+use App\Models\TestPhase;
+use App\Models\TestStatus;
+use App\Models\TestType;
+use App\Models\TestTypeMeasure;
+use App\Models\UNHLSFacility;
+use App\Models\UNHLSFacilityLevel;
+use App\Models\UNHLSFacilityOwnership;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class UpdateMicrobiologyFunctionalities extends Migration {
 
@@ -94,12 +125,12 @@ class UpdateMicrobiologyFunctionalities extends Migration {
 
         // seeding on the go! STARTS HERE
 
-        Eloquent::unguard();
+        Model::unguard();
 
         /* DISTRICT table */
         $districtsData = array(
-            array("id" => \Config::get('constants.DISTRICT_ID'),
-                'name' => \Config::get('constants.DISTRICT_NAME')
+            array("id" => config('constants.DISTRICT_ID'),
+                'name' => config('constants.DISTRICT_NAME')
                 ),
         );
 
@@ -263,12 +294,12 @@ class UpdateMicrobiologyFunctionalities extends Migration {
 
         /* Facility table */
         $facilitysData = array(
-            array("id" => \Config::get('constants.FACILITY_ID'),
-                'name' => \Config::get('constants.FACILITY_NAME'),
-                'district_id' => \Config::get('constants.DISTRICT_ID'),
-                'code' => \Config::get('constants.FACILITY_CODE'),
-                'level_id' => \Config::get('constants.FACILITY_LEVEL_ID'),
-                'ownership_id' => \Config::get('constants.FACILITY_OWNERSHIP_ID')
+            array("id" => config('constants.FACILITY_ID'),
+                'name' => config('constants.FACILITY_NAME'),
+                'district_id' => config('constants.DISTRICT_ID'),
+                'code' => config('constants.FACILITY_CODE'),
+                'level_id' => config('constants.FACILITY_LEVEL_ID'),
+                'ownership_id' => config('constants.FACILITY_OWNERSHIP_ID')
                 ),
         );
 
@@ -284,7 +315,7 @@ class UpdateMicrobiologyFunctionalities extends Migration {
             array(
                 "username" => "administrator", "password" => Hash::make("password"),
                 "email" => "", "name" => "A-LIS Admin", "designation" => "Systems Administrator",
-                "facility_id" => \Config::get('constants.FACILITY_ID')
+                "facility_id" => config('constants.FACILITY_ID')
             ),
         );
 
@@ -457,33 +488,33 @@ class UpdateMicrobiologyFunctionalities extends Migration {
         /* Permissions table */
         $permissions = array(
 
-            array("name" => "manage_incidents", "display_name" => "Can Manage Biorisk & Biosecurity Incidents"),
-            array("name" => "register_incident", "display_name" => "Can Register BB Incidences"),
-            array("name" => "summary_log", "display_name" => "Can view BB summary log"),
-            array("name" => "facility_report", "display_name" => "Can create faility BB report"),
+            array("name" => "manage_incidents", "display_name" => "Can Manage Biorisk & Biosecurity Incidents", "guard_name" => "web"),
+            array("name" => "register_incident", "display_name" => "Can Register BB Incidences", "guard_name" => "web"),
+            array("name" => "summary_log", "display_name" => "Can view BB summary log", "guard_name" => "web"),
+            array("name" => "facility_report", "display_name" => "Can create faility BB report", "guard_name" => "web"),
 
-            array("name" => "view_names", "display_name" => "Can view patient names"),
-            array("name" => "manage_patients", "display_name" => "Can add patients"),
+            array("name" => "view_names", "display_name" => "Can view patient names", "guard_name" => "web"),
+            array("name" => "manage_patients", "display_name" => "Can add patients", "guard_name" => "web"),
 
-            array("name" => "receive_external_test", "display_name" => "Can receive test requests"),
-            array("name" => "request_test", "display_name" => "Can request new test"),
-            array("name" => "accept_test_specimen", "display_name" => "Can accept test specimen"),
-            array("name" => "reject_test_specimen", "display_name" => "Can reject test specimen"),
-            array("name" => "change_test_specimen", "display_name" => "Can change test specimen"),
-            array("name" => "start_test", "display_name" => "Can start tests"),
-            array("name" => "enter_test_results", "display_name" => "Can enter tests results"),
-            array("name" => "edit_test_results", "display_name" => "Can edit test results"),
-            array("name" => "verify_test_results", "display_name" => "Can verify test results"),
-            array("name" => "send_results_to_external_system", "display_name" => "Can send test results to external systems"),
-            array("name" => "refer_specimens", "display_name" => "Can refer specimens"),
+            array("name" => "receive_external_test", "display_name" => "Can receive test requests", "guard_name" => "web"),
+            array("name" => "request_test", "display_name" => "Can request new test", "guard_name" => "web"),
+            array("name" => "accept_test_specimen", "display_name" => "Can accept test specimen", "guard_name" => "web"),
+            array("name" => "reject_test_specimen", "display_name" => "Can reject test specimen", "guard_name" => "web"),
+            array("name" => "change_test_specimen", "display_name" => "Can change test specimen", "guard_name" => "web"),
+            array("name" => "start_test", "display_name" => "Can start tests", "guard_name" => "web"),
+            array("name" => "enter_test_results", "display_name" => "Can enter tests results", "guard_name" => "web"),
+            array("name" => "edit_test_results", "display_name" => "Can edit test results", "guard_name" => "web"),
+            array("name" => "verify_test_results", "display_name" => "Can verify test results", "guard_name" => "web"),
+            array("name" => "send_results_to_external_system", "display_name" => "Can send test results to external systems", "guard_name" => "web"),
+            array("name" => "refer_specimens", "display_name" => "Can refer specimens", "guard_name" => "web"),
 
-            array("name" => "manage_users", "display_name" => "Can manage users"),
-            array("name" => "manage_test_catalog", "display_name" => "Can manage test catalog"),
-            array("name" => "manage_lab_configurations", "display_name" => "Can manage lab configurations"),
-            array("name" => "view_reports", "display_name" => "Can view reports"),
-            array("name" => "manage_inventory", "display_name" => "Can manage inventory"),
-            array("name" => "request_topup", "display_name" => "Can request top-up"),
-            array("name" => "manage_qc", "display_name" => "Can manage Quality Control")
+            array("name" => "manage_users", "display_name" => "Can manage users", "guard_name" => "web"),
+            array("name" => "manage_test_catalog", "display_name" => "Can manage test catalog", "guard_name" => "web"),
+            array("name" => "manage_lab_configurations", "display_name" => "Can manage lab configurations", "guard_name" => "web"),
+            array("name" => "view_reports", "display_name" => "Can view reports", "guard_name" => "web"),
+            array("name" => "manage_inventory", "display_name" => "Can manage inventory", "guard_name" => "web"),
+            array("name" => "request_topup", "display_name" => "Can request top-up", "guard_name" => "web"),
+            array("name" => "manage_qc", "display_name" => "Can manage Quality Control", "guard_name" => "web")
         );
 
         foreach ($permissions as $permission) {
@@ -493,25 +524,27 @@ class UpdateMicrobiologyFunctionalities extends Migration {
 
         /* Roles table */
         $roles = array(
-            array("name" => "Superadmin"),
-            array("name" => "Technologist"),
-            array("name" => "Receptionist")
+            array("name" => "Superadmin", "guard_name" => "web"),
+            array("name" => "Technologist", "guard_name" => "web"),
+            array("name" => "Receptionist", "guard_name" => "web")
         );
         foreach ($roles as $role) {
             Role::create($role);
         }
         echo "Roles table seeded\n";
 
-        $user1 = User::find(1);
-        $role1 = Role::find(1);
-        $permissions = Permission::all();
+//        $user1 = User::find(1);
+//        $role1 = Role::find(1);
+//        $permissions = Permission::all();
 
         //Assign all permissions to role administrator
-        foreach ($permissions as $permission) {
-            $role1->attachPermission($permission);
-        }
-        //Assign role Administrator to user 1 administrator
-        $user1->attachRole($role1);
+//        foreach ($permissions as $permission) {
+////            $role1->attachPermission($permission);
+//            $role1->givePermissionTo($permission);
+//        }
+//        //Assign role Administrator to user 1 administrator
+////        $user1->attachRole($role1);
+//        $user1->assignRole($role1);
 
         $barcode = array("encoding_format" => 'code39', "barcode_width" => '2', "barcode_height" => '30', "text_size" => '11');
         Barcode::create($barcode);
@@ -1323,7 +1356,7 @@ class UpdateMicrobiologyFunctionalities extends Migration {
         MeasureRange::create(array("measure_id" => $measureSGOT->id, "alphanumeric" => "High"));
         MeasureRange::create(array("measure_id" => $measureSGOT->id, "alphanumeric" => "Low"));
         MeasureRange::create(array("measure_id" => $measureSGOT->id, "alphanumeric" => "Normal"));
-        
+
         MeasureRange::create(array("measure_id" => $measureIndirectCOOMBSTest->id, "alphanumeric" => "Positive"));
         MeasureRange::create(array("measure_id" => $measureIndirectCOOMBSTest->id, "alphanumeric" => "Negative"));
 
@@ -1703,13 +1736,13 @@ class UpdateMicrobiologyFunctionalities extends Migration {
 
         DB::disableQueryLog();
         /*Drugs table*/
-        DB::unprepared(file_get_contents(base_path() . "/app/database/seeds/drugs.sql"));
+        DB::unprepared(file_get_contents(base_path() . "/database/seeds/drugs.sql"));
         echo "bulk antibiotics seeded!\n";
         /*Organisms table*/
-        DB::unprepared(file_get_contents(base_path() . "/app/database/seeds/organisms.sql"));
+        DB::unprepared(file_get_contents(base_path() . "/database/seeds/organisms.sql"));
         echo "bulk organisms seeded!\n";
         /*Zone Diameters table table*/
-        DB::unprepared(file_get_contents(base_path() . "/app/database/seeds/zone_diameters.sql"));
+        DB::unprepared(file_get_contents(base_path() . "/database/seeds/zone_diameters.sql"));
         echo "bulk zone diameters seeded!\n";
         DB::enableQueryLog();
 

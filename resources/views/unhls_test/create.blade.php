@@ -66,12 +66,12 @@
                                         </div>
                                     <!-- <div class="form-group">
 											{{ Form::label('ward_id','Ward/Clinic/Health Unit') }}
-                                    {{ Form::select('ward_id', [' ' => '- -'], Input::get('ward_id'),
+                                    {{ Form::select('ward_id', [' ' => '- -'], Illuminate\Support\Facades\Request::get('ward_id'),
                                     array('class' => 'form-control','id'=>'ward_dropdown_id','name'=>'ward_dropdown')) }}
                                         </div> -->
                                         <div class="form-group">
                                             {{ Form::label('ward_id','Ward/Clinic/Health Unit') }}
-                                            {{ Form::select('ward_id', $ward, Input::get('ward_id'),
+                                            {{ Form::select('ward_id', $ward, Illuminate\Support\Facades\Request::get('ward_id'),
                                             array('class' => 'form-control')) }}
                                         </div>
                                         <div class="form-group">
@@ -80,7 +80,7 @@
                                         </div>
                                         <div class="form-group">
                                             {{ Form::label('facility','Facility Name:') }}
-                                            {{ Form::select('facility', $facilities, Input::get('facility'), array('class' => 'form-control')) }}
+                                            {{ Form::select('facility', $facilities, Illuminate\Support\Facades\Request::get('facility'), array('class' => 'form-control')) }}
                                         </div>
                                         <div class="form-group">
                                             {{ Form::label('facility_lab_number','Facility Lab No:', array('text-align' => 'right')) }}
@@ -158,7 +158,7 @@
                                             <div class="form-group">
                                                 {{Form::label('specimen_type', 'Sample Type')}}
                                                 {{ Form::select('specimen_type', $specimenType,
-                                                Input::get('specimenType'),
+                                                Illuminate\Support\Facades\Request::get('specimenType'),
                                                 ['class' => 'form-control specimen-type']) }}
                                             </div>
                                             <div class="form-group">
@@ -184,7 +184,7 @@
                                             <div class="form-group">
                                                 {{Form::label('test_type_category', 'Lab Section')}}
                                                 {{ Form::select('test_type_category', $testCategory,
-                                                Input::get('testCategory'),
+                                                Illuminate\Support\Facades\Request::get('testCategory'),
                                                 ['class' => 'form-control test-type-category']) }}
                                             </div>
                                         </div>

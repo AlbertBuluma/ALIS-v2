@@ -1,8 +1,10 @@
 <?php
 
-use Zizaco\Entrust\EntrustPermission;
+namespace  App\Models;
 
-class Permission extends EntrustPermission
+use Spatie\Permission\Models\Permission as perm;
+
+class Permission extends perm
 {
     /**
      * Checks if the Permission has a Role by its name.

@@ -1,11 +1,11 @@
 <?php
-/** 
+/**
  *   To aid quick referencing, keep entries in the same section ALPHABETICALLY ORDERED
  */
 
 return [
 
-    /** 
+    /**
      *   Generic names
      */
 
@@ -44,6 +44,7 @@ return [
     'photo' => 'Photo',
     'role' => 'Role|Roles',
     'save' => 'Save',
+    'save-request' => 'Save and Request',
     'submit' => 'Submit',
     'save-all' => 'Save All',
     'type' => 'Type',
@@ -60,7 +61,7 @@ return [
     'out' => 'Out',
     'vertical' =>'Vertical', //UNHLS terminology
 
-    /** 
+    /**
      *   Generic phrases
      */
     'confirm-delete-title' => 'Confirm Delete',
@@ -68,7 +69,7 @@ return [
     'confirm-delete-irreversible' => 'This action is irreversible.',
     'court-of-arms' => 'Court of Arms',
 
-    /** 
+    /**
      *   User
      */
     'create-user' => 'Create User',
@@ -90,8 +91,9 @@ return [
     'success-deleting-user' => 'The user was successfully deleted!',
     'user-details' => 'User Details',
     'user-profile-edit-success' => 'The user details were successfully updated!',
+    'sample-patient' => 'Microbiology Specimen',
 
-    /** 
+    /**
      *  Patient
      */
 
@@ -124,8 +126,8 @@ return [
     'sex' => 'Sex', //Unhls prefers this to Gender
     'ulin' => 'ULIN',
     'workplace-village' => 'Village of Workplace', //Unhls entry
-    
-    /** 
+
+    /**
      *   Specimen
      */
     'not-paid' => 'Not Paid',
@@ -188,7 +190,7 @@ return [
     'time-dispatch' => 'Time of Sample dispatch: ', //UNHLS terminolgy
     'specimen-collected-by' => 'Specimen Collected and Recieved By', //UNHLS terminology
 
-    /** 
+    /**
      *   Test Catalog
      */
     /*Measure*/
@@ -229,7 +231,7 @@ return [
     'success-updating-specimen-type' => 'The specimen type details were successfully updated!',
 
     /*Specimen Rejection*/
-    
+
     'add-rejection-reason' => 'Add New Rejection Reason',
     'edit-rejection-reason' => ' Edit Rejection Reason',
     'failure-specimen-rejection-reason-in-use' => 'This Rejection Reason is in Use',
@@ -331,6 +333,7 @@ return [
     'fetch-test-data-title' => 'Fetch Test data from associated equipment.',
     'first-select-patient' => 'First select a patient below',
     'in-patient' => 'In Patient',
+    'refferrals' => 'Refferral',
     'interpretation' => 'Interpretation',
     'lab-receipt-date' => 'Receipt Date',
     'list-tests' => 'Test Requests',
@@ -350,7 +353,7 @@ return [
     'start-test' => 'Analysis',
     'start-test-title' => 'Start Test',
     'started' => 'Test Started',
-    'success-creating-test' => 'Successfully created test!',
+    'success-creating-test' => 'Successfully created test! with ULIN:',
     'test' => 'Test|Tests|Test-Request',
     'test-unhls' => 'Test|List of All Test Requests', //Unhls  terminology
     'test-catalog' => 'Test Catalog',
@@ -374,9 +377,11 @@ return [
     'visit-number' => 'Visit No.',
     'visit-lab-number' => 'Visit Lab No.',//This number is issued at each patient visit in the Lab
     'visit-type' => 'Visit Type',
+    'sample-source' => 'Sample Source',
+    'visit-test-details' => 'View List of Tests',
 
 
-    /** 
+    /**
      *   Tests search panel
      */
     'empty-search' => 'Your search did not match any test record!',
@@ -390,6 +395,7 @@ return [
      *   Tests Results
      */
     'edit-test-results' => 'Edit Test Results',
+    'recall-test-results' => 'Recall Test Results',
     'enter-results' => 'Enter Results',
     'enter-results-title' => 'Enter Test Results',
     'enter-test-results' => 'Enter Test Results',
@@ -397,7 +403,7 @@ return [
     'success-saving-results' => 'The results successfully saved!',
     'test-results' => 'Results',
 
-    /** 
+    /**
      *   Access Controls
      */
 
@@ -416,7 +422,7 @@ return [
     'success-updating-role' => 'Roles successfully updated!',
     'user-accounts' => 'User Accounts',
 
-    /** 
+    /**
      *   Reports
      */
     'aggregate-reports' => 'Aggregate Reports',
@@ -443,6 +449,8 @@ return [
     'results-entry-date' => 'Results Entry Date',
     'test-results-values' => 'Test Results',
     'view-report' => 'View Report',
+    'recall-report' => 'Recall Report',
+    'recall-test' => 'Recall Test',
     'view-final-report'=>'View Final Report',
     'view-interim-report'=>'View Interim Report',
     'view-visit-report' => 'View Visit Report',
@@ -463,6 +471,8 @@ return [
     'positive'  =>  'Positive',
     'negative'  =>  'Negative',
     'prevalence-rates-label'    =>  'Cummulative Percentage (%)',
+    'tat-rates-label'    =>  'Percentage (%)',
+    'tat-label'    =>  'Total Number of tests',
     'no-match'  =>  'Your filter did not match any records.',
     'check-date-range'  =>  'Please check your dates range and try again!',
     'time-in-years' =>  'Time(yrs)',
@@ -505,7 +515,7 @@ return [
     'weekly'    =>  'Weekly',
     'daily' =>  'Daily',
 
-    /* Usage Statistics Reports*/ 
+    /* Usage Statistics Reports*/
     'accepted-specimen' => 'Specimen Collected',
     'no-data-found' => 'No data available!',
     'performed-tests' => 'Tests Performed',
@@ -523,16 +533,50 @@ return [
     'user-statistics-tests-register-report-title' => 'Tests Registered (Period: [FROM] - [TO] [USER])',
     'verified-tests' => 'Tests Verified',
 
-     /* Inventory Reports*/ 
+     /* Inventory Reports*/
     'inventory-reports' => 'Inventory Reports',
     'stock-levels' => 'Stock Levels',
     'stock-level-report' => 'Stock Level Report',
     'monthly-stock-level-report-title' => 'Monthly Stock Levels (Period: [FROM] - [TO])',
     'quarterly-stock-level-report-title' => 'Quarterly Stock Levels (Period: [FROM] - [TO] )',
-    
- 
+    'phone' => 'Phone',
+    'address' => 'Address',
+    'details' => 'Details',
+    'item' => 'Item',
+    'storage' => 'Storage',
+    'new' => 'New',
+    'log-usage' => 'Log Usage',
+    'stock' => 'Stock',
+    'lot-no' => 'Lot No',
+    'expiry' => 'Expiry',
+    'manufacturer' => 'Manufacturer',
+    'supplied' => 'Amount Supplied',
+    'cost-per-unit' => 'Cost per unit',
+    'date-received' => 'Date Received',
+    'record-successfully-saved' => 'Record successfully saved',
+    'usage' => 'Usage',
+    'record-successfully-updated' => 'Record successfully Updated',
+    'record-successfully-deleted' => 'Record successfully Deleted',
+    'available-qty' => 'Available Quantity',
+    'signed-out' => 'Signed Out',
+    'date-of-usage' => 'Date of Usage',
+    'received-by' => 'Received By',
+    'ordered-by' => 'Ordered By',
+    'request' => 'Request',
+    'issued' => 'Issued',
+    'status' => 'Status',
+    'quantity-remaining' => 'Quantity Remaining',
+    'order-quantity' => 'Quantity Ordered',
+    'not-issued' => 'Not issued',
+    'update-stock' => 'Update stock',
+    'stock-usage' => 'Stock Usage',
+    'issued-greater-than-ordered' => 'Issued greater than ordered',
+    'top-up' => 'Top Up',
 
-    /** 
+
+
+
+    /**
      *   Configurations
      */
     'add-facility' => 'Add a facility',
@@ -572,7 +616,7 @@ return [
     'supported-test-types' => 'Supported Tests',
     'unwriteable-destination-folder' => 'Unable to write to the plugins folder',
 
-    /** 
+    /**
      *   Dates
      */
     'year' => 'Year|Years',
@@ -581,8 +625,8 @@ return [
     'hour' => 'Hour|Hours',
     'minute' => 'Minute|Minutes',
     'second' => 'Second|Seconds',
-  
-    /** 
+
+    /**
      *   Inventory
      */
 
@@ -695,7 +739,7 @@ return [
     'success-deleting-control' => 'The Control has been successfully deleted',
     'success-adding-control-result' => 'The control results have been succesfully added',
 
-    /** 
+    /**
      *   MOH 706 report
      */
     'moh-706'   =>  'MOH 706',
@@ -704,7 +748,7 @@ return [
     'affiliation'   =>  'Affiliation',
     'reporting-period'  =>  'Reporting Period',
     'begin-end' =>  'Begining|Ending',
-    /** 
+    /**
      *   Controls
      */
     'gok'   =>  'GOK',
@@ -753,41 +797,41 @@ return [
     'baseline'  =>  'Baseline',
     'follow-up' =>  'Follow Up',
     'cd4-less'  =>  '< 500',
-    'cd4-greater'   =>  '> 500',   
-	
-	
-	/**
-	* BB Incidences
-	*/
-	'bbincidence' => 'BB Incidence | BB Incidences',
-	'new-bbincidence' => 'New BB Incidence',
-	'incident-serial-number' => 'Incident Serial Number',
-	'date-of-occurrence' => 'Date of Occurrence',
-	'time-of-occurrence' => 'Time of Occurrence',
-	'age' => 'Age',
-	'dob' => 'Date of Birth',
-	'filter' => 'Filter',
-	
-	
+    'cd4-greater'   =>  '> 500',
+
+
+    /**
+    * BB Incidences
+    */
+    'bbincidence' => 'BB Incidence | BB Incidences',
+    'new-bbincidence' => 'New BB Incidence',
+    'incident-serial-number' => 'Incident Serial Number',
+    'date-of-occurrence' => 'Date of Occurrence',
+    'time-of-occurrence' => 'Time of Occurrence',
+    'age' => 'Age',
+    'dob' => 'Date of Birth',
+    'filter' => 'Filter',
+
+
 
     //BLIS uganda
-    'stock-card' => 'Stock card' ,   
+    'stock-card' => 'Stock card' ,
     'equipment-log' => 'Equipment log',
     'requisition-voucher'=>'Requisition voucher',
     'stock-entries'=> 'Stock Entries',
     'add-stock'=> 'Add',
     'stock-list'=> 'Stock List',
-    'stock-requisition' => 'Stockbook',    
+    'stock-requisition' => 'Stockbook',
     'edit-stock-entry'=> 'Edit',
     'stock-succesfully-deleted' => 'Stock has been succesfully deleted',
     'stock-succesfully-added' => 'Successifully added a new stock entry',
     'settings' => 'Settings',
     'add-stock'=> 'Add',
-    'equipment-list'=> 'Equipment List',      
-    'equipment-breakdown'=> 'Equipment breakdown',    
-     'equipment-breakdown-list'=> 'Equipment breakdown list', 
-    'equipment-maintenance'=> 'Equipment maintenance',         
-    'supplier-list'=> 'Supplier List',    
+    'equipment-list'=> 'Equipment List',
+    'equipment-breakdown'=> 'Equipment breakdown',
+     'equipment-breakdown-list'=> 'Equipment breakdown list',
+    'equipment-maintenance'=> 'Equipment maintenance',
+    'supplier-list'=> 'Supplier List',
     'add'=> 'Add',
 
     //

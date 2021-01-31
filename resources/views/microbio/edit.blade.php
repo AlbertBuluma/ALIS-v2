@@ -227,7 +227,7 @@
 							<div class="form-group">
 								{{Form::label('specimen_type', 'Sample Type')}}
 								{{ Form::select('specimen_type', $specimenType,
-									Input::get('specimenType'),	['class' => 'form-control specimen-type']) }}
+									Illuminate\Support\Facades\Request::get('specimenType'),	['class' => 'form-control specimen-type']) }}
 							</div>
 						<div class="form-group">
 								<label for="collection_date">Time of Sample Collection</label>
@@ -251,7 +251,7 @@
 						</div>
 						<div class="form-group">
 						        {{Form::label('test_type_category', 'Lab Section')}}
-						    	{{ Form::select('test_type_category', $testCategory, Input::get('testCategory'),
+						    	{{ Form::select('test_type_category', $testCategory, Illuminate\Support\Facades\Request::get('testCategory'),
 								    ['class' => 'form-control test-type-category']) }}
 											</div>
 						</div>

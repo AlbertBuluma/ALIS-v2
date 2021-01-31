@@ -41,7 +41,7 @@ class PocController extends Controller {
 		}
 
 		// Load the view and pass the patients
-		$antenatal = array('0'=>'Lifelong ART', '1' => 'No ART', '2' => 'UNKNOWN');
+		$antenatal = array('1'=>'Lifelong ART', '2' => 'No ART', '3' => 'UNKNOWN');
 		return view('poc.index')
 		->with('antenatal',$antenatal)
 		// ->with('facility',$facility)
@@ -90,15 +90,17 @@ class PocController extends Controller {
      */
 	public function store(Request $request)
 	{
+//	    dd($request->all());
 		//
-		$rules = array(
+        $rules = array(
 
-			'infant_name' => 'required',
-			'age'       => 'required',
-			'gender' => 'required',
-			'mother_name' => 'required' ,
-			'entry_point' => 'required' ,
-		);
+            'infant_name' => 'required',
+            'age'       => 'required',
+//            'gender' => 'required',
+//            'entry_point' => 'required',
+            'collection_date' => 'required',
+            'sample_id' => 'required|unique:poc_tables,sample_id'
+        );
 		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {

@@ -327,7 +327,7 @@ class TestType extends Model
 
         }
         $data = $data->whereBetween('time_created', array($from, $toPlusOne))
-            ->groupBy('test_types.id')
+            ->groupBy('test_types.id', 'test_types.name')
             ->get();
         return $data;
     }

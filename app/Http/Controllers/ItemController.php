@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barcode;
 use App\Models\Item;
-use Faker\Provider\Barcode;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

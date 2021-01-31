@@ -56,7 +56,7 @@
 					<div class="form-group">
 						{{ Form::label('nationality', trans('Nationality'), array('class' => 'required')) }}
 						{{ Form::select('nationality',  array_merge(array(' ' => '--- Select Nationality ---'), $nation),
-						Input::get('nationality'),['class' => 'form-control'])  }}
+						Illuminate\Support\Facades\Request::get('nationality'),['class' => 'form-control'])  }}
 					</div>
 				</div>
 				<div class="col-md-12">
@@ -83,13 +83,13 @@
 						<div class="form-group">
 							{{ Form::label('visit_type', trans("messages.visit-type")) }}
 							{{ Form::select('visit_type',array_merge(array(' ' => '--- Select visit type  ---'), $visitType),
-							Input::get('visit_type'),['class' => 'form-control'])  }}
+							Illuminate\Support\Facades\Request::get('visit_type'),['class' => 'form-control'])  }}
 						</div>
 				</div>
 				<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('ward','Ward/Clinic/Health Unit') }}
-							{{ Form::select('ward', $ward, Input::get('ward'), array('class' => 'form-control')) }}
+							{{ Form::select('ward', $ward, Illuminate\Support\Facades\Request::get('ward'), array('class' => 'form-control')) }}
 						</div>
 						<div class="form-group">
 							{{ Form::label('patient_number', trans('messages.patient-number'), array('class' => 'required')) }}
@@ -102,7 +102,7 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('district_residence', 'District of Residence') }}
-							{{ Form::select('district_residence', $districts, Input::get('district_residence'),['class' => 'form-control']) }}
+							{{ Form::select('district_residence', $districts, Illuminate\Support\Facades\Request::get('district_residence'),['class' => 'form-control']) }}
 						</div>
 						<div class="form-group">
 							{{ Form::label('sub_county_residence', 'Sub County of Residence') }}
@@ -116,7 +116,7 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							{{ Form::label('district_workplace', 'District of Work Place') }}
-							{{ Form::select('district_workplace', $districts, Input::get('district_workplace'),['class' => 'form-control']) }}
+							{{ Form::select('district_workplace', $districts, Illuminate\Support\Facades\Request::get('district_workplace'),['class' => 'form-control']) }}
 						</div>
 						<div class="form-group">
 							{{ Form::label('sub_county_workplace', 'Sub County of Work Place') }}
@@ -184,7 +184,7 @@
 							<div class="form-group">
 							{{Form::label('drug', 'List Antibiotics')}}
 							{{ Form::select('antibiotic[drug][]', $antibiotics,
-							Input::get('antibiotic'), ['class' => 'form-control', 'id' => 'select2']) }}
+							Illuminate\Support\Facades\Request::get('antibiotic'), ['class' => 'form-control', 'id' => 'select2']) }}
 							</div>
 							<div class="form-group">
 							{{ Form::label('antibiotic_days', 'Days on Antibiotic') }}
@@ -223,7 +223,7 @@
 							<div class="form-group">
 								{{Form::label('specimen_type', 'Sample Type', array('class' => 'required'))}}
 								{{ Form::select('specimen_type', $specimenType,
-									Input::get('specimenType'),	['class' => 'form-control specimen-type']) }}
+									Illuminate\Support\Facades\Request::get('specimenType'),	['class' => 'form-control specimen-type']) }}
 							</div>
 						<div class="form-group">
 								<label for="collection_date">Time of Sample Collection</label>
@@ -247,7 +247,7 @@
 						</div>
 						<div class="form-group">
 						        {{Form::label('test_type_category', 'Lab Section')}}
-						    	{{ Form::select('test_type_category', $testCategory, Input::get('testCategory'),
+						    	{{ Form::select('test_type_category', $testCategory, Illuminate\Support\Facades\Request::get('testCategory'),
 								    ['class' => 'form-control test-type-category']) }}
 											</div>
 						</div>

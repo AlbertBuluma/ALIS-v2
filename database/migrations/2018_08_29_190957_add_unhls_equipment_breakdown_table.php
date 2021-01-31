@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddUnhlsEquipmentBreakdownTable extends Migration {
 
@@ -29,7 +30,7 @@ class AddUnhlsEquipmentBreakdownTable extends Migration {
 			$table->string('reporting_officer');
 			$table->string('reporting_officer_contact');
 			$table->string('reporting_officer_email');
-			$table->string('intervention_authorit	y');
+			$table->string('intervention_authority');
 			// $table->text('action_taken');
 			$table->text('conclusion');
 			$table->string('verified_by');

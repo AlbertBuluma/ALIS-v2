@@ -2,8 +2,9 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
-class AddInstrumentIdColumnToUnhlsTests extends Migration {
+class AddColumnsToReferralsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,8 +13,10 @@ class AddInstrumentIdColumnToUnhlsTests extends Migration {
 	 */
 	public function up()
 	{
-		//
-		DB::update('ALTER TABLE unhls_tests ADD COLUMN instrument_id int after instrument');
+		Schema::table('referrals', function(Blueprint $table)
+		{
+			$table->string('test_id')->nullable()->after('id');
+		});
 	}
 
 	/**

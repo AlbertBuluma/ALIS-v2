@@ -80,7 +80,7 @@ class UnhlsTestController extends Controller {
 
             $tests = UnhlsTest::search($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
 
-            if (count($tests) == 0) {
+            if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
             }
         }
@@ -165,7 +165,7 @@ class UnhlsTestController extends Controller {
 
             $tests = UnhlsTest::completedTests($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
 
-            if (count($tests) == 0) {
+            if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
             }
         }
@@ -241,7 +241,7 @@ class UnhlsTestController extends Controller {
 
             $tests = UnhlsTest::pendingTests($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
 
-            if (count($tests) == 0) {
+            if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
             }
         }
@@ -316,7 +316,7 @@ class UnhlsTestController extends Controller {
 
             $tests = UnhlsTest::startedTests($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
 
-            if (count($tests) == 0) {
+            if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
             }
         }
@@ -391,7 +391,7 @@ class UnhlsTestController extends Controller {
 
             $tests = UnhlsTest::startedTests($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
 
-            if (count($tests) == 0) {
+            if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
             }
         }
@@ -467,7 +467,7 @@ class UnhlsTestController extends Controller {
 
             $tests = UnhlsTest::verified($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
 
-            if (count($tests) == 0) {
+            if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
             }
         }
@@ -1185,7 +1185,7 @@ class UnhlsTestController extends Controller {
 
         $tests = UnhlsTest::searchByVisit( $id);
 
-        if (count($tests) == 0) {
+        if (count($tests->get()) == 0) {
             Session::flash('message', trans('messages.empty-search'));
         }
 

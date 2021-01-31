@@ -257,7 +257,8 @@
                         <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px; width: 215px; display: none;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; right: 3px; height: 620px; display: none;"><div class="ps-scrollbar-y" style="top: 0px; height: 0px;"></div></div></div>
                 </div>
             </li>
-            @can('manage_lab_configurations'))
+
+            @can('manage_lab_configurations')
 
                 <li class="nav_trigger">
                     <a href="#">
@@ -310,11 +311,11 @@
                 </li>
             @endcan
 
-            @can('manage_test_catalog'))
+            @can('manage_test_catalog')
                 <li class="nav_trigger">
                     <a href="#">
                         <span class="ion-gear-a"></span>
-                        <span class="nav_title">Test Catalog</>
+                        <span class="nav_title">Test Catalog</span>
                     </a>
                     <div class="sub_panel" style="left: -220px;">
                         <div class="side_inner ps-ready ps-container" style="height:620px;">
@@ -356,7 +357,7 @@
             @endcan
 
 
-            @can('manage_inventory'))
+            @can('manage_inventory')
                 <li class="nav_trigger">
                     <a href="#">
                         <span class="ion-ios-cart"></span>
@@ -433,7 +434,7 @@
                 </div>
             </li>
 
-            @can('manage_users'))
+            @can('manage_users')
 
                 <li class="nav_trigger">
                     <a href="#">

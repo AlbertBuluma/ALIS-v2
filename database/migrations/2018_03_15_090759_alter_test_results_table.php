@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AlterTestResultsTable extends Migration {
 
@@ -28,7 +29,7 @@ class AlterTestResultsTable extends Migration {
 	{
 		//
 		Schema::table('unhls_test_results', function($table){
-    
+
     		$table->dropColumn('sample_id');
 
 		});

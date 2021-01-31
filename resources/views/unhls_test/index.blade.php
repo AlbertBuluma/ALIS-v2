@@ -49,7 +49,7 @@
                 </div>
                 <div class='col-md-7'>
                     {{ Form::select('test_status', $testStatus,
-                        Input::get('test_status'), array('class' => 'form-control')) }}
+                        Illuminate\Support\Facades\Request::get('test_status'), array('class' => 'form-control')) }}
                 </div>
             </div>
             <div class='col-md-3'>
@@ -58,12 +58,12 @@
                 </div>
                 <div class='col-md-7'>
                     {{ Form::select('test_category', $testCategories,
-                        Input::get('test_category'), array('class' => 'form-control','id'=> $selectedTestCategoryId)) }}
+                        Illuminate\Support\Facades\Request::get('test_category'), array('class' => 'form-control','id'=> $selectedTestCategoryId)) }}
                 </div>
             </div>
             <div class='col-md-2'>
                 {{ Form::label('search', trans('messages.search'), array('class' => 'sr-only')) }}
-                {{ Form::text('search', Input::get('search'),
+                {{ Form::text('search', Illuminate\Support\Facades\Request::get('search'),
                     array('class' => 'form-control', 'placeholder' => 'Search')) }}
             </div>
             <div class='col-md-1'>
@@ -157,7 +157,7 @@
                             {{ in_array($test->id, Session::get('activeTest'))?"class='info'":""}}
                             @endif
                         >
-                            <td>{{ date('d-m-Y H:i', strtotime($test->time_created));}}</td>  <!--Date Ordered-->
+                            <td>{{ date('d-m-Y H:i', strtotime($test->time_created))}}</td>  <!--Date Ordered-->
                             <td>{{ empty($test->visit->patient->external_patient_number)?
                                 $test->visit->patient->patient_number:
                                 $test->visit->patient->external_patient_number
@@ -356,7 +356,7 @@
             </table>
             {{ $testSet->links() }}
             {{ Session::put('SOURCE_URL', URL::full()) }}
-            {{ Session::put('TESTS_FILTER_INPUT', Input::except('_token')); }}
+            {{ Session::put('TESTS_FILTER_INPUT', Illuminate\Support\Facades\Request::except('_token')) }}
 
         </div>
     </div>

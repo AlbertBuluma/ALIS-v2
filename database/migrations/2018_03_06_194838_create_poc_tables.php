@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePocTables extends Migration {
 
@@ -51,7 +52,7 @@ class CreatePocTables extends Migration {
 	*/
 	public function down()
 	{
-		Schema::drop('poc_tables');	
+		Schema::drop('poc_tables');
 	}
 
 }

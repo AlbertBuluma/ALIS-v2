@@ -94,9 +94,9 @@
 						<div class="stat_box">
 							<div class="stat_ico color_a"><i class="ion-plane"></i></div>
 							<div class="stat_content">
-								@if(UnhlsTest::where('test_status_id','=', 4)->whereMonth('time_created', '=', Carbon::today()->month)->count() > 0)
-								<span class="stat_count">{{round(Referral::whereMonth('created_at', '=', Carbon::today()->month)->count()/
-									UnhlsTest::where('test_status_id','=', 4)->whereMonth('time_created', '=', Carbon::today()->month)->count()/100, 2)}}%</span>
+								@if(App\Models\UnhlsTest::where('test_status_id','=', 4)->whereMonth('time_created', '=', Illuminate\Support\Carbon::today()->month)->count() > 0)
+								<span class="stat_count">{{round(App\Models\Referral::whereMonth('created_at', '=', Illuminate\Support\Carbon::today()->month)->count()/
+									App\Models\UnhlsTest::where('test_status_id','=', 4)->whereMonth('time_created', '=', Illuminate\Support\Carbon::today()->month)->count()/100, 2)}}%</span>
 								@endif
 								<span class="stat_name">Tests referred</span>
 							</div>
@@ -325,4 +325,5 @@
 		</div>
 	</div>
 </div>
+    @endsection()
 @stop

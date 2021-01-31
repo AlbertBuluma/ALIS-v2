@@ -14,7 +14,7 @@
 			<div class="form-group">
 
 				{{ Form::label('search', "search", array('class' => 'sr-only')) }}
-				{{ Form::text('search', Input::get('search'), array('class' => 'form-control test-search')) }}
+				{{ Form::text('search', Illuminate\Support\Facades\Request::get('search'), array('class' => 'form-control test-search')) }}
 			</div>
 			<div class="form-group">
 				{{ Form::button("<span class='glyphicon glyphicon-search'></span> ".trans('messages.search'),
