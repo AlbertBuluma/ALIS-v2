@@ -263,7 +263,7 @@
                 <li class="nav_trigger">
                     <a href="#">
                         <span class="ion-wrench"></span>
-                        <span class="nav_title">Lab Configuration</>
+                        <span class="nav_title">Lab Configuration</span>
                     </a>
                     <div class="sub_panel" style="left: -220px;">
                         <div class="side_inner ps-ready ps-container" style="height:620px;">

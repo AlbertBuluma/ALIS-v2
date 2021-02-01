@@ -514,7 +514,10 @@ class UpdateMicrobiologyFunctionalities extends Migration {
             array("name" => "view_reports", "display_name" => "Can view reports", "guard_name" => "web"),
             array("name" => "manage_inventory", "display_name" => "Can manage inventory", "guard_name" => "web"),
             array("name" => "request_topup", "display_name" => "Can request top-up", "guard_name" => "web"),
-            array("name" => "manage_qc", "display_name" => "Can manage Quality Control", "guard_name" => "web")
+            array("name" => "manage_qc", "display_name" => "Can manage Quality Control", "guard_name" => "web"),
+            array("name" => "approve_test_results", "display_name" => "Can approve test results as the last phase", "guard_name" => "web"),
+            array("name" => "cancel_test", "display_name" => "Can cancel a test", "guard_name" => "web"),
+            array("name" => "recall_report", "display_name" => "Can recall a report of a Patient", "guard_name" => "web")
         );
 
         foreach ($permissions as $permission) {
