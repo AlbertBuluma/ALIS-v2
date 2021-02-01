@@ -399,7 +399,17 @@ class TestType extends Model
         $toPlusOne = date_add(new DateTime($to), date_interval_create_from_date_string('1 day'));
 
         // TODO: Should be changed to a more flexible format i.e. that supports localization
-        $data =  UnhlsTest::select(DB::raw("test_type_id,tt.name, tt.test_category_id as lab_section, count(DISTINCT unhls_tests.id) as total,SUM(case when TIMESTAMPDIFF(MINUTE, unhls_tests.time_started, unhls_tests.time_completed) < (tt.targetTAT*60) then 1 else 0 end) as Within, SUM(case when TIMESTAMPDIFF(MINUTE, unhls_tests.time_started, unhls_tests.time_completed) > (tt.targetTAT*60) then 1 else 0 end) as Beyond, DATE_FORMAT(unhls_tests.time_started,'%Y%m') year_month_created, unhls_tests.time_created, unhls_tests.time_started, unhls_tests.time_completed, unhls_tests.time_verified, TIMESTAMPDIFF(MINUTE, unhls_tests.time_created, unhls_tests.time_started) as waiting_time, SEC_TO_TIME(AVG(TIME_TO_SEC(unhls_tests.time_started) - TIME_TO_SEC(unhls_tests.time_created))) as WT, TIMESTAMPDIFF(MINUTE, unhls_tests.time_started, unhls_tests.time_verified) as testing_time, SEC_TO_TIME(tt.targetTAT*3600) AS ETAT ,SEC_TO_TIME(AVG(TIME_TO_SEC(unhls_tests.time_completed) - TIME_TO_SEC(unhls_tests.time_created))) as ACT, SUM(TIMESTAMPDIFF(MINUTE, unhls_tests.time_started, unhls_tests.time_completed)) as AverageTAT,SEC_TO_TIME(AVG(TIME_TO_SEC(unhls_tests.time_completed) - TIME_TO_SEC(unhls_tests.time_started))) as avgtime"))
+        $data =  UnhlsTest::select(DB::raw("test_type_id,tt.name, tt.test_category_id as lab_section,
+                    count(DISTINCT unhls_tests.id) as total,SUM(case when TIMESTAMPDIFF(MINUTE, unhls_tests.time_started, unhls_tests.time_completed) < (tt.targetTAT*60)
+                    then 1 else 0 end) as Within, SUM(case when TIMESTAMPDIFF(MINUTE, unhls_tests.time_started,
+                    unhls_tests.time_completed) > (tt.targetTAT*60) then 1 else 0 end) as Beyond,
+                    DATE_FORMAT(unhls_tests.time_started,'%Y%m') year_month_created, unhls_tests.time_created, unhls_tests.time_started,
+                    unhls_tests.time_completed, unhls_tests.time_verified, TIMESTAMPDIFF(MINUTE, unhls_tests.time_created,
+                    unhls_tests.time_started) as waiting_time, SEC_TO_TIME(AVG(TIME_TO_SEC(unhls_tests.time_started) - TIME_TO_SEC(unhls_tests.time_created))) as WT,
+                    TIMESTAMPDIFF(MINUTE, unhls_tests.time_started, unhls_tests.time_verified) as testing_time, SEC_TO_TIME(tt.targetTAT*3600) AS ETAT ,
+                    SEC_TO_TIME(AVG(TIME_TO_SEC(unhls_tests.time_completed) - TIME_TO_SEC(unhls_tests.time_created))) as ACT,
+                    SUM(TIMESTAMPDIFF(MINUTE, unhls_tests.time_started, unhls_tests.time_completed)) as AverageTAT,
+                    SEC_TO_TIME(AVG(TIME_TO_SEC(unhls_tests.time_completed) - TIME_TO_SEC(unhls_tests.time_started))) as avgtime"))
             // ->JOIN('unhls_test_results as utr', 'unhls_tests.id', '=', 'utr.test_id')
             ->JOIN('test_types as tt', 'unhls_tests.test_type_id', '=', 'tt.id')
             ->where('unhls_tests.time_completed', '!=', 'null')
@@ -425,7 +435,7 @@ class TestType extends Model
 
         }
         $data = $data->whereBetween('time_created', array($from, $toPlusOne))
-            ->groupBy('test_type_id')
+            ->groupBy('test_type_id', 'tt.name', 'test_category_id', 'time_started', 'time_created')
             ->get();
         return $data;
     }

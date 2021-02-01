@@ -477,7 +477,7 @@
         minYear: 1970,
         maxYear: 2015,
         yearDescending: true,
-        minuteStep: 5,
+        minuteStep: 1,
         secondStep: 1,
         firstItem: 'empty', //'name', 'empty', 'none'
         errorClass: null,

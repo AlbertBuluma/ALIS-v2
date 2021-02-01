@@ -24,7 +24,7 @@
 		<div class="form-group">
 
 		    {{ Form::label('search', "search", array('class' => 'sr-only')) }}
-            {{ Form::text('search', Input::get('search'), array('class' => 'form-control test-search')) }}
+            {{ Form::text('search', Illuminate\Support\Facades\Request::get('search'), array('class' => 'form-control test-search')) }}
 		</div>
 		<div class="form-group">
 			{{ Form::button("<span class='glyphicon glyphicon-search'></span> ".trans('messages.search'),
@@ -47,9 +47,9 @@
 				<tr>
 					<th class="hide">#</th>
 					<th>Date of visit</th>
-					@if(Entrust::can('view_names'))
+					@can('view_names')
 						<th>{{trans('messages.full-name')}}</th>
-					@endif
+					@endcan
 					<th>Tests requested</th>
 					<th>Test status</th>
 					<th>{{trans('messages.gender')}}</th>
