@@ -16,7 +16,7 @@
                     <span class="glyphicon glyphicon-edit"></span>
                     {{ trans('messages.edit') }}
                 </a>
-                @can('request_test'))
+                @can('request_test')
                 <a class="btn btn-sm btn-info"
                     href="{{ route('unhls_test.create', array('patient_id' => $patient->id)) }}">
                     <span class="glyphicon glyphicon-edit"></span>

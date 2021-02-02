@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use AnalyticSpecimenRejection;
+use App\Models\AnalyticSpecimenRejection;
 use App\Models\AnalyticSpecimenRejectionReason;
 use App\Models\Barcode;
 use App\Models\Clinician;

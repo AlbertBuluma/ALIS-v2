@@ -49,7 +49,8 @@
 					@can('view_names')
 						<td>{{ $patient->name }}</td>
 					@endcan
-					<td>{{ $patient->getGender() }}</td>
+{{--					<td>{{ $patient->getGender() }}</td>--}}
+					<td>{{ ($patient->gender==0?trans('messages.male'):trans('messages.female')) }}</td>
 					<td>{{ $patient->getAge() }}</td>
 					<td>
 					<!-- show the patient report(uses the show method found at GET /patient/{id} -->

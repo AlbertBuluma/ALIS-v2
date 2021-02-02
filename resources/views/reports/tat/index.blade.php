@@ -42,7 +42,7 @@
                     {{ Form::label('test_type', Lang::choice('messages.test-type',1)) }}
                 </div>
                 <div class="col-md-9">
-                    {{ Form::select('test_type', array(0 => '-- All Tests --')+App\Models\TestType::supportTurnaoundCounts()->lists('name','id'),
+                    {{ Form::select('test_type', array(0 => '-- All Tests --')+App\Models\TestType::supportTurnaoundCounts()->pluck('name','id')->toArray(),
                         isset($input['test_type'])?$input['test_type']:0, array('class' => 'form-control')) }}
                 </div>
             </div>

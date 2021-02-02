@@ -90,14 +90,13 @@ class PocController extends Controller {
      */
 	public function store(Request $request)
 	{
-//	    dd($request->all());
 		//
         $rules = array(
 
             'infant_name' => 'required',
             'age'       => 'required',
-//            'gender' => 'required',
-//            'entry_point' => 'required',
+            'gender' => 'required',
+            'entry_point' => 'required',
             'collection_date' => 'required',
             'sample_id' => 'required|unique:poc_tables,sample_id'
         );
@@ -149,7 +148,6 @@ class PocController extends Controller {
 			// $patient->district	= $request->get('district');
 			$patient->created_by = Auth::user()->name;
 
-
 			try{
 				$patient->save();
 
@@ -158,7 +156,7 @@ class PocController extends Controller {
 
 			}catch(QueryException $e){
 				Log::error($e);
-				return view('poc.error', array(), 404);
+				return view('poc.error', array(), []);
 			}
 
 			// redirect

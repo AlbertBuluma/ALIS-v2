@@ -16,23 +16,23 @@
 
                         @if($test->isCompletedVerifiedorApproved() && $test->specimen->isAccepted())
                             <div class="panel-btn">
-                                @if(Auth::user()->can('edit_test_results'))
+                                @can('edit_test_results')
                                     <a class="btn btn-sm btn-info" href="{{ URL::to('unhls_test/'.$test->id.'/edit') }}">
                                         <span class="glyphicon glyphicon-edit"></span>
                                         {{trans('messages.edit-test-results')}}
                                     </a>
-                                @endif
+                                @endcan
 
-                                @if(Auth::user()->can('verify_test_results'))
+                                @can('verify_test_results')
                                     @if(!$test->isVerified() && !$test->isApproved())
                                         <a class="btn btn-sm btn-success" href="{{ route('test.verify', array($test->id)) }}">
                                             <span class="glyphicon glyphicon-thumbs-up"></span>
                                             {{trans('messages.verify')}}
                                         </a>
                                     @endif
-                                @endif
+                                @endcan
 
-                                @if(Auth::user()->can('approve_test_results'))
+                                @can('approve_test_results')
                                     @if($test->isVerified() && Auth::user()->id != $test->tested_by)
 
                                         <a class="btn btn-sm btn-success" href="{{ route('test.approve', array($test->id)) }}">
@@ -40,11 +40,11 @@
                                             {{trans('messages.approve')}}
                                         </a>
                                     @endif
-                                @endif
+                                @endcan
                             </div>
                         @endif
                         <div class="panel-btn">
-                            @if(Auth::user()->can('view_reports'))
+                            @can('view_reports')
                                 @if($test->isApproved() || $test->specimenIsRejected())
                                     <a class="btn btn-sm btn-default"
                                        href="{{ URL::to('patient_final_report/'.$test->visit->patient->id.'/'.$test->visit->id ) }}" target="_blank"
@@ -57,7 +57,7 @@
                                         Request Form
                                     </a>
 
-                                @elseif( $test->isVerified() && Auth::user()->can('verify_test_results') || $test->specimenIsRejected())
+                                @elseif( $test->isVerified() && Illuminate\Support\Facades\Auth::user()->can('verify_test_results') || $test->specimenIsRejected())
                                     <a class="btn btn-sm btn-default" href="{{ URL::to('patient_interim_report/'.$test->visit->patient->id.'/'.$test->visit->id ) }}"  target="_blank">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                         {{trans('messages.view-interim-report')}}
@@ -67,17 +67,17 @@
                                         Request Form
                                     </a>
                                 @endif
-                            @endif
+                            @endcan
                         </div>
                         <div class="panel-btn">
-                            @if(Auth::user()->can('accept_test_specimen'))
+                            @can('accept_test_specimen')
                                 @if($test->isNotStarted)
                                     <a class="btn btn-sm btn-default" href="{{ URL::to('unhls_test/'.$test->id.'/collectsample') }}">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                         {{trans('Collect Sample')}}
                                     </a>
                                 @endif
-                            @endif
+                            @endcan
 
                         </div>
 
@@ -346,7 +346,7 @@
                                     @foreach($test->testResults as $result)
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <p><strong>{{ Measure::find($result->measure_id)->name }}</strong></p>
+                                                <p><strong>{{ App\Models\Measure::find($result->measure_id)->name }}</strong></p>
                                             </div>
                                             <div class="col-md-3">
                                                 @if($result->revised_result!=null)
@@ -374,7 +374,8 @@
                     </div>
                 </div>
             </div> <!-- ./ container-fluid -->
-            @if(count($test->testType->organisms)>0)
+
+            @if(count(array($test->testType->organisms)) > 0)
                 <div class="panel panel-success">  <!-- Patient Details -->
                     <div class="panel-heading">
                         <h3 class="panel-title">{{trans("messages.culture-worksheet")}}</h3>
@@ -406,38 +407,38 @@
                             @endif
                             </tbody>
                         </table>
-                        <p><strong>{{trans("messages.susceptibility-test-results")}}</strong></p>
-                        <div class="row">
-                            @if(count($test->susceptibility)>0)
-                                @foreach($test->testType->organisms as $organism)
-                                    <div class="col-md-6">
-                                        <table class="table table-bordered">
-                                            <tbody>
-                                            <tr>
-                                                <th colspan="3">{{ $organism->name }}</th>
-                                            </tr>
-                                            <tr>
-                                                <th width="50%">{{ Lang::choice('messages.drug',1) }}</th>
-                                                <th>{{ trans('messages.zone-size')}}</th>
-                                                <th>{{ trans('messages.interp')}}</th>
-                                            </tr>
-                                            @foreach($organism->drugs as $drug)
-                                                @if($drugSusceptibility = App\Models\Susceptibility::getDrugSusceptibility($test->id, $organism->id, $drug->id))
-                                                    @if($drugSusceptibility->interpretation)
-                                                        <tr>
-                                                            <td>{{ $drug->name }}</td>
-                                                            <td>{{ $drugSusceptibility->zone!=null?$drugSusceptibility->zone:'' }}</td>
-                                                            <td>{{ $drugSusceptibility->interpretation!=null?$drugSusceptibility->interpretation:'' }}</td>
-                                                        </tr>
-                                                    @endif
-                                                @endif
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                @endforeach
-                            @endif
-                        </div>
+{{--                        <p><strong>{{trans("messages.susceptibility-test-results")}}</strong></p>--}}
+{{--                        <div class="row">--}}
+{{--                            @if(count($test->susceptibility)>0)--}}
+{{--                                @foreach($test->testType->organisms as $organism)--}}
+{{--                                    <div class="col-md-6">--}}
+{{--                                        <table class="table table-bordered">--}}
+{{--                                            <tbody>--}}
+{{--                                            <tr>--}}
+{{--                                                <th colspan="3">{{ $organism->name }}</th>--}}
+{{--                                            </tr>--}}
+{{--                                            <tr>--}}
+{{--                                                <th width="50%">{{ Lang::choice('messages.drug',1) }}</th>--}}
+{{--                                                <th>{{ trans('messages.zone-size')}}</th>--}}
+{{--                                                <th>{{ trans('messages.interp')}}</th>--}}
+{{--                                            </tr>--}}
+{{--                                            @foreach($organism->drugs as $drug)--}}
+{{--                                                @if($drugSusceptibility = App\Models\Susceptibility::getDrugSusceptibility($test->id, $organism->id, $drug->id))--}}
+{{--                                                    @if($drugSusceptibility->interpretation)--}}
+{{--                                                        <tr>--}}
+{{--                                                            <td>{{ $drug->name }}</td>--}}
+{{--                                                            <td>{{ $drugSusceptibility->zone!=null?$drugSusceptibility->zone:'' }}</td>--}}
+{{--                                                            <td>{{ $drugSusceptibility->interpretation!=null?$drugSusceptibility->interpretation:'' }}</td>--}}
+{{--                                                        </tr>--}}
+{{--                                                    @endif--}}
+{{--                                                @endif--}}
+{{--                                            @endforeach--}}
+{{--                                            </tbody>--}}
+{{--                                        </table>--}}
+{{--                                    </div>--}}
+{{--                                @endforeach--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
                     </div>
                 </div> <!-- ./ panel-body -->
             @endif

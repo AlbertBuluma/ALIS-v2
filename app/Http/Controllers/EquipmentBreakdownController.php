@@ -35,7 +35,7 @@ class EquipmentBreakdownController extends Controller {
 		//
 
 		$breakdown_type = array('1' => 'Hardware', '2' => 'Software', '3' => 'Both');
-		$equipment = UNHLSEquipmentInventory::get()->lists('name','id');
+		$equipment = UNHLSEquipmentInventory::get()->pluck('name','id')->toArray();
 		return view('equipment.breakdown.create')
 		->with('equipment',$equipment)
 		->with('breakdown_type',$breakdown_type);

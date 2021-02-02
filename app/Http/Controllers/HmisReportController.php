@@ -265,10 +265,14 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 	return $sample_counts_array;
 	}
 	private function getTestCountsByLabSection($lab_section_id, $month){
-		$query = "select ut.test_type_id, tt.name, utr.measure_id, mnm.measure_id as M2, mnm.system_name, tt.test_category_id as lab_section, count(DISTINCT ut.id) as total FROM unhls_tests ut INNER JOIN test_types tt ON(ut.test_type_id = tt.id) INNER JOIN test_categories tc ON(tc.id = tt.test_category_id AND tt.test_category_id = $lab_section_id) INNER JOIN unhls_test_results utr ON(utr.test_id = ut.id)
+		$query = "select ut.test_type_id, tt.name, utr.measure_id, mnm.measure_id as M2, mnm.system_name, tt.test_category_id as lab_section,
+                count(DISTINCT ut.id) as total FROM unhls_tests ut INNER JOIN test_types tt ON(ut.test_type_id = tt.id)
+                    INNER JOIN test_categories tc ON(tc.id = tt.test_category_id AND tt.test_category_id = $lab_section_id)
+                    INNER JOIN unhls_test_results utr ON(utr.test_id = ut.id)
 			LEFT JOIN measure_name_mappings mnm ON(utr.measure_id = mnm.measure_id)
 			 WHERE `ut`.`time_created` LIKE '%".$month."%'
-			 GROUP BY measure_id";
+			 GROUP BY measure_id, test_type_id, tt.name, mnm.measure_id, mnm.system_name,
+			        tt.test_category_id";
 
 	 	$rows = DB::select($query);
 	 	return $rows;
@@ -288,7 +292,7 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 		$query = "select ut.test_type_id, tt.name, utr.measure_id, mnm.measure_id as M2, mnm.system_name, tt.test_category_id as lab_section, count(DISTINCT ut.id) as total, SUM(case when mr.interpretation = 'Positive' then 1 else 0 end) as Positive, SUM(case when mr.interpretation = 'Negative' then 1 else 0 end) as Negative FROM unhls_tests ut INNER JOIN test_types tt ON(ut.test_type_id = tt.id) INNER JOIN test_categories tc ON(tc.id = tt.test_category_id) INNER JOIN unhls_test_results utr ON(utr.test_id = ut.id) INNER JOIN testtype_measures ttm ON(ttm.measure_id = utr.measure_id) INNER JOIN measure_ranges mr ON(mr.measure_id = utr.measure_id AND mr.alphanumeric = utr.result)
 		LEFT JOIN measure_name_mappings mnm ON(utr.measure_id = mnm.measure_id)
 		WHERE `ut`.`time_created` LIKE '%".$month."%'
-		GROUP BY measure_id";
+		GROUP BY measure_id, ut.test_type_id, tt.name, mnm.measure_id, mnm.system_name, tt.test_category_id";
 
 	 	$rows = DB::select($query);
 	 	return $rows;

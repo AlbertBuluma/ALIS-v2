@@ -4,6 +4,7 @@ namespace  App\Models;
 
 use DateTime;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf;
 
 class FinalReportPdf extends TCPDF {
     var $test_request_information=[];

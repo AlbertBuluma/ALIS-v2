@@ -55,6 +55,7 @@ class EquipmentInventoryController extends Controller {
 					->with('procurement_type_list',$procurement_type_list)
 					->with('location_list',$location_list)
 					->with('warranty_list',$warranty_list)
+					->with('service_contract_list',$service_contract_list)
 					->with('supplier_list',$supplier_list);
 
 	}

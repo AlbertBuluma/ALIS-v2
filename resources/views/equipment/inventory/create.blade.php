@@ -223,7 +223,7 @@
                                 <div class="form-group">
                                 {{  Form::label('service_contract', 'Service Contract', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('service_contract', array(null => 'Select')+ $service_contract_list, old('service_contract'), array('class' => 'form-control', 'id' => 'service_contract_id','required'=>'required')) }}
+                                        {{ Form::select('service_contract', array_merge(array(null => 'Select'), $service_contract_list) , old('service_contract'), array('class' => 'form-control', 'id' => 'service_contract_id','required'=>'required')) }}
 
                                         @if ($errors->has('service_contract'))
                                             <span class="text-danger">
@@ -238,7 +238,8 @@
                                 <div class="form-group">
                                 {{  Form::label('supplier_id', 'Supplier', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('supplier_id', array(null => 'Select')+ $supplier_list, old('supplier'), array('class' => 'form-control', 'id' => 'service_contract_id','required'=>'required')) }}
+{{--                                        {{ Form::select('supplier_id', array(null => 'Select')+ $supplier_list, old('supplier'), array('class' => 'form-control', 'id' => 'service_contract_id','required'=>'required')) }}--}}
+                                        {{ Form::select('supplier_id', array_merge(array(null => 'Select'), $supplier_list) , old('supplier'), array('class' => 'form-control', 'id' => 'service_contract_id','required'=>'required')) }}
 
                                         @if ($errors->has('supplier_id'))
                                             <span class="text-danger">

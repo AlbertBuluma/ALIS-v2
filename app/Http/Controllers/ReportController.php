@@ -32,6 +32,7 @@ use App\Models\UnhlsSpecimen;
 use App\Models\UnhlsTest;
 use App\Models\UnhlsVisit;
 use App\Models\User;
+use PDF;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -287,15 +288,21 @@ class ReportController extends Controller {
             'tests' => $tests,
             'patient'=> $patient
         );
-        $pdf = new FinalReportPdf;
-        $pdf->setTestRequestInformation($test_request_information);
 
-        $pdf->SetAutoPageBreak(TRUE, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('times','','11');
-        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+        $pdf = PDF::loadHtml($content);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream('report.pdf');
 
-        return $pdf->output('report.pdf');
+//        $pdf = new FinalReportPdf;
+//        $pdf->setTestRequestInformation($test_request_information);
+//
+//        $pdf->SetAutoPageBreak(TRUE, 15);
+//        $pdf->AddPage();
+//        $pdf->SetFont('times','','11');
+//        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+
+//        return $pdf->output('report.pdf');
 
 
     }
@@ -1003,7 +1010,7 @@ class ReportController extends Controller {
 
             $months = json_decode(self::getMonths($from, $to));
             $data = TestType::getPrevalenceCounts($from, $to, $testTypeID);
-            $chart = self::getPrevalenceRatesChart($testTypeID);
+            $chart = self::getPrevalenceRatesChart($request, $testTypeID);
         }
         else
         {
@@ -1012,7 +1019,7 @@ class ReportController extends Controller {
             $periodStart = $test->min('time_created'); //Get the minimum date
             $periodEnd = $test->max('time_created'); //Get the maximum date
             $data = TestType::getPrevalenceCounts($periodStart, $periodEnd);
-            $chart = self::getPrevalenceRatesChart();
+            $chart = self::getPrevalenceRatesChart($request);
         }
 
         return view('reports.prevalence.index')
@@ -1602,7 +1609,7 @@ class ReportController extends Controller {
 
             $months = json_decode(self::getMonths($from, $to));
             $data = TestType::getTurnaroundCounts($from, $to, $testTypeID);
-            $chart = self::getturnaroundTimeChart($testTypeID);
+            $chart = self::getturnaroundTimeChart($request, $testTypeID);
         }
         else
         {
@@ -1611,7 +1618,7 @@ class ReportController extends Controller {
             $periodStart = $test->min('time_created'); //Get the minimum date
             $periodEnd = $test->max('time_created'); //Get the maximum date
             $data = TestType::getTurnaroundCounts($periodStart, $periodEnd);
-            $chart = self::getturnaroundTimeChart();
+            $chart = self::getturnaroundTimeChart($request);
         }
         if($request->has('word')){
             $date = date("Ymdhi");

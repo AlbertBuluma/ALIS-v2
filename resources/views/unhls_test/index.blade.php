@@ -209,7 +209,7 @@
                                         </a> -->
                                     @endcan
                                 @elseif ($test->specimen->isNotCollected())
-                                    @can('accept_test_specimen'))
+                                    @can('accept_test_specimen')
                                         <a class="btn btn-sm btn-info" href="#accept-specimen-modal"
                                            data-toggle="modal" data-url="{{ route('unhls_test.collectSpecimen') }}" data-specimen-id="{{$test->specimen->id}}" data-target="#accept-specimen-modal"
                                            title="{{trans('messages.accept-specimen-title')}}">
@@ -220,7 +220,7 @@
                                     @endcan
                                 @endif
                                 @if (!$test->isNotReceived() && $test->specimen->isAccepted() && !($test->isVerified()))
-                                    @can('reject_test_specimen') && !($test->specimen->isReferred()))
+                                    @if(Illuminate\Support\Facades\Auth::user()->can('reject_test_specimen') && !($test->specimen->isReferred()))
                                         @if(!($test->specimenIsRejected()))
                                         <!-- <a class="btn btn-sm btn-danger" id="reject-{{$test->id}}-link"
                                     href="{{route('unhls_test.reject', array($test->id))}}"
@@ -233,7 +233,7 @@
                                             <span class="glyphicon glyphicon-barcode"></span>
                                             {{trans('messages.barcode')}}
                                         </a>
-                                    @endcan
+                                    @endif
                                     @if ($test->isPending())
                                         @can('start_test')
                                             <a class="btn btn-sm btn-warning start-test" href="javascript:void(0)"
@@ -256,7 +256,7 @@
                                             </a>
                                         @endcan
                                     @elseif ($test->isStarted())
-                                        @can('enter_test_results'))
+                                        @can('enter_test_results')
                                             <a class="btn btn-sm btn-info" id="enter-results-{{$test->id}}-link"
                                                href="{{ route('unhls_test.enterResults', array($test->id)) }}"
                                                title="{{trans('messages.enter-results-title')}}">
@@ -265,7 +265,7 @@
                                             </a>
                                         @endcan
                                     @elseif ($test->isCompleted())
-                                        @can('edit_test_results'))
+                                        @can('edit_test_results')
                                             <a class="btn btn-sm btn-info" id="edit-{{$test->id}}-link"
                                                href="{{ route('unhls_test.edit', array($test->id)) }}"
                                                title="{{trans('messages.edit-test-results')}}">
@@ -273,7 +273,7 @@
                                                 {{trans('messages.edit')}}
                                             </a>
                                         @endcan
-                                        @can('verify_test_results') && Auth::user()->id != $test->tested_by)
+                                        @if(Illuminate\Support\Facades\Auth::user()->can('verify_test_results') && Illuminate\Support\Facades\Auth::user()->id != $test->tested_by)
                                             <a class="btn btn-sm btn-success" id="verify-{{$test->id}}-link"
                                                href="{{ route('unhls_test.viewDetails', array($test->id)) }}"
                                                title="{{trans('messages.verify-title')}}">

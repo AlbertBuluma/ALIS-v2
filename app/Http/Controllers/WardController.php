@@ -61,6 +61,7 @@ class WardController extends Controller {
             $ward = new Ward;
             $ward->name = $request->get('name');
             $ward->description = $request->get('description');
+
             try{
                 $ward->save();
 
