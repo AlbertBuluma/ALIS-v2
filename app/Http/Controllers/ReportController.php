@@ -536,22 +536,32 @@ class ReportController extends Controller {
             'tests' => $tests,
             'patient'=> $patient
         );
-        $pdf = new FinalReportPdf;
 
-        if($this->isReportInterim($tests)){
-            $pdf = new InterimReportPdf;
+        // Using TCPDF
+//        $pdf = new FinalReportPdf;
+//
+//        if($this->isReportInterim($tests)){
+//            $pdf = new InterimReportPdf;
+//
+//        }
 
-        }
+//        $pdf->setTestRequestInformation($test_request_information);
+//
+//        $pdf->SetAutoPageBreak(TRUE, 15);
+//        $pdf->AddPage();
+//        $pdf->SetFont('times','','11');
+//        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+//
+//        return $pdf->output('report.pdf');
 
 
-        $pdf->setTestRequestInformation($test_request_information);
+        // Using Laravel DOM PDF
+        $pdf = PDF::loadHtml($content);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream('report.pdf');
 
-        $pdf->SetAutoPageBreak(TRUE, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('times','','11');
-        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
 
-        return $pdf->output('report.pdf');
     }
 
     public function viewPatientVisitRequestForm(Request $request, $visit_id){

@@ -117,7 +117,7 @@ class PocController extends Controller {
 			$patient->age	= $request->get('age');
 			$patient->gender	= $request->get('gender');
 			$patient->caretaker_number	= $request->get('caretaker_number');
-			$patient->contrimoxazole	= $request->get('contrimoxazole');
+			$patient->given_contrimoxazole	= $request->get('given_contrimoxazole');
 			$patient->delivery_details	= $request->get('delivery_details');
 			$patient->infant_pmtctarv	= $request->get('infant_pmtctarv');
 			$patient->entry_point	= $request->get('entry_point');
@@ -127,16 +127,16 @@ class PocController extends Controller {
 			$patient->pcr_level	= $request->get('pcr_level');
 			$patient->non_routine	= $request->get('non_routine');
 			$patient->feeding_status	= $request->get('feeding_status');
+			$patient->breastfeeding_status	= $request->get('breastfeeding_status');
 			$patient->mother_hts	= $request->get('mother_hts');
 			$patient->mother_art = $request->get('mother_art');
-			$patient->mother_nin = $request->get('mother_nin');
+			$patient->mother_nin = $request->get('nin');
 			$patient->pmtct_antenatal	= $request->get('pmtct_antenatal');
 			$patient->pmtct_delivery	= $request->get('pmtct_delivery');
 			$patient->pmtct_postnatal	= $request->get('pmtct_postnatal');
 			$patient->created_by = Auth::user()->name;
 
 			$patient->admission_date	= $request->get('admission_date');
-			$patient->breastfeeding_status	= $request->get('breastfeeding_status');
 			$patient->mother_name	= $request->get('mother_name');
 			$patient->provisional_diagnosis	= $request->get('provisional_diagnosis');
 			$patient->infant_pmtctarv	= $request->get('infant_pmtctarv');

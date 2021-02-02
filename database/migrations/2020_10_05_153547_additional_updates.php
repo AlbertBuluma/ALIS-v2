@@ -34,7 +34,8 @@ class AdditionalUpdates extends Migration {
         DB::insert("INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES (1, 'App\\Models\\User', 1)");
         DB::insert('INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) VALUES (18, "User", 1)');
         DB::statement('ALTER TABLE `unhls_tests` CHANGE `purpose` `purpose` VARCHAR(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL;');
-
+        DB::statement('ALTER TABLE `poc_tables` ADD `mother_hts` VARCHAR(60) NULL DEFAULT NULL AFTER `mother_name`');
+        DB::statement('ALTER TABLE `poc_tables` ADD `mother_art` VARCHAR(60) NULL DEFAULT NULL AFTER `mother_hts`');
     }
 
 	/**

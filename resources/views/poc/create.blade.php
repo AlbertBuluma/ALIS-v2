@@ -56,18 +56,18 @@
 					{{ Form::label('caretaker_number', 'Caregiver Phone No.', array('class' =>'col-sm-2 ')) }}
 					{{ Form::text('caretaker_number', old('caretaker_number'), array('class' => 'form-control col-sm-4')) }}
 
-					{{ Form::label('contrimoxazole', 'Given Contrimoxazole', array('class' =>'col-sm-2')) }}
-					<div class="radio-inline">{{ Form::radio('contrimoxazole', 'Yes', false) }} <span class="input-tag">Yes</span></div>
-					<div class="radio-inline">{{ Form::radio("contrimoxazole", 'No', false) }} <span class="input-tag">No</span></div>
+					{{ Form::label('given_contrimoxazole', 'Given Contrimoxazole', array('class' =>'col-sm-2')) }}
+					<div class="radio-inline">{{ Form::radio('given_contrimoxazole', 'Yes', false) }} <span class="input-tag">Yes</span></div>
+					<div class="radio-inline">{{ Form::radio("given_contrimoxazole", 'No', false) }} <span class="input-tag">No</span></div>
 
 				</div>
 
 				<div class="form-group">
 
-					{{ Form::label('delivery_details', 'Delivered at Health Facility:', array('class' =>'col-sm-2')) }}
-					<div class="radio-inline">{{ Form::radio('delivery_details', 'Yes', false) }} <span class="input-tag">Yes</span></div>
-					<div class="radio-inline">{{ Form::radio("delivery_details", 'No', false) }} <span class="input-tag">No</span></div>
-					<div class="radio-inline">{{ Form::radio("delivery_details", 'Unknownl', false) }} <span class="input-tag">Unknown</span></div>
+					{{ Form::label('delivered_at', 'Delivered at Health Facility:', array('class' =>'col-sm-2')) }}
+					<div class="radio-inline">{{ Form::radio('delivered_at', 'Yes', false) }} <span class="input-tag">Yes</span></div>
+					<div class="radio-inline">{{ Form::radio("delivered_at", 'No', false) }} <span class="input-tag">No</span></div>
+					<div class="radio-inline">{{ Form::radio("delivered_at", 'Unknownl', false) }} <span class="input-tag">Unknown</span></div>
 				</div>
 
 				<div class="form-group">
@@ -119,7 +119,7 @@
 
 			{{ Form::label('mother_name', 'Mothers Name', array('class' =>'col-sm-2 ')) }}
 			{{ Form::text('mother_name', old('mother_name'), array('class' => 'form-control col-sm-4')) }}
-			<!--
+
 			{{ Form::label('mother_hiv_status', 'Mothers HIV Status', array('class' =>'col-sm-2 ')) }}
 			{{ Form::select('mother_hiv_status', array_merge(array(null => 'select.....'), $hiv_status), old('mother_hiv_status'), array('class' => 'form-control')) }} -->
 			<!-- {{ Form::label('mother_hiv_status', 'Mothers HIV Status', array('class'=>'control-label')) }}
@@ -247,17 +247,17 @@
 				<br>
 
 				{{ Form::label('pcr_level', 'Non Routine PCR (Tick):',array('class' =>'col-sm-2 required ')) }}
-				<div class="radio-inline">{{ Form::radio('non_routine', 'R1', false) }} <span class="input-tag">R<sub>1</sub></span></div>
-				<div class="radio-inline">{{ Form::radio('non_routine', 'R2', false) }} <span class="input-tag">R<sub>2</sub></span></div>
-				<div class="radio-inline">{{ Form::radio('non_routine', 'R3', false) }} <span class="input-tag">R<sub>3</sub></span></div>
+				<div class="radio-inline">{{ Form::radio('pcr_level', 'R1', false) }} <span class="input-tag">R<sub>1</sub></span></div>
+				<div class="radio-inline">{{ Form::radio('pcr_level', 'R2', false) }} <span class="input-tag">R<sub>2</sub></span></div>
+				<div class="radio-inline">{{ Form::radio('pcr_level', 'R3', false) }} <span class="input-tag">R<sub>3</sub></span></div>
 			</div>
 
 			<div class="form-group">
 				{{ Form::label('requesting_officer', 'Recieved By:', array('class' =>'col-sm-2 ')) }}
-				{{ Form::text('requesting_officer', Auth::user()->name, array('class' => 'form-control col-sm-4')) }}
+				{{ Form::text('requesting_officer', Illuminate\Support\Facades\Auth::user()->name, array('class' => 'form-control col-sm-4')) }}
 
 				{{ Form::label('clinician_phone', 'Mobile Number:', array('class' =>'col-sm-2 ')) }}
-				{{ Form::text('clinician_phone', Auth::user()->phone_contact, array('class' => 'form-control col-sm-4')) }}
+				{{ Form::text('clinician_phone', Illuminate\Support\Facades\Auth::user()->phone_contact, array('class' => 'form-control col-sm-4')) }}
 				<!-- {{ Form::text('collection_date', old('collection_date'), array('class' => 'form-control standard-datepicker col-sm-4', 'placeholder' => 'DD/ MM /YYYY')) }} -->
 			</div>
 		</div>
@@ -290,8 +290,8 @@
 				{{ Form::label('mother_art', 'ART No.:',array('class' =>'col-sm-2 required ')) }}
 				{{ Form::text('mother_art', old('mother_art'), array('class' => 'form-control col-sm-4')) }}
 
-				{{ Form::label('mother_nin', 'NIN:',array('class' =>'col-sm-2')) }}
-				{{ Form::text('mother_nin', old('mother_nin'), array('class' => 'form-control col-sm-4')) }}
+				{{ Form::label('nin', 'NIN:',array('class' =>'col-sm-2')) }}
+				{{ Form::text('nin', old('nin'), array('class' => 'form-control col-sm-4')) }}
 
 			</div>
 
