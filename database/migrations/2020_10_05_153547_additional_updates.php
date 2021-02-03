@@ -17,6 +17,7 @@ class AdditionalUpdates extends Migration {
 		DB::update('ALTER TABLE unhls_patients ADD age INT(10) NULL ');
 		// DB::update('ALTER TABLE unhls_patients ADD nationality VARCHAR(255) NULL AFTER age');
 		DB::update('ALTER TABLE poc_tables ADD ulin VARCHAR(255) NULL AFTER updated_at');
+		DB::update('ALTER TABLE unhls_patients ADD admission_date DATETIME NULL DEFAULT NULL AFTER gender');
 		DB::update('ALTER TABLE unhls_tests ADD revised_by INT(10) NULL AFTER time_approved');
 		DB::update('ALTER TABLE unhls_tests ADD time_revised DATE NULL AFTER revised_by');
 		DB::update('ALTER TABLE unhls_test_results ADD revised_result VARCHAR(255) NULL AFTER sample_id');

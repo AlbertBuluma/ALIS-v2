@@ -89,6 +89,8 @@ class MicrobiologyController extends Controller {
 			'nationality' => 'required',
 			'patient_number' => 'required',
 			'specimen_type' => 'required',
+			'clinical_notes' => 'required',
+			'facility_transfered' => 'required',
 		);
 		$validator = Validator::make($request->all(), $rules);
 
@@ -128,6 +130,7 @@ class MicrobiologyController extends Controller {
 				}
 				$patient->save();
 				$uuid = new UuidGenerator;
+                $uuid->counter = 0;     // TODO Get default value as 0 from migration
 				$uuid->save();
 
 			$patientdetail = new MicroPatientDetail;

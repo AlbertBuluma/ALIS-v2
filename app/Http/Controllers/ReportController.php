@@ -66,7 +66,7 @@ class ReportController extends Controller {
         //$search = $request->get('search');
 
         //$patients = UnhlsPatient::search($search)->orderBy('id','DESC')->paginate(Config::get('kblis.page-items'));
-        $patients = UnhlsPatient::getAllPatients();
+        $patients = UnhlsPatient::paginate(20);
         $patient_helper = UnhlsPatient::find(1);
 
         //if (count($patients) == 0) {

@@ -101,7 +101,7 @@
 		    	<legend class="scheduler-border">Resident Details</legend>
 					<div class="col-md-6">
 						<div class="form-group">
-							{{ Form::label('district_residence', 'District of Residence') }}
+							{{ Form::label('district_residence', 'District of Residence', array('class' => 'required')) }}
 							{{ Form::select('district_residence', $districts, Illuminate\Support\Facades\Request::get('district_residence'),['class' => 'form-control']) }}
 						</div>
 						<div class="form-group">
@@ -115,7 +115,7 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							{{ Form::label('district_workplace', 'District of Work Place') }}
+							{{ Form::label('district_workplace', 'District of Work Place', array('class' => 'required')) }}
 							{{ Form::select('district_workplace', $districts, Illuminate\Support\Facades\Request::get('district_workplace'),['class' => 'form-control']) }}
 						</div>
 						<div class="form-group">
@@ -148,13 +148,13 @@
 		    	<legend class="scheduler-border">Clinical Information</legend>
 					<div class="col-md-6">
 						<div class="form-group">
-							{{ Form::label('admission_date', 'Admission Date') }}
+							{{ Form::label('admission_date', 'Admission Date', array('class' => 'required')) }}
 							{{ Form::text('admission_date', old('admission_date'), array('class' => 'form-control standard-datepicker', 'placeholder' => 'Ignore if not admitted')) }}
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							{{ Form::label('facility_transfered', 'Facility Patient transfered from') }}
+							{{ Form::label('facility_transfered', 'Facility Patient transfered from', array('class' => 'required')) }}
 							{{ Form::text('facility_transfered', old('facility_transfered'), array('class' => 'form-control')) }}
 						</div>
 					</div>
@@ -204,7 +204,7 @@
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-							{{ Form::label('clinical_notes', 'Provisional diagnosis') }}
+							{{ Form::label('clinical_notes', 'Provisional diagnosis', array('class' => 'required')) }}
 							{{Form::textarea('clinical_notes', old('physician'), array('class' => 'form-control', 'rows'=>'2', 'placeholder' => 'Provisional diagnosis'))}}
 							</div>
 						</div>

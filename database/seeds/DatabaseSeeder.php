@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder {
         DB::unprepared(file_get_contents(base_path() . "/database/seeds/permission_role.sql"));
         echo "Updated Admin role permissions in role_has_permissions table!\n";
 
+        DB::unprepared(file_get_contents(base_path() . "/database/seeds/admin_privileges.sql"));
+        echo "Updated Admin privileges table!\n";
 //        DB::unprepared(file_get_contents(base_path() . "/database/seeds/permissions_update.sql"));
 //        echo "Updated permissions Table!\n";
 
