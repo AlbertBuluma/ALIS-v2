@@ -249,12 +249,12 @@
                                                 {{trans('messages.reject')}}
                                             </a>
                                         @endcan
-                                        @can('refer_specimens') && !($test->isExternal()) && !($test->specimen->isReferred()))
+                                        @if(Illuminate\Support\Facades\Auth::user()->can('refer_specimens') && !($test->isExternal()) && !($test->specimen->isReferred()))
                                             <a class="btn btn-sm btn-info" href="{{ route('unhls_test.refer', array($test->id)) }}">
                                                 <span class="glyphicon glyphicon-edit"></span>
                                                 {{trans('messages.refer-sample')}}
                                             </a>
-                                        @endcan
+                                        @endif
                                     @elseif ($test->isStarted())
                                         @can('enter_test_results')
                                             <a class="btn btn-sm btn-info" id="enter-results-{{$test->id}}-link"

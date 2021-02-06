@@ -56,9 +56,9 @@
 					{{ Form::label('caretaker_number', 'Caregiver Phone No.', array('class' =>'col-sm-2 ')) }}
 					{{ Form::text('caretaker_number', old('caretaker_number'), array('class' => 'form-control col-sm-4')) }}
 
-					{{ Form::label('given_contrimoxazole', 'Given Contrimoxazole', array('class' =>'col-sm-2')) }}
-					<div class="radio-inline">{{ Form::radio('given_contrimoxazole', 'Yes', false) }} <span class="input-tag">Yes</span></div>
-					<div class="radio-inline">{{ Form::radio("given_contrimoxazole", 'No', false) }} <span class="input-tag">No</span></div>
+					{{ Form::label('given_contrimazole', 'Given Contrimoxazole', array('class' =>'col-sm-2')) }}
+					<div class="radio-inline">{{ Form::radio('given_contrimazole', 'Yes', false) }} <span class="input-tag">Yes</span></div>
+					<div class="radio-inline">{{ Form::radio("given_contrimazole", 'No', false) }} <span class="input-tag">No</span></div>
 
 				</div>
 
@@ -67,7 +67,7 @@
 					{{ Form::label('delivered_at', 'Delivered at Health Facility:', array('class' =>'col-sm-2')) }}
 					<div class="radio-inline">{{ Form::radio('delivered_at', 'Yes', false) }} <span class="input-tag">Yes</span></div>
 					<div class="radio-inline">{{ Form::radio("delivered_at", 'No', false) }} <span class="input-tag">No</span></div>
-					<div class="radio-inline">{{ Form::radio("delivered_at", 'Unknownl', false) }} <span class="input-tag">Unknown</span></div>
+					<div class="radio-inline">{{ Form::radio("delivered_at", 'Unknown', false) }} <span class="input-tag">Unknown</span></div>
 				</div>
 
 				<div class="form-group">

@@ -112,7 +112,7 @@ class UnhlsPatientController extends Controller {
             $patient->gender = $request->get('gender');
             $patient->nationality = $nation[$request->get('nationality')];
             $patient->dob = $request->get('dob');
-            $patient->village_resunhls_patientidence = $request->get('village_residence');
+            $patient->village_residence = $request->get('village_residence');
             $patient->village_workplace = $request->get('village_workplace');
             $patient->occupation = $request->get('occupation');
             $patient->email = $request->get('email');

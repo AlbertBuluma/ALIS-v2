@@ -50,6 +50,7 @@ class CliniciansController extends Controller {
             'cadre' => 'required',
             'phone' => 'required'
             );
+
         $validator = Validator::make($request->all(), $rules);
 
         //process

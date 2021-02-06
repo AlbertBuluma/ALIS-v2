@@ -1016,7 +1016,7 @@ class UnhlsTestController extends Controller {
         $test->save();
 
         //Fire of entry saved/edited event
-        Event::fire('test.saved', array($testID));
+        Event::dispatch('test.saved', array($testID));
 
         $input = Session::get('TESTS_FILTER_INPUT');
         Session::put('fromRedirect', 'true');
@@ -1079,7 +1079,7 @@ class UnhlsTestController extends Controller {
         $test->save();
 
         //Fire of entry saved/edited event
-        Event::fire('test.saved', array($testID));
+        Event::dispatch('test.saved', array($testID));
 
         $input = Session::get('TESTS_FILTER_INPUT');
         Session::put('fromRedirect', 'true');
@@ -1155,7 +1155,7 @@ class UnhlsTestController extends Controller {
         $test->save();
 
         //Fire of entry verified event
-        Event::fire('test.verified', array($testID));
+        Event::dispatch('test.verified', array($testID));
 
         return view('unhls_test.viewDetails')->with('test', $test);
     }
@@ -1175,13 +1175,12 @@ class UnhlsTestController extends Controller {
         $test->save();
 
         //Fire of entry approved event
-        Event::fire('test.approved', array($testID));
+        Event::dispatch('test.approved', array($testID));
 
         return view('unhls_test.viewDetails')->with('test', $test);
     }
 
     public function getTestVisit($id){
-
 
         $tests = UnhlsTest::searchByVisit( $id);
 
