@@ -47,7 +47,7 @@
                     <div class="row">
                         <div class="form-group col-md-4">
                             {{ Form::label('rejectionReason', trans('messages.rejection-reason')) }}
-                            {{ Form::select('rejectionReason[]', array(0 => '')+$rejectionReason->lists('reason', 'id'),
+                            {{ Form::select('rejectionReason[]', array(0 => '')+$rejectionReason->pluck('reason', 'id')->toArray(),
                                 old('rejectionReason'), array('class' => 'form-control')) }}
                         </div>
                         {{ Form::button("<span class='glyphicon glyphicon-delete'></span> ".'Remove', ['class' => 'remove-reason btn-normal']) }}

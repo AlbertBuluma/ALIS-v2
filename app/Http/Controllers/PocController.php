@@ -86,13 +86,13 @@ class PocController extends Controller {
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse
      */
 	public function store(Request $request)
 	{
+//	    dd($request->all());
 		//
         $rules = array(
-
             'infant_name' => 'required',
             'age'       => 'required',
             'gender' => 'required',
@@ -100,15 +100,15 @@ class PocController extends Controller {
             'collection_date' => 'required',
             'sample_id' => 'required|unique:poc_tables,sample_id'
         );
+
 		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
+//        dd($validator);
 
 			return redirect()->back()->withErrors($validator)->withInput($request->all());
 		} else {
-			// store
-
-
+//			 store
 
 			$patient = new POC;
 
@@ -117,20 +117,20 @@ class PocController extends Controller {
 			$patient->age	= $request->get('age');
 			$patient->gender	= $request->get('gender');
 			$patient->caretaker_number	= $request->get('caretaker_number');
-			$patient->given_contrimoxazole	= $request->get('given_contrimoxazole');
-			$patient->delivery_details	= $request->get('delivery_details');
+			$patient->given_contrimazole	= $request->get('given_contrimazole');
+			$patient->delivered_at	= $request->get('delivered_at');
 			$patient->infant_pmtctarv	= $request->get('infant_pmtctarv');
 			$patient->entry_point	= $request->get('entry_point');
 			$patient->other_entry_point	= $request->get('other_entry_point');
 			$patient->collection_date	= $request->get('collection_date');
 			$patient->sample_id	= $request->get('sample_id');
 			$patient->pcr_level	= $request->get('pcr_level');
-			$patient->non_routine	= $request->get('non_routine');
+//			$patient->non_routine	= $request->get('pcr_level');
 			$patient->feeding_status	= $request->get('feeding_status');
 			$patient->breastfeeding_status	= $request->get('breastfeeding_status');
 			$patient->mother_hts	= $request->get('mother_hts');
 			$patient->mother_art = $request->get('mother_art');
-			$patient->mother_nin = $request->get('nin');
+			$patient->nin = $request->get('nin');
 			$patient->pmtct_antenatal	= $request->get('pmtct_antenatal');
 			$patient->pmtct_delivery	= $request->get('pmtct_delivery');
 			$patient->pmtct_postnatal	= $request->get('pmtct_postnatal');
