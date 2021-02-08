@@ -24,6 +24,7 @@ use App\Models\UnhlsTestResult;
 use App\Models\UnhlsVisit;
 use App\Models\Ward;
 use DateTime;
+use PDF;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -779,14 +780,19 @@ class UnhlsTestController extends Controller {
         );
         //dd($test_request_information);
 
-        $pdf = new RejectionReportPdf;
-        $pdf->setTestRequestInformation($test_request_information);
+        $pdf = PDF::loadHtml($html);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream('report.pdf');
 
-        $pdf->SetAutoPageBreak(TRUE, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('', '', 10);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        return $pdf->output('report.pdf');
+//        $pdf = new RejectionReportPdf;
+//        $pdf->setTestRequestInformation($test_request_information);
+//
+//        $pdf->SetAutoPageBreak(TRUE, 15);
+//        $pdf->AddPage();
+//        $pdf->SetFont('', '', 10);
+//        $pdf->writeHTML($html, true, false, true, false, '');
+//        return $pdf->output('report.pdf');
     }
 
     /**
@@ -815,7 +821,8 @@ class UnhlsTestController extends Controller {
     {
         //Reject justifying why.
         $rules = array(
-            'rejectionReason' => 'required|non_zero_key',
+//            'rejectionReason' => 'required|non_zero_key',
+            'rejectionReason' => 'required',
             'reject_explained_to' => 'required',
         );
         $validator = Validator::make($request->all(), $rules);
