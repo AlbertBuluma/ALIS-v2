@@ -91,6 +91,7 @@ class MicrobiologyController extends Controller {
 			'specimen_type' => 'required',
 			'clinical_notes' => 'required',
 			'facility_transfered' => 'required',
+			'requested_by' => 'required',
 		);
 		$validator = Validator::make($request->all(), $rules);
 
