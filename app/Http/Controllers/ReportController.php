@@ -32,6 +32,7 @@ use App\Models\UnhlsSpecimen;
 use App\Models\UnhlsTest;
 use App\Models\UnhlsVisit;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use PDF;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
@@ -195,15 +196,20 @@ class ReportController extends Controller {
             'tests' => $tests,
             'patient'=> $patient
         );
-        $pdf = new RevisedReportPdf;
-        $pdf->setTestRequestInformation($test_request_information);
+//        $pdf = new RevisedReportPdf;
+//        $pdf->setTestRequestInformation($test_request_information);
+//
+//        $pdf->SetAutoPageBreak(TRUE, 15);
+//        $pdf->AddPage();
+//        $pdf->SetFont('times','','11');
+//        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+//
+//        return $pdf->output('report.pdf');
 
-        $pdf->SetAutoPageBreak(TRUE, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('times','','11');
-        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
-
-        return $pdf->output('report.pdf');
+        $pdf = PDF::loadHtml($content);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream('report.pdf');
 
 
     }
@@ -361,8 +367,6 @@ class ReportController extends Controller {
                 continue;
         }
 
-
-
         // adhoc config decision
         // $template = AdhocConfig::where('name','Report')->first()->getReportTemplate();
         $template = "reports.patient.standard";
@@ -384,15 +388,19 @@ class ReportController extends Controller {
         );
 
 
-        $pdf = new InterimReportPdf;
-        $pdf->setTestRequestInformation($test_request_information);
-        $pdf->SetAutoPageBreak(TRUE, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('times','','11');
-        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+//        $pdf = new InterimReportPdf;
+//        $pdf->setTestRequestInformation($test_request_information);
+//        $pdf->SetAutoPageBreak(TRUE, 15);
+//        $pdf->AddPage();
+//        $pdf->SetFont('times','','11');
+//        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+//
+//        return $pdf->output('report.pdf');
 
-        return $pdf->output('report.pdf');
-
+        $pdf = PDF::loadHtml($content);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream('report.pdf');
 
     }
 
@@ -498,14 +506,19 @@ class ReportController extends Controller {
 
         ob_end_clean();
 
-        $pdf = new Mypdf;
-        $pdf->SetAutoPageBreak(TRUE, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('times','','11');
-        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+//        $pdf = new Mypdf;
+//        $pdf->SetAutoPageBreak(TRUE, 15);
+//        $pdf->AddPage();
+//        $pdf->SetFont('times','','11');
+//        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+//
+//
+//        return $pdf->output('report.pdf');
 
-
-        return $pdf->output('report.pdf');
+        $pdf = PDF::loadHtml($content);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream('report.pdf');
 
     }
 
@@ -591,17 +604,23 @@ class ReportController extends Controller {
             'tests' => $tests,
             'patient'=> $patient
         );
-        $pdf = new RequestFormPdf;
+//        $pdf = new RequestFormPdf;
 
 
-        $pdf->setTestRequestInformation($test_request_information);
+//        $pdf->setTestRequestInformation($test_request_information);
+//
+//        $pdf->SetAutoPageBreak(TRUE, 15);
+//        $pdf->AddPage();
+//        $pdf->SetFont('times','','11');
+//        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+//
+//        return $pdf->output('report.pdf');
 
-        $pdf->SetAutoPageBreak(TRUE, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('times','','11');
-        $pdf->writeHTML($content, 'true', 'false', 'false', 'false', '');
+        $pdf = PDF::loadHtml($content);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream('report.pdf');
 
-        return $pdf->output('report.pdf');
     }
 
 
@@ -718,7 +737,7 @@ class ReportController extends Controller {
         $testResult->save();
 
         //Fire of entry saved/edited event
-        Event::fire('test.recalled', array($testID));
+        Event::dispatch('test.recalled', array($testID));
 
         $input = Session::get('TESTS_FILTER_INPUT');
         Session::put('fromRedirect', 'true');
