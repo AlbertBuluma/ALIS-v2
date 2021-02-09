@@ -194,7 +194,7 @@
 					</div>
 						<div class="col-md-6">
 							<div class="form-group">
-							{{ Form::label('requested_by', 'Requested By') }}
+							{{ Form::label('requested_by', 'Requested By', array('class' => 'required')) }}
 							{{Form::text('requested_by', old('physician'), array('class' => 'form-control'))}}
 							</div>
 							<div class="form-group">
