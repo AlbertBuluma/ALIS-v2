@@ -127,7 +127,7 @@ class PocController extends Controller {
 			$patient->pcr_level	= $request->get('pcr_level');
 //			$patient->non_routine	= $request->get('pcr_level');
 			$patient->feeding_status	= $request->get('feeding_status');
-			$patient->breastfeeding_status	= $request->get('breastfeeding_status');
+			$patient->breastfeeding_status	= $request->get('feeding_status');
 			$patient->mother_hts	= $request->get('mother_hts');
 			$patient->mother_art = $request->get('mother_art');
 			$patient->nin = $request->get('nin');
@@ -140,10 +140,11 @@ class PocController extends Controller {
 			$patient->mother_name	= $request->get('mother_name');
 			$patient->provisional_diagnosis	= $request->get('provisional_diagnosis');
 			$patient->infant_pmtctarv	= $request->get('infant_pmtctarv');
+			$patient->mother_pmtctarv	= $request->get('pmtct_delivery'); //Mother_pmtctarv
 			$patient->mother_hiv_status	= $request->get('mother_hiv_status');
 
-			// $patient->district_id = \Config::get('constants.DISTRICT_ID');
-			// $patient->facility_id = \Config::get('constants.FACILITY_ID');
+			 $patient->district_id = config('constants.DISTRICT_ID');
+			 $patient->facility_id = config('constants.FACILITY_ID');
 			// $patient->facility	= $request->get('facility');
 			// $patient->district	= $request->get('district');
 			$patient->created_by = Auth::user()->name;
