@@ -8,13 +8,13 @@
 <br>
 <br>
 
-<table style="border-bottom: 1px solid #cecfd5; font-size:8px;
+<table style="border-bottom: 1px solid #cecfd5; font-size:8px; width: 100%;
  font-family: 'Courier New',Courier;">
 	<thead>
 		<tr>
 		<td colspan="2"><b>Examination Requested</b></td>
 		</tr>
-	    <tr>
+	    <tr align="left">
 	            <th width="20%"><strong>Tests</strong></th>
 	            <th width="20%"><strong>Sample Type</strong></th>
 	            <th width="20%"><strong>{{ Lang::choice('messages.test-category', 1)}}</strong></th>
@@ -59,7 +59,7 @@
 <br>
 <br>
 
-<table style="border-bottom: 1px solid #cecfd5; font-size:8px;
+<table style="border-bottom: 1px solid #cecfd5; font-size:8px; width: 100%;
  font-family: 'Courier New',Courier;">
 	 @if(isset($tests))
 
@@ -78,13 +78,13 @@
 
 <br>
 <br>
-<table style="border-bottom: 1px solid #cecfd5; font-size:8px;
+<table style="border-bottom: 1px solid #cecfd5; font-size:8px; width: 100%;
  font-family: 'Courier New',Courier;">
 	<thead>
 		<tr>
 		<td colspan="2"><b>Test Requested By</b></td>
 		</tr>
-	    <tr>
+	    <tr align="left">
 	            <th width="30%"><strong>Name</strong></th>
 	            <th width="30%"><strong>Cadre</strong></th>
 	            <th width="30%"><strong>Mob:</strong></th>
@@ -122,13 +122,13 @@
 
 <br>
 
-<table style="border-bottom: 1px solid #cecfd5; font-size:8px;
+<table style="border-bottom: 1px solid #cecfd5; font-size:8px; width: 100%;
  font-family: 'Courier New',Courier;">
 	<thead>
 		<tr>
 		<td colspan="2"><b>Sample Collected By</b></td>
 		</tr>
-	    <tr>
+	    <tr align="left">
 	            <th width="20%"><strong>Name</strong></th>
 	            <th width="20%"><strong>Cadre</strong></th>
 	            <th width="20%"><strong>{{ Lang::choice('messages.test-category', 1)}}</strong></th>
@@ -172,13 +172,13 @@
 
 <br>
 
-<table style="border-bottom: 1px solid #cecfd5; font-size:8px;
+<table style="border-bottom: 1px solid #cecfd5; font-size:8px; width: 100%;
  font-family: 'Courier New',Courier;">
 	<thead>
 		<tr>
 		<td colspan="2"><b>Sample Received By</b></td>
 		</tr>
-	    <tr>
+	    <tr align="left">
 	            <th width="20%"><strong>Lab Section</strong></th>
 	            <th width="15%"><strong>Date Received</strong></th>
 	            <th width="15%"><strong>Time Received</strong></th>
