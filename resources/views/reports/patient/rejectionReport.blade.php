@@ -5,14 +5,14 @@
 </style>
 <table style="border-bottom: 1px solid #cecfd5; font-size:9px; font-family: Bookman Old Style; width: 100%; text-align: left">
 	<thead>
-	    <tr>
-	            <th width="20%; align=left"><strong>Sample Type</strong></th>
-	            <th width="20%; align=left"><strong>Date Collected</strong></th>
+	    <tr align="left">
+	            <th width="20%"><strong>Sample Type</strong></th>
+	            <th width="20%"><strong>Date Collected</strong></th>
 
-	            <th width="20%; align=left"><strong>Date Received</strong></th>
+	            <th width="20%"><strong>Date Received</strong></th>
 
-	            <th width="20%; align=left"><strong>{{ Lang::choice('messages.test-category', 1)}}</strong></th>
-	            <th width="20%; align=left"><strong>Tests Requested</strong></th>
+	            <th width="20%"><strong>{{ Lang::choice('messages.test-category', 1)}}</strong></th>
+	            <th width="20%"><strong>Tests Requested</strong></th>
 	        </tr>
 	</thead>
 	<tbody>

@@ -339,7 +339,10 @@ class PocController extends Controller {
 		$rules = array(
 			'results' => 'required',
 			'test_date' => 'required',
+			'tested_by' => 'required',
+			'dispatched_by' => 'required',
 		);
+
 		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {

@@ -43,6 +43,7 @@ class AdditionalUpdates extends Migration {
         DB::statement('ALTER TABLE `poc_tables` CHANGE `provisional_diagnosis` `provisional_diagnosis` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `poc_results` CHANGE `test_time` `test_time` TIME NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `poc_tables` CHANGE `caretaker_number` `caretaker_number` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
+        DB::statement('ALTER TABLE `poc_tables` CHANGE `other_entry_point` `other_entry_point` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
     }
 
 	/**
