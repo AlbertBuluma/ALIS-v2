@@ -3,7 +3,7 @@
 <div>
 	<ol class="breadcrumb">
 	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
-	  <li><a href="{{ route('testtype.index') }}">{{ Lang::choice('messages.test-type',1) }}</a<li class="active">{{trans('messages.create-test-type')}}</li>
+	  <li><a href="{{ route('testtype.index') }}">{{ Lang::choice('messages.test-type',1) }}</a><li class="active">{{trans('messages.create-test-type')}}</li>
 	</ol>
 </div>
 <div class="panel panel-primary">
