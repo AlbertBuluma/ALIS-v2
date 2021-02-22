@@ -154,7 +154,7 @@
 	</table>
 	@elseif($test->testType->isCulture())
         <!-- Culture and Sensitivity analysis -->
-        @if(count($test->isolated_organisms)>0)<!-- if there are any isolated organisms -->
+        @if(count(array($test->isolated_organisms))>0)<!-- if there are any isolated organisms -->
         <table style="border-bottom: 1px solid #cecfd5; font-size:8px;font-family: 'Courier New',Courier;">
             <tr>
               <td colspan="3"></td>
