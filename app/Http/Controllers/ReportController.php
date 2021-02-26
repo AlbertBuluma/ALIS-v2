@@ -46,6 +46,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use LaravelQRCode\Facades\QRCode;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MicrobiologyExport;
 use RevisedReportPdf;
 
 class ReportController extends Controller {
@@ -1313,8 +1314,9 @@ class ReportController extends Controller {
             foreach (TestType::all() as $testType) {
                 $pending = $testType->countPerStatus([UnhlsTest::PENDING, UnhlsTest::STARTED], $from, $toPlusOne->format('Y-m-d H:i:s'));
                 $complete = $testType->countPerStatus([UnhlsTest::COMPLETED, UnhlsTest::VERIFIED], $from, $toPlusOne->format('Y-m-d H:i:s'));
-                $approved = $testType->countPerStatus([UnhlsTest::APPROVED, UnhlsTest::APPROVED], $from, $toPlusOne->format('Y-m-d H:i:s'));
-                $ungroupedTests[$testType->id] = ["complete"=>$complete, "pending"=>$pending, "approved"=>$approved];
+                $approved = $testType->countPerStatus([UnhlsTest::APPROVED], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $rejected = $testType->countPerStatus([UnhlsTest::REJECTED], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $ungroupedTests[$testType->id] = ["complete"=>$complete, "pending"=>$pending, "approved"=>$approved, "rejected"=>$rejected];
             }
 
             // $data = $data->groupBy('test_type_id')->paginate(Config::get('kblis.page-items'));
@@ -2700,7 +2702,7 @@ class ReportController extends Controller {
                 $q->where('specimens.time_accepted', '>=', $dateFrom);
                 $q->where('specimens.time_accepted', '<=', $dateTo);
             })->orderBy('specimens.time_accepted', 'DESC')
-            ->groupBy('unhls_patients.name')
+            ->groupBy('unhls_patients.name','specimens.time_accepted','specimens.time_collected','unhls_patients.patient_number','unhls_patients.ulin','unhls_patients.admission_date','unhls_districts.name','unhls_patients.gender','unhls_visits.hospitalized','age','unhls_visits.visit_type','onAntibiotics','Ward','diagnosis','SpecimenType','unhls_tests.test_type_id','DonAntibiotics','testID','drugs.name','IsolatedOrganism','isoID')
             ->groupBy('isolated_organisms.id')
             ->orderBy('specimens.time_accepted', 'DESC')
             ->get();
@@ -2718,7 +2720,7 @@ class ReportController extends Controller {
             $content[$i]['Patient Name'] = $isolatedOrganism->PatientName;
             $content[$i]['Ward'] = $isolatedOrganism->Ward;
             $content[$i]['Sex'] = ($isolatedOrganism->gender == 1) ? 'F' : 'M';//sex
-            $content[$i]['Age'] = newAge($isolatedOrganism->age);//age
+           // $content[$i]['Age'] = \newAge($isolatedOrganism->age);//age
             $content[$i]['Hospitalized for more than 2 days (48 hours) at time of specimen collection?'] = ($isolatedOrganism->hospitalized == 1) ? 'Yes' : (($isolatedOrganism->hospitalized == '0') ? 'No' : '');//$hospitalized_value; tenary operator//48hrs
             $content[$i]['On Antibiotics'] = ($isolatedOrganism->onAntibiotics == 1) ? 'Yes' : '';
             $content[$i]['Days on Antibiotics'] = $isolatedOrganism->DonAntibiotics;
@@ -2735,11 +2737,12 @@ class ReportController extends Controller {
         }
 
         $fileName = $dateFrom.' to '.$dateTo;
-        Excel::create($fileName, function($excel) use($content) {
-            $excel->sheet('Sheet1', function($sheet) use($content) {
-                $sheet->fromArray($content);
-            });
-        })->export('xls');
+        // \Excel::download($export, string $fileName,'', function($excel) use($content) {
+        //     $excel->sheet('Sheet1', function($sheet) use($content) {
+        //         $sheet->fromArray($content);
+        //     });
+        // })->export('xls');
+        return Excel::download(new MicrobiologyExport(), $fileName.'.xlsx');
 
     }
 
