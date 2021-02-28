@@ -69,7 +69,7 @@ class TestTypeController extends Controller {
 		//
 		$rules = array(
 			'name' => 'required|unique:test_types,name',
-			'test_category_id' => 'required|non_zero_key',
+			'test_category_id' => 'required',
 			'specimentypes' => 'required',
 			'new-measures' => 'required',
 			'targetTAT' => 'required',
