@@ -164,7 +164,7 @@ class UnhlsTestController extends Controller {
         // Search Conditions
         if($searchString||$testStatusId||$testCategoryId||$dateFrom||$dateTo){
 
-            $tests = UnhlsTest::completedTests($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
+            $tests = UnhlsTest::completedTests($searchString, $testStatusId, $testCategoryId);
 
             if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
@@ -240,7 +240,7 @@ class UnhlsTestController extends Controller {
         // Search Conditions
         if($searchString||$testStatusId||$testCategoryId||$dateFrom||$dateTo){
 
-            $tests = UnhlsTest::pendingTests($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
+            $tests = UnhlsTest::pendingTests($searchString, $testStatusId, $testCategoryId);
 
             if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
@@ -315,7 +315,7 @@ class UnhlsTestController extends Controller {
         // Search Conditions
         if($searchString||$testStatusId||$testCategoryId||$dateFrom||$dateTo){
 
-            $tests = UnhlsTest::startedTests($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
+            $tests = UnhlsTest::startedTests($searchString, $testStatusId, $testCategoryId);
 
             if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
@@ -466,7 +466,7 @@ class UnhlsTestController extends Controller {
         // Search Conditions
         if($searchString||$testStatusId||$testCategoryId||$dateFrom||$dateTo){
 
-            $tests = UnhlsTest::verified($searchString, $testStatusId, $testCategoryId, $dateFrom, $dateTo);
+            $tests = UnhlsTest::verified($searchString, $testStatusId, $testCategoryId);
 
             if (count($tests->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));
@@ -639,6 +639,8 @@ class UnhlsTestController extends Controller {
             $therapy->visit_id = $visit->id;
             $therapy->previous_therapy = $request->get('previous_therapy');
             $therapy->current_therapy = $request->get('current_therapy');
+            $therapy->clinical_notes = $request->get('clinical_notes');
+            $therapy->clinician_id = $request->get('clinician');
             $therapy->save();
 
             /*
@@ -760,7 +762,7 @@ class UnhlsTestController extends Controller {
     }
 
     // Reject Report Function
-    public function rejectionReport(Request $request, $id, $visit = null, $testId = null)
+    public function rejectionReport(Request $request, $id, $visit = null, $visitId = null, $testId = null)
     {
         $tests = UnhlsTest::where('visit_id', '=', $visit?$visit:$visitId);
         $tests = UnhlsTest::where('id', '=', $testId)->get();
