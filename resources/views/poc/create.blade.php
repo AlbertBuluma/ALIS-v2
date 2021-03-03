@@ -221,7 +221,7 @@
 
 		<div class="form-group">
 			{{ Form::label('collection_date', 'Sample Collection Date:', array('class' =>'col-sm-2 ')) }}
-			{{ Form::text('collection_date', old('collection_date'), array('class' => 'form-control standard-datepicker standard-datepicker-nofuture col-sm-4', 'placeholder' => 'YYYY-MM-DD')) }}
+			{{ Form::text('collection_date', old('collection_date'), array('class' => 'form-control standard-datepicker col-sm-4', 'placeholder' => 'YYYY-MM-DD')) }}
 
 			{{ Form::label('sample_id', 'Sample ID:',array('class' =>'col-sm-2 required ')) }}
 			{{ Form::text('sample_id', old('sample_id'), array('class' => 'form-control col-sm-4')) }}
@@ -297,15 +297,15 @@
 
 			<div class="form-group">
 				{{ Form::label('pmtct_antenatal', 'PMTCT Antenatal:',array('class' =>'col-sm-2 required ')) }}
-				{{ Form::select('pmtct_antenatal', array_merge(array(null => 'Select...	'), $antenatal), old('pmtct_antenatal'), array('class' => 'form-control')) }}
+				{{ Form::select('pmtct_antenatal', $antenatal, old('pmtct_antenatal'), array('class' => 'form-control')) }}
 			</div>
 				<div class="form-group">
 				{{ Form::label('pmtct_delivery', 'PMTCT Delivery:',array('class' =>'col-sm-2 required ')) }}
-				{{ Form::select('pmtct_delivery', array_merge(array(null => 'Select...	'), $antenatal), old('pmtct_delivery'), array('class' => 'form-control')) }}
+				{{ Form::select('pmtct_delivery', $antenatal, old('pmtct_delivery'), array('class' => 'form-control')) }}
 </div>
 	<div class="form-group">
 				{{ Form::label('pmtct_postnatal', 'PMTCT Post Natal:',array('class' =>'col-sm-2 required ')) }}
-				{{ Form::select('pmtct_postnatal', array_merge(array(null => 'Select...	'), $antenatal), old('pmtct_postnatal'), array('class' => 'form-control')) }}
+				{{ Form::select('pmtct_postnatal', $antenatal, old('pmtct_postnatal'), array('class' => 'form-control')) }}
 
 				<!-- <div class="radio-inline">{{ Form::radio('mother_antenatal', 'Antenatal', false) }} <span class="input-tag">Antenatal</span></div>
 					<div class="radio-inline">{{ Form::radio("mother_delivery", 'Delivery', false) }} <span class="input-tag">Delivery</span></div>

@@ -233,7 +233,15 @@
                             </div>
                         @endforeach
                         <div class="form-group">
-                            {{ Form::label('comment', trans('messages.comments'), array('class' => 'required')) }}
+                            {{  Form::label('equipment_id', 'Equipment used', array('class'=>'control-label')) }}
+                            {{ Form::select('equipment_id', $equipment_list, old('equipment_id'), array('class' => 'form-control', 'id' => 'equipment_id')) }}
+                        </div>
+                           <div class="form-group">
+                            {{  Form::label('method_used', 'Method used', array('class'=>'control-label')) }}
+                            {{ Form::text('method_used', old('method_used'), array('class' => 'form-control', 'id' => 'method_used')) }}
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('comment', trans('messages.comments')) }}
                             {{ Form::textarea('interpretation', $test->interpretation,
                                 array('class' => 'form-control result-interpretation', 'rows' => '2')) }}
                         </div>

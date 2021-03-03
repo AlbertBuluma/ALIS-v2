@@ -50,11 +50,11 @@
 							$zebra = "";
 						?>
 						@foreach($specimentypes as $key=>$value)
-							{{ ($cnt%4==0)?"<div class='row $zebra'>":"" }}
+							<!-- {{ ($cnt%4==0)?"<div class='row $zebra'>":"" }}
 							<?php
 								$cnt++;
 								$zebra = (((int)$cnt/4)%2==1?"row-striped":"");
-							?>
+							?> -->
 							<div class="col-md-3">
 								<label  class="checkbox">
 									<input type="checkbox" name="specimentypes[]" value="{{ $value->id}}"
@@ -62,7 +62,7 @@
 										{{$value->name }}
 								</label>
 							</div>
-							{{ ($cnt%4==0)?"</div>":"" }}
+							<!-- {{ ($cnt%4==0)?"</div>":"" }} -->
 						@endforeach
 						</div>
 					</div>

@@ -304,6 +304,18 @@ Route::middleware('auth')->group(function()
             "as"   => "measurenamemapping.edit",
             "uses" => "MeasureNameMappingController@edit"
         ));
+        Route::get("/measureranges/{id}/ranges", array(
+            "as"   => "measureranges.getranges",
+            "uses" => "MeasureNameMappingController@getRanges"
+        ));
+        Route::get("/measureranges/{id}/range", array(
+            "as"   => "measureranges.ranges",
+            "uses" => "MeasureNameMappingController@getRange"
+        ));
+        Route::post("/measureranges/{id}/range", array(
+            "as"   => "measureranges.postrange",
+            "uses" => "MeasureNameMappingController@postRange"
+        ));
         Route::get("/measurenamemapping/{id}/delete", array(
             "as"   => "measurenamemapping.delete",
             "uses" => "MeasureNameMappingController@delete"
@@ -315,6 +327,14 @@ Route::middleware('auth')->group(function()
         Route::put("/measurenamemapping/{id}", array(
             "as"   => "measurenamemapping.update",
             "uses" => "MeasureNameMappingController@update"
+        ));
+        Route::get("/getnegativeorganism/{id}", array(
+            "as"   => "measureranges.getnegativeorganism",
+            "uses" => "MeasureNameMappingController@getnegativeorganism"
+        ));
+        Route::post("/postnegativeorganism/{id}", array(
+            "as"   => "measureranges.postnegativeorganism",
+            "uses" => "MeasureNameMappingController@postnegativeorganism"
         ));
 
         // Route::resource('measurenamemapping', 'MeasureNameMappingController');

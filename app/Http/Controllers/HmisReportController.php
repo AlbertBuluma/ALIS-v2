@@ -24,7 +24,7 @@ class HmisReportController extends Controller {
 		$culture_and_sensitivity_counts  = $this->getCultureAndSensitivityCounts($month);
 		$immunology_counts = $this->getImmunologyCounts($month);
 		$molecular_counts = $this->getMolecularCounts($month);
-		$hiv_by_purpose = $this->getHivTestByPurpose($month);
+		// $hiv_by_purpose = $this->getHivTestByPurpose($month);
 		$referral_tests = $this->getReferredTestCounts($month);
 		$referred_microbiology = $this->getReferredMicrobiologyCounts($month);
 		$referred_virology = $this->getReferredVirologyCounts($month);
@@ -143,8 +143,8 @@ class HmisReportController extends Controller {
 							->with('inconclusive_test',$inconclusive_test)
 							->with('dna_confirmatory_test',$dna_confirmatory_test)
 							->with('iqc_test',$iqc_test)
-							->with('eqa_test',$eqa_test)
-							->with('hiv_by_purpose',$hiv_by_purpose);
+							->with('eqa_test',$eqa_test);
+							// ->with('hiv_by_purpose',$hiv_by_purpose);
 	}
 
 	/*
@@ -282,7 +282,7 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 		$query = "select ut.test_type_id, tt.name, utr.measure_id, ut.purpose, mnm.measure_id as M2, mnm.system_name, tt.test_category_id as lab_section, count(DISTINCT ut.id) as total, SUM(case when utr.result = 'Reactive' then 1 else 0 end) as Positive, SUM(case when ut.purpose = 'hct' then 1 else 0 end) as hct, SUM(case when ut.purpose = 'smc' then 1 else 0 end) as smc, SUM(case when ut.purpose = 'pmtct' then 1 else 0 end) as pmtct, SUM(case when ut.purpose = 'qc' then 1 else 0 end) as qc, SUM(case when ut.purpose = 'clinical_diagnosis' then 1 else 0 end) as clinical_diagnosis, SUM(case when ut.purpose = 'repeat_test' then 1 else 0 end) as repeat_test, SUM(case when ut.purpose = 'test_for_verification' then 1 else 0 end) as test_for_verification, SUM(case when ut.purpose = 'inconclusive_result' then 1 else 0 end) as inconclusive_result, SUM(case when ut.purpose = 'dna_confirmed_test' then 1 else 0 end) as dna_confirmed_test, SUM(case when ut.purpose = 'eqa' then 1 else 0 end) as eqa FROM unhls_tests ut INNER JOIN test_types tt ON(ut.test_type_id = tt.id) INNER JOIN test_categories tc ON(tc.id = tt.test_category_id) INNER JOIN unhls_test_results utr ON(utr.test_id = ut.id) INNER JOIN testtype_measures ttm ON(ttm.measure_id = utr.measure_id) INNER JOIN measure_ranges mr ON(mr.measure_id = utr.measure_id AND mr.alphanumeric = utr.result)
 		LEFT JOIN measure_name_mappings mnm ON(utr.measure_id = mnm.measure_id)
 		WHERE `ut`.`time_created` LIKE '%".$month."%'
-		GROUP BY measure_id";
+		GROUP BY measure_id,ut.test_type_id, tt.name, utr.measure_id, ut.purpose, mnm.measure_id, mnm.system_name, tt.test_category_id, ut.id, utr.result";
 
 	 	$rows = DB::select($query);
 	 	return $rows;
@@ -308,7 +308,7 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 			LEFT JOIN measure_name_mappings mnm ON(utr.measure_id = mnm.measure_id)
 			INNER JOIN unhls_tests ut ON(rr.test_id = ut.id)
 			INNER JOIN test_types tt ON(ut.test_type_id = tt.id)
-			WHERE `ut`.`time_created` LIKE '%".$month."%' GROUP BY test_type_id";
+			WHERE `ut`.`time_created` LIKE '%".$month."%' GROUP BY test_type_id,utr.test_id, utr.measure_id, M2, mnm.system_name, lab_section, rr.id,utr.id";
 
 
 	 	$rows = DB::select($query);
@@ -324,7 +324,7 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 		LEFT JOIN test_name_mappings tnm ON(ut.test_type_id = tnm.test_type_id)
 		INNER JOIN test_types tt ON(ut.test_type_id = tt.id)
 		WHERE `rr`.`sample_date` LIKE '%".$month."%'
-		GROUP BY test_category_id";
+		GROUP BY test_category_id,ut.test_type_id, tt.test_category_id, rr.id, tnm.system_name";
 
 	 	$rows = DB::select($query);
 	 	return $rows;
@@ -337,7 +337,7 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 		INNER JOIN organisms org ON(tt.organism_id = org.id AND tt.organism_id = $lab_section_id)
 		INNER JOIN drug_susceptibility_measures dsm ON(rr.drug_susceptibility_measure_id = dsm.id)
 		WHERE `rr`.`created_at` LIKE '%".$month."%'
-		GROUP BY rr.drug_id";
+		GROUP BY rr.drug_id, rr.drug_susceptibility_measure_id, rr.drug_susceptibility_measure_id,rr.id";
 
 	 	$rows = DB::select($query);
 	 	return $rows;
@@ -358,7 +358,7 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 	private function getTotalNumberOfIsolates($lab_section_id, $month){
 		$query = "select tt.id, tt.organism_id, ty.test_category_id as lab_section, count(tt.id) as total FROM isolated_organisms tt INNER JOIN organisms org ON(tt.organism_id = org.id) INNER JOIN unhls_tests ut ON (ut.id = tt.test_id) INNER JOIN test_types ty ON (ty.id = ut.test_type_id AND ty.test_category_id = $lab_section_id)
 		WHERE `tt`.`created_at` LIKE '%".$month."%'
-		GROUP BY tt.organism_id";
+		GROUP BY tt.organism_id,ty.test_category_id, tt.id";
 		//set variables for the target tests -from
 		//also get array of test_type ids to use in condition
 	 	$rows = DB::select($query);
@@ -6130,431 +6130,431 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 		return $test_types[$lab_section];
 	}
 
-	private function getHivTestByPurpose($month){
-		$ret_array =  array();
-		$d_hct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('measure_id','=','1')->where('purpose','=','hct')
-		->where('result', '!=', '')
-		->where('unhls_tests.time_verified', 'LIKE', $month)->get();
-		$ret_array['determine']['hct']= $d_hct[0]->counter;
+// 	private function getHivTestByPurpose($month){
+// 		$ret_array =  array();
+// 		$d_hct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('measure_id','=','1')->where('purpose','=','hct')
+// 		->where('result', '!=', '')
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)->get();
+// 		$ret_array['determine']['hct']= $d_hct[0]->counter;
 
-		$d_emct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','1')->where('purpose','=','emtct')->where('result', '!=', '')->get();
-		$ret_array['determine']['emct']= $d_emct[0]->counter;
+// 		$d_emct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','1')->where('purpose','=','emtct')->where('result', '!=', '')->get();
+// 		$ret_array['determine']['emct']= $d_emct[0]->counter;
 
-		$d_clinic = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','1')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
-		$ret_array['determine']['clinic']= $d_clinic[0]->counter;
+// 		$d_clinic = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','1')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
+// 		$ret_array['determine']['clinic']= $d_clinic[0]->counter;
 
-		$d_smc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','1')->where('purpose','=','smc')->where('result', '!=', '')->get();
-		$ret_array['determine']['smc']= $d_smc[0]->counter;
+// 		$d_smc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','1')->where('purpose','=','smc')->where('result', '!=', '')->get();
+// 		$ret_array['determine']['smc']= $d_smc[0]->counter;
 
-		$d_repeat = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','1')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
-		$ret_array['determine']['repeat']= $d_repeat[0]->counter;
+// 		$d_repeat = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','1')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
+// 		$ret_array['determine']['repeat']= $d_repeat[0]->counter;
 
-		$d_verification = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','1')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
-		$ret_array['determine']['verification']= $d_verification[0]->counter;
+// 		$d_verification = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','1')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
+// 		$ret_array['determine']['verification']= $d_verification[0]->counter;
 
-		$d_inconclusive = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','1')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
-		$ret_array['determine']['inconclusive']= $d_inconclusive[0]->counter;
+// 		$d_inconclusive = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','1')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
+// 		$ret_array['determine']['inconclusive']= $d_inconclusive[0]->counter;
 
-		$d_dna = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','1')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
-		$ret_array['determine']['dna']= $d_dna[0]->counter;
+// 		$d_dna = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','1')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
+// 		$ret_array['determine']['dna']= $d_dna[0]->counter;
 
-		$d_iqc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','1')->where('purpose','=','iqc')->where('result', '!=', '')->get();
-		$ret_array['determine']['iqc']= $d_iqc[0]->counter;
+// 		$d_iqc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','1')->where('purpose','=','iqc')->where('result', '!=', '')->get();
+// 		$ret_array['determine']['iqc']= $d_iqc[0]->counter;
 
-		$d_eqa = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','1')->where('purpose','=','eqa')->where('result', '!=', '')->get();
-		$ret_array['determine']['eqa']= $d_eqa[0]->counter;
+// 		$d_eqa = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','1')->where('purpose','=','eqa')->where('result', '!=', '')->get();
+// 		$ret_array['determine']['eqa']= $d_eqa[0]->counter;
 
-		// Statpak counts
-		$s_hct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','hct')->where('result', '!=', '')->get();
-		$ret_array['statpak']['hct']= $d_hct[0]->counter;
+// 		// Statpak counts
+// 		$s_hct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','hct')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['hct']= $d_hct[0]->counter;
 
-		$s_emct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','emtct')->where('result', '!=', '')->get();
-		$ret_array['statpak']['emct']= $d_emct[0]->counter;
+// 		$s_emct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','emtct')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['emct']= $d_emct[0]->counter;
 
-		$s_clinic = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
-		$ret_array['statpak']['clinic']= $d_clinic[0]->counter;
+// 		$s_clinic = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['clinic']= $d_clinic[0]->counter;
 
-		$s_smc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','smc')->where('result', '!=', '')->get();
-		$ret_array['statpak']['smc']= $d_smc[0]->counter;
+// 		$s_smc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','smc')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['smc']= $d_smc[0]->counter;
 
-		$s_repeat = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
-		$ret_array['statpak']['repeat']= $d_repeat[0]->counter;
+// 		$s_repeat = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['repeat']= $d_repeat[0]->counter;
 
-		$s_verification = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
-		$ret_array['statpak']['verification']= $d_verification[0]->counter;
+// 		$s_verification = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['verification']= $d_verification[0]->counter;
 
-		$s_inconclusive = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
-		$ret_array['statpak']['inconclusive']= $s_inconclusive[0]->counter;
+// 		$s_inconclusive = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['inconclusive']= $s_inconclusive[0]->counter;
 
-		$s_dna = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
-		$ret_array['statpak']['dna']= $s_dna[0]->counter;
+// 		$s_dna = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['dna']= $s_dna[0]->counter;
 
-		$s_iqc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','iqc')->where('result', '!=', '')->get();
-		$ret_array['statpak']['iqc']= $s_iqc[0]->counter;
+// 		$s_iqc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','iqc')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['iqc']= $s_iqc[0]->counter;
 
-		$s_eqa = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','2')->where('purpose','=','eqa')->where('result', '!=', '')->get();
-		$ret_array['statpak']['eqa']= $s_eqa[0]->counter;
+// 		$s_eqa = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','2')->where('purpose','=','eqa')->where('result', '!=', '')->get();
+// 		$ret_array['statpak']['eqa']= $s_eqa[0]->counter;
 
-		// SD-Bioline counts
-		$sd_hct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','hct')->where('result', '!=', '')	->get();
-		$ret_array['sdbioline']['hct']= $sd_hct[0]->counter;
+// 		// SD-Bioline counts
+// 		$sd_hct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','hct')->where('result', '!=', '')	->get();
+// 		$ret_array['sdbioline']['hct']= $sd_hct[0]->counter;
 
-		$sd_emct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','emtct')->where('result', '!=', '')->get();
-		$ret_array['sdbioline']['emct']= $sd_emct[0]->counter;
+// 		$sd_emct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','emtct')->where('result', '!=', '')->get();
+// 		$ret_array['sdbioline']['emct']= $sd_emct[0]->counter;
 
-		$sd_clinic = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
-		$ret_array['sdbioline']['clinic']= $sd_clinic[0]->counter;
+// 		$sd_clinic = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
+// 		$ret_array['sdbioline']['clinic']= $sd_clinic[0]->counter;
 
-		$sd_smc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','smc')->where('result', '!=', '')->get();
-		$ret_array['sdbioline']['smc']= $sd_smc[0]->counter;
+// 		$sd_smc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','smc')->where('result', '!=', '')->get();
+// 		$ret_array['sdbioline']['smc']= $sd_smc[0]->counter;
 
-		$sd_repeat = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
-		$ret_array['sdbioline']['repeat']= $sd_repeat[0]->counter;
+// 		$sd_repeat = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
+// 		$ret_array['sdbioline']['repeat']= $sd_repeat[0]->counter;
 
-		$sd_verification = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
-		$ret_array['sdbioline']['verification']= $sd_verification[0]->counter;
+// 		$sd_verification = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
+// 		$ret_array['sdbioline']['verification']= $sd_verification[0]->counter;
 
-		$sd_inconclusive = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
-		$ret_array['sdbioline']['inconclusive']= $sd_inconclusive[0]->counter;
+// 		$sd_inconclusive = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
+// 		$ret_array['sdbioline']['inconclusive']= $sd_inconclusive[0]->counter;
 
-		$sd_dna = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
-		$ret_array['sdbioline']['dna']= $sd_dna[0]->counter;
+// 		$sd_dna = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
+// 		$ret_array['sdbioline']['dna']= $sd_dna[0]->counter;
 
-		$sd_iqc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','iqc')->where('result', '!=', '')->get();
-		$ret_array['sdbioline']['iqc']= $sd_iqc[0]->counter;
+// 		$sd_iqc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','iqc')->where('result', '!=', '')->get();
+// 		$ret_array['sdbioline']['iqc']= $sd_iqc[0]->counter;
 
-		$sd_eqa = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','3')->where('purpose','=','eqa')->where('result', '!=', '')->get();
-		$ret_array['sdbioline']['eqa']= $sd_eqa[0]->counter;
+// 		$sd_eqa = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','3')->where('purpose','=','eqa')->where('result', '!=', '')->get();
+// 		$ret_array['sdbioline']['eqa']= $sd_eqa[0]->counter;
 
-		// HIV-Syphilis Duo count
-		$h_hct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','hct')->where('result', '!=', '')	->get();
-		$ret_array['syphilis']['hct']= $h_hct[0]->counter;
+// 		// HIV-Syphilis Duo count
+// 		$h_hct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','hct')->where('result', '!=', '')	->get();
+// 		$ret_array['syphilis']['hct']= $h_hct[0]->counter;
 
-		$h_emct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','emtct')->where('result', '!=', '')->get();
-		$ret_array['syphilis']['emct']= $h_emct[0]->counter;
+// 		$h_emct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','emtct')->where('result', '!=', '')->get();
+// 		$ret_array['syphilis']['emct']= $h_emct[0]->counter;
 
-		$h_clinic = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
-		$ret_array['syphilis']['clinic']= $h_clinic[0]->counter;
+// 		$h_clinic = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
+// 		$ret_array['syphilis']['clinic']= $h_clinic[0]->counter;
 
-		$h_smc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','smc')->where('result', '!=', '')->get();
-		$ret_array['syphilis']['smc']= $h_smc[0]->counter;
+// 		$h_smc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','smc')->where('result', '!=', '')->get();
+// 		$ret_array['syphilis']['smc']= $h_smc[0]->counter;
 
-		$h_repeat = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
-		$ret_array['syphilis']['repeat']= $h_repeat[0]->counter;
+// 		$h_repeat = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
+// 		$ret_array['syphilis']['repeat']= $h_repeat[0]->counter;
 
-		$h_verification = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
-		$ret_array['syphilis']['verification']= $h_verification[0]->counter;
+// 		$h_verification = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
+// 		$ret_array['syphilis']['verification']= $h_verification[0]->counter;
 
-		$h_inconclusive = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
-		$ret_array['syphilis']['inconclusive']= $h_inconclusive[0]->counter;
+// 		$h_inconclusive = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
+// 		$ret_array['syphilis']['inconclusive']= $h_inconclusive[0]->counter;
 
-		$h_dna = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
-		$ret_array['syphilis']['dna']= $h_dna[0]->counter;
+// 		$h_dna = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
+// 		$ret_array['syphilis']['dna']= $h_dna[0]->counter;
 
-		$h_iqc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','iqc')->where('result', '!=', '')->get();
-		$ret_array['syphilis']['iqc']= $h_iqc[0]->counter;
+// 		$h_iqc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','iqc')->where('result', '!=', '')->get();
+// 		$ret_array['syphilis']['iqc']= $h_iqc[0]->counter;
 
-		$h_eqa = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','100')->where('purpose','=','eqa')->where('result', '!=', '')->get();
-		$ret_array['syphilis']['eqa']= $h_eqa[0]->counter;
+// 		$h_eqa = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','100')->where('purpose','=','eqa')->where('result', '!=', '')->get();
+// 		$ret_array['syphilis']['eqa']= $h_eqa[0]->counter;
 
-		// Oraquick count
-		$o_hct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','101')->where('purpose','=','hct')->where('result', '!=', '')	->get();
-		$ret_array['oraquick']['hct']= $o_hct[0]->counter;
+// 		// Oraquick count
+// 		$o_hct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','101')->where('purpose','=','hct')->where('result', '!=', '')	->get();
+// 		$ret_array['oraquick']['hct']= $o_hct[0]->counter;
 
-		$o_emct = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','101')->where('purpose','=','emtct')->where('result', '!=', '')->get();
-		$ret_array['oraquick']['emct']= $o_emct[0]->counter;
+// 		$o_emct = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','101')->where('purpose','=','emtct')->where('result', '!=', '')->get();
+// 		$ret_array['oraquick']['emct']= $o_emct[0]->counter;
 
-		$o_clinic = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','101')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
-		$ret_array['oraquick']['clinic']= $o_clinic[0]->counter;
+// 		$o_clinic = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','101')->where('purpose','=','clinical_diagnosis')->where('result', '!=', '')->get();
+// 		$ret_array['oraquick']['clinic']= $o_clinic[0]->counter;
 
-		$o_smc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','101')->where('purpose','=','smc')->where('result', '!=', '')->get();
-		$ret_array['oraquick']['smc']= $o_smc[0]->counter;
+// 		$o_smc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','101')->where('purpose','=','smc')->where('result', '!=', '')->get();
+// 		$ret_array['oraquick']['smc']= $o_smc[0]->counter;
 
-		$o_repeat = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','101')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
-		$ret_array['oraquick']['repeat']= $o_repeat[0]->counter;
+// 		$o_repeat = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','101')->where('purpose','=','repeat_test')->where('result', '!=', '')->get();
+// 		$ret_array['oraquick']['repeat']= $o_repeat[0]->counter;
 
-		$o_verification = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','101')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
-		$ret_array['oraquick']['verification']= $o_verification[0]->counter;
+// 		$o_verification = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','101')->where('purpose','=','test_for_verification')->where('result', '!=', '')->get();
+// 		$ret_array['oraquick']['verification']= $o_verification[0]->counter;
 
-		$o_inconclusive = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','101')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
-		$ret_array['oraquick']['inconclusive']= $o_inconclusive[0]->counter;
+// 		$o_inconclusive = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','101')->where('purpose','=','inconclusive_results')->where('result', '!=', '')->get();
+// 		$ret_array['oraquick']['inconclusive']= $o_inconclusive[0]->counter;
 
-		$o_dna = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','101')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
-		$ret_array['oraquick']['dna']= $o_dna[0]->counter;
+// 		$o_dna = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','101')->where('purpose','=','dna_confirmatory_test')->where('result', '!=', '')->get();
+// 		$ret_array['oraquick']['dna']= $o_dna[0]->counter;
 
-		$o_iqc = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('unhls_tests.time_verified', 'LIKE', $month)
-		->where('measure_id','=','101')->where('purpose','=','iqc')->where('result', '!=', '')->get();
-		$ret_array['oraquick']['iqc']= $o_iqc[0]->counter;
+// 		$o_iqc = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('unhls_tests.time_verified', 'LIKE', $month)
+// 		->where('measure_id','=','101')->where('purpose','=','iqc')->where('result', '!=', '')->get();
+// 		$ret_array['oraquick']['iqc']= $o_iqc[0]->counter;
 
-		$o_eqa = DB::table("unhls_test_results")
-		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
-		->join("measures","measures.id","=","unhls_test_results.measure_id")
-		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
-		->where('measure_id','=','101')->where('purpose','=','eqa')->where('result', '!=', '')->get();
-		$ret_array['oraquick']['eqa']= $o_eqa[0]->counter;
+// 		$o_eqa = DB::table("unhls_test_results")
+// 		->select("unhls_tests.purpose","measures.name", DB::raw("COUNT(unhls_tests.id) as counter"))
+// 		->join("measures","measures.id","=","unhls_test_results.measure_id")
+// 		->join("unhls_tests","unhls_test_results.test_id","=","unhls_tests.id")
+// 		->where('measure_id','=','101')->where('purpose','=','eqa')->where('result', '!=', '')->get();
+// 		$ret_array['oraquick']['eqa']= $o_eqa[0]->counter;
 
-//get the totals now
-		$ret_array['determine']['total'] = $ret_array['determine']['hct']+$ret_array['determine']['emct']+$ret_array['determine']['clinic']+$ret_array['determine']['smc']+$ret_array['determine']['repeat']+$ret_array['determine']['verification']+
-$ret_array['determine']['inconclusive']+$ret_array['determine']['dna']+$ret_array['determine']['iqc']+$ret_array['determine']['eqa'];
+// //get the totals now
+// 		$ret_array['determine']['total'] = $ret_array['determine']['hct']+$ret_array['determine']['emct']+$ret_array['determine']['clinic']+$ret_array['determine']['smc']+$ret_array['determine']['repeat']+$ret_array['determine']['verification']+
+// $ret_array['determine']['inconclusive']+$ret_array['determine']['dna']+$ret_array['determine']['iqc']+$ret_array['determine']['eqa'];
 
-$ret_array['statpak']['total'] = $ret_array['statpak']['hct']+$ret_array['statpak']['emct']+$ret_array['statpak']['clinic']+$ret_array['statpak']['smc']+$ret_array['statpak']['repeat']+$ret_array['statpak']['verification']+
-$ret_array['statpak']['inconclusive']+$ret_array['statpak']['dna']+$ret_array['statpak']['iqc']+$ret_array['statpak']['eqa'];
+// $ret_array['statpak']['total'] = $ret_array['statpak']['hct']+$ret_array['statpak']['emct']+$ret_array['statpak']['clinic']+$ret_array['statpak']['smc']+$ret_array['statpak']['repeat']+$ret_array['statpak']['verification']+
+// $ret_array['statpak']['inconclusive']+$ret_array['statpak']['dna']+$ret_array['statpak']['iqc']+$ret_array['statpak']['eqa'];
 
-$ret_array['sdbioline']['total'] = $ret_array['sdbioline']['hct']+$ret_array['sdbioline']['emct']+$ret_array['sdbioline']['clinic']+$ret_array['sdbioline']['smc']+$ret_array['sdbioline']['repeat']+$ret_array['sdbioline']['verification']+
-$ret_array['sdbioline']['inconclusive']+$ret_array['sdbioline']['dna']+$ret_array['sdbioline']['iqc']+$ret_array['sdbioline']['eqa'];
+// $ret_array['sdbioline']['total'] = $ret_array['sdbioline']['hct']+$ret_array['sdbioline']['emct']+$ret_array['sdbioline']['clinic']+$ret_array['sdbioline']['smc']+$ret_array['sdbioline']['repeat']+$ret_array['sdbioline']['verification']+
+// $ret_array['sdbioline']['inconclusive']+$ret_array['sdbioline']['dna']+$ret_array['sdbioline']['iqc']+$ret_array['sdbioline']['eqa'];
 
-$ret_array['syphilis']['total'] = $ret_array['syphilis']['hct']+$ret_array['syphilis']['emct']+$ret_array['syphilis']['clinic']+$ret_array['syphilis']['smc']+$ret_array['syphilis']['repeat']+$ret_array['syphilis']['verification']+
-$ret_array['syphilis']['inconclusive']+$ret_array['syphilis']['dna']+$ret_array['syphilis']['iqc']+$ret_array['syphilis']['eqa'];
+// $ret_array['syphilis']['total'] = $ret_array['syphilis']['hct']+$ret_array['syphilis']['emct']+$ret_array['syphilis']['clinic']+$ret_array['syphilis']['smc']+$ret_array['syphilis']['repeat']+$ret_array['syphilis']['verification']+
+// $ret_array['syphilis']['inconclusive']+$ret_array['syphilis']['dna']+$ret_array['syphilis']['iqc']+$ret_array['syphilis']['eqa'];
 
-$ret_array['oraquick']['total'] = $ret_array['oraquick']['hct']+$ret_array['oraquick']['emct']+$ret_array['oraquick']['clinic']+$ret_array['oraquick']['smc']+$ret_array['oraquick']['repeat']+$ret_array['oraquick']['verification']+
-$ret_array['oraquick']['inconclusive']+$ret_array['oraquick']['dna']+$ret_array['oraquick']['iqc']+$ret_array['oraquick']['eqa'];
+// $ret_array['oraquick']['total'] = $ret_array['oraquick']['hct']+$ret_array['oraquick']['emct']+$ret_array['oraquick']['clinic']+$ret_array['oraquick']['smc']+$ret_array['oraquick']['repeat']+$ret_array['oraquick']['verification']+
+// $ret_array['oraquick']['inconclusive']+$ret_array['oraquick']['dna']+$ret_array['oraquick']['iqc']+$ret_array['oraquick']['eqa'];
 
 
-		return $ret_array;
-	}
+// 		return $ret_array;
+// 	}
 /*SELECT ur.id, ur.test_id, mr.measure_id, mr.interpretation
 FROM unhls_test_results ur
 INNER JOIN measure_ranges mr ON(ur.measure_id = mr.measure_id)*/

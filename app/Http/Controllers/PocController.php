@@ -58,7 +58,7 @@ class PocController extends Controller {
 	{
 		//Create patients
 		$hiv_status = array('0' => 'Positive', '1' => 'Negative', '2' => 'Unknown');
-		$antenatal= array('1'=>'Lifelong ART', '2' => 'No ART', '3' => 'UNKNOWN');
+		$antenatal= array('0'=>'Select---','Lifelong ART'=>'Lifelong ART', 'No ART' => 'No ART', 'UNKNOWN' => 'UNKNOWN');
 		// $facility = Hubs::orderBy('name','ASC')
 		// ->lists('name','id');
 		// $district = District::orderBy('name','ASC')
@@ -202,7 +202,7 @@ class PocController extends Controller {
 		}
 
 		// Load the view and pass the patients
-		$antenatal = array('0'=>'Lifelong ART', '1' => 'No ART', '2' => 'UNKNOWN');
+		$antenatal = array('1'=>'Lifelong ART', '2' => 'No ART', '3' => 'UNKNOWN');
 		return view('poc.show')
 		->with('antenatal',$antenatal)
 		->with('patient', $patient)->withInput($request->all());
@@ -339,10 +339,7 @@ class PocController extends Controller {
 		$rules = array(
 			'results' => 'required',
 			'test_date' => 'required',
-			'tested_by' => 'required',
-			'dispatched_by' => 'required',
 		);
-
 		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {

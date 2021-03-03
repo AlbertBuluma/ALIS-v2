@@ -2731,7 +2731,7 @@ class ReportController extends Controller {
             $content[$i]['Organism'] = $isolatedOrganism->IsolatedOrganism;
 
             foreach ($drugs as $drug) {
-                $content[$i][$drug->name] = getIsolatedOrganismResult($isolatedOrganism->isoID, $drug->id);
+                $content[$i][$drug->name] = \getIsolatedOrganismResult($isolatedOrganism->isoID, $drug->id);
             }
             $i++;
         }

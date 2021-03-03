@@ -156,11 +156,11 @@
 											$zebra = "";
 											?>
 											@foreach($natures as $key=>$value)
-											{{ ($cnt%6==0)?"<div class='row $zebra'>":"" }}
+											<!-- {{ ($cnt%6==0)?"<div class='row $zebra'>":"" }}
 												<?php
 												$cnt++;
 												$zebra = (((int)$cnt/6)%2==1?"row-striped":"");
-												?>
+												?> -->
 												<div class="col-md-2">
 													<!--<label  class="checkbox" title="{{ $value->priority}}/{{ $value->class}}">
 													<input type="checkbox" name="nature[]" value="{{ $value->id}}" />{{$value->name}}
@@ -172,9 +172,9 @@
 												</label>
 
 											</div>
-											{{ ($cnt%6==0)?"</div>":"" }}
+											<!-- {{ ($cnt%6==0)?"</div>":"" }} -->
 											@endforeach
-											{{ ($cnt%6!=0)?"</div>":"" }}
+											<!-- {{ ($cnt%6!=0)?"</div>":"" }} -->
 											<br></br>
 
 											{{ Form::label('facility_id', 'Check if incident(s) is Minor or Major', array('class' => 'col-sm-4')) }}<br></br>

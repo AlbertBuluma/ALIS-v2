@@ -208,7 +208,7 @@ class MicrobiologyController extends Controller {
                         $test->specimen_id = $specimen->id;
                         $test->test_status_id = UnhlsTest::PENDING;
                         $test->created_by = Auth::user()->id;
-                        //$test->requested_by = $request->get('clinician');
+                        $test->requested_by = Auth::user()->id;
                         //$test->purpose = $request->get('hiv_purpose');
                         $test->save();
 

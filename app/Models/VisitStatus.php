@@ -2,7 +2,10 @@
 
 namespace  App\Models;
 
+use DateTime;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class VisitStatus extends Model
 {
