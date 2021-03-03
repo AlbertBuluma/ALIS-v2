@@ -149,7 +149,7 @@ class BbincidenceController extends Controller {
 
 			$bbincidence->facility_id = $request->get('facility_id');
 			$bbincidence->occurrence_date = $request->get('occurrence_date');
-			$bbincidence->occurrence_time = $request->get('occurrence_time');
+			$bbincidence->occurrence_time = date('H:i:s', strtotime($request->get('occurrence_time')));
 			$bbincidence->firstaid = $request->get('firstaid');
 			$bbincidence->personnel_id = $request->get('personnel_id');
 			$bbincidence->personnel_surname = $request->get('personnel_surname');
@@ -350,7 +350,7 @@ class BbincidenceController extends Controller {
 			}
 
 			$bbincidence->occurrence_date = $request->get('occurrence_date');
-			$bbincidence->occurrence_time = $request->get('occurrence_time');
+			$bbincidence->occurrence_time = date('H:i:s', strtotime($request->get('occurrence_time')));
 			$bbincidence->firstaid = $request->get('firstaid');
 			$bbincidence->personnel_id = $request->get('personnel_id');
 			$bbincidence->personnel_surname = $request->get('personnel_surname');
