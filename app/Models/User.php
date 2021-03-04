@@ -25,6 +25,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     const EXTERNAL_SYSTEM_USER = 2;
 	const MALE = 0;
 	const FEMALE = 1;
+
+	//Set Laravel Spatie guard property
+    protected $guard_name = 'web';
 	/**
 	 * Enabling soft deletes on the user table.
 	 *

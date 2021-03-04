@@ -527,7 +527,7 @@ Route::middleware('auth')->group(function()
         "uses" => "OrganismAntibioticController@destroy"
     ));
 
-    Route::group(array("before" => "admin"), function()
+    Route::group(["middleware" => "can:manage_users"], function()
     {
         Route::resource("permission", "PermissionController");
         Route::get("role/assign", array(

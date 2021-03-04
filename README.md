@@ -42,7 +42,7 @@ The easiest way to install is using docker, follow instruction [here](https://gi
 5. Run the migrations to create the required database tables.
     <blockquote>php artisan migrate</blockquote>
 6. Load the basic seed data
-    <blockquote> php artisan db:seed </blockquote>
+    <blockquote> php artisan migrate --seed </blockquote>
    If #5 or #6 above fails, you may need to run the following command then repeat the two commands again.
     <blockquote> composer dumpautoload </blockquote>
 7. If you are running the application on a webserver eg. apache, ensure that the webserver has write permissions to the /app/storage folder.
