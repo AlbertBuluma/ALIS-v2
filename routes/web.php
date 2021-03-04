@@ -1189,7 +1189,3 @@ Route::post("/updateupload/", array(
 Route::get('/facility_settings', 'ApiController@facilitySettings');
 
 Route::get('/getvisits/{visit_id}/{poc_id}/{clin_id}/{user_id}', 'ApiController@getChunkedVisits');
-
-Route::get('/test', function (){
-    return Auth::user();
-});
