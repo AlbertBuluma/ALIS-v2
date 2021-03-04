@@ -67,6 +67,7 @@
 <div class="form-group">
 
 				{{ Form::label('equipment_used', 'POC Device Used for EID test (Select one):', array('class' =>'col-sm-2 required ')) }}
+				<div class="radio-inline">{{ Form::radio('equipment_used', 'm-PIMA', false) }} <span class="input-tag">m-PIMA</span></div>
 				<div class="radio-inline">{{ Form::radio('equipment_used', 'Alere q', false) }} <span class="input-tag">Alere q</span></div>
 				<div class="radio-inline">{{ Form::radio("equipment_used", 'SAMBA I', false) }} <span class="input-tag">SAMBA I</span></div>
 				<div class="radio-inline">{{ Form::radio("equipment_used", 'SAMBA II', false) }} <span class="input-tag">SAMBA II</span></div>

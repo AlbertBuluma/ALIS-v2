@@ -28,7 +28,7 @@
 					<th>Standard Name</th>
 					<th>Facility Name</th>
 					<!-- <th>System name</th> -->
-					<th></th>
+					<!-- <th></th> -->
 				</tr>
 			</thead>
 			<tbody>

@@ -40,6 +40,7 @@
                         </tr>
                       </thead>
                       <tbody class="isolated-organism-tbody">
+                        @if(is_array($test->isolated_organisms) || is_object($test->isolated_organisms))
                         @foreach($test->isolated_organisms as $isolated_organism)
                             <tr class="isolated-organism-tr-{{$isolated_organism->id}}">
                               <td class="col-md-9 isolated-organism-entry">{{$isolated_organism->organism->name}}</td>
@@ -68,6 +69,7 @@
                               </td>
                             </tr>
                         @endforeach
+                        @endif
                       </tbody>
                     </table>
                 </div>
@@ -87,6 +89,7 @@
                         </tr>
                       </thead>
                       <tbody class="drug-susceptibility-tbody">
+                        @if(is_array($test->isolated_organisms) || is_object($test->isolated_organisms))
                         @foreach($test->isolated_organisms as $isolated_organism)
                             @foreach($isolated_organism->drug_susceptibilities as $drug_susceptibility)
                             <tr class="drug-susceptibility-tr-{{$drug_susceptibility->id}}">
@@ -130,6 +133,7 @@
                             </tr>
                             @endforeach
                         @endforeach
+                        @endif
                       </tbody>
                     </table>
                 </div>

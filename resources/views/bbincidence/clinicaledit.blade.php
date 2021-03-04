@@ -86,7 +86,13 @@
 					{{ Form::label('intervention_time', 'Time of Intervention', array('class' => 'col-sm-2')) }}
 					{{ Form::text('intervention_time', old('intervention_time'), array('class' => 'form-control col-sm-4',
 					'placeholder' => 'hh:mm (24hr Format)'))}}
-
+					<div class='input-group date' id='intervention_time'>
+						<script type="text/javascript">
+							$(function () {
+								$('#intervention_time').datetimepicker({format:'LT'});
+							});
+						</script>
+					</div>
 				</div>
 
 				<span style="font-weight: bold;">Medical Officer</span>

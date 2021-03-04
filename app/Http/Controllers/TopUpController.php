@@ -61,20 +61,20 @@ class TopUpController extends Controller {
 		return redirect()->route('inventory.request.index')->withErrors($validator);
 		} else {
 			// store
-			$request = new Topup;
-			$request->item_id = $request->get('item_id');
-			$request->quantity_remaining = $request->get('quantity_remaining');
-			$request->test_category_id = $request->get('test_category_id');
-			$request->tests_done = $request->get('tests_done');
-			$request->quantity_ordered = $request->get('quantity_ordered');
-			$request->remarks = $request->get('remarks');
-			$request->user_id = Auth::user()->id;
+			$topup = new Topup;
+			$topup->item_id = $request->get('item_id');
+			$topup->quantity_remaining = $request->get('quantity_remaining');
+			$topup->test_category_id = $request->get('test_category_id');
+			$topup->tests_done = $request->get('tests_done');
+			$topup->quantity_ordered = $request->get('quantity_ordered');
+			$topup->remarks = $request->get('remarks');
+			$topup->user_id = Auth::user()->id;
 			try{
-				$request->save();
+				$topup->save();
 				$url = Session::get('SOURCE_URL');
 
             	return redirect()->to($url)
-					->with('message', trans('messages.record-successfully-saved')) ->with('activerequest', $request ->id);
+					->with('message', trans('messages.record-successfully-saved')) ->with('activerequest', $topup ->id);
 			}catch(QueryException $e){
 				Log::error($e);
 			}

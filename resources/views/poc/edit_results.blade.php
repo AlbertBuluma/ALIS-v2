@@ -17,6 +17,8 @@ if($result->equipment_used =='Alere q'){
 	$res_sambai = true;
 }elseif($result->equipment_used =='SAMBA I'){
 	$res_sambaii = true;
+}elseif($result->equipment_used =='m-PIMA'){
+	$res_mpima = true;
 }elseif($result->equipment_used =='SAMBA II'){
 	$res_sambii = true;
 }
@@ -91,6 +93,7 @@ elseif($result->equipment_used =='GeneXpert'){
 			</div>
 {{ Form::label('equipment_used', 'POC Device Used for EID test (Select one):', array('class' =>'col-sm-2')) }}
 
+<div class="radio-inline">{{ Form::radio('equipment_used', 'm-PIMA', $res_mpima) }} <span class="input-tag">m-PIMA</span></div>
 <div class="radio-inline">
 {{ Form::radio('equipment_used', 'Alere q', $res_alere) }}
 

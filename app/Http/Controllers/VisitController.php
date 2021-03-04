@@ -54,13 +54,13 @@ class VisitController extends Controller {
         $dateTo = isset($input['date_to'])?$input['date_to']:date('Y-m-d');
 
         // Search Conditions
-        if($searchString||$visitStatusId||$dateFrom||$dateTo){
+        if($searchString||$dateFrom||$dateTo){
             if ($searchString != '') {
                 $dateFrom = '';
                 $dateTo = '';
             }
 
-            $visits = UnhlsVisit::search($searchString, $visitStatusId, $dateFrom, $dateTo);
+            $visits = UnhlsVisit::search($searchString, $dateFrom, $dateTo);
 
             if (count($visits->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));

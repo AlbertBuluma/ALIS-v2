@@ -229,7 +229,7 @@
                                     {{trans('messages.reject')}}
                                             </a> -->
                                         @endif
-                                        <a class="btn btn-sm btn-midnight-blue barcode-button" onclick="print_barcode({{ "'".$test->specimen->id."'".', '."'".$barcode->encoding_format."'".', '."'".$barcode->barcode_width."'".', '."'".$barcode->barcode_height."'".', '."'".$barcode->text_size."'" }})" title="{{trans('messages.barcode')}}">
+                                        <a class="btn btn-sm btn-midnight-blue barcode-button" href="#" onclick="print_barcode({{ "'".$test->specimen->id."'".', '."'".$barcode->encoding_format."'".', '."'".$barcode->barcode_width."'".', '."'".$barcode->barcode_height."'".', '."'".$barcode->text_size."'" }})" title="{{trans('messages.barcode')}}">
                                             <span class="glyphicon glyphicon-barcode"></span>
                                             {{trans('messages.barcode')}}
                                         </a>
@@ -248,6 +248,10 @@
                                                 <span class="glyphicon glyphicon-thumbs-down"></span>
                                                 {{trans('messages.reject')}}
                                             </a>
+                                            <a class="btn btn-sm btn-midnight-blue barcode-button" onclick="print_barcode({{ "'".$test->specimen->id."'".', '."'".$barcode->encoding_format."'".', '."'".$barcode->barcode_width."'".', '."'".$barcode->barcode_height."'".', '."'".$barcode->text_size."'" }})" title="{{trans('messages.barcode')}}">
+                                            <span class="glyphicon glyphicon-barcode"></span>
+                                            {{trans('messages.barcode')}}
+                                        </a>
                                         @endcan
                                         @if(Illuminate\Support\Facades\Auth::user()->can('refer_specimens') && !($test->isExternal()) && !($test->specimen->isReferred()))
                                             <a class="btn btn-sm btn-info" href="{{ route('unhls_test.refer', array($test->id)) }}">

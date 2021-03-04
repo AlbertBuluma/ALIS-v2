@@ -96,7 +96,7 @@
                 <tbody>
                 @foreach($visit->tests as $key => $test)
                     <tr>
-                        <td>{{ date('d-m-Y H:i', strtotime($test->time_created));}}</td>  <!--Date Ordered-->
+                        <td>{{ date('d-m-Y H:i', strtotime($test->time_created))}}</td>  <!--Date Ordered-->
                         <td>
                             @if(!$test->isNotReceived())
                                 {{ $test->getSpecimenId() }}

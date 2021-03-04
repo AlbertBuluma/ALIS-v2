@@ -75,6 +75,7 @@ class EquipmentBreakdownController extends Controller {
 				$item->equipment_id = $request->get('equipment_id');
 				$item->equipment_code = $request->get('equipment_code');
 				$item->equipment_type = $request->get('equipment_type');
+				$item->description = $request->get('problem');
 				$item->problem = $request->get('problem');
 				$item->reporting_officer = $request->get('reporting_officer');
 				$item->reporting_officer_email = $request->get('reporting_officer_email');
@@ -84,10 +85,10 @@ class EquipmentBreakdownController extends Controller {
 				$item->conclusion = $request->get('conclusion');
 				$item->facility_code = $request->get('facility_code');
 				$item->facility_level = $request->get('facility_level');
-				$item->report_date = $request->get('report_date');
-				$item->breakdown_date = $request->get('report_date');
+				$item->report_date = date('Y-m-d H:i:s', strtotime($request->get('report_date')));
+				$item->breakdown_date = date('Y-m-d H:i:s',strtotime($request->get('report_date')));
 				$item->verified_by = $request->get('verified_by');
-				$item->verification_date = $request->get('verification_date');
+				$item->verification_date = date('Y-m-d H:i:s',strtotime($request->get('verification_date')));
 
 
 				$item->save();

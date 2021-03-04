@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function()
         "as" => "dashboard.index",
         "uses" => "DashboardController@index"
     ));
-    Route::group(["middleware" => "permission:manage_users"], function() {
+    Route::group(["middleware" => "can:manage_users"], function() {
         Route::resource('user', 'UserController');
         Route::get("/user/{id}/delete", array(
             "as"   => "user.delete",
@@ -177,10 +177,9 @@ Route::middleware('auth')->group(function()
         "uses" => "UnhlsTestController@viewDetails"
     ));
     Route::post("/unhls_test/start", array(
-        "before" => "permission:start_test",
         "as"   => "unhls_test.start",
         "uses" => "UnhlsTestController@start"
-    ));
+    ))->middleware(['can:start_test']);
     Route::any("rejection/{id}/{visit}/{testId?}", [
         "as"   => 'rejection.report',
         'uses' => 'UnhlsTestController@rejectionReport']);
@@ -245,7 +244,7 @@ Route::middleware('auth')->group(function()
         "as"   => "instrument.getResult",
         "uses" => "InstrumentController@getTestResult"
     ));
-    Route::group(["middleware" => "permission:manage_test_catalog"], function()
+    Route::group(["middleware" => "can:manage_test_catalog"], function()
     {
         Route::resource('specimentype', 'SpecimenTypeController');
         Route::get("/specimentype/{id}/delete", array(
@@ -289,7 +288,7 @@ Route::middleware('auth')->group(function()
     });
 
 
-    Route::group(['middleware' => ['permission:manage_lab_configurations']], function(){
+    Route::group(['middleware' => ['can:manage_lab_configurations']], function(){
         Route::resource('instrument', 'InstrumentController');
         Route::resource('ward', 'WardController');
         Route::resource('referral', 'ReferralController');
@@ -304,6 +303,18 @@ Route::middleware('auth')->group(function()
             "as"   => "measurenamemapping.edit",
             "uses" => "MeasureNameMappingController@edit"
         ));
+        Route::get("/measureranges/{id}/ranges", array(
+            "as"   => "measureranges.getranges",
+            "uses" => "MeasureNameMappingController@getRanges"
+        ));
+        Route::get("/measureranges/{id}/range", array(
+            "as"   => "measureranges.ranges",
+            "uses" => "MeasureNameMappingController@getRange"
+        ));
+        Route::post("/measureranges/{id}/range", array(
+            "as"   => "measureranges.postrange",
+            "uses" => "MeasureNameMappingController@postRange"
+        ));
         Route::get("/measurenamemapping/{id}/delete", array(
             "as"   => "measurenamemapping.delete",
             "uses" => "MeasureNameMappingController@delete"
@@ -315,6 +326,14 @@ Route::middleware('auth')->group(function()
         Route::put("/measurenamemapping/{id}", array(
             "as"   => "measurenamemapping.update",
             "uses" => "MeasureNameMappingController@update"
+        ));
+        Route::get("/getnegativeorganism/{id}", array(
+            "as"   => "measureranges.getnegativeorganism",
+            "uses" => "MeasureNameMappingController@getnegativeorganism"
+        ));
+        Route::post("/postnegativeorganism/{id}", array(
+            "as"   => "measureranges.postnegativeorganism",
+            "uses" => "MeasureNameMappingController@postnegativeorganism"
         ));
 
         // Route::resource('measurenamemapping', 'MeasureNameMappingController');
@@ -351,99 +370,81 @@ Route::middleware('auth')->group(function()
         "uses" => "UnhlsTestController@getResultInterpretation"
     ));
     Route::any("/test/{id}/receive", array(
-        "before" => "permission:receive_external_test",
         "as"   => "test.receive",
         "uses" => "UnhlsTestController@receive"
-    ));
+    ))->middleware(['can:receive_external_test']);
 
     Route::any("/unhls_test/wards/{ward_type_id?}", array(
-        "before" => "permission:request_test",
         "as"   => "unhls_test.wards",
         "uses" => "UnhlsTestController@getWards"
-    ));
+    ))->middleware(['can:request_test']);
 
     Route::any("/unhls_test/clinician/{id?}", array(
-        "before" => "permission:request_test",
         "as"   => "unhls_test.clinician",
         "uses" => "UnhlsTestController@getClinician"
-    ));
+    ))->middleware(['can:request_test']);
 
     Route::any("/unhls_test/create/{patient?}", array(
-        "before" => "permission:request_test",
         "as"   => "unhls_test.create",
         "uses" => "UnhlsTestController@create"
-    ));
+    ))->middleware(['can:request_test']);
     Route::any("/create_test", array(
-        "before" => "permission:request_test",
         "as"   => "create_test",
         "uses" => "UnhlsTestController@create"
-    ));
+    ))->middleware(['can:request_test']);
     Route::post("/submit_test", array(
-        "before" => "permission:request_test",
         "as"   => "submit_test",
         "uses" => "UnhlsTestController@saveNewTest"
-    ));
+    ))->middleware(['can:request_test']);
     Route::post("/unhls_test/acceptspecimen", array(
-        "before" => "permission:accept_test_specimen",
         "as"   => "unhls_test.acceptSpecimen",
         "uses" => "UnhlsTestController@acceptSpecimenAction"
-    ));
+    ))->middleware(['can:accept_test_specimen']);
     Route::get("/unhls_test/{testid}/refer", array(
-        "before" => "permission:refer_specimens",
         "as"   => "unhls_test.refer",
         "uses" => "UnhlsTestController@showRefer"
-    ));
+    ))->middleware(['can:refer_specimens']);
     Route::post("/refer_action", array(
-        "before" => "permission:refer_specimens",
         "as"   => "refer_action",
         "uses" => "UnhlsTestController@refer_action"
-    ));
+    ))->middleware(['can:refer_specimens']);
     Route::get("/unhls_test/{id}/reject", array(
-        "before" => "permission:reject_test_specimen",
         "as"   => "unhls_test.reject",
         "uses" => "UnhlsTestController@reject"
-    ));
+    ))->middleware(['can:reject_test_specimen']);
     Route::post("/unhls_test/rejectaction", array(
-        "before" => "permission:reject_test_specimen",
         "as"   => "unhls_test.rejectAction",
         "uses" => "UnhlsTestController@rejectAction"
-    ));
+    ))->middleware(['can:reject_test_specimen']);
     Route::post("/unhls_test/changespecimen", array(
-        "before" => "permission:change_test_specimen",
         "as"   => "unhls_test.changeSpecimenType",
         "uses" => "UnhlsTestController@changeSpecimenType"
-    ));
+    ))->middleware(['can:change_test_specimen']);
     Route::post("/unhls_test/updatespecimentype", array(
-        "before" => "permission:change_test_specimen",
         "as"   => "unhls_test.updateSpecimenType",
         "uses" => "UnhlsTestController@updateSpecimenType"
-    ));
+    ))->middleware(['can:change_test_specimen']);
     Route::post("/test/start", array(
-        "before" => "permission:start_test",
         "as"   => "test.start",
         "uses" => "UnhlsTestController@start"
-    ));
+    ))->middleware(['can:start_test']);
     Route::get("/unhls_test/{test}/enterresults", array(
-        "before" => "permission:enter_test_results",
         "as"   => "unhls_test.enterResults",
         "uses" => "UnhlsTestController@enterResults"
-    ));
+    ))->middleware(['can:enter_test_results']);
 
     Route::get("/unhls_test/{test}/edit", array(
-        "before" => "permission:edit_test_results",
         "as"   => "unhls_test.edit",
         "uses" => "UnhlsTestController@edit"
-    ));
+    ))->middleware(['can:edit_test_results']);
     Route::post("/unhls_test/{test}/saveresults", array(
-        "before" => "permission:edit_test_results",
         "as"   => "unhls_test.saveResults",
         "uses" => "UnhlsTestController@saveResults"
-    ));
+    ))->middleware(['can:edit_test_results']);
     Route::post("/unhls_test/{test}/saverevisedresults", array(
-        "before" => "permission:edit_test_results",
         "as"   => "unhls_test.saveRevisedResults",
         "uses" => "UnhlsTestController@saveRevisedResults"
-    ));
+    ))->middleware(['can:edit_test_results']);
     Route::get("/test/{test}/viewdetails", array(
         "as"   => "test.viewDetails",
         "uses" => "TestController@viewDetails"
@@ -458,10 +459,9 @@ Route::middleware('auth')->group(function()
         "as" => "unhls_test.collectSpecimen",
         "uses" => "UnhlsTestController@acceptSpecimen"));
     Route::post("/unhls_test/collectspecimenaction", array(
-        "before" => "permission:refer_specimens", //TODO create permissions for collecting sample and update acordingly
         "as"   => "unhls_test.collectSpecimenAction",
         "uses" => "UnhlsTestController@collectSpecimenAction"
-    ));
+    ))->middleware(['can:refer_specimens']);
     Route::get("test/completed", array(
         "as" => "test.completed",
         "uses" => "UnhlsTestController@completed"));
@@ -484,15 +484,13 @@ Route::middleware('auth')->group(function()
     ));
     //Test viewDetail ends
     Route::any("/test/{test}/verify", array(
-        "before" => "permission:verify_test_results",
         "as"   => "test.verify",
         "uses" => "UnhlsTestController@verify"
-    ));
+    ))->middleware(['can:verify_test_results']);
     Route::any("/test/{test}/approve", array(
-        "before" => "permission:approve_test_results",
         "as"   => "test.approve",
         "uses" => "UnhlsTestController@approve"
-    ));
+    ))->middleware(['can:approve_test_results']);
     Route::get("/print/{id}", array(
         "as"   => "visit.print",
         "uses" => "ReportController@print_visit"
@@ -547,7 +545,7 @@ Route::middleware('auth')->group(function()
         ));
     });
     // Check if able to manage lab configuration
-    Route::group(["middleware" => "permission:manage_lab_configurations"], function()
+    Route::group(["middleware" => "can:manage_lab_configurations"], function()
     {
         Route::resource("facility", "FacilityController");
         Route::get("/facility/{id}/delete", array(
@@ -599,7 +597,7 @@ Route::middleware('auth')->group(function()
     });
 
     //  Check if able to manage reports
-    Route::group(["middleware" => "permission:view_reports"], function()
+    Route::group(["middleware" => "can:view_reports"], function()
     {
         Route::resource('reports', 'ReportController');
 
@@ -638,10 +636,9 @@ Route::middleware('auth')->group(function()
             "uses" => "ReportController@recallPatientTest"
         ));
         Route::post("/patientvisitreport/{test}/saveresults", array(
-            "before" => "permission:recall_report",
             "as"   => "reports.recallResults",
             "uses" => "ReportController@recallResults"
-        ));
+        ))->middleware(['can:recall_report']);
 
         Route::any("/patient_final_report/{id}/{visit}", array(
             "as" => "reports.patient.report",
@@ -761,7 +758,7 @@ Route::middleware('auth')->group(function()
             "uses" => "ReportController@vl_tb_register"
         ));
     });
-    Route::group(["middleware" => "permission:manage_qc"], function()
+    Route::group(["middleware" => "can:manage_qc"], function()
     {
         Route::resource("lot", "LotController");
         Route::get('lot/{lotId}/delete', array(
@@ -807,7 +804,7 @@ Route::middleware('auth')->group(function()
         ));
     });
 
-    Route::group(["middleware" => "permission:request_topup"], function()
+    Route::group(["middleware" => "can:request_topup"], function()
     {
         //top-ups
         Route::resource('topup', 'TopUpController');
@@ -820,7 +817,7 @@ Route::middleware('auth')->group(function()
             "uses"  =>  "TopUpController@availableStock"
         ));
     });
-    Route::group(["middleware" => "permission:manage_inventory"], function()
+    Route::group(["middleware" => "can:manage_inventory"], function()
     {
         //Commodities
         Route::resource('commodity', 'CommodityController');
@@ -1034,7 +1031,7 @@ Route::middleware('auth')->group(function()
 
     });
     //Check if user can manage BB Incidents
-    Route::group(["middleware" => "permission:manage_incidents"], function()
+    Route::group(["middleware" => "can:manage_incidents"], function()
     {
         Route::resource('bbincidence', 'BbincidenceController');
         Route::get("/bbincidence/{id}/delete", array(
@@ -1192,5 +1189,3 @@ Route::post("/updateupload/", array(
 Route::get('/facility_settings', 'ApiController@facilitySettings');
 
 Route::get('/getvisits/{visit_id}/{poc_id}/{clin_id}/{user_id}', 'ApiController@getChunkedVisits');
-
-

@@ -77,7 +77,16 @@
 
 				<div class="form-pane panel panel-default">
 					<div class="container-fluid">
+						<?php
+							$cnt = 0;
+							$zebra = "";
+						?>
 						@foreach($causes as $key=>$value)
+							<!-- {{ ($cnt%4==0)?"<div class='row $zebra'>":"" }}
+							<?php
+								$cnt++;
+								$zebra = (((int)$cnt/4)%2==1?"row-striped":"");
+							?> -->
 							<div class="col-md-3">
 								<label  class="checkbox">
 								<input type="checkbox" name="cause[]" value="{{ $value->id}}" title=""

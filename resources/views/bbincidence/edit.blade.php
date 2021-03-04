@@ -86,11 +86,9 @@
 						?>
 						<div class="col-md-3">
 							<label  class="checkbox" title="{{ $value->priority}}/{{ $value->class}}">
-
-							<input type="checkbox" name="nature[]" value="{{ $value->id}}" title=""
-							{{ in_array($value->id, $bbincidence->bbnature->lists('id'))?"checked":"" }} />
-							{{$value->name}}
-							</label>
+													{{ Form::checkbox('nature[]',$value->id,old($value->id),array('title'=>$value->priority.'/'.$value->class)) }}
+													{{$value->name}}
+												</label>
 						</div>
 						{{ ($cnt%4==0)?"</div>":"" }}
 					@endforeach
