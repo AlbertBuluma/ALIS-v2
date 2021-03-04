@@ -10,4 +10,11 @@ class Supplier extends Model {
 	protected $table = 'suppliers';
 	protected $dates = ['deleted_at'];
 
+    /**
+     * Stock relationship
+     */
+    public function stocks()
+    {
+        return $this->hasMany('App\Models\Stock', 'supplier_id');
+    }
 }

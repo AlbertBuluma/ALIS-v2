@@ -7,8 +7,8 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{ URL::route('organism.index') }}">{{ Lang::choice('messages.organism',1) }}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{ route('organism.index') }}">{{ Lang::choice('messages.organism',1) }}</a></li>
 		  <li class="active">{{ trans('messages.organism-details') }}</li>
 		</ol>
 	</div>
@@ -17,11 +17,11 @@
 			<span class="glyphicon glyphicon-adjust"></span>
 			{{ $organism->name }}
 			<div class="panel-btn">
-				<a class="btn btn-sm btn-info" href="{{ URL::route('organism.edit', array($organism->id)) }}">
+				<a class="btn btn-sm btn-info" href="{{ route('organism.edit', array($organism->id)) }}">
 					<span class="glyphicon glyphicon-edit"></span>
 					Edit Organism
 				</a>
-				<a class="btn btn-sm btn-info" href="{{ URL::route('organismantibiotic.create', array($organism->id)) }}">
+				<a class="btn btn-sm btn-info" href="{{ route('organismantibiotic.create', array($organism->id)) }}">
 					<span class="glyphicon glyphicon-edit"></span>
 					Add Antibiotic
 					<!-- todo: Set Antiibiotic | should make more sense -->

@@ -2,7 +2,7 @@
 @section("content")
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+          <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
           <li><a href="{{ route('poc.index') }}">{{ Lang::choice('messages.patient',2) }}</a></li>
           <li class="active">{{ trans('messages.patient-details') }}</li>
         </ol>

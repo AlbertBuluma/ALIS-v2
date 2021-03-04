@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\UNHLSEquipmentBreakdown;
 use App\Models\UNHLSEquipmentInventory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EquipmentBreakdownController extends Controller {
 
@@ -33,7 +35,7 @@ class EquipmentBreakdownController extends Controller {
 		//
 
 		$breakdown_type = array('1' => 'Hardware', '2' => 'Software', '3' => 'Both');
-		$equipment = UNHLSEquipmentInventory::get()->lists('name','id');
+		$equipment = UNHLSEquipmentInventory::get()->pluck('name','id')->toArray();
 		return view('equipment.breakdown.create')
 		->with('equipment',$equipment)
 		->with('breakdown_type',$breakdown_type);
@@ -41,12 +43,13 @@ class EquipmentBreakdownController extends Controller {
 	}
 
 
-	/**
-	* Store a newly created resource in storage.
-	*
-	* @return \Illuminate\Http\RedirectResponse
-	*/
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+	public function store(Request $request)
 	{
 		//
 
@@ -57,7 +60,7 @@ class EquipmentBreakdownController extends Controller {
 			'action_taken' => 'required',
 			);
 
-			$validator = Validator::make(Input::all(), $rules);
+			$validator = Validator::make($request->all(), $rules);
 
 			if ($validator->fails()) {
 				return redirect()->back()->withErrors($validator);
@@ -69,22 +72,23 @@ class EquipmentBreakdownController extends Controller {
 				$item->facility_id = config('constants.FACILITY_ID');
 				$item->year_id = config('constants.FIN_YEAR_ID');
 
-				$item->equipment_id = Input::get('equipment_id');
-				$item->equipment_code = Input::get('equipment_code');
-				$item->equipment_type = Input::get('equipment_type');
-				$item->problem = Input::get('problem');
-				$item->reporting_officer = Input::get('reporting_officer');
-				$item->reporting_officer_email = Input::get('reporting_officer_email');
-				$item->reporting_officer_contact = Input::get('reporting_officer_contact');
-				$item->action_taken = Input::get('action_taken');
-				$item->intervention_authority = Input::get('intervention_authority');
-				$item->conclusion = Input::get('conclusion');
-				$item->facility_code = Input::get('facility_code');
-				$item->facility_level = Input::get('facility_level');
-				$item->report_date = Input::get('report_date');
-				$item->breakdown_date = Input::get('report_date');
-				$item->verified_by = Input::get('verified_by');
-				$item->verification_date = Input::get('verification_date');
+				$item->equipment_id = $request->get('equipment_id');
+				$item->equipment_code = $request->get('equipment_code');
+				$item->equipment_type = $request->get('equipment_type');
+				$item->description = $request->get('problem');
+				$item->problem = $request->get('problem');
+				$item->reporting_officer = $request->get('reporting_officer');
+				$item->reporting_officer_email = $request->get('reporting_officer_email');
+				$item->reporting_officer_contact = $request->get('reporting_officer_contact');
+				$item->action_taken = $request->get('action_taken');
+				$item->intervention_authority = $request->get('intervention_authority');
+				$item->conclusion = $request->get('conclusion');
+				$item->facility_code = $request->get('facility_code');
+				$item->facility_level = $request->get('facility_level');
+				$item->report_date = date('Y-m-d H:i:s', strtotime($request->get('report_date')));
+				$item->breakdown_date = date('Y-m-d H:i:s',strtotime($request->get('report_date')));
+				$item->verified_by = $request->get('verified_by');
+				$item->verification_date = date('Y-m-d H:i:s',strtotime($request->get('verification_date')));
 
 
 				$item->save();
@@ -156,7 +160,7 @@ class EquipmentBreakdownController extends Controller {
 
 		}
 
-		public function saveRestore()
+		public function saveRestore(Request $request)
 		{
 			//
 
@@ -167,22 +171,22 @@ class EquipmentBreakdownController extends Controller {
 
 			);
 
-			$validator = Validator::make(Input::all(), $rules);
+			$validator = Validator::make($request->all(), $rules);
 
 			if ($validator->fails()) {
 				return redirect()->back()->withErrors($validator);
 			} else {
 
-				$breakdown = UNHLSEquipmentBreakdown::find( Input::get('breakdown_id'));
+				$breakdown = UNHLSEquipmentBreakdown::find( $request->get('breakdown_id'));
 
-				$breakdown->comment = Input::get('comment');
-				$breakdown->restored_by = Input::get('reviewed_by');
-				$breakdown->restore_date = Input::get('review_date');
+				$breakdown->comment = $request->get('comment');
+				$breakdown->restored_by = $request->get('reviewed_by');
+				$breakdown->restore_date = $request->get('review_date');
 
 
 				$breakdown->save();
 
-				return redirect('equipmentbreakdown');
+				return redirect()->route('equipmentbreakdown');
 			}
 		}
 

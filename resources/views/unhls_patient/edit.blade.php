@@ -13,16 +13,11 @@
 			{{trans('messages.edit-patient-details')}}
 		</div>
 		<div class="panel-body">
-        	@if(count($errors->all()))
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
+			@if($errors->all())
+				<div class="alert alert-danger">
+					{{ HTML::ul($errors->all()) }}
+				</div>
+			@endif
 			{{ Form::model($patient, array('route' => array('unhls_patient.update', $patient->id), 'method' => 'PUT',
 				'id' => 'form-edit-patient')) }}
 
@@ -36,8 +31,8 @@
 					{{ Form::text('nin', old('nin'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group">
-					{{ Form::label('ulin', 'Lab No.') }}
-					{{ Form::text('ulin', old('ulin'), array('class' => 'form-control')) }}
+					{{ Form::label('ulin', trans('messages.ulin'), array('class' => 'required')) }}
+					{{ Form::text('ulin', $patient->ulin,	array('class' => 'form-control', 'readonly' =>'true')) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('name', Lang::choice('messages.name',1)) }}
@@ -59,15 +54,17 @@
 
 
                 <div class="form-group">
-                    {{ Form::label('gender', trans('messages.gender')) }}
-                    <div>{{ Form::radio('gender', '0', true) }}
-                    	<span class="input-tag">{{trans('messages.male')}}</span></div>
-                    <div>{{ Form::radio("gender", '1', false) }}
-                    	<span class="input-tag">{{trans('messages.female')}}</span></div>
-                </div>
+					{{ Form::label('gender', trans('messages.sex'), array('class' => 'required')) }}
+					<div>{{ Form::radio('gender', '0', true) }}
+					<span class="input-tag">{{trans('messages.male')}}</span></div>
+					<div>{{ Form::radio("gender", '1', false) }}
+					<span class="input-tag">{{trans('messages.female')}}</span></div>
+				</div>
 				<div class="form-group">
-					{{ Form::label('address', trans('messages.physical-address')) }}
-					{{ Form::text('address', old('address'), array('class' => 'form-control')) }}
+					{{ Form::label('nationality', trans('Nationality')) }}
+					{{ Form::select('nationality', [' ' => '--- Select Nationality ---',
+					'0' => trans('National'),'1' => trans('Refugee'),'2' => trans('Foreigner')], null,
+						array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('village_residence', trans('messages.residence-village'), array('class' => 'required')) }}
@@ -75,7 +72,11 @@
 				</div>
 				<div class="form-group">
 					{{ Form::label('village_workplace', trans('messages.workplace-village')) }}
-					{{ Form::text('village_workplace', old('village_workplace'), array('class' => 'form-control')) }}
+					{{ Form::text('village_workplace', old('village_workplace'), array('class'=>'form-control')) }}
+				</div>
+				<div class="form-group">
+					{{ Form::label('address', trans('messages.physical-address')) }}
+					{{ Form::text('address', old('address'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('occupation', trans('messages.occupation')) }}
@@ -89,8 +90,8 @@
 					{{ Form::email('email', old('email'), array('class' => 'form-control')) }}
 				</div>
 				<div class="form-group actions-row">
-					{{ Form::button('<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'),
-						 array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
+					{{ Form::button('<span class="glyphicon glyphicon-save"></span> '.trans('messages.save-request'),
+						['class' => 'btn btn-primary', 'onclick' => 'submit()']) }}
 				</div>
 
 			{{ Form::close() }}

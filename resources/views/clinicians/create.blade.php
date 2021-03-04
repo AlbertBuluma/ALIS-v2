@@ -30,9 +30,9 @@
                     {{ Form::text('name', old('name'), array('class' => 'form-control')) }}
                 </div>
                 <div class="form-group">
-                    {{ Form::label('cadre', "Cadre") }}</label>
+                    {{ Form::label('cadre', "Cadre"), array('class' => 'required') }}</label>
                     {{ Form::text('cadre', old('cadre'),
-                        array('class' => 'form-control')) }}
+                        array('class' => 'form-control', 'required' => 'required')) }}
                 </div>
                 <div class="form-group">
                     {{ Form::label('phone', "Phone") }}</label>

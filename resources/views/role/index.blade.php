@@ -56,7 +56,7 @@
             </tbody>
         </table>
 <!--        --><?php //echo $roles->links();
-//        Session::put('SOURCE_URL', URL::full());?>
+        Session::put('SOURCE_URL', URL::full());?>
     </div>
 </div>
 @stop

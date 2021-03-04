@@ -53,7 +53,7 @@
 				<td  class="col-sm-1">  {{$item->equipment->name }}</td>
 				<td class="col-sm-1">  {{$item->equipment_failure }}</td>
 				<td class="col-sm-1">  {{$item->reporting_officer }}</td>
-				<td class="col-sm-1">  {{$item->report_date }}</td>
+				<td class="col-sm-1">  {{(date('d M Y', strtotime($item->report_date))) }}</td>
 				<td  class="col-sm-2">  {{$item->action_taken }}</td>
 				<td class="col-sm-1">  {{$item->intervention_authority }}</td>
 				<td class="col-sm-1">  {{ $item->intervention_date }}</td>

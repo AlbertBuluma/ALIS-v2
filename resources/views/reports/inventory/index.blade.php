@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.report',2) }}</li>
 	  <li class="active">{{ trans('messages.stock-level-report') }}</li>
 	</ol>
@@ -18,7 +18,7 @@
 					{{ Form::label('start', trans("messages.from")) }}
 				</div>
 				<div class="col-md-10">
-					{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-d'), 
+					{{ Form::text('start', isset($input['start'])?$input['start']:date('Y-m-d'),
 				        array('class' => 'form-control standard-datepicker')) }}
 			    </div>
 	    	</div><!-- /.row -->
@@ -29,12 +29,12 @@
 			    	{{ Form::label('end', trans("messages.to")) }}
 			    </div>
 				<div class="col-md-8">
-				    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'), 
+				    {{ Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'),
 				        array('class' => 'form-control standard-datepicker')) }}
 		        </div>
 	    	</div><!-- /.row -->
 	    </div>
-	    
+
     </div><!-- /.row -->
     <br />
 	<div class="row">
@@ -52,11 +52,11 @@
 	    <div class="col-md-4">
 	    <div class="row">
 	    <div class="col-md-8">
-		    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'), 
+		    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'),
 		        array('class' => 'btn btn-info', 'id' => 'filter', 'type' => 'submit')) }}
 		        </div>
 		        </div>
-        </div>  
+        </div>
 	</div><!-- /.row -->
 </div><!-- /.container-fluid -->
 
@@ -74,7 +74,7 @@
 	<div class="panel-body">
 		@if (Session::has('message'))
 			<div class="alert alert-info">{{ trans(Session::get('message')) }}</div>
-		@endif	
+		@endif
 
 		<div class="table-responsive">
 			<div><strong>{{$reportTitle}}</strong></div><br />
@@ -93,11 +93,11 @@
 						</tr>
 					</thead>
 					<tbody>
-					
+
 						<?php $i = 1;?>
 						@forelse($reportData as $row)
-						
-						
+
+
 							<tr>
 								<td>{{$i++}}</td>
 								<td>{{Commodity::find($row->commodity_id)->name}}</td>
@@ -133,15 +133,15 @@
 
 						<?php $i = 1;?>
 						@forelse($reportData as $row)
-							
+
 							<tr>
 								<td>{{$i++}}</td>
 								<td>{{$row->balance}}</td>
 								<td>{{ $row->sourceOfStock($row->to_from_type,$row->to_from)->name }}</td>
 								<td>{{$row->batch_number }}</td>
 								<td>{{$row->quantity}}</td>
-								<td>{{ date('d M Y', strtotime($row->expiry_date)) }}</td>								
-								<td></td>								
+								<td>{{ date('d M Y', strtotime($row->expiry_date)) }}</td>
+								<td></td>
 								<td>{{$row->balance}}</td>
 							</tr>
 						@empty

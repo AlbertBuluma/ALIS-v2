@@ -1,7 +1,12 @@
 <?php
 
+use App\Models\MeasureNameMapping;
+use App\Models\ResultInterpretation;
+use App\Models\TestNameMapping;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTestNameMappingsTable extends Migration {
 
@@ -29,7 +34,7 @@ class CreateTestNameMappingsTable extends Migration {
 			$table->string('system_name')->unique();
 		});
 
-        Eloquent::unguard();
+        Model::unguard();
         // testing seeding
         $testNameMappings = [
             ['standard_name' => 'CBC',

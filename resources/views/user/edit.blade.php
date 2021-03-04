@@ -13,7 +13,7 @@
 			{{trans('messages.edit-user-details')}}
 		</div>
 		<div class="panel-body
-			{{(Auth::id() == $user->id || !Entrust::hasRole(Role::getAdminRole()->name)) ? 'user-profile': ''}}">
+			{{(Auth::id() == $user->id || !auth()->user()->hasRole(App\Models\Role::getAdminRole()->name)) ? 'user-profile': ''}}">
 			@if($errors->all())
 				<div class="alert alert-danger">
 					{{ HTML::ul($errors->all()) }}
@@ -24,7 +24,8 @@
 				<div class="row">
 					<div class="col-md-12">
 						<!-- For Users to edit their own profiles -->
-						@if(Auth::id() == $user->id || !Entrust::hasRole(Role::getAdminRole()->name))
+{{--						@if(Auth::id() == $user->id || !Entrust::hasRole(Role::getAdminRole()->name))--}}
+						@if(Auth::id() == $user->id || !auth()->user()->hasRole(App\Models\Role::getAdminRole()->name))
 						<ul class="nav nav-tabs" role="tablist">
 							<li class="active">
 								<a href="#edit-profile" role="tab" data-toggle="tab">
@@ -77,7 +78,8 @@
 							                    <div>{{ Form::radio('gender', '1', false) }}<span class='input-tag'>
 							                    	{{trans('messages.female')}}</span></div>
 							                </div>
-											@if(Auth::id() != $user->id && Entrust::hasRole(Role::getAdminRole()->name))
+{{--											@if(Auth::id() != $user->id && Entrust::hasRole(Role::getAdminRole()->name))--}}
+											@if(Auth::id() != $user->id && auth()->user()->hasRole(App\Models\Role::getAdminRole()->name))
 												<!-- For the administrator to reset other users' passwords -->
 								                <div class="form-group">
 								                	<label for="reset-password"><a class="reset-password"

@@ -6,11 +6,12 @@
 		  <li class="active">{{ Lang::choice('messages.report', 2) }}</li>
 		</ol>
 	</div>
-	{{ Form::open(array('route' => array('reports.patient.index'), 'class'=>'form-inline', 'role'=>'form', 'method'=>'POST')) }}
+{{--	{{ Form::open(array('route' => array('reports.patient.index'), 'class'=>'form-inline', 'role'=>'form', 'method'=>'POST')) }}--}}
+	{{ Form::open(array('route' => array('reports.patient.merged'), 'class'=>'form-inline', 'role'=>'form', 'method'=>'POST')) }}
 		<div class="form-group">
 
 		    {{ Form::label('search', "search", array('class' => 'sr-only')) }}
-            {{ Form::text('search', $request['search'], array('class' => 'form-control test-search')) }}
+            {{ Form::text('search', \Illuminate\Support\Facades\Request::get('search'), array('class' => 'form-control test-search')) }}
 		</div>
 		<div class="form-group">
 			{{ Form::button("<span class='glyphicon glyphicon-search'></span> ".trans('messages.search'),
@@ -49,8 +50,9 @@
 					@can('view_names')
 						<td>{{ $patient->name }}</td>
 					@endcan
-					<td>{{ $patient->getGender() }}</td>
-					<td>{{ $patient->getAge() }}</td>
+{{--					<td>{{ $patient->getGender() }}</td>--}}
+					<td>{{ ($patient->gender==0?trans('messages.male'):trans('messages.female')) }}</td>
+					<td>{{ $patient_helper->newAge($patient->dob) }}</td>
 					<td>
 					<!-- show the patient report(uses the show method found at GET /patient/{id} -->
 						<a class="btn btn-sm btn-info" href="{{ URL::to('patientvisits/' . $patient->id) }}" >

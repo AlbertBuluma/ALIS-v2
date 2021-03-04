@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\UnhlsSpecimen;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CreatekBLIStables extends Migration {
 
@@ -243,7 +246,7 @@ class CreatekBLIStables extends Migration {
 
             $table->timestamps();
         });
-		
+
 		Schema::create('rejection_reasons', function(Blueprint $table)
 		{
 			$table->increments('id')->unsigned();
@@ -281,7 +284,7 @@ class CreatekBLIStables extends Migration {
 
             $table->timestamps();
         });
-        
+
         Schema::create('specimens', function(Blueprint $table)
         {
             $table->increments('id')->unsigned();
@@ -362,7 +365,7 @@ class CreatekBLIStables extends Migration {
             $table->integer('specimen_id')->unsigned();
             $table->integer('rejection_id')->unsigned();
             $table->integer('reason_id')->unsigned();
-           
+
             $table->foreign('specimen_id')->references('specimen_id')->on('analytic_specimen_rejections');
             $table->foreign('rejection_id')->references('id')->on('analytic_specimen_rejections');
             $table->foreign('reason_id')->references('id')->on('rejection_reasons');
@@ -378,7 +381,7 @@ class CreatekBLIStables extends Migration {
 			$table->integer('measure_id')->unsigned();
 			$table->string('result',1000)->nullable();
 			$table->timestamp('time_entered')->default(DB::raw('CURRENT_TIMESTAMP'));
-			
+
             $table->foreign('test_id')->references('id')->on('unhls_tests');
             $table->foreign('measure_id')->references('id')->on('measures');
 			$table->unique(array('test_id','measure_id'));

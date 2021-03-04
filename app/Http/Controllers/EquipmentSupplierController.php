@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\UNHLSEquipmentSupplier;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EquipmentSupplierController extends Controller {
 
@@ -32,12 +34,13 @@ class EquipmentSupplierController extends Controller {
 	}
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function store(Request $request)
 	{
 		//
 		$rules = array(
@@ -47,7 +50,7 @@ class EquipmentSupplierController extends Controller {
 		'address' => 'required'
 		);
 
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
 			return redirect()->back()->withErrors($validator);
@@ -55,10 +58,10 @@ class EquipmentSupplierController extends Controller {
 
 			$supplier = new UNHLSEquipmentSupplier;
 
-			$supplier->name = Input::get('supplier_name');
-			$supplier->phone = Input::get('phone');
-			$supplier->email = Input::get('email');
-			$supplier->address = Input::get('address');
+			$supplier->name = $request->get('supplier_name');
+			$supplier->phone = $request->get('phone');
+			$supplier->email = $request->get('email');
+			$supplier->address = $request->get('address');
 
 			$supplier->save();
 

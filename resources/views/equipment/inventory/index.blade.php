@@ -34,7 +34,7 @@
 					<th>Name</th>
 					<th>Model</th>
 					<th>Serial number</th>
-					<th>Location</th>
+					<!-- <th>Location</th> -->
 					<th>Procurement type</th>
 					<th>Purchase date</th>
 					<th>Delivery date</th>
@@ -54,7 +54,7 @@
 				<td> {{ $item->name }} </td>
 				<td> {{ $item->model }} </td>
 				<td> {{ $item->serial_number }}  </td>
-				<td> {{ $location[$item->location] }}</td>
+				<!-- <td> {{ $location[$item->location] }}</td> -->
 				<td> {{ $procurement_type[$item->procurement_type] }}</td>
 
 				<td>  {{ date('d M Y', strtotime($item->purchase_date)) }}</td>

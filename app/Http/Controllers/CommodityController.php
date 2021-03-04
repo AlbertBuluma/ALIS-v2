@@ -58,7 +58,7 @@ class CommodityController extends Controller {
 
 			try{
 				$commodity->save();
-				return redirect('commodity.index')
+				return redirect()->route('commodity.index')
 					->with('message', trans('messages.commodity-succesfully-added'));
 			}catch(QueryException $e){
 				Log::error($e);
@@ -127,7 +127,7 @@ class CommodityController extends Controller {
 
 		try{
 			$commodity->save();
-			return Redirect::route('commodity.index')
+			return redirect()->route('commodity.index')
 			->with('message', trans('messages.success-updating-commodity'))->with('activecommodity', $commodity ->id);
 			}catch(QueryException $e){
 				Log::error($e);
@@ -139,7 +139,7 @@ class CommodityController extends Controller {
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
@@ -148,6 +148,6 @@ class CommodityController extends Controller {
 		$commodity->delete();
 
 		// redirect
-		return Redirect::route('commodity.index')->with('message', trans('messages.commodity-succesfully-deleted'));
+		return redirect()->route('commodity.index')->with('message', trans('messages.commodity-succesfully-deleted'));
 	}
 }

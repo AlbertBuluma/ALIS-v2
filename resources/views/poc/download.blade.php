@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{ route('user.home') }}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 		<li><a href="{{ route('poc.index') }}">EID Patient list</a></li>
 		<!-- <li><a href="{{ route('bbincidence.bbfacilityreport') }}">Facility Report</a></li> -->
 		<li class="active">Download</li>

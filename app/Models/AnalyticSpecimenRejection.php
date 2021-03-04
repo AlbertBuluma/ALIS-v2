@@ -1,6 +1,10 @@
 <?php
 
-class AnalyticSpecimenRejection extends Eloquent
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class AnalyticSpecimenRejection extends Model
 {
 	/**
 	 * The database table used by the model.

@@ -29,11 +29,11 @@
 			<tbody>
 				<tr>
 					<th>{{ trans('messages.patient-name')}}</th>
-					@if(Entrust::can('view_names'))
+					@can('view_names')
 						<td>{{ $visit->patient->name }}</td>
 					@else
 						<td>N/A</td>
-					@endif
+					@endcan
 					<th>{{ trans('messages.gender')}}</th>
 					<td>{{ $visit->patient->getGender(false) }}</td>
 				</tr>

@@ -3,11 +3,11 @@
 
 	<div>
 		<ol class="breadcrumb">
-			<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-			<li><a href="{{ URL::route('testnamemapping.index') }}">Test Name Mappings</a></li>
-			<li><a href="{{ URL::route('testnamemapping.show',[$measureRange->measure->measureNameMapping->test_name_mapping_id]) }}">
+			<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+			<li><a href="{{ route('testnamemapping.index') }}">Test Name Mappings</a></li>
+			<li><a href="{{ route('testnamemapping.show',[$measureRange->measure->measureNameMapping->test_name_mapping_id]) }}">
 				Measure Name Mappings</a></li>
-			<li class="active"><a href="{{ URL::route('measureranges.getranges',[$measureRange->measure->id]) }}">Measure Ranges</a></li>
+			<li class="active"><a href="{{ route('measureranges.getranges',[$measureRange->measure->id]) }}">Measure Ranges</a></li>
 			<li class="active">Measure Range</li>
 		</ol>
 	</div>

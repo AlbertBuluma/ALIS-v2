@@ -3,8 +3,8 @@
 
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-          <li><a href="{{ URL::route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a></li>
+          <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
+          <li><a href="{{ route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a></li>
           <li class="active">Gram Staining</li>
         </ol>
     </div>
@@ -15,10 +15,10 @@
                     <span class="glyphicon glyphicon-adjust"></span>Gram Staining | Lab Id: {{$test->specimen->lab_id }}
                     <a class="btn btn-sm btn-success add-gram-stain-range"
                         data-test-id="{{ $test->id }}"
-                        data-url="{{ URL::route('gramstain.store') }}"
+                        data-url="{{ route('gramstain.store') }}"
                         data-toggle="modal"
                         data-target=".add-gram-stain-range-modal"
-                        data-drug-susceptibility-store-url="{{ URL::route('drugsusceptibility.store') }}"
+                        data-drug-susceptibility-store-url="{{ route('drugsusceptibility.store') }}"
                         title="Add Isolated Organism">
                         <span class="glyphicon glyphicon-plus"></span>
                         Add Gram Staining Result
@@ -43,7 +43,7 @@
                               <td class="col-md-9 gram-stain-range-entry">{{$gramStainResult->gramStainRange->name}}</td>
                               <td class="col-md-3">
                                 <a class="btn btn-sm btn-danger delete-gram-stain-range"
-                                    data-url="{{ URL::route('gramstain.destroy',
+                                    data-url="{{ route('gramstain.destroy',
                                         [$gramStainResult->id]) }}"
                                     data-id="{{ $gramStainResult->id }}"
                                     title="Delete Gram Stain Result">
@@ -64,8 +64,8 @@
                     {{ Form::button(
                         '<span class="glyphicon glyphicon-save"></span> '.'Update Results', [
                             'class' => 'btn btn-default save-gram-stain-results',
-                            'data-redirect-url' => URL::route('unhls_test.viewDetails',[$test->id]),
-                            'data-url' => URL::route('unhls_test.saveResults',[$test->id])]
+                            'data-redirect-url' => route('unhls_test.viewDetails',[$test->id]),
+                            'data-url' => route('unhls_test.saveResults',[$test->id])]
                     ) }}
                 </div>
             </div>
@@ -75,8 +75,8 @@
                     {{ Form::button(
                         '<span class="glyphicon glyphicon-save"></span> '.'Set To Completed', [
                             'class' => 'btn btn-default save-gram-stain-results',
-                            'data-redirect-url' => URL::route('unhls_test.viewDetails',[$test->id]),
-                            'data-url' => URL::route('unhls_test.saveResults',[$test->id])]
+                            'data-redirect-url' => route('unhls_test.viewDetails',[$test->id]),
+                            'data-url' => route('unhls_test.saveResults',[$test->id])]
                     ) }}
                 </div>
             </div>

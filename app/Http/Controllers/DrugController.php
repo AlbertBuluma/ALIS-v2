@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Drug;
+use App\Models\DrugSusceptibility;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -65,7 +66,7 @@ class DrugController extends Controller {
 				$drug->save();
 				$url = Session::get('SOURCE_URL');
 
-            	return redirect($url)
+            	return redirect()->to($url)
 					->with('message', trans('messages.success-creating-drug')) ->with('activedrug', $drug ->id);
 			}catch(QueryException $e){
 				Log::error($e);
@@ -141,7 +142,7 @@ class DrugController extends Controller {
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return int
 	 */
 	public function destroy($id)
 	{

@@ -73,42 +73,48 @@
 	<div class="panel-body">
 				<div class="form-group">
 					{{ Form::label('extent', 'Extent/Magnitude of injury', array('class' => 'col-sm-2')) }}
-					{{ Form::text('extent', Input::old('extent'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('extent', old('extent'), array('class' => 'form-control col-sm-4')) }}
 
 					{{ Form::label('intervention', 'Clinical Intervention', array('class' => 'col-sm-2')) }}
-					{{ Form::textarea('intervention', Input::old('intervention'), array('size' => '10x2', 'class' => 'form-control col-sm-4')) }}
+					{{ Form::textarea('intervention', old('intervention'), array('size' => '10x2', 'class' => 'form-control col-sm-4')) }}
 				</div>
 
 				<div class="form-group">
 					{{ Form::label('intervention_date', 'Date of Intervention', array('class' => 'col-sm-2')) }}
-					{{ Form::text('intervention_date', Input::old('intervention_date'), array('class' => 'form-control standard-datepicker col-sm-4')) }}
+					{{ Form::text('intervention_date', old('intervention_date'), array('class' => 'form-control standard-datepicker col-sm-4')) }}
 
 					{{ Form::label('intervention_time', 'Time of Intervention', array('class' => 'col-sm-2')) }}
-					{{ Form::text('intervention_time', Input::old('intervention_time'), array('class' => 'form-control col-sm-4',
+					{{ Form::text('intervention_time', old('intervention_time'), array('class' => 'form-control col-sm-4',
 					'placeholder' => 'hh:mm (24hr Format)'))}}
-
+					<div class='input-group date' id='intervention_time'>
+						<script type="text/javascript">
+							$(function () {
+								$('#intervention_time').datetimepicker({format:'LT'});
+							});
+						</script>
+					</div>
 				</div>
 
 				<span style="font-weight: bold;">Medical Officer</span>
 				<div class="form-group">
 					{{ Form::label('mo_fname', 'First Name', array('class' => 'col-sm-2')) }}
-					{{ Form::text('mo_fname', Input::old('mo_fname'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('mo_fname', old('mo_fname'), array('class' => 'form-control col-sm-4')) }}
 
 					{{ Form::label('mo_lname', 'Last Name', array('class' => 'col-sm-2')) }}
-					{{ Form::text('mo_lname', Input::old('mo_lname'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('mo_lname', old('mo_lname'), array('class' => 'form-control col-sm-4')) }}
 				</div>
 
 				<div class="form-group">
 					{{ Form::label('mo_designation', 'Designation', array('class' => 'col-sm-2')) }}
-					{{ Form::text('mo_designation', Input::old('mo_designation'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('mo_designation', old('mo_designation'), array('class' => 'form-control col-sm-4')) }}
 
 					{{ Form::label('mo_telephone', 'Telephone', array('class' => 'col-sm-2')) }}
-					{{ Form::text('mo_telephone', Input::old('mo_telephone'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('mo_telephone', old('mo_telephone'), array('class' => 'form-control col-sm-4')) }}
 				</div>
 
 				<div class="form-group">
 					{{ Form::label('intervention_followup', 'Intervention Followup', array('class' => 'col-sm-2')) }}
-					{{ Form::textarea('intervention_followup', Input::old('intervention_followup'), array('size' => '10x2', 'class' => 'form-control col-sm-4')) }}
+					{{ Form::textarea('intervention_followup', old('intervention_followup'), array('size' => '10x2', 'class' => 'form-control col-sm-4')) }}
 
 					{{ Form::label('', '', array('class' => 'col-sm-2')) }}
 					{{ Form::button('<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'),

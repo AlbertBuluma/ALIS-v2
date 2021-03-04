@@ -1,7 +1,12 @@
 <?php
 
+use App\Models\Role;
+use App\Models\VisitStatus;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Models\Permission;
 
 class CreateVisitStatusTable extends Migration {
 
@@ -19,7 +24,7 @@ class CreateVisitStatusTable extends Migration {
 		});
 
 		// migrate year
-		Eloquent::unguard();
+		Model::unguard();
 
 		VisitStatus::create(["id" => 1, "name" => "appointment-made"]);
 		VisitStatus::create(["id" => 2, "name" => "test-request-made"]);
@@ -28,14 +33,15 @@ class CreateVisitStatusTable extends Migration {
 
 		/* Permissions table */
 		$permissions = array(
-			array("name" => "manage_appointments", "display_name" => "Can manage appointments with Clinician"),
-			array("name" => "make_labrequests", "display_name" => "Can make lab requests(Only for Clinicians)"),
-			array("name" => "manage_visits", "display_name" => "Can manage visit content"),
+			array("name" => "manage_appointments", "display_name" => "Can manage appointments with Clinician", "guard_name" => "web"),
+			array("name" => "make_labrequests", "display_name" => "Can make lab requests(Only for Clinicians)", "guard_name" => "web"),
+			array("name" => "manage_visits", "display_name" => "Can manage visit content", "guard_name" => "web"),
 		);
 
 		$superadmin = Role::find(1);
 		foreach ($permissions as $permission) {
-			$superadmin->attachPermission(Permission::create($permission));
+//			$superadmin->attachPermission(Permission::create($permission));
+			$superadmin->givePermissionTo(Permission::create($permission));
 		}
 
 	}

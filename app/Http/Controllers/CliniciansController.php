@@ -47,8 +47,10 @@ class CliniciansController extends Controller {
         //Validation
         $rules = array(
             'name' => 'required|unique:clinicians,name',
+            'cadre' => 'required',
             'phone' => 'required'
             );
+
         $validator = Validator::make($request->all(), $rules);
 
         //process

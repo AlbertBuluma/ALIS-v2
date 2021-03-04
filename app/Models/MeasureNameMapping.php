@@ -17,11 +17,11 @@ class MeasureNameMapping extends Model
 
     public function testNameMapping()
     {
-      return $this->belongsTo('TestNameMapping');
+      return $this->belongsTo('App\Models\TestNameMapping');
     }
 
     public function measure()
     {
-      return $this->belongsTo('Measure');
+      return $this->belongsTo('App\Models\Measure');
     }
 }

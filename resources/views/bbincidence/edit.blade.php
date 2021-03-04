@@ -3,8 +3,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-		  <li><a href="{{ URL::route('bbincidence.index') }}">BB Incidents</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('bbincidence.index') }}">BB Incidents</a></li>
 		  <li class="active">Editing BB Incident</li>
 		</ol>
 	</div>
@@ -13,11 +13,11 @@
 			<span class="glyphicon glyphicon-edit"></span>
 			Editing BB Incident
 
-			<a class="btn btn-sm btn-info" href="{{ URL::route('bbincidence.edit', array($previousbbincidence)) }}" >
+			<a class="btn btn-sm btn-info" href="{{ route('bbincidence.edit', array($previousbbincidence)) }}" >
 				<span class="glyphicon glyphicon-backward"></span> Previous
 			</a>
 
-			<a class="btn btn-sm btn-info" href="{{ URL::route('bbincidence.edit', array($nextbbincidence)) }}" >
+			<a class="btn btn-sm btn-info" href="{{ route('bbincidence.edit', array($nextbbincidence)) }}" >
 				Next <span class="glyphicon glyphicon-forward"></span>
 			</a>
 		</div>
@@ -86,11 +86,9 @@
 						?>
 						<div class="col-md-3">
 							<label  class="checkbox" title="{{ $value->priority}}/{{ $value->class}}">
-
-							<input type="checkbox" name="nature[]" value="{{ $value->id}}" title=""
-							{{ in_array($value->id, $bbincidence->bbnature->lists('id'))?"checked":"" }} />
-							{{$value->name}}
-							</label>
+													{{ Form::checkbox('nature[]',$value->id,old($value->id),array('title'=>$value->priority.'/'.$value->class)) }}
+													{{$value->name}}
+												</label>
 						</div>
 						{{ ($cnt%4==0)?"</div>":"" }}
 					@endforeach

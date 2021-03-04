@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use App\Models\UNHLSEquipmentInventory;
 use App\Models\UNHLSEquipmentMaintenance;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EquipmentMaintenanceController extends Controller {
 
@@ -31,8 +33,8 @@ class EquipmentMaintenanceController extends Controller {
 	{
 		//
 
-		$equipment_list = UNHLSEquipmentInventory::get()->lists('name','id');
-		$supplier_list = Supplier::get()->lists('name','id');
+		$equipment_list = UNHLSEquipmentInventory::get()->pluck('name','id')->toArray();
+		$supplier_list = Supplier::get()->pluck('name','id')->toArray();
 		return view('equipment.maintenance.create')
 				->with('equipment_list',$equipment_list)
 				->with('supplier_list',$supplier_list);
@@ -40,12 +42,13 @@ class EquipmentMaintenanceController extends Controller {
 	}
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function store(Request $request)
 	{
 		//
 		$rules = array(
@@ -58,7 +61,7 @@ class EquipmentMaintenanceController extends Controller {
 
 		);
 
-		$validator = Validator::make(Input::all(), $rules);
+		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
 			return redirect()->back()->withErrors($validator);
@@ -70,13 +73,13 @@ class EquipmentMaintenanceController extends Controller {
         	$item->facility_id = config('constants.FACILITY_ID');
         	$item->year_id = config('constants.FIN_YEAR_ID');
 
-			$item->equipment_id = Input::get('equipment_id');
-			$item->last_service_date = Input::get('service_date');
-			$item->next_service_date = Input::get('next_service_date');
-			$item->serviced_by_name = Input::get('serviced_by');
-			$item->serviced_by_contact = Input::get('serviced_by_phone');
-			$item->supplier_id = Input::get('supplier_id');
-			$item->comment = Input::get('comment');
+			$item->equipment_id = $request->get('equipment_id');
+			$item->last_service_date = $request->get('service_date');
+			$item->next_service_date = $request->get('next_service_date');
+			$item->serviced_by_name = $request->get('serviced_by');
+			$item->serviced_by_contact = $request->get('serviced_by_phone');
+			$item->supplier_id = $request->get('supplier_id');
+			$item->comment = $request->get('comment');
 
 			$item->save();
 

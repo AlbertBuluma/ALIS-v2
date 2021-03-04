@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 
 /**
  *Contains functions for managing bbincidence records
@@ -23,11 +24,12 @@ use Illuminate\Support\Facades\Validator;
  */
 class BbincidenceController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
 	public function index(Request $request)
 	{
 
@@ -38,7 +40,7 @@ class BbincidenceController extends Controller {
 //		if(\Entrust::can('manage_national_biorisk')){
 		if(Auth::user()->can('manage_national_biorisk')){
 			if($datefrom != ''){
-			$bbincidences = Bbincidence::filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends(Input::except('_token'));
+			$bbincidences = Bbincidence::filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends($request->except('_token'));
 			}
 			else
 			$bbincidences = Bbincidence::search($search)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends($request->except('_token'));
@@ -46,19 +48,19 @@ class BbincidenceController extends Controller {
 		else{
 
 			if($datefrom != ''){
-			$bbincidences = Bbincidence::filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends(Input::except('_token'));
+			$bbincidences = Bbincidence::filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends($request->except('_token'));
 			}
 			else
 			$bbincidences = Bbincidence::search($search)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends($request->except('_token'));
 		}
 
 		if (count($bbincidences) == 0) {
-		 	\Session::flash('message', trans('messages.no-match'));
+		 	Session::flash('message', trans('messages.no-match'));
 		}
 
 		// Load the view and pass the bbincidences
 		$bbcount=count($bbincidences);
-		return View('bbincidence.index')->with('bbincidences', $bbincidences)->with('bbcount',$bbcount);
+		return view('bbincidence.index')->with('bbincidences', $bbincidences)->with('bbcount',$bbcount);
 	}
 
 	/**
@@ -92,7 +94,7 @@ class BbincidenceController extends Controller {
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
 	public function store(Request $request)
 	{
@@ -147,7 +149,7 @@ class BbincidenceController extends Controller {
 
 			$bbincidence->facility_id = $request->get('facility_id');
 			$bbincidence->occurrence_date = $request->get('occurrence_date');
-			$bbincidence->occurrence_time = $request->get('occurrence_time');
+			$bbincidence->occurrence_time = date('H:i:s', strtotime($request->get('occurrence_time')));
 			$bbincidence->firstaid = $request->get('firstaid');
 			$bbincidence->personnel_id = $request->get('personnel_id');
 			$bbincidence->personnel_surname = $request->get('personnel_surname');
@@ -248,8 +250,8 @@ class BbincidenceController extends Controller {
     				});
 				}*/
 
-			$url = \Session::get('SOURCE_URL');
-			return Redirect::to($url)
+			$url = Session::get('SOURCE_URL');
+			return redirect()->to($url)
 			->with('message', 'Successfully created BB Incidence with ID '.$bbincidenceSerialNo);
 			}catch(QueryException $e){
 				echo $e;
@@ -348,7 +350,7 @@ class BbincidenceController extends Controller {
 			}
 
 			$bbincidence->occurrence_date = $request->get('occurrence_date');
-			$bbincidence->occurrence_time = $request->get('occurrence_time');
+			$bbincidence->occurrence_time = date('H:i:s', strtotime($request->get('occurrence_time')));
 			$bbincidence->firstaid = $request->get('firstaid');
 			$bbincidence->personnel_id = $request->get('personnel_id');
 			$bbincidence->personnel_surname = $request->get('personnel_surname');
@@ -390,9 +392,10 @@ class BbincidenceController extends Controller {
 			}
 
 			// redirect
-			$url = \Session::get('SOURCE_URL');
-			return Redirect::to($url)
-			->with('message', 'Details for BB Incidence No '.$bbincidence->serial_no.' were successfully updated!') ->with('activebbincidence',$bbincidence ->id);
+			$url = Session::get('SOURCE_URL');
+			return redirect()->to($url)
+			    ->with('message', 'Details for BB Incidence No '.$bbincidence->serial_no.' were successfully updated!')
+                ->with('activebbincidence',$bbincidence ->id);
 
 		}
 	}
@@ -412,7 +415,7 @@ class BbincidenceController extends Controller {
 	 * Remove the specified resource from storage (soft delete).
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
@@ -422,8 +425,8 @@ class BbincidenceController extends Controller {
 		$bbincidence->delete();
 
 		// redirect
-			$url = \Session::get('SOURCE_URL');
-			return Redirect::to($url)
+			$url = Session::get('SOURCE_URL');
+			return redirect()->to($url)
 			->with('message', 'The commodity was successfully deleted!');
 	}
 
@@ -454,20 +457,20 @@ class BbincidenceController extends Controller {
 	}
 
 
-/*	public function clinical()
+/*	public function clinical(Request $request)
 	{
-		$searchterm = Input::get('searchterm');
-		$datefrom = Input::get('datefrom');
-		$dateto = Input::get('dateto');
+		$searchterm = $request->get('searchterm');
+		$datefrom = $request->get('datefrom');
+		$dateto = $request->get('dateto');
 		$user_facility = Auth::user()->facility_id;
 
 		//->where('facility_id', '=', Auth::user()->facility_id)
 
 		if($datefrom != ''){
-			$bbincidences = Bbincidence::facility_filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends(Input::except('_token'));
+			$bbincidences = Bbincidence::facility_filterbydate($datefrom,$dateto)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends($request->except('_token'));
 		}
 		else{
-			$bbincidences = Bbincidence::facility_search($searchterm)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends(Input::except('_token'));
+			$bbincidences = Bbincidence::facility_search($searchterm)->orderBy('id','DESC')->paginate(config('kblis.page-items'))->appends($request->except('_token'));
 		}
 
 		if (count($bbincidences) == 0) {
@@ -477,7 +480,7 @@ class BbincidenceController extends Controller {
 		 // Load the view and pass the bbincidences
 		$bbcount=count($bbincidences);
 
-		return View::make('bbincidence.clinical')->with('bbincidences', $bbincidences)->withInput(Input::all())->with ($bbcount);
+		return View::make('bbincidence.clinical')->with('bbincidences', $bbincidences)->withInput($request->all())->with ($bbcount);
 
 	} */
 
@@ -605,8 +608,8 @@ class BbincidenceController extends Controller {
 			}
 
 			// redirect
-			$url = \Session::get('SOURCE_URL');
-			return Redirect::to($url)
+			$url = Session::get('SOURCE_URL');
+			return redirect()->to($url)
 			->with('message', 'Details for BB Incidence No '.$bbincidence->serial_no.' were successfully updated!') ->with('activebbincidence',$bbincidence ->id);
 
 		}
@@ -654,8 +657,8 @@ class BbincidenceController extends Controller {
 			$bbincidence->save();
 
 			// redirect
-			$url = \Session::get('SOURCE_URL');
-			return Redirect::to($url)
+			$url = Session::get('SOURCE_URL');
+			return redirect()->to($url)
 			->with('message', 'Details for BB Incidence No '.$bbincidence->serial_no.' were successfully updated!') ->with('activebbincidence',$bbincidence ->id);
 
 		}

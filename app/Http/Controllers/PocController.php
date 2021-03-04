@@ -34,14 +34,14 @@ class PocController extends Controller {
 						->select('poc_tables.*','pr.results', 'pr.test_date')
 						->from('poc_tables')
 						->get();
-		// ->paginate(Config::get('kblis.page-items'))->appends(Input::except('_token'));
+		// ->paginate(Config::get('kblis.page-items'))->appends($request->except('_token'));
 
 		if (count($patients) == 0) {
             $request->session()->flash('message', trans('messages.no-match'));
 		}
 
 		// Load the view and pass the patients
-		$antenatal = array('0'=>'Lifelong ART', '1' => 'No ART', '2' => 'UNKNOWN');
+		$antenatal = array('1'=>'Lifelong ART', '2' => 'No ART', '3' => 'UNKNOWN');
 		return view('poc.index')
 		->with('antenatal',$antenatal)
 		// ->with('facility',$facility)
@@ -58,7 +58,7 @@ class PocController extends Controller {
 	{
 		//Create patients
 		$hiv_status = array('0' => 'Positive', '1' => 'Negative', '2' => 'Unknown');
-		$antenatal= array('0'=>'Lifelong ART', '1' => 'No ART', '2' => 'UNKNOWN');
+		$antenatal= array('0'=>'Select---','Lifelong ART'=>'Lifelong ART', 'No ART' => 'No ART', 'UNKNOWN' => 'UNKNOWN');
 		// $facility = Hubs::orderBy('name','ASC')
 		// ->lists('name','id');
 		// $district = District::orderBy('name','ASC')
@@ -71,59 +71,83 @@ class PocController extends Controller {
 			->with('antenatal', $antenatal);
 	}
 
+	public function oldForm()
+	{
+		//Create patients
+		$hiv_status = array('1' => 'Positive', '2' => 'Negative', '3' => 'Unknown');
+		$antenatal= array('1'=>'Lifelong ART', '2' => 'No ART', '3' => 'UNKNOWN');
+
+		return view('poc.oldRequestForm')
+		->with('hiv_status', $hiv_status)
+			->with('antenatal', $antenatal);
+	}
+
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse
      */
 	public function store(Request $request)
 	{
+//	    dd($request->all());
 		//
-		$rules = array(
+        $rules = array(
+            'infant_name' => 'required',
+            'age'       => 'required',
+            'gender' => 'required',
+            'entry_point' => 'required',
+            'collection_date' => 'required',
+            'sample_id' => 'required|unique:poc_tables,sample_id'
+        );
 
-			'infant_name' => 'required',
-			'age'       => 'required',
-			'gender' => 'required',
-			'mother_name' => 'required' ,
-			'entry_point' => 'required' ,
-		);
 		$validator = Validator::make($request->all(), $rules);
 
 		if ($validator->fails()) {
+//        dd($validator);
 
 			return redirect()->back()->withErrors($validator)->withInput($request->all());
 		} else {
-			// store
-
-
+//			 store
 
 			$patient = new POC;
-			// $patient->district_id = config('constants.DISTRICT_ID');
-			// $patient->facility_id = config('constants.FACILITY_ID');
-			$patient->gender	= $request->get('gender');
-			$patient->age	= $request->get('age');
-			$patient->exp_no = $request->get('exp_no');
-			$patient->caretaker_number	= $request->get('caretaker_number');
-			$patient->admission_date	= $request->get('admission_date');
-			$patient->breastfeeding_status	= $request->get('breastfeeding_status');
-			$patient->entry_point	= $request->get('entry_point');
-			$patient->mother_name	= $request->get('mother_name');
+
 			$patient->infant_name	= $request->get('infant_name');
-			$patient->provisional_diagnosis	= $request->get('provisional_diagnosis');
+			$patient->exp_no = $request->get('exp_no');
+			$patient->age	= $request->get('age');
+			$patient->gender	= $request->get('gender');
+			$patient->caretaker_number	= $request->get('caretaker_number');
+			$patient->given_contrimazole	= $request->get('given_contrimazole');
+			$patient->delivered_at	= $request->get('delivered_at');
 			$patient->infant_pmtctarv	= $request->get('infant_pmtctarv');
-			$patient->mother_hiv_status	= $request->get('mother_hiv_status');
+			$patient->entry_point	= $request->get('entry_point');
+			$patient->other_entry_point	= $request->get('other_entry_point');
 			$patient->collection_date	= $request->get('collection_date');
+			$patient->sample_id	= $request->get('sample_id');
 			$patient->pcr_level	= $request->get('pcr_level');
+//			$patient->non_routine	= $request->get('pcr_level');
+			$patient->feeding_status	= $request->get('feeding_status');
+			$patient->breastfeeding_status	= $request->get('feeding_status');
+			$patient->mother_hts	= $request->get('mother_hts');
+			$patient->mother_art = $request->get('mother_art');
+			$patient->nin = $request->get('nin');
 			$patient->pmtct_antenatal	= $request->get('pmtct_antenatal');
 			$patient->pmtct_delivery	= $request->get('pmtct_delivery');
 			$patient->pmtct_postnatal	= $request->get('pmtct_postnatal');
-			$patient->sample_id	= $request->get('sample_id');
-			$patient->other_entry_point	= $request->get('other_entry_point');
-			// $patient->facility	= Input::get('facility');
-			// $patient->district	= Input::get('district');
 			$patient->created_by = Auth::user()->name;
 
+			$patient->admission_date	= $request->get('admission_date');
+			$patient->mother_name	= $request->get('mother_name');
+			$patient->provisional_diagnosis	= $request->get('provisional_diagnosis');
+			$patient->infant_pmtctarv	= $request->get('infant_pmtctarv');
+			$patient->mother_pmtctarv	= $request->get('pmtct_delivery'); //Mother_pmtctarv
+			$patient->mother_hiv_status	= $request->get('mother_hiv_status');
+
+			 $patient->district_id = config('constants.DISTRICT_ID');
+			 $patient->facility_id = config('constants.FACILITY_ID');
+			// $patient->facility	= $request->get('facility');
+			// $patient->district	= $request->get('district');
+			$patient->created_by = Auth::user()->name;
 
 			try{
 				$patient->save();
@@ -133,7 +157,7 @@ class PocController extends Controller {
 
 			}catch(QueryException $e){
 				Log::error($e);
-				return view('poc.error', array(), 404);
+				return view('poc.error', array(), []);
 			}
 
 			// redirect
@@ -172,13 +196,13 @@ class PocController extends Controller {
 //                        $join->on('pr.patient_id', '=', 'poc_tables.id');
 //                    })
 //                    ->select('poc_tables.*','pr.results', 'pr.test_date', 'pr.equipment_used', 'tested_by');
-		// ->paginate(Config::get('kblis.page-items'))->appends(Input::except('_token'));
+		// ->paginate(Config::get('kblis.page-items'))->appends($request->except('_token'));
 		if (count($patient->get()) == 0) {
             $request->session()->flash('message', trans('messages.no-match'));
 		}
 
 		// Load the view and pass the patients
-		$antenatal = array('0'=>'Lifelong ART', '1' => 'No ART', '2' => 'UNKNOWN');
+		$antenatal = array('1'=>'Lifelong ART', '2' => 'No ART', '3' => 'UNKNOWN');
 		return view('poc.show')
 		->with('antenatal',$antenatal)
 		->with('patient', $patient)->withInput($request->all());
@@ -293,14 +317,15 @@ class PocController extends Controller {
 			->with('message', 'The commodity was successfully deleted!');
 	}
 
-	/**
-	 * Return a Patients collection that meets the searched criteria as JSON.
-	 *
-	 * @return Response
-	 */
-	public function search()
+    /**
+     * Return a Patients collection that meets the searched criteria as JSON.
+     *
+     * @param Request $request
+     * @return Response
+     */
+	public function search(Request $request)
 	{
-        return UnhlsPatient::search(Input::get('text'))->take(Config::get('kblis.limit-items'))->get()->toJson();
+        return UnhlsPatient::search($request->get('text'))->take(config('kblis.limit-items'))->get()->toJson();
 	}
 
 	public function enter_results($patient_id){

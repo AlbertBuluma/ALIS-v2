@@ -38,13 +38,13 @@
                         </div>
                         <div class='col-md-7'>
                             {{ Form::select('visit_status', $visitStatus,
-                                Input::get('visit_status'), array('class' => 'form-control')) }}
+                                Illuminate\Support\Facades\Request::get('visit_status'), array('class' => 'form-control')) }}
                         </div>
                     @endif
                  </div>
                 <div class='col-md-2'>
                         {{ Form::label('search', trans('messages.search'), array('class' => 'sr-only')) }}
-                        {{ Form::text('search', Input::get('search'),
+                        {{ Form::text('search', Illuminate\Support\Facades\Request::get('search'),
                             array('class' => 'form-control', 'placeholder' => 'Search')) }}
                 </div>
                 <div class='col-md-1'>
@@ -146,7 +146,7 @@
 
             {{ $visits->links() }}
         {{ Session::put('SOURCE_URL', URL::full()) }}
-        {{ Session::put('TESTS_FILTER_INPUT', Input::except('_token')); }}
+        {{ Session::put('TESTS_FILTER_INPUT', Illuminate\Support\Facades\Request::except('_token')) }}
 
         </div>
     </div>

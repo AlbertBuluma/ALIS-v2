@@ -6,9 +6,9 @@
 	@endif
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 		  <li>
-		  	<a href="{{ URL::route('specimenrejection.index') }}">{{ trans('messages.specimen-rejection') }}</a>
+		  	<a href="{{ route('specimenrejection.index') }}">{{ trans('messages.specimen-rejection') }}</a>
 		  </li>
 		  <li class="active">{{ trans('messages.edit-rejection-reason') }}</li>
 		</ol>

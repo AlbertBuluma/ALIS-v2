@@ -27,6 +27,10 @@
 				{{ Form::label('name', Lang::choice('messages.name',1)) }}
 				{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 			</div>
+			<!-- <div class="form-group">
+				{{ Form::label('parentId','Standard name') }}
+				{{ Form::select('parentId', array(0 => '')+$standardnames->pluck('standard_name', 'id')->toArray(), old('parentId'), array('class' => 'form-control')) }}
+			</div> -->
 			<div class="form-group">
 				{{ Form::label('description', trans('messages.description')) }}
 				{{ Form::textarea('description', old('description'),
@@ -46,11 +50,11 @@
 							$zebra = "";
 						?>
 						@foreach($specimentypes as $key=>$value)
-							{{ ($cnt%4==0)?"<div class='row $zebra'>":"" }}
+							<!-- {{ ($cnt%4==0)?"<div class='row $zebra'>":"" }}
 							<?php
 								$cnt++;
 								$zebra = (((int)$cnt/4)%2==1?"row-striped":"");
-							?>
+							?> -->
 							<div class="col-md-3">
 								<label  class="checkbox">
 									<input type="checkbox" name="specimentypes[]" value="{{ $value->id}}"
@@ -58,7 +62,7 @@
 										{{$value->name }}
 								</label>
 							</div>
-							{{ ($cnt%4==0)?"</div>":"" }}
+							<!-- {{ ($cnt%4==0)?"</div>":"" }} -->
 						@endforeach
 						</div>
 					</div>

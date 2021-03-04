@@ -2,8 +2,8 @@
 @section("content")
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-		  <li><a href="{{ URL::route('user.index') }}">{{ Lang::choice('messages.user', 2)}}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
+		  <li><a href="{{ route('user.index') }}">{{ Lang::choice('messages.user', 2)}}</a></li>
 		  <li class="active">{{trans('messages.user-details')}}</li>
 		</ol>
 	</div>
@@ -32,7 +32,7 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<img class="img-responsive img-thumbnail user-image" src="{{ $user->image }}" 
+						<img class="img-responsive img-thumbnail user-image" src="{{ $user->image }}"
 							alt="{{trans('messages.image-alternative')}}"></img>
 					</div>
 				</div>

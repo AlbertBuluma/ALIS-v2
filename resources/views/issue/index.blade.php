@@ -50,7 +50,7 @@
 						<!-- delete this commodity (uses the delete method found at GET /inventory/{id}/delete -->
 					<button class="btn btn-sm btn-danger delete-item-link"
 							data-toggle="modal" data-target=".confirm-delete-modal"
-							data-id="{{ URL::route('issue.delete', array($issue->id)) }}">
+							data-id="{{ route('issue.delete', array($issue->id)) }}">
 							<span class="glyphicon glyphicon-trash"></span>
 							{{trans('messages.delete')}}
 					</button>

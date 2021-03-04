@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AdhocConfig;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 

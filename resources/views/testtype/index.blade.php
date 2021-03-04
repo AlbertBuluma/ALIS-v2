@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
 	  <li class="active">{{ Lang::choice('messages.test-type',1) }}</li>
 	</ol>
 </div>
@@ -25,6 +25,7 @@
 			<thead>
 				<tr>
 					<th>{{ Lang::choice('messages.name',1) }}</th>
+					<th>Standard Name</th>
 					<th>{{trans('messages.description')}}</th>
 					<th>{{trans('messages.target-turnaround-time')}}</th>
 					<th>{{trans('messages.prevalence-threshold')}}</th>
@@ -38,6 +39,7 @@
                         @endif
                         >
 					<td>{{ $value->name }}</td>
+					<td>{{ !is_null($value->parentId) ? $value->standardnamemapping->standard_name:'' }}</td>
 					<td>{{ $value->description }}</td>
 					<td>{{ $value->targetTAT }} {{$value->targetTAT_unit}}</td>
 					<td>{{ $value->prevalence_threshold }}</td>
@@ -55,7 +57,7 @@
 						</a>
 						<!-- delete this testtype (uses the delete method found at GET /testtype/{id}/delete -->
 						<button class="btn btn-sm btn-danger delete-item-link"
-							data-toggle="modal" data-target=".confirm-delete-modal"	
+							data-toggle="modal" data-target=".confirm-delete-modal"
 							data-id='{{ URL::to("testtype/" . $value->id . "/delete") }}'>
 							<span class="glyphicon glyphicon-trash"></span>
 							{{trans('messages.delete')}}

@@ -3,8 +3,7 @@
 <div>
 	<ol class="breadcrumb">
 	  <li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
-	  <li><a href="{{ route('testtype.index') }}">{{ Lang::choice('messages.test-type',1) }}</a></li>
-	  <li class="active">{{trans('messages.create-test-type')}}</li>
+	  <li><a href="{{ route('testtype.index') }}">{{ Lang::choice('messages.test-type',1) }}</a><li class="active">{{trans('messages.create-test-type')}}</li>
 	</ol>
 </div>
 <div class="panel panel-primary">
@@ -27,6 +26,10 @@
 				{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
 			</div>
 			<div class="form-group">
+				{{ Form::label('parentId','Standard name') }}
+				{{ Form::select('parentId', array(0 => '')+$standardnames->pluck('standard_name', 'id')->toArray(), old('parentId'), array('class' => 'form-control')) }}
+			</div>
+			<div class="form-group">
 				{{ Form::label('description', trans('messages.description')) }}
 				{{ Form::textarea('description', old('description'),
 					array('class' => 'form-control', 'rows' => '2')) }}
@@ -40,22 +43,12 @@
 				{{ Form::label('specimen_types', trans('messages.select-specimen-types')) }}
 				<div class="form-pane panel panel-default">
 					<div class="container-fluid">
-						<?php
-							$cnt = 0;
-							$zebra = "";
-						?>
 						@foreach($specimentypes as $key=>$value)
-							{{ ($cnt%4==0)?"<div class='row $zebra'>":"" }}
-							<?php
-								$cnt++;
-								$zebra = (((int)$cnt/4)%2==1?"row-striped":"");
-							?>
 							<div class="col-md-3">
 								<label  class="checkbox">
 									<input type="checkbox" name="specimentypes[]" value="{{ $value->id}}" />{{$value->name}}
 								</label>
 							</div>
-							{{ ($cnt%4==0)?"</div>":"" }}
 						@endforeach
 						</div>
 					</div>

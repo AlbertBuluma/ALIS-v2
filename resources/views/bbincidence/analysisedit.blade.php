@@ -82,21 +82,19 @@
 							$zebra = "";
 						?>
 						@foreach($causes as $key=>$value)
-							{{ ($cnt%4==0)?"<div class='row $zebra'>":"" }}
+							<!-- {{ ($cnt%4==0)?"<div class='row $zebra'>":"" }}
 							<?php
 								$cnt++;
 								$zebra = (((int)$cnt/4)%2==1?"row-striped":"");
-							?>
+							?> -->
 							<div class="col-md-3">
 								<label  class="checkbox">
 								<input type="checkbox" name="cause[]" value="{{ $value->id}}" title=""
-								{{ in_array($value->id, $bbincidence->bbcause->lists('id'))?"checked":"" }} />
+								{{ in_array($value->id, $bbincidence->bbcause->pluck('id')->toArray())?"checked":"" }} />
 								{{$value->causename}}
 								</label>
 							</div>
-							{{ ($cnt%4==0)?"</div>":"" }}
 						@endforeach
-							{{ ($cnt%4!=0)?"</div>":"" }}
 					</div>
 				</div>
 
@@ -109,26 +107,15 @@
 
 				<div class="form-pane panel panel-default">
 					<div class="container-fluid">
-						<?php
-							$cnt = 0;
-							$zebra = "";
-						?>
 						@foreach($actions as $key=>$value)
-							{{ ($cnt%4==0)?"<div class='row $zebra'>":"" }}
-							<?php
-								$cnt++;
-								$zebra = (((int)$cnt/4)%2==1?"row-striped":"");
-							?>
 							<div class="col-md-3">
 								<label  class="checkbox">
 								<input type="checkbox" name="corrective_action[]" value="{{ $value->id}}" title=""
-								{{ in_array($value->id, $bbincidence->bbaction->lists('id'))?"checked":"" }} />
+								{{ in_array($value->id, $bbincidence->bbaction->pluck('id')->toArray())?"checked":"" }} />
 								{{$value->actionname}}
 								</label>
 							</div>
-							{{ ($cnt%4==0)?"</div>":"" }}
 						@endforeach
-							{{ ($cnt%4!=0)?"</div>":"" }}
 					</div>
 				</div>
 
@@ -142,39 +129,39 @@
 					'Referred to District Level' => 'Referred to District Level',
 					'Referred to Regional Level' => 'Referred to Regional Level',
 					'Referred to National Level' => 'Referred to National Level'],
-					Input::old('referral_status'), array('class' => 'form-control')) }}
+					old('referral_status'), array('class' => 'form-control')) }}
 
 					{{ Form::label('status', 'Completion Status', array('class' => 'col-sm-2')) }}
 					{{ Form::select('status', [
 					'Ongoing' => 'Ongoing',
 					'Completed' => 'Completed'],
-					Input::old('status'), array('class' => 'form-control')) }}
+					old('status'), array('class' => 'form-control')) }}
 				</div>
 
 				<div class="form-group">
 					{{ Form::label('analysis_date', 'Analysis Date', array('class' => 'col-sm-2')) }}
-					{{ Form::text('analysis_date', Input::old('analysis_date'), array('class' => 'form-control standard-datepicker col-sm-4')) }}
+					{{ Form::text('analysis_date', old('analysis_date'), array('class' => 'form-control standard-datepicker col-sm-4')) }}
 
 					{{ Form::label('analysis_time', 'Analysis Time', array('class' => 'col-sm-2', 'placeholder' => 'hh:mm (24hr Format)')) }}
-					{{ Form::text('analysis_time', Input::old('analysis_time'), array('class' => 'form-control col-sm-4',
+					{{ Form::text('analysis_time', old('analysis_time'), array('class' => 'form-control col-sm-4',
 					'placeholder' => 'hh:mm (24hr Format)')) }}
 				</div>
 
 				<span style="font-weight: bold;">Bio-Safety Officer</span>
 				<div class="form-group">
 					{{ Form::label('bo_fname', 'First Name', array('class' => 'col-sm-2')) }}
-					{{ Form::text('bo_fname', Input::old('bo_fname'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('bo_fname', old('bo_fname'), array('class' => 'form-control col-sm-4')) }}
 
 					{{ Form::label('bo_lname', 'Last Name', array('class' => 'col-sm-2')) }}
-					{{ Form::text('bo_lname', Input::old('bo_lname'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('bo_lname', old('bo_lname'), array('class' => 'form-control col-sm-4')) }}
 				</div>
 
 				<div class="form-group">
 					{{ Form::label('bo_designation', 'Designation', array('class' => 'col-sm-2')) }}
-					{{ Form::text('bo_designation', Input::old('bo_designation'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('bo_designation', old('bo_designation'), array('class' => 'form-control col-sm-4')) }}
 
 					{{ Form::label('bo_telephone', 'Telephone', array('class' => 'col-sm-2')) }}
-					{{ Form::text('bo_telephone', Input::old('bo_telephone'), array('class' => 'form-control col-sm-4')) }}
+					{{ Form::text('bo_telephone', old('bo_telephone'), array('class' => 'form-control col-sm-4')) }}
 				</div>
 
 				<div class="form-group actions-row">

@@ -48,7 +48,8 @@ class BlisClientController extends Controller {
 		$properties = DB::table('equip_config')->where('equip_id', $client->id)->get();
 		foreach ($properties as $property)
 		{
-			$conf = DB::table('ii_quickcodes')->where('feed_source', $client->feed_source)->where('id', $property->prop_id)->first();
+			$conf = DB::table('ii_quickcodes')->where('feed_source', $client->feed_source)
+                        ->where('id', $property->prop_id)->first();
 			$property->config_prop = $conf->config_prop;
 		}
 		return json_encode($properties);

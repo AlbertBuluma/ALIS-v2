@@ -3,8 +3,8 @@
 
     <div>
         <ol class="breadcrumb">
-          <li><a href="{{{URL::route('user.home')}}}">{{trans('messages.home')}}</a></li>
-          <li><a href="{{ URL::route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a></li>
+          <li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
+          <li><a href="{{ route('unhls_test.index') }}">{{ Lang::choice('messages.test',2) }}</a></li>
           <li class="active">Culture and Sensitivity</li>
         </ol>
     </div>
@@ -15,10 +15,10 @@
                     <span class="glyphicon glyphicon-adjust"></span>Culture and Sensitivity
                     <a class="btn btn-sm btn-success add-isolated-organism"
                         data-test-id="{{ $test->id }}"
-                        data-url="{{ URL::route('isolatedorganism.store') }}"
+                        data-url="{{ route('isolatedorganism.store') }}"
                         data-toggle="modal"
                         data-target=".add-isolated-organism-modal"
-                        data-drug-susceptibility-store-url="{{ URL::route('drugsusceptibility.store') }}"
+                        data-drug-susceptibility-store-url="{{ route('drugsusceptibility.store') }}"
                         title="Add Isolated Organism">
                         <span class="glyphicon glyphicon-plus"></span>
                         Add Isolated Organism
@@ -40,13 +40,14 @@
                         </tr>
                       </thead>
                       <tbody class="isolated-organism-tbody">
+                        @if(is_array($test->isolated_organisms) || is_object($test->isolated_organisms))
                         @foreach($test->isolated_organisms as $isolated_organism)
                             <tr class="isolated-organism-tr-{{$isolated_organism->id}}">
                               <td class="col-md-9 isolated-organism-entry">{{$isolated_organism->organism->name}}</td>
                               <td class="col-md-3">
                                 <a class="btn btn-sm btn-success add-drug-susceptibility"
-                                    data-url="{{ URL::route('drugsusceptibility.store') }}"
-                                    data-antibiotics-url="{{ URL::route('organismantibiotic.show', [$isolated_organism->organism->id]) }}"
+                                    data-url="{{ route('drugsusceptibility.store') }}"
+                                    data-antibiotics-url="{{ route('organismantibiotic.show', [$isolated_organism->organism->id]) }}"
                                     data-isolated-organism-id="{{ $isolated_organism->id }}"
                                     data-isolated-organism-name="{{ $isolated_organism->organism->name }}"
                                     data-organism-id="{{ $isolated_organism->organism->id }}"
@@ -58,7 +59,7 @@
                                     Add Antibiotic
                                 </a>
                                 <a class="btn btn-sm btn-danger delete-isolated-organism"
-                                    data-url="{{ URL::route('isolatedorganism.destroy',
+                                    data-url="{{ route('isolatedorganism.destroy',
                                         [$isolated_organism->id]) }}"
                                     data-id="{{ $isolated_organism->id }}"
                                     title="Delete Organism">
@@ -68,6 +69,7 @@
                               </td>
                             </tr>
                         @endforeach
+                        @endif
                       </tbody>
                     </table>
                 </div>
@@ -87,6 +89,7 @@
                         </tr>
                       </thead>
                       <tbody class="drug-susceptibility-tbody">
+                        @if(is_array($test->isolated_organisms) || is_object($test->isolated_organisms))
                         @foreach($test->isolated_organisms as $isolated_organism)
                             @foreach($isolated_organism->drug_susceptibilities as $drug_susceptibility)
                             <tr class="drug-susceptibility-tr-{{$drug_susceptibility->id}}">
@@ -100,10 +103,10 @@
                                 {{$drug_susceptibility->drug_susceptibility_measure->interpretation}}</td>
                               <td class="col-md-3">
                                 <a class="btn btn-sm btn-info edit-drug-susceptibility"
-                                    data-url="{{ URL::route('drugsusceptibility.update',
+                                    data-url="{{ route('drugsusceptibility.update',
                                         [$drug_susceptibility->id]) }}"
                                     data-id="{{ $drug_susceptibility->id }}"
-                                    data-antibiotics-url="{{ URL::route('organismantibiotic.show',
+                                    data-antibiotics-url="{{ route('organismantibiotic.show',
                                         [$drug_susceptibility->isolated_organism->organism->id]) }}"
                                     data-drug-id="{{ $drug_susceptibility->drug_id }}"
                                     data-isolated-organism-id="{{ $drug_susceptibility->isolated_organism_id }}"
@@ -119,7 +122,7 @@
                                     Edit
                                 </a>
                                 <a class="btn btn-sm btn-danger delete-drug-susceptibility"
-                                    data-url="{{ URL::route('drugsusceptibility.destroy',
+                                    data-url="{{ route('drugsusceptibility.destroy',
                                         [$drug_susceptibility->id]) }}"
                                     data-id="{{ $drug_susceptibility->id }}"
                                     title="Delete Susceptibility Test Result">
@@ -130,6 +133,7 @@
                             </tr>
                             @endforeach
                         @endforeach
+                        @endif
                       </tbody>
                     </table>
                 </div>
@@ -148,7 +152,7 @@
                 <div class="form-group actions-row">
                 @if(!$test->culture_observation)
                     <a class="btn btn-sm btn-success add-culture-observation"
-                        data-url="{{ URL::route('cultureobservation.store') }}"
+                        data-url="{{ route('cultureobservation.store') }}"
                         data-test-id="{{ $test->id }}"
                         data-verb="POST"
                         data-toggle="modal"
@@ -160,7 +164,7 @@
                 @endif
                 @if($test->culture_observation)
                     <a class="btn btn-sm btn-info edit-culture-observation"
-                        data-url="{{ URL::route('cultureobservation.update',
+                        data-url="{{ route('cultureobservation.update',
                             [$test->culture_observation->id]) }}"
                         data-toggle="modal"
                         data-verb="PUT"
@@ -183,7 +187,7 @@
                 <div class="form-group">
                     <div class="form-group">
                         {{ Form::label('interpretation', trans('messages.comment')) }}
-                        {{ Form::textarea('interpretation', Input::old('interpretation'),
+                        {{ Form::textarea('interpretation', old('interpretation'),
                             ['class' => 'form-control interpretation', 'rows' => '2']) }}
                     </div>
                 </div>
@@ -191,8 +195,8 @@
                     {{ Form::button(
                         '<span class="glyphicon glyphicon-save"></span> '.trans('messages.submit'), [
                             'class' => 'btn btn-primary submit-completed-culture-sensitivity-analysis',
-                            'data-redirect-url' => URL::route('unhls_test.viewDetails',[$test->id]),
-                            'data-url' => URL::route('unhls_test.saveResults',[$test->id])]
+                            'data-redirect-url' => route('unhls_test.viewDetails',[$test->id]),
+                            'data-url' => route('unhls_test.saveResults',[$test->id])]
                     ) }}
                     {{ Form::button(trans('messages.cancel'),
                         ['class' => 'btn btn-default cancel-completion-of-culture-sensitivity-analysis']) }}
@@ -383,14 +387,14 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {{ Form::text('zone_diameter', Input::old('zone_diameter'),
+                                    {{ Form::text('zone_diameter', old('zone_diameter'),
                                         array('class' => 'form-control zone-diameter')) }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     {{ Form::select('susceptibility', $drugSusceptibilityMeasures,
-                                        Input::old('susceptibility'), array('class' => 'form-control susceptibility')) }}
+                                        old('susceptibility'), array('class' => 'form-control susceptibility')) }}
                                 </div>
                             </div>
                         </div>

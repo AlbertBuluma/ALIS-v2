@@ -65,7 +65,13 @@
 					<span class="input-tag">{{trans('messages.female')}}</span></div>
 				</div>
 				<div class="form-group">
-					{{ Form::label('village_residence', trans('messages.residence-village'), array('class' => 'required')) }}
+					{{ Form::label('nationality', trans('Nationality')) }}
+					{{ Form::select('nationality', [' ' => '--- Select Nationality ---',
+					'0' => trans('National'),'1' => trans('Refugee'),'2' => trans('Foreigner')], null,
+						array('class' => 'form-control')) }}
+				</div>
+				<div class="form-group">
+					{{ Form::label('village_residence', trans('messages.residence-village'),array('class' => 'required')) }}
 					{{ Form::text('village_residence', old('village_residence'), array('class' => 'form-control',
 					'required' => 'required')) }}
 				</div>

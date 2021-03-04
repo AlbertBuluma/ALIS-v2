@@ -24,7 +24,8 @@
                 <strong>{{trans('messages.time-collected')}}</strong>
             </div>
             <div class="col-md-8">
-                {{$specimen->time_accepted}}
+                <!-- {{$specimen->time_accepted}} -->
+                 <?php $date = date('Y-m-d H:i:s');  echo $date; ?>
             </div>
         </div><br />
         <div class="row">

@@ -7,8 +7,8 @@
 
 	<div>
 		<ol class="breadcrumb">
-		  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
-		  <li><a href="{{ URL::route('testcategory.index') }}">{{ Lang::choice('messages.test-category',1) }}</a></li>
+		  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		  <li><a href="{{ route('testcategory.index') }}">{{ Lang::choice('messages.test-category',1) }}</a></li>
 		  <li class="active">{{ trans('messages.test-category-details') }}</li>
 		</ol>
 	</div>
@@ -17,7 +17,7 @@
 			<span class="glyphicon glyphicon-adjust"></span>
 			{{ trans('messages.test-category-details') }}
 			<div class="panel-btn">
-				<a class="btn btn-sm btn-info" href="{{ URL::route('testcategory.edit', array($testcategory->id)) }}">
+				<a class="btn btn-sm btn-info" href="{{ route('testcategory.edit', array($testcategory->id)) }}">
 					<span class="glyphicon glyphicon-edit"></span>
 					{{ trans('messages.edit') }}
 				</a>
@@ -28,7 +28,7 @@
 				<h3 class="view"><strong>{{ Lang::choice('messages.name',1) }}:</strong>{{ $testcategory->name }} </h3>
 				<p class="view-striped"><strong>{{ trans('messages.description') }}:</strong>
 					{{ $testcategory->description }}</p>
-				
+
 			</div>
 		</div>
 	</div>

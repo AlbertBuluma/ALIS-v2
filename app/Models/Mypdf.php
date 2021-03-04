@@ -1,15 +1,21 @@
 <?php
 
+namespace  App\Models;
+
+use DateTime;
+use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf;
+
 class Mypdf extends TCPDF {
 	//Pdf Header
 	Public function Header(){
 		if($this->page == 1){
-			$this->writeHTML(View::make('reportHeader'), true, false, true, false, '');
+			$this->writeHTML(view('reportHeader'), true, false, true, false, '');
 			$this->SetMargins(PDF_MARGIN_LEFT, 50, PDF_MARGIN_RIGHT);
 		}else {
 			$this->SetMargins(PDF_MARGIN_LEFT, 15, PDF_MARGIN_RIGHT);
 		}
-		
+
 	}
 
 	Public function Footer(){

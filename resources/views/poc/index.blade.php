@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{ route('user.home') }}">{{trans('messages.home')}}</a></li>
+		<li><a href="{{{route('user.home')}}}">{{trans('messages.home')}}</a></li>
 		<li class="active">{{ Lang::choice('messages.patient',2) }}</li>
 	</ol>
 </div>
@@ -14,7 +14,7 @@
 			<div class="form-group">
 
 				{{ Form::label('search', "search", array('class' => 'sr-only')) }}
-				{{ Form::text('search', old('search'), array('class' => 'form-control test-search')) }}
+				{{ Form::text('search', Illuminate\Support\Facades\Request::get('search'), array('class' => 'form-control test-search')) }}
 			</div>
 			<div class="form-group">
 				{{ Form::button("<span class='glyphicon glyphicon-search'></span> ".trans('messages.search'),
@@ -36,11 +36,19 @@
 		<span class="glyphicon glyphicon-user"></span>
 		POC / EID Patient List
 		<div class="panel-btn">
-			<a class="btn btn-sm btn-info" href="{{ route('poc.create') }}">
+			<a class="btn btn-sm btn-success" href="{{ route('poc.create') }}">
 				<span class="glyphicon glyphicon-plus-sign"></span>
-				{{trans('messages.new-patient')}}
+				Register EID Infant using NEW Form
 			</a>
 		</div>
+
+		<div class="panel-btn">
+			<a class="btn btn-sm btn-danger" href="{{ route('poc.oldform') }}">
+				<span class="glyphicon glyphicon-plus-sign"></span>
+				Register EID Infant using OLD Form
+			</a>
+		</div>
+
 	</div>
 	<div class="panel-body" style="overflow-x:auto;">
 		<table class="table table-striped table-bordered table-hover table-condensed search-table">
@@ -85,7 +93,7 @@
 					<td>
 
 						@if($patient->results == "")
-						<a class="btn btn-sm btn-warning" href="{{ URL::route('poc.enter_results', array($patient->id)) }}"
+						<a class="btn btn-sm btn-warning" href="{{ route('poc.enter_results', array($patient->id)) }}"
 							<span class="glyphicon glyphicon-edit"></span>
 							Enter Results
 						</a>

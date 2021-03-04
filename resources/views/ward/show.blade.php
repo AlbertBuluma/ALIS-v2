@@ -17,7 +17,7 @@
             <span class="glyphicon glyphicon-adjust"></span>
             Health Unit Details
             <div class="panel-btn">
-                <a class="btn btn-sm btn-info" href="{{ URL::route('ward.edit', array($ward->id)) }}">
+                <a class="btn btn-sm btn-info" href="{{ route('ward.edit', array($ward->id)) }}">
                     <span class="glyphicon glyphicon-edit"></span>
                     {{ trans('messages.edit') }}
                 </a>

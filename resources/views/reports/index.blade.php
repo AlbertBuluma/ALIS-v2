@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.report',2) }}</li>
 	</ol>
 </div>
@@ -14,13 +14,13 @@
 							<ul>
 								<li>
 									<div>
-										<a href="{{ URL::route('reports.patient.index')}}">
+										<a href="{{ route('reports.patient.index')}}">
 											<span class="glyphicon glyphicon-tag"></span>
 											{{trans('messages.patient-report')}}</a>
 									</div>
 								</li>
 								<li>
-									<div><a href="{{ URL::route('reports.daily.log')}}">
+									<div><a href="{{ route('reports.daily.log')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.daily-log')}}</a>
 									</div>
@@ -29,43 +29,43 @@
 							<h4 class="panel_heading panel_heading_first">{{trans('messages.aggregate-reports')}}</h4>
 							<ul>
 								<li>
-									<div><a href="{{ URL::route('reports.aggregate.prevalence')}}">
+									<div><a href="{{ route('reports.aggregate.prevalence')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.positivity-rates')}}</a>
 									</div>
 								</li>
 								<li>
-									<div><a href="{{ URL::route('reports.aggregate.surveillance')}}">
+									<div><a href="{{ route('reports.aggregate.surveillance')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.surveillance')}}</a>
 									</div>
 								</li>
 								<li>
-									<div><a href="{{ URL::route('reports.aggregate.counts')}}">
+									<div><a href="{{ route('reports.aggregate.counts')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.counts')}}</a>
 									</div>
 								</li>
 								<li>
-									<div><a href="{{ URL::route('reports.aggregate.tat')}}">
+									<div><a href="{{ route('reports.aggregate.tat')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.turnaround-time')}}</a>
 									</div>
 								</li>
 								<li>
-									<div><a href="{{ URL::route('reports.aggregate.infection')}}">
+									<div><a href="{{ route('reports.aggregate.infection')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.infection-report')}}</a>
 									</div>
 								</li>
 								<li>
-									<div><a href="{{ URL::route('reports.aggregate.userStatistics')}}">
+									<div><a href="{{ route('reports.aggregate.userStatistics')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.user-statistics-report')}}</a>
 									</div>
 								</li>
 								<li>
-									<div><a href="{{ URL::route('reports.aggregate.moh706')}}">
+									<div><a href="{{ route('reports.aggregate.moh706')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.moh-706')}}</a>
 									</div>
@@ -77,13 +77,13 @@
 									</div>
 								</li>
 								<li>
-									<div><a href="{{ URL::route('reports.aggregate.cd4')}}">
+									<div><a href="{{ route('reports.aggregate.cd4')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.cd4-report')}}</a>
 									</div>
 								</li>
 								<li>
-									<div><a href="{{ URL::route('reports.qualityControl')}}">
+									<div><a href="{{ route('reports.qualityControl')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{Lang::choice('messages.quality-control', 2)}}</a>
 									</div>
@@ -92,7 +92,7 @@
 							<h4 class="panel_heading panel_heading_first">{{trans('messages.inventory-reports')}}</h4>
 							<ul>
 								<li>
-									<div><a href="{{ URL::route('reports.inventory')}}">
+									<div><a href="{{ route('reports.inventory')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										{{trans('messages.stock-levels')}}</a>
 									</div>
@@ -101,7 +101,7 @@
 							<h4 class="panel_heading panel_heading_first">Dashboard</h4>
 							<ul>
 								<li>
-									<div><a href="{{ URL::route('user.dashboard')}}">
+									<div><a href="{{ route('dashboard.index')}}">
 										<span class="glyphicon glyphicon-tag"></span>
 										Dashboard</a>
 									</div>

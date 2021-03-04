@@ -54,6 +54,18 @@
 			    	</ul>
 		    	</div>
 	    	</div>
+	    	<div class="row">
+	    		<div class="col-md-7">
+					{{ Form::open(array('route' => array('resetulin.specimen_collection'), 'id' => 'uuid-set'))}}
+
+						<div class="form-group">
+							<div class="panel-btn"><a href="javascript:void(0)" class="btn btn-link" role="button" data-toggle="modal" data-target="#resetTwo">
+								<span class="glyphicon glyphicon-plus-sign"></span><strong>{{' Click to activate specimen collection option for the facility'}}</strong></a>
+							</div>
+						</div>
+					{{ Form::close()}}
+				</div>
+	    	</div>
     	</div>
 
 	</div>
@@ -104,6 +116,29 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onclick="submit();">Reset ID</button>
+      </div>
+      {{Form::close()}}
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="resetTwo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    	{{Form::open(array('route' => 'resetulin.specimen_collection', 'id' =>'uuid-reset')) }}
+       <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">{{'Activate facility sample collection option'}}</h4>
+      </div>
+      <div class="modal-body">
+			<div class="alert alert-danger">
+				{{Form::hidden('incrementNum', '2')}}
+				{{ 'This will activate view for sample collection. Are you sure you want to proceed? This Action is irreversible!'}}
+			</div>
+	  </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submit();">Activate</button>
       </div>
       {{Form::close()}}
     </div>

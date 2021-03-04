@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\DailyTestCount;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class DailyReportController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+	public function index(Request $request)
 	{
-		$input = Input::get('month');
+		$input = $request->get('month');
 		if ($input == '') {
 			$month = date('Y-m');
 		}else{
@@ -30,7 +33,7 @@ class DailyReportController extends Controller {
 			$expectedDates[] = date('Y',strtotime($month)) . "-" . date('m',strtotime($month)) . "-" . str_pad($i, 2, '0', STR_PAD_LEFT);
 		}
 		$dailyreports = DailyTestCount::where('date', 'like', '%' . $month . '%')->lists('date');
-		return View::make('reportconfig.dailyreport')
+		return view('reportconfig.dailyreport')
 			->with('dailyreports',$dailyreports)
 			->with('month',$month)
 			->with('expectedDates',$expectedDates);
@@ -50,14 +53,14 @@ class DailyReportController extends Controller {
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function store($date)
 	{
 		Artisan::call('report:day', ['date' => $date]);
 
 		$month = date('Y-m',strtotime($date));
-		return Redirect::route('reportconfig.dailyreport')
+		return redirect()->route('reportconfig.dailyreport')
 			->with('month', $month)
 			->with('message', 'Daily Report Database successfully populated for '.$date.'. Thanks for being patient.');
 	}
@@ -102,13 +105,13 @@ class DailyReportController extends Controller {
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
 		// todo: some real action on the way
 		// $->delete();
-		return Redirect::route('reportconfig.dailyreport')
+		return redirect()->route('reportconfig.dailyreport')
 			->with('message', trans('messages.successfully-deleted-dailyreport'));
 	}
 

@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-		<li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+		<li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 		<li class="active">Reported Dates</li>
 	</ol>
 </div>
@@ -45,7 +45,7 @@
 					<td>{{ $expectedDate }}</td>
 					<td>
 						@if(in_array($expectedDate,$dailyreports))
-						<!-- 
+						<!--
 						<a class="btn btn-sm btn-danger delete-item-link"
 							href='{{ URL::to("reportconfig/" . $expectedDate . "/delete") }}'>
 							<span class="glyphicon glyphicon-trash"></span>

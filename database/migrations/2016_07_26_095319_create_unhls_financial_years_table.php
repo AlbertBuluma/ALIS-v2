@@ -12,16 +12,16 @@ class CreateUnhlsFinancialYearsTable extends Migration {
 	 */
 	public function up()
 	{
-	
+
 		Schema::create('unhls_financial_years', function($table)
 
 		{
 		    $table->increments('id');
 		    $table->string('year');
-		    $table->timestamps();
+//		    $table->timestamps();
 
 		});
-			
+
 	}
 
 	/**

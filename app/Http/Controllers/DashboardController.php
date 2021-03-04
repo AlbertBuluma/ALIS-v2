@@ -16,7 +16,7 @@ class DashboardController extends Controller {
     /**
      * Display dashboard.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
 	public function index(Request $request){
 
@@ -47,20 +47,18 @@ class DashboardController extends Controller {
             $outPatients = 0.00;
         }
 
-        $testCounts = UnhlsTest::where('test_status_id', '=', UnhlsTest::COMPLETED)->orWhere('test_status_id', '=', UnhlsTest::VERIFIED)
-                    ->whereBetween('time_created', [$from, $to])->count();
+        $tests = UnhlsTest::whereBetween('time_created', [$from, $to]);
+        $testCounts =$tests->whereTestStatusId('7')->orWhere('test_status_id', '=', '5')->whereBetween('time_created', [$from, $to])->count();
+        $testsReffered =$tests->whereTestStatusId('8')->count();
 
-        $testsReffered = UnhlsTest::where('test_status_id', '=', UnhlsTest::REFERRED_OUT)->whereBetween('time_created', [$from, $to])->count();
-
-        $samplesRejected = UnhlsTest::where('test_status_id', '=', UnhlsTest::REJECTED)->whereBetween('time_created', [$from, $to])->count();
-
-        $sampleCounts = UnhlsSpecimen::whereBetween('time_collected', [$from, $to])->count();
-
+        $samples = UnhlsSpecimen::whereBetween('time_collected', [$from, $to]);
+        $sampleCounts = $samples->count();
         if($sampleCounts > 0){
-            $samplesAccepted = round(($sampleCounts - $samplesRejected) * 100/$sampleCounts, 2);
+            $samplesAccepted = round($samples->whereSpecimenStatusId('2')->count() * 100/$sampleCounts, 2);
         }else{
             $samplesAccepted = 0.00;
         }
+        $samplesRejected = $samples->whereSpecimenStatusId('3')->count();
 
         $staffCount = User::count();
 
@@ -68,10 +66,10 @@ class DashboardController extends Controller {
           $tb = $hiv = $malaria = 0.00;
 
         foreach($getPrevalenceCounts as $prevalence){
-            if ($prevalence['test'] == 'Malaria RDTs'){
+            if ($prevalence['test'] == 'Malaria RDT'){
                 $malaria = $prevalence['rate'];
             }
-            elseif ($prevalence['test'] == 'TB') {
+            elseif ($prevalence['test'] == 'ZN'|| $prevalence['test']=='ZN stain for AFBS' || $prevalence['test']=='TB') {
                 $tb = $prevalence['rate'];
             }
             elseif($prevalence['test'] == 'HIV' || $prevalence['test'] == 'H.I.V'){
@@ -79,14 +77,25 @@ class DashboardController extends Controller {
             }
         }
 
-        $testAnalytics = array('patientCnts' => $patientCounts , 'opd' => $outPatients, 'testCnts' => $testCounts, 'testsReffered' => $testsReffered,
-            'sampleCnts' => $sampleCounts, 'samplesAccepted' => $samplesAccepted, 'samplesRejected' => $samplesRejected, 'malaria' => $malaria,
-            'tb' => $tb, 'hiv' => $hiv);
+//        $testAnalytics = array('patientCnts' => $patientCounts , 'opd' => $outPatients, 'testCnts' => $testCounts, 'testsReffered' => $testsReffered,
+//            'sampleCnts' => $sampleCounts, 'samplesAccepted' => $samplesAccepted, 'samplesRejected' => $samplesRejected, 'malaria' => $malaria,
+//            'tb' => $tb, 'hiv' => $hiv);
 
         return view("dashboard.home")
             ->with('dateFrom', $dateFrom)
             ->with('dateTo', $dateTo)
-            ->with('testAnalytics', $testAnalytics)
+            ->with('malaria', $malaria)
+            ->with('tb', $tb)
+            ->with('hiv', $hiv)
+            ->with('patientCount', $patientCounts)
+            ->with('outPatients', $outPatients)
+            ->with('testCounts', $testCounts)
+            ->with('sampleCounts', $sampleCounts)
+            ->with('samplesAccepted', $samplesAccepted)
+            ->with('samplesRejected', $samplesRejected)
+            // ->with('items', $items)
+            // ->with('stockout', $stockout)
+            // ->with('expiredItems', $expiredItems)
             ->with('staff', $staffCount);
     }
 

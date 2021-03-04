@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.drug',1) }}</li>
 	</ol>
 </div>
@@ -38,7 +38,7 @@
 
 					<td>{{ $value->name }}</td>
 					<td>{{ $value->description }}</td>
-					
+
 					<td>
 
 					<!-- show the drug (uses the show method found at GET /drug/{id} -->
@@ -52,10 +52,10 @@
 							<span class="glyphicon glyphicon-edit"></span>
 							{{ trans('messages.edit') }}
 						</a>
-						
+
 					<!-- delete this drug (uses delete method found at GET /drug/{id}/delete -->
 						<button class="btn btn-sm btn-danger delete-item-link"
-							data-toggle="modal" data-target=".confirm-delete-modal"	
+							data-toggle="modal" data-target=".confirm-delete-modal"
 							data-id='{{ URL::to("drug/" . $value->id . "/delete") }}'>
 							<span class="glyphicon glyphicon-trash"></span>
 							{{ trans('messages.delete') }}

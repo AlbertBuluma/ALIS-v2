@@ -2,7 +2,7 @@
 @section("content")
 <div>
 	<ol class="breadcrumb">
-	  <li><a href="{{{URL::route('user.home')}}}">{{ trans('messages.home') }}</a></li>
+	  <li><a href="{{{route('user.home')}}}">{{ trans('messages.home') }}</a></li>
 	  <li class="active">{{ Lang::choice('messages.disease',2) }}</li>
 	</ol>
 </div>
@@ -24,7 +24,7 @@
 					<div class="col-sm-5 col-md-3">
 						<input class="form-control" name="diseases[{{ $disease->id }}][disease]"
 							type="text" value="{{ $disease->name }}">
-					    <button class="close" aria-hidden="true" type="button" 
+					    <button class="close" aria-hidden="true" type="button"
 					        title="{{trans('messages.delete')}}">×</button>
 					</div>
 				</div>
@@ -35,13 +35,13 @@
 			<div class="form-group actions-row">
 				<input class="hidden" name="from-form" type="text" value="from-form">
 				{{ Form::button(
-					'<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'), 
+					'<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'),
 					['class' => 'btn btn-primary', 'onclick' => 'authenticate("#form-edit-disease")']
 				) }}
-				{{ Form::button(trans('messages.cancel'), 
+				{{ Form::button(trans('messages.cancel'),
 					['class' => 'btn btn-default', 'onclick' => 'javascript:history.go(-1)']
 				) }}
-				{{ Form::button(trans('messages.add-another'), 
+				{{ Form::button(trans('messages.add-another'),
 					['class' => 'btn btn-default add-another-disease', 'data-new-disease' => '1']
 				) }}
 			</div>
@@ -53,7 +53,7 @@
 		<div class="row">
 			<div class="col-sm-5 col-md-3">
 				<input class="form-control disease" type="text">
-			    <button class="close" aria-hidden="true" type="button" 
+			    <button class="close" aria-hidden="true" type="button"
 			        title="{{trans('messages.delete')}}">×</button>
 			</div>
 		</div>

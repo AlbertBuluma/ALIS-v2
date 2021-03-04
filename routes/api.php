@@ -28,22 +28,25 @@ Route::middleware('api')->group(function()
     | Proposed route for the BLIS api, we will receive api calls
     | from other systems from this route.
     */
-    Route::post('receiver', array(
+    Route::post('/receiver', array(
         "as" => "api.receiver",
         "uses" => "InterfacerController@receiveLabRequest"
     ));
-    Route::post('testinfo', array(
+    Route::post('/testinfo', array(
         "uses" => "InterfacerController@getTestInfo"
     ));
-    Route::post('searchtests', array(
+    Route::post('/searchtests', array(
         "uses" => "InterfacerController@getTests"
     ));
-    Route::post('saveresults', array(
+    Route::post('/saveresults', array(
         "uses" => "InterfacerController@saveTestResults"
     ));
-    Route::any('/', array(
-        "as" => "user.login",
-        "uses" => "UserController@loginAction"
+    // blisurl/api/saveresults?username=???&password=???&specimen_id?=1052&measure_id=68&result=5.23&dec=0
+    Route::get('/saveresults/{query?}', array(
+        "uses" => "InterfacerController@saveTestResultsFromInstrument"
+    ));
+    Route::get('/fetchrequests/{query?}', array(
+        "uses" => "InterfacerController@getTestRequestsForInstrument"
     ));
 
 });

@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CultureObservation;
+use App\Models\DailyTestCount;
 use App\Models\DrugSusceptibilityMeasure;
 use App\Models\Organism;
 use App\Models\UnhlsTest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class CultureController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return Response
+     */
+	public function index(Request $request)
 	{
 		//
 	}
@@ -30,12 +36,13 @@ class CultureController extends Controller {
 	}
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return CultureObservation
+     */
+	public function store(Request $request)
 	{
 		//
 	}
@@ -55,7 +62,7 @@ class CultureController extends Controller {
 			'isolatedOrganisms.drugSusceptibilities.drug',
 			'isolatedOrganisms.drugSusceptibilities.drugSusceptibilityMeasure');
 
-		$content = View::make('test.culture.microbiologyreport')
+		$content = view('test.culture.microbiologyreport')
 			->with('test', $test);
 		$pdf = App::make('dompdf');
 		$pdf->loadHTML($content);
@@ -67,7 +74,7 @@ class CultureController extends Controller {
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function edit($id)
 	{
@@ -78,10 +85,10 @@ class CultureController extends Controller {
 			'isolatedOrganisms.drugSusceptibilities.drug',
 			'isolatedOrganisms.drugSusceptibilities.drugSusceptibilityMeasure');
 
-		$drugSusceptibilityMeasures = ['']+DrugSusceptibilityMeasure::all()->lists('interpretation','id');
-		$organisms = ['']+Organism::all()->lists('name','id');
+		$drugSusceptibilityMeasures = ['']+DrugSusceptibilityMeasure::all()->pluck('interpretation','id')->toArray();
+		$organisms = ['']+Organism::all()->pluck('name','id')->toArray();
 
-		return View::make('unhls_test.culture')
+		return view('unhls_test.culture')
 			->with('drugSusceptibilityMeasures', $drugSusceptibilityMeasures)
 			->with('organisms', $organisms)
 			->with('test', $test);
@@ -104,7 +111,7 @@ class CultureController extends Controller {
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
-	 * @return Response
+	 * @return int
 	 */
 	public function destroy($id)
 	{
