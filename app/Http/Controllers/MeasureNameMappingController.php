@@ -37,7 +37,7 @@ class MeasureNameMappingController extends Controller {
 	public function create($test_name_mapping_id)
 	{
 		$testNameMapping = TestNameMapping::find($test_name_mapping_id);
-		$measures = ($testNameMapping->test_type_id != '') ? $testNameMapping->testType->measures->pluck('name', 'id') : [] ;
+		$measures = ($testNameMapping->test_type_id != '') ? $testNameMapping->testType->measures->pluck('name', 'id')->toArray() : [] ;
 		return view('testnamemapping.measurenamemapping.create')
 				->with('measures', $measures)
 				->with('testNameMapping', $testNameMapping);
@@ -97,7 +97,7 @@ class MeasureNameMappingController extends Controller {
 	public function edit(Request $request, $id)
 	{
 		$measureNameMapping = MeasureNameMapping::find($id);
-		$measures = ($measureNameMapping->testNameMapping->test_type_id != '') ? $measureNameMapping->testNameMapping->testType->measures->pluck('name', 'id') : [] ;
+		$measures = ($measureNameMapping->testNameMapping->test_type_id != '') ? $measureNameMapping->testNameMapping->testType->measures->pluck('name', 'id')->toArray() : [] ;
 
 		return view('testnamemapping.measurenamemapping.edit')
 				->with('measureNameMapping', $measureNameMapping)
@@ -164,7 +164,7 @@ class MeasureNameMappingController extends Controller {
 	public function getRange($id)
 	{
 		$measureRange = MeasureRange::find($id);
-		$resultInterpretations = ResultInterpretation::orderBy('id','DESC')->pluck('name', 'id');
+		$resultInterpretations = ResultInterpretation::orderBy('id','DESC')->pluck('name', 'id')->toArray();
 
 		return view('testnamemapping.measurenamemapping.range')
 				->with('resultInterpretations', $resultInterpretations)
@@ -184,7 +184,7 @@ class MeasureNameMappingController extends Controller {
 
 	public function getNegativeGramStain($test_name_mapping_id)
 	{
-		$gramStainRanges = GramStainRange::orderBy('id','DESC')->pluck('name', 'id');
+		$gramStainRanges = GramStainRange::orderBy('id','DESC')->pluck('name', 'id')->toArray();
 		return view('testnamemapping.measurenamemapping.negativegramstain')
 			->with('test_name_mapping_id', $test_name_mapping_id)
 			->with('gramStainRanges', $gramStainRanges);
@@ -205,7 +205,7 @@ class MeasureNameMappingController extends Controller {
 
 	public function getNegativeOrganism($test_name_mapping_id)
 	{
-		$organisms = Organism::orderBy('id','DESC')->pluck('name', 'id');
+		$organisms = Organism::orderBy('id','DESC')->pluck('name', 'id')->toArray();
 		return view('testnamemapping.measurenamemapping.negativeorganism')
 			->with('test_name_mapping_id', $test_name_mapping_id)
 			->with('organisms', $organisms);

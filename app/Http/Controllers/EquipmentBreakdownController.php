@@ -186,7 +186,7 @@ class EquipmentBreakdownController extends Controller {
 
 				$breakdown->save();
 
-				return redirect('equipmentbreakdown');
+				return redirect()->route('equipmentbreakdown');
 			}
 		}
 
