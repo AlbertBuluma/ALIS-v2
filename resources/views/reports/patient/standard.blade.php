@@ -1,14 +1,56 @@
 <style type="text/css">
     table {
         padding: 3px;
-
     }
-
     th{
         text-align: left;
     }
-</style>
+    .pagenum:before {
+        content: counter(page);
+    }
+    footer{
+        position: fixed;
+        bottom: -60px;
+        left: 0px;
+        right: 0px;
+        height: 50px;
 
+        /** Extra personal styles **/
+        /*background-color: #03a9f4;*/
+        color: black;
+        text-align: center;
+        line-height: 35px;
+    }
+</style>
+    <table style="text-align:center; margin-top: -20px;" >
+
+        <tr>
+            <td colspan="12" style="text-align:center;">
+            {{ @HTML::image(config('kblis.organization-logo'),  config('kblis.country') . trans('messages.court-of-arms'), array('width' => '90px')) }}
+            </td>
+        </tr>
+        <tr>
+
+            <td colspan="12" style="text-align:center;"><b>
+                    {{ strtoupper(config('constants.MINISTRY')) }}<br>
+                    <span style="font-size:14px">
+                        {{ strtoupper(config('constants.FACILITY_NAME')) }}<br>
+                    </span>
+
+                    {{config('kblis.address-info')}}<br>
+                    {{config('kblis.telephone-number')}}<br>
+                    {{config('kblis.email-address')}}<br></b>
+                @if(isset($tests))
+                    @if(!empty($tests->first()->approved_by))
+                        {{config('kblis.final-report-name')}}
+                    @else
+                        {{config('kblis.interim-report-name')}}
+                    @endif
+                @endif
+            </td>
+        </tr>
+
+    </table>
 
 <table style="border-bottom: 1px solid #cecfd5; font-size:8px; width: 100%;
  font-family: 'Courier New',Courier;">
@@ -355,3 +397,7 @@
     </tr>
     <!-- <tr><td><u><strong></strong></u></td></tr> -->
 </table>
+<footer>
+    <div>Page<span class="pagenum"></span></div>
+</footer>
+

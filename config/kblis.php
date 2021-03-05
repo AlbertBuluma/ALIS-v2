@@ -47,8 +47,9 @@ return array(
 	|--------------------------------------------------------------------------
 	|
 	*/
-	'address-info' => 'Plot 39/43 Kampala Road, P.O. BOX 29, Entebbe <br> Tel: +256 773 547 114, +256 753 385 163 <br> Email: info.ebhl@gmail.com <br><br>',
-
+	'address-info' => 'Plot 39/43 Kampala Road, P.O. BOX 29, Entebbe',
+    'telephone-number' => 'Tel: +256 773 547 114, +256 753 385 163',
+	'email-address' => 'Email: info.ebhl@gmail.com',
 	/*
 	|--------------------------------------------------------------------------
 	|	Organization Logo
