@@ -45,18 +45,17 @@ class CliniciansController extends Controller {
     public function store(Request $request)
     {
         //Validation
-        $rules = array(
-            'name' => 'required|unique:clinicians,name',
+        $request->validate([
+            'name' => 'required',
             'cadre' => 'required',
             'phone' => 'required'
-            );
 
-        $validator = Validator::make($request->all(), $rules);
+        ], [
+            'name.required' => 'Clinician name is required',
+            'cadre.required' => 'Cadre required',
+            'phone.required' => 'Phone number is required'
+        ]);
 
-        //process
-        if($validator->fails()){
-                return redirect()->back()->withErrors($validator);
-        }else{
             //store
             $clinician = new Clinician;
             $clinician->name = $request->get('name');
@@ -71,7 +70,6 @@ class CliniciansController extends Controller {
             }catch(QueryException $e){
                 Log::error($e);
             }
-        }
     }
 
     /**

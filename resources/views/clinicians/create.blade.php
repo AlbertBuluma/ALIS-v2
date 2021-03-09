@@ -28,16 +28,31 @@
                 <div class="form-group">
                     {{ Form::label('name', Lang::choice('messages.name',1)) }}
                     {{ Form::text('name', old('name'), array('class' => 'form-control')) }}
+                    @if ($errors->has('name'))
+                        <span class="text-danger">
+                            <strong>{{ $errors->first('name') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group">
                     {{ Form::label('cadre', "Cadre"), array('class' => 'required') }}</label>
                     {{ Form::text('cadre', old('cadre'),
                         array('class' => 'form-control', 'required' => 'required')) }}
+                    @if ($errors->has('cadre'))
+                        <span class="text-danger">
+                            <strong>{{ $errors->first('cadre') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group">
                     {{ Form::label('phone', "Phone") }}</label>
                     {{ Form::text('phone', old('phone'),
                         array('class' => 'form-control')) }}
+                    @if ($errors->has('phone'))
+                        <span class="text-danger">
+                            <strong>{{ $errors->first('phone') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group">
                     {{ Form::label('email', "Email") }}</label>

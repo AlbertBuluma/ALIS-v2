@@ -24,10 +24,20 @@
 			<div class="form-group">
 				{{ Form::label('name', Lang::choice('messages.name',1)) }}
 				{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
+				@if ($errors->has('name'))
+					<span class="text-danger">
+                            <strong>{{ $errors->first('name') }}</strong>
+                        </span>
+				@endif
 			</div>
 			<div class="form-group">
 				{{ Form::label('parentId','Standard name') }}
 				{{ Form::select('parentId', array(0 => '')+$standardnames->pluck('standard_name', 'id')->toArray(), old('parentId'), array('class' => 'form-control')) }}
+				@if ($errors->has('parentId'))
+					<span class="text-danger">
+                            <strong>{{ $errors->first('parentId') }}</strong>
+                        </span>
+				@endif
 			</div>
 			<div class="form-group">
 				{{ Form::label('description', trans('messages.description')) }}
