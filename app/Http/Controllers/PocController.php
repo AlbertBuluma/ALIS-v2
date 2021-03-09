@@ -90,25 +90,22 @@ class PocController extends Controller {
      */
 	public function store(Request $request)
 	{
-//	    dd($request->all());
-		//
-        $rules = array(
+        $request->validate([
             'infant_name' => 'required',
-            'age'       => 'required',
-            'gender' => 'required',
+            'age' => 'required|numeric',
             'entry_point' => 'required',
+            'pcr_level' => 'required',
             'collection_date' => 'required',
-            'sample_id' => 'required|unique:poc_tables,sample_id'
-        );
+            'sample_id' => 'required'
 
-		$validator = Validator::make($request->all(), $rules);
-
-		if ($validator->fails()) {
-//        dd($validator);
-
-			return redirect()->back()->withErrors($validator)->withInput($request->all());
-		} else {
-//			 store
+        ], [
+            'infant_name.required' => 'Infant name required',
+            'age.required' => 'Age required',
+            'entry_point.required' => 'Entry point required',
+            'pcr_level.required' => 'Type of PCR required',
+            'collection_date.required' => 'Collection date required',
+            'sample_id.required' => 'Unique Sample ID required'
+        ]);
 
 			$patient = new POC;
 
@@ -149,19 +146,11 @@ class PocController extends Controller {
 			// $patient->district	= $request->get('district');
 			$patient->created_by = Auth::user()->name;
 
-			try{
 				$patient->save();
 
 				return redirect()->route('poc.index')
 				->with('message', 'Successfully saved patient information:!');
 
-			}catch(QueryException $e){
-				Log::error($e);
-				return view('poc.error', array(), []);
-			}
-
-			// redirect
-		}
 	}
     /**
      * Display the specified resource.

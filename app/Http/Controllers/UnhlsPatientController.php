@@ -88,21 +88,28 @@ class UnhlsPatientController extends Controller {
     public function store(Request $request)
     {
         //
-        $rules = array(
-            'name'       => 'required',
-            'gender' => 'required',
-            'dob' => 'required' ,
+//        $rules = array(
+//            'name'       => 'required',
+//            'gender' => 'required',
+//            'dob' => 'required' ,
+//            'nationality' => 'required'
+//            // 'village_residence' => 'required'
+//
+//        );
+//        $validator = Validator::make($request->all(), $rules);
+//
+//        if ($validator->fails()) {
+//
+//            return redirect()->back()->withErrors($validator)->withInput($request->all());
+//        } else {
+        $request->validate([
+            'name' => 'required',
             'nationality' => 'required'
-            // 'village_residence' => 'required'
 
-        );
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-
-            return redirect()->back()->withErrors($validator)->withInput($request->all());
-        } else {
-
+        ], [
+            'name.required' => 'Name is required',
+            'nationality.required' => 'Nationality is required'
+        ]);
             $nation = ['0' => 'National', '1' => 'Refugee', '2' => 'Foreigner'];
             // store
             $patient = new UnhlsPatient;
@@ -146,7 +153,7 @@ class UnhlsPatientController extends Controller {
             }
 
             // redirect
-        }
+//        }
     }
     /**
      * Display the specified resource.

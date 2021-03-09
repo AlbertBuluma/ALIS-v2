@@ -43,6 +43,11 @@
 				<div class="form-group">
 					{{ Form::label('name', trans('messages.names'), array('class' => 'required')) }}
 					{{ Form::text('name', old('name'), array('class' => 'form-control')) }}
+					@if ($errors->has('name'))
+						<span class="text-danger">
+						<strong>{{ $errors->first('name') }}</strong>
+					</span>
+					@endif
 				</div>
 				<div class="form-group">
 					<label class= 'required' for="dob">Date Of Birth</label>
@@ -69,6 +74,11 @@
 					{{ Form::select('nationality', [' ' => '--- Select Nationality ---',
 					'0' => trans('National'),'1' => trans('Refugee'),'2' => trans('Foreigner')], null,
 						array('class' => 'form-control')) }}
+					@if ($errors->has('nationality'))
+						<span class="text-danger">
+						<strong>{{ $errors->first('nationality') }}</strong>
+					</span>
+					@endif
 				</div>
 				<div class="form-group">
 					{{ Form::label('village_residence', trans('messages.residence-village'),array('class' => 'required')) }}
@@ -78,6 +88,11 @@
 				<div class="form-group">
 					{{ Form::label('village_workplace', trans('messages.workplace-village')) }}
 					{{ Form::text('village_workplace', old('village_workplace'), array('class'=>'form-control')) }}
+					@if ($errors->has('village_workplace'))
+						<span class="text-danger">
+                                                <strong>{{ $errors->first('village_workplace') }}</strong>
+                                            </span>
+					@endif
 				</div>
 				<div class="form-group">
 					{{ Form::label('address', trans('messages.physical-address')) }}

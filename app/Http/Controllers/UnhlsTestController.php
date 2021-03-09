@@ -603,17 +603,16 @@ class UnhlsTestController extends Controller {
     public function saveNewTest(Request $request)
     {
         //Create New Test
-        $rules = array(
+        $request->validate([
             'visit_type' => 'required',
             'testtypes' => 'required',
-        );
-        $validator = Validator::make($request->all(), $rules);
+            'urgency' => 'required'
 
-        // process the login
-        if ($validator->fails()) {
-            return redirect()->route('unhls_test.create',
-                array($request->get('patient_id')))->withInput()->withErrors($validator);
-        } else {
+        ], [
+            'visit_type.required' => 'Visit Type is required',
+            'urgency.required' => 'Type of request is required',
+            'testtypes.required' => 'Select test type to be displayed within this pane'
+        ]);
 
             $visitType = ['Out-patient','In-patient', 'Referral'];
             $activeTest = array();
@@ -681,7 +680,6 @@ class UnhlsTestController extends Controller {
 
             return redirect()->to($url)->with('message', 'messages.success-creating-test')
                 ->with('activeTest', $activeTest);
-        }
     }
 
 

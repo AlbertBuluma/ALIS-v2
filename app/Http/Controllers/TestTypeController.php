@@ -67,22 +67,25 @@ class TestTypeController extends Controller {
 	public function store(Request $request)
 	{
 		//
-		$rules = array(
-			'name' => 'required|unique:test_types,name',
-			'test_category_id' => 'required',
-			'specimentypes' => 'required',
-			'new-measures' => 'required',
-			'targetTAT' => 'required',
-			'targetTAT_unit'=>'required'
+        $request->validate([
+            'name' => 'required',
+            'test_category_id' => 'required',
+            'specimentypes' => 'required',
+            'new-measures' => 'required',
+            'parentId' => 'required',
+            'targetTAT' => 'required',
+            'targetTAT_unit' => 'required'
 
-		);
-		$validator = Validator::make($request->all(), $rules);
-			//array to be split here and sent to appropriate place! man! with ids and all possibilities
+        ], [
+            'name.required' => 'Test type name is required',
+            'test_category_id.required' => 'Lab section required',
+            'specimentypes.required' => 'Specimen type required',
+            'new-measures.required' => 'Measures required',
+            'parentId.required' => 'Standard name required',
+            'targetTAT.required' => 'TAT required',
+            'targetTAT_unit.required' => 'TAT unit required'
+        ]);
 
-		// process the login
-		if ($validator->fails()) {
-			return redirect()->route('testtype.create')->withErrors($validator);
-		} else {
 			// store
 			$testtype = new TestType;
 			$testtype->name = trim($request->get('name'));
@@ -111,7 +114,6 @@ class TestTypeController extends Controller {
 			}
 				return redirect()->route('testtype.index')
 					->with('message', trans('messages.success-creating-test-type'));
-		}
 	}
 
 	/**

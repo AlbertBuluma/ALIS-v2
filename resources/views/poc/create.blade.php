@@ -36,7 +36,11 @@
 					<div class="form-group">
 						{{ Form::label('infant_name', 'Infant Name', array('class' =>'col-sm-2 required ')) }}
 						{{ Form::text('infant_name', old('infant_name'), array('class' => 'form-control col-sm-4')) }}
-
+						@if ($errors->has('infant_name'))
+							<span class="text-danger">
+								<p><strong>{{ $errors->first('infant_name') }}</strong></p><br>
+                                            </span>
+						@endif
 						{{ Form::label('exp_no', 'Exp. Number', array('class' =>'col-sm-2 required ')) }}
 						{{ Form::text('exp_no', old('exp_no'), array('class' => 'form-control col-sm-4', 'placeholder' => '(If Status is not known)')) }}
 					</div>
@@ -44,9 +48,13 @@
 					<div class="form-group">
 						{{ Form::label('age', 'Age in Months', array('class' =>'col-sm-2 required ')) }}
 						{{ Form::number('age', old('age'), array('class' => 'form-control col-sm-4', 'placeholder' => '(In months)')) }}
-
+						@if ($errors->has('age'))
+							<span class="text-danger">
+								<p><strong>{{ $errors->first('age') }}</strong></p><br>
+                                            </span>
+						@endif
 						{{ Form::label('gender', 'Sex:', array('class' =>'col-sm-2 required ')) }}
-						<div class="radio-inline">{{ Form::radio('gender', 'Male', false) }} <span class="input-tag">Male</span></div>
+						<div class="radio-inline">{{ Form::radio('gender', 'Male', true) }} <span class="input-tag">Male</span></div>
 						<div class="radio-inline">{{ Form::radio("gender", 'Female', false) }} <span class="input-tag">Female</span></div>
 					</div>
 				</div>
@@ -102,6 +110,11 @@
 					<div class="radio-inline">{{ Form::radio("entry_point", 'Nutrition Unit', false) }} <span class="input-tag">Nutrition</span></div>
 					<div class="radio-inline">{{ Form::radio("entry_point", 'MBCP', false) }} <span class="input-tag">MBCP/eMTCT</span></div>
 					<div class="radio-inline">{{ Form::radio("entry_point", 'Young Child Clinic', false) }} <span class="input-tag">Young Child Clinic</span></div>
+					@if ($errors->has('entry_point'))
+						<span class="text-danger">
+                                                <strong>{{ $errors->first('entry_point') }}</strong><br>
+                                            </span>
+					@endif
 				</div>
 
 				<div class="form-group">
@@ -222,9 +235,18 @@
 		<div class="form-group">
 			{{ Form::label('collection_date', 'Sample Collection Date:', array('class' =>'col-sm-2 ')) }}
 			{{ Form::text('collection_date', old('collection_date'), array('class' => 'form-control standard-datepicker col-sm-4', 'placeholder' => 'YYYY-MM-DD')) }}
-
+			@if ($errors->has('collection_date'))
+				<span class="text-danger">
+					<p><strong>{{ $errors->first('collection_date') }}</strong></p><br>
+                                            </span>
+			@endif
 			{{ Form::label('sample_id', 'Sample ID:',array('class' =>'col-sm-2 required ')) }}
 			{{ Form::text('sample_id', old('sample_id'), array('class' => 'form-control col-sm-4')) }}
+			@if ($errors->has('sample_id'))
+				<span class="text-danger">
+                                                <strong>{{ $errors->first('sample_id') }}</strong>
+                                            </span>
+			@endif
 		</div>
 
 		<div class="form-group">
@@ -250,6 +272,11 @@
 				<div class="radio-inline">{{ Form::radio('pcr_level', 'R1', false) }} <span class="input-tag">R<sub>1</sub></span></div>
 				<div class="radio-inline">{{ Form::radio('pcr_level', 'R2', false) }} <span class="input-tag">R<sub>2</sub></span></div>
 				<div class="radio-inline">{{ Form::radio('pcr_level', 'R3', false) }} <span class="input-tag">R<sub>3</sub></span></div>
+				@if ($errors->has('pcr_level'))
+					<span class="text-danger">
+						<strong>{{ $errors->first('pcr_level') }}</strong>
+					</span>
+				@endif
 			</div>
 
 			<div class="form-group">

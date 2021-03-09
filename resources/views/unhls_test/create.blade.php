@@ -63,6 +63,11 @@
                                             {{ Form::select('visit_type', [' ' => '--- Select visit type ---',
                                             '0' => trans("messages.out-patient"),'1' => trans("messages.in-patient"),'2' => trans("messages.refferrals")], null,
                                                  array('class' => 'form-control')) }}
+                                            @if ($errors->has('visit_type'))
+                                                <span class="text-danger">
+						                            <strong>{{ $errors->first('visit_type') }}</strong>
+					                            </span>
+                                            @endif
                                         </div>
                                     <!-- <div class="form-group">
 											{{ Form::label('ward_id','Ward/Clinic/Health Unit') }}
@@ -96,6 +101,11 @@
                                                 <span class="input-tag">Normal</span></div>
                                             <div>{{ Form::radio("urgency", '1', false) }}
                                                 <span class="input-tag">Emergency</span></div>
+                                            @if ($errors->has('urgency'))
+                                                <span class="text-danger">
+						                            <strong>{{ $errors->first('urgency') }}</strong>
+					                            </span>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -211,6 +221,11 @@
                                                 <div class="col-md-1"></div>
                                             </div>
                                         </div>
+                                        @if ($errors->has('testtypes'))
+                                            <span class="text-danger">
+						                            <strong>{{ $errors->first('testtypes') }}</strong>
+					                            </span>
+                                        @endif
                                     </div>
                                     <div class ="form-group hidden hiv-purpose col-md-12">
                                         {{Form::label('hiv_purpose', 'Please select the purpose of HIV test', array('class' => 'required'))}}
