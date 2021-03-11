@@ -112,7 +112,8 @@
 						<tr>
 							<td>{{count($visits)}}</td>
 							<td>
-								{{--*/ $male = 0 /*--}}
+								<?php $male = 0;
+                                ?>
 								@forelse($visits as $visit)
 								  @if($visit->patient->gender==App\Models\UnhlsPatient::MALE)
 								   	{{--*/ $male++ /*--}}
