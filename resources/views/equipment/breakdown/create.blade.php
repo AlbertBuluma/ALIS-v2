@@ -156,7 +156,7 @@
 						{{ Form::text('verified_by',null,['class' => 'form-control','rows'=>'5']) }}
 
 						{{ Form::label('verification_date', 'Verification Date:', ['class' => 'col-lg-2 control-label']) }}
-						{{ Form::text('verification_date', old('verification_date'), array('class' => 'form-control standard-datepicker', 'id' => 'report_date','required'=>'required')) }}
+						{{ Form::text('verification_date', old('verification_date'), array('class' => 'form-control standard-datepicker','required'=>'required')) }}
 					</div>
 
 				</div>
