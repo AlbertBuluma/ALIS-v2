@@ -71,7 +71,13 @@
 				@endforeach</td>
 				<td>{{ $test->interpretation }}</td>
 				<td>{{ $test->time_completed or trans('messages.pending') }}</td>
-				<td>{{ $test->verifiedBy->name or trans('messages.verification-pending') }}</td>
+				<td>
+                    @if($test->verified_by !=0)
+                        {{$test->verifiedBy->name}}
+                    @else
+                        {{ trans('messages.verification-pending') }}
+                    @endif
+                </td>
 			</tr>
 			@empty
 			<tr><td colspan="9">{{trans('messages.no-records-found')}}</td></tr>
