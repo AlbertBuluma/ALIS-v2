@@ -120,7 +120,7 @@ class EquipmentInventoryController extends Controller {
 
 			$item->save();
 
-			return redirect()->route('equipmentinventory');
+			return redirect('equipmentinventory');
 		}
 	}
 
