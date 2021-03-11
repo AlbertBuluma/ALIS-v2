@@ -299,7 +299,7 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 	}
 
 	private function getReferralTestCountsByLabSection($lab_section_id, $month){
-		$query = "select test_type_id, utr.test_id, utr.measure_id, mnm.measure_id as M2, mnm.system_name, tt.test_category_id as lab_section, count(DISTINCT rr.id) as total, count(rr.id)-count(utr.id) as Pending, DATE_FORMAT(rr.created_at,'%Y%m') year_month_created, ut.time_started,
+		$query = "select test_type_id, utr.test_id, utr.measure_id, mnm.measure_id as M2, mnm.system_name, tt.test_category_id as lab_section, count(DISTINCT rr.id) as total, count(rr.id)-count(utr.id) as Pending, DATE_FORMAT(rr.created_at,'%Y%m') year_month_created, ut.time_started, ut.time_verified,
 						ut.time_verified, ut.time_approved,
 						TIMESTAMPDIFF(MINUTE, ut.time_created, ut.time_approved) as waiting_time,
 						TIMESTAMPDIFF(MINUTE, rr.created_at, ut.time_verified) as testing_time,
@@ -308,7 +308,7 @@ WHERE `v`.`created_at` LIKE '%".$month."%' ";
 			LEFT JOIN measure_name_mappings mnm ON(utr.measure_id = mnm.measure_id)
 			INNER JOIN unhls_tests ut ON(rr.test_id = ut.id)
 			INNER JOIN test_types tt ON(ut.test_type_id = tt.id)
-			WHERE `ut`.`time_created` LIKE '%".$month."%' GROUP BY test_type_id,utr.test_id, utr.measure_id, M2, mnm.system_name, lab_section, rr.id,utr.id";
+			WHERE `ut`.`time_created` LIKE '%".$month."%' GROUP BY test_type_id,utr.test_id, utr.measure_id, M2, mnm.system_name, lab_section, rr.id, rr.created_at, ut.time_started, ut.time_created, ut.time_verified, ut.time_approved, utr.id";
 
 
 	 	$rows = DB::select($query);
