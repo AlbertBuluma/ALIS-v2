@@ -43,7 +43,9 @@ class SupplierController extends Controller  {
     public function store(Request $request)
     {
         $rules = array(
-            'name' => 'required|unique:suppliers,name');
+            'name' => 'required|unique:suppliers,name',
+            'phone' => 'required',
+            'address' => 'required');
         $validator = Validator::make($request->all(), $rules);
 
 
