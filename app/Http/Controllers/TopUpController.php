@@ -51,14 +51,16 @@ class TopUpController extends Controller {
 	{
 		$rules = array(
 			'item_id' => 'required',
+			'tests_done' => 'required',
 			'test_category_id' => 'required',
-			'quantity_ordered' => 'required'
+			'quantity_ordered' => 'required',
+            'quantity_remaining' => 'required'
 		);
 		$validator = Validator::make($request->all(), $rules);
 
 		// process the login
 		if ($validator->fails()) {
-		return redirect()->route('inventory.request.index')->withErrors($validator);
+		return redirect()->back()->withErrors($validator);
 		} else {
 			// store
 			$topup = new Topup;
@@ -134,17 +136,17 @@ class TopUpController extends Controller {
 			'test_category_id' => 'required'
 		);
 		// Update
-		$request = Topup::find($id);
-		$request->item_id = $request->get('item_id');
-		$request->quantity_remaining = $request->get('quantity_remaining');
-		$request->test_category_id = $request->get('test_category_id');
-			$request->tests_done = $request->get('tests_done');
-		$request->quantity_ordered = $request->get('quantity_ordered');
-		$request->remarks = $request->get('remarks');
-		$request->user_id = Auth::user()->id;
+		$topup = Topup::find($id);
+		$topup->item_id = $request->get('item_id');
+		$topup->quantity_remaining = $request->get('quantity_remaining');
+		$topup->test_category_id = $request->get('test_category_id');
+		$topup->tests_done = $request->get('tests_done');
+		$topup->quantity_ordered = $request->get('quantity_ordered');
+		$topup->remarks = $request->get('remarks');
+		$topup->user_id = Auth::user()->id;
 		try
 		{
-			$request->save();
+			$topup->save();
 			$url = Session::get('SOURCE_URL');
 
         	return redirect()->to($url)
