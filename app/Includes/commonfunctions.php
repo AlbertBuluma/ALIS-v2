@@ -1,11 +1,11 @@
 <?php
 /**
  * Change a date from MySQL database Format (yyyy-mm-dd) to the format displayed on pages(mm/dd/yyyy)
- * 
- * If the date from the database is NULL, it is transformed to an empty string for display on the pages 
  *
- * @param String $mysqldate The date in MySQL format 
- * @return String the date in short date format, or an empty string if no date is provided 
+ * If the date from the database is NULL, it is transformed to an empty string for display on the pages
+ *
+ * @param String $mysqldate The date in MySQL format
+ * @return String the date in short date format, or an empty string if no date is provided
  */
 function changeMySQLDateToPageFormat($mysqldate) {
 	if (isEmptyString($mysqldate)) {
@@ -16,11 +16,11 @@ function changeMySQLDateToPageFormat($mysqldate) {
 }
 
 /**
- * Transform a date from the format displayed on pages(mm/dd/yyyy) to the MySQL database date format (yyyy-mm-dd). 
+ * Transform a date from the format displayed on pages(mm/dd/yyyy) to the MySQL database date format (yyyy-mm-dd).
  * If the date from the database is an empty string or the string NULL, it is transformed to a NULL value.
  *
  * @param String $pagedate The string representing the date
- * @return String The MYSQL datetime format or NULL if the provided date is an empty string or the string NULL 
+ * @return String The MYSQL datetime format or NULL if the provided date is an empty string or the string NULL
  */
 function changeDateFromPageToMySQLFormat($pagedate) {
 	if ($pagedate == "NULL") {
@@ -38,27 +38,27 @@ function changeDateFromPageToMySQLFormat($pagedate) {
  * Check whether or not the value of the key in the specified array is empty
  *
  * @param String $key The key whose value is to be checked
- * @param Array $arr The array to check  
- * 
+ * @param Array $arr The array to check
+ *
  * @return bool Whether or not the array key is empty
  */
 function isArrayKeyAnEmptyString($key, $arr) {
 	if (!array_key_exists($key, $arr)) {
-		return true; 
+		return true;
 	}
 	if (empty($arr[$key])) {
-		return true; 
+		return true;
 	}
 	if (is_string($arr[$key])) {
 		return isEmptyString($arr[$key]);
 	}
-	return false; 
+	return false;
 }
 /**
  * Check whether or not the string is empty. The string is emptied
  *
  * @param String $str The string to be checked
- * 
+ *
  * @return boolean Whether or not the string is empty
  */
 function isNotAnEmptyString($str) {
@@ -79,7 +79,7 @@ function debugMessage($obj) {
  * Print the Doctrine management entity
  *
  * @param Object $obj The object to be printed
- 
+
 function debugEntity($obj) {
     echo "<br />";
     \Doctrine\Common\Util\Debug::dump($obj);
@@ -89,7 +89,7 @@ function debugEntity($obj) {
 /**
  *  Merge the arrays passed to the function and keep the keys intact.
  *  If two keys overlap then it is the last added key that takes precedence.
- * 
+ *
  * @return Array the merged array
  */
 function array_merge_maintain_keys() {
@@ -109,7 +109,7 @@ function trim_value(&$value) {
 }
 
 /**
- * Recursively Remove empty values from an array. If any of the keys contains an 
+ * Recursively Remove empty values from an array. If any of the keys contains an
  * array, the values are also removed.
  *
  * @param Array $input The array
@@ -138,22 +138,22 @@ function array_remove_empty($arr) {
 
 
 /**
- * Wrapper function for the encoding of the urls using base64_encode 
+ * Wrapper function for the encoding of the urls using base64_encode
  *
  * @param String $str The string to be encoded
- * @return String The encoded string 
+ * @return String The encoded string
  */
 function encode($str) {
-	return base64_encode($str); 
+	return base64_encode($str);
 }
 /**
- * Wrapper function for the decoding of the urls using base64_decode 
+ * Wrapper function for the decoding of the urls using base64_decode
  *
  * @param String $str The string to be decoded
- * @return String The encoded string 
+ * @return String The encoded string
  */
 function decode($str) {
-	return base64_decode($str); 
+	return base64_decode($str);
 }
 
 /**
@@ -161,12 +161,12 @@ function decode($str) {
  *
  * @param $data The data to be converted into a string
  * @param $default_option_value Value of the default option
- * @param $default_option_text Test for the default 
- * 
+ * @param $default_option_text Test for the default
+ *
  * @return the JSON string containing the select options
  */
 function generateJSONStringForSelectChain($data, $default_option_value = "", $default_option_text = "<Select One>") {
-	$values = array(); 
+	$values = array();
 	//debugMessage($data);
 	if (!isEmptyString($default_option_value)) {
 		# use the text and option from the data
@@ -190,61 +190,61 @@ function generateJSONStringForSelectChain($data, $default_option_value = "", $de
  * Generate an HTML list from an array of values
  *
  * @param Array $array
- * @return String 
+ * @return String
  */
 function createHTMLListFromArray($array) {
-	$str = ""; 
+	$str = "";
 	// return empty string if no array is passed
 	if (!is_array($array)) {
-		return $str; 
+		return $str;
 	}
 	// return an empty string if the array is empty
 	if (!$array) {
-		return $str; 
+		return $str;
 	}
-	
+
 	// opening list tag and the first li element
 	$str  = "<ul><li>";
 	// explode the array and generate the inner list items
 	$str .= implode($array, "</li><li>");
 	// close the last list item, and the ul
-	$str .= "</li></ul>"; 
-	
-	return $str; 
+	$str .= "</li></ul>";
+
+	return $str;
 }
 
 
 /**
-	 * Decode all html entities of an array  
+	 * Decode all html entities of an array
 	 * @param Array $elem the array to be decoded
 	 */
-	function decodeHtmlEntitiesInArray(&$elem){ 
-  		if (!is_array($elem)) { 
-    		$elem=html_entity_decode($elem); 
-		}  else  { 
+	function decodeHtmlEntitiesInArray(&$elem){
+  		if (!is_array($elem)) {
+    		$elem=html_entity_decode($elem);
+		}  else  {
 			foreach ($elem as $key=>$value){
 				$elem[$key]=decodeHtmlEntitiesInArray($value);
-			} 
-  		} 
-		return $elem; 
+			}
+  		}
+		return $elem;
 	}
-	
+
 	/**
 	 * Get a database connection to execute straight SQL queries
-	 * 
-	 * @return Doctrine\DBAL\Connection 
+	 *
+	 * @return Doctrine\DBAL\Connection
 	 */
-	
-	
-	
+
+
+
 	function isValidObject($object){
 		return is_object($object) && (count(get_object_vars($object)) > 0);
 	}
-	
-	
+
+
 	/**
-	 * Generate a 10 digit activation key  
-	 * 
+	 * Generate a 10 digit activation key
+	 *
 	 * @return String An activation key
 	 */
     function generateActivationKey() {
@@ -262,18 +262,18 @@ function createHTMLListFromArray($array) {
      * document.
      *
      * @param integer $size The size of the file
-     * @param integer $precision The number of decimal places to show  
+     * @param integer $precision The number of decimal places to show
      *
      * @return String The file size with the defined type of FALSE if there is an invalid size
      */
     function formatBytes($size, $precision = 2) {
         $base = log($size) / log(1024);
         $suffixes = array('', 'KB', 'MB', 'GB', 'TB');
-    
+
         return round(pow(1024, $base - floor($base)), $precision) . " ".$suffixes[floor($base)];
     }
     /**
-	 * Trims a given string with a length more than a specified length with a more link to view the details 
+	 * Trims a given string with a length more than a specified length with a more link to view the details
 	 *
 	 * @param string $text
 	 * @param int $length
@@ -296,11 +296,11 @@ function createHTMLListFromArray($array) {
 		}
 		return $text;
 	}
-	
+
  	function printtoScreen(){
 	 echo 'common functions works find';
 	}
-	
+
 	function generateContextMenu($currenturl){
 		$links = '';
 		if (strpos($currenturl, 'hub') !== false){
@@ -328,13 +328,13 @@ function createHTMLListFromArray($array) {
 				$links .= '<li> <a href="'.route('roles.index').'">All roles</a></li>';
 				$links .= '<li> <a href="'.route('roles.create').'">Create role</a></li>';
 				$links .= '<li> <a href="'.route('permissions.index').'">All permissions</a></li>';
-				$links .= '<li> <a href="'.route('permissions.create').'">Add Permission</a></li>';				
+				$links .= '<li> <a href="'.route('permissions.create').'">Add Permission</a></li>';
 			}
 			if(!(Auth::user()->hasRole(['In_charge', 'Admin']))){
 				$links .= '<li> <a href="'.route('users.index').'">All users</a></li>';
 				$links .= '<li> <a href="'.route('users.create').'">New user</a></li>';
 			}
-			
+
 		}elseif (strpos($currenturl, 'sampletracking') !== false){
 			$links .= '<li> <a href="'.route('sampletracking.index').'">All Refered Samples</a></li>';
 			$links .= '<li> <a href="'.route('sampletracking.create').'">Refer Sample</a></li>';
@@ -350,14 +350,14 @@ function createHTMLListFromArray($array) {
 		$model = $model::findOrFail($id); //Find model of id = $id
         return $model->$attribute;
     }
-	
+
 	/**
-	 * Return the description of a lookup value 
-	 * 
+	 * Return the description of a lookup value
+	 *
 	 * @param String $lookuptype The Lookuptype - passed dynamically, that is why a static method is used
-	 * 
-	 * @param String $lookuptypevalue The actual lookvalue that was saved, now needs translation 
-	 * 
+	 *
+	 * @param String $lookuptypevalue The actual lookvalue that was saved, now needs translation
+	 *
 	 * @return Array containing the lookup types for the values or false if an error occurs
 	 *
 	 */
@@ -374,7 +374,7 @@ function createHTMLListFromArray($array) {
 		//DB::table('users')->pluck('columname');
     		// add the result to the cache
 			Cache::put($cache_key, $lookuptype.$lookuptypevalue, \Config::get('app.lookup_value_cache_minutes'));
-	   } 
+	   }
 	   return $result[0];
 	}
 	function getSupportPeriodDates($organizationid){
@@ -384,12 +384,12 @@ function createHTMLListFromArray($array) {
 		return $dates;
 	}
 	function getFacilitiesForIP($organisationid){
-	$query = "SELECT f.id, f.name, h.hubname as hub, fl.level as `facilitylevel`, d.name as district 
-		FROM facility as f 
-		INNER JOIN facility as h ON (f.parentid = h.id) 
+	$query = "SELECT f.id, f.name, h.hubname as hub, fl.level as `facilitylevel`, d.name as district
+		FROM facility as f
+		INNER JOIN facility as h ON (f.parentid = h.id)
 		INNER JOIN ips_facilities ipf ON (ipf.facilityID = f.id AND ipf.ipID = '".$organisationid."')
 		INNER JOIN ips i ON (ipf.ipID = i.id)
-		INNER JOIN facilitylevel AS fl ON (f.facilitylevelid = fl.id) 
+		INNER JOIN facilitylevel AS fl ON (f.facilitylevelid = fl.id)
 		INNER JOIN district as d ON(f.districtid = d.id)
 		ORDER BY f.name ASC";
 		$facilities = \DB::select($query);
@@ -399,7 +399,7 @@ function createHTMLListFromArray($array) {
 		$query = "SELECT  i.name from ips_facilities ipf
 INNER JOIN facility f ON (ipf.facilityID = f.id)
 INNER JOIN organization i ON (ipf.ipID = i.id AND ipf.facilityID ='".$facilityid."')
-where ISNULL(f.parentid) 
+where ISNULL(f.parentid)
 ORDER BY f.name";
 	$ips = \DB::select($query);
 	$names = array();
@@ -407,8 +407,8 @@ ORDER BY f.name";
 		$names[] = $ip->name;
 	}
 		return implode(", ", $names);
-	} 
-	
+	}
+
 	function getContact($obj, $cat,$type,$table_attribute = 'organizationid'){
 		return \App\Models\Contact::where($table_attribute, $obj)
 											->where('category',$cat)
@@ -419,7 +419,7 @@ ORDER BY f.name";
 		$schedule =  \App\Models\RoutingSchedule::where('dayoftheweek', '=', $day)->where('hubid', $hubid)->get();
 		return $schedule;
 	}
-		
+
 	function getHubScheduleFacilitiesforaDay($day, $hubid){
 		$schedule = getHubScheduleforaDay($day, $hubid);
 		$ids_array = array();
@@ -427,36 +427,36 @@ ORDER BY f.name";
 		if($no_items){
 			foreach($schedule as $line){
 				$ids_array[] = $line->facilityid;
-				
+
 			}
 		}
 		return $ids_array;
 	}
 	function getActionTakenOnBike($breakdownid){
 		return \App\Models\EquipmentBreakDownAction::where('equipmentbreakdownid', $breakdownid)->paginate(10);
-		
+
 	}
 	function getBikeBreakDownReason($breakdownid){
 		return \App\Models\EquipmentBreakDownReason::where('equipmentbreakdownid', $breakdownid)->paginate(10);
 	}
-	
+
 		/**
 		 * Generate an array of dates for the period, in this case for a week
-		 * 
-		 * @return Array 
+		 *
+		 * @return Array
 		 */
 		function getDatesInPeriod(){
 			$weekendingdate = new DateTime();
 			//$startdate = new DateTime();
 			//$day = $startdate->modify("sunday ".$aconfig->timesheet->minweekendingdate." weeks ago");
 			for ($i = 0; $i < 7; $i++) {
-				$days[$weekendingdate->format("U")] = $weekendingdate->format("Y-m-d");  
+				$days[$weekendingdate->format("U")] = $weekendingdate->format("Y-m-d");
 				$weekendingdate->modify("-1 day");
 			}
-			ksort($days); 
+			ksort($days);
 			return  $days;
 		}
-		
+
 		/**
 		 * Get the date for the start of the timesheet period, in this case a week which starts on a Monday and ends on a Sunday
 		 *
@@ -465,21 +465,21 @@ ORDER BY f.name";
 		function getPeriodStartingDateTimestamp($date=NULL) {
 			 $date_stamp = strtotime(date('Y-m-d', strtotime($date)));
 			 //check date is sunday or monday
-			$stamp = date('l', $date_stamp);      
-		
+			$stamp = date('l', $date_stamp);
+
 			if($stamp == 'Mon'){
 				$week_start = $date;
 			}else{
 				$week_start = date('Y-m-d', strtotime('Last Monday', $date_stamp));
 			}
-		
-		
+
+
 			if($stamp == 'Sunday'){
 				$week_end = $date;
 			}else{
 				$week_end = date('Y-m-d', strtotime('Next Sunday', $date_stamp));
-			}        
-			return array($week_start, $week_end); 
+			}
+			return array($week_start, $week_end);
 		}
 		function checkifPermissioninArray($key, $arr){
 			if(!empty($arr)){
@@ -491,11 +491,11 @@ ORDER BY f.name";
 			}
 			return 0;
 		}
-		
+
 	function generateSlug($str, $delimiter = '-'){
 			$slug = strtolower(trim(preg_replace('/[\s-]+/', $delimiter, preg_replace('/[^A-Za-z0-9-]+/', $delimiter, preg_replace('/[&]/', 'and', preg_replace('/[\']/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str))))), $delimiter));
 			return $slug;
-		} 
+		}
 	function getTimeString($date){
 		//set the default timezone
 		date_default_timezone_set('Africa/Kampala');
@@ -543,7 +543,7 @@ ORDER BY f.name";
 	function generateRationInput($array_data,$field_name, $style = 'inline'){
 		$options_string = '';
 		foreach($array_data as $key =>$value){
-			$options_string .= Form::radio($field_name,  $key).' 
+			$options_string .= Form::radio($field_name,  $key).'
 			<span class="input-tag">'.$value.' </span>';
 		}
 		return $options_string;
@@ -551,14 +551,14 @@ ORDER BY f.name";
 	function getPageDateFormat($date){
 		return date('d/m/Y',strtotime($date));
 	}
-	
+
 	function getMysqlDateFormat($date){
 		return date("Y-m-d", strtotime($date));
 	}
 	function getDailyRoutingForBike($hubid, $bikeid, $thedate){
-		$query = "SELECT dd.numberofsamples, dd.numberofresults, f.name, lv.lookupvaluedescription as category 
-		FROM dailyroutingdetail as dd 
-		INNER JOIN facility as f ON (dd.facilityid = f.id ) 
+		$query = "SELECT dd.numberofsamples, dd.numberofresults, f.name, lv.lookupvaluedescription as category
+		FROM dailyroutingdetail as dd
+		INNER JOIN facility as f ON (dd.facilityid = f.id )
 		INNER JOIN lookuptypevalue lv ON (lv.id = dd.samplecategory AND lv.lookuptypeid)
 		INNER JOIN lookuptype l ON (l.id = lv.lookuptypeid)
 		WHERE dd.hubid = '".$hubid."' AND dd.bikeid = '".$bikeid."' AND dd.thedate = '".$thedate."'
@@ -566,7 +566,7 @@ ORDER BY f.name";
 		$dailyroutingdetails = \DB::select($query);
 		return $dailyroutingdetails;
 	}
-	
+
 	function getPackagesInTransitByType($type,$status = 1){
 		//check the kind of user logged in and return the corresponding results
 		$hubid = Auth::getUser()->hubid;
@@ -581,9 +581,9 @@ WHERE p.`type` = '".$type."' AND pm.`status` = 1 ".$andwhere;
 //echo $query;
 	$samples = \DB::select($query);
 	return count($samples);
-	
-	} 
-	
+
+	}
+
 	function getReceivedSamples($type){
 		$query = "SELECT s.id FROM samples s
 INNER JOIN package p ON(p.barcode_id = s.barcodeid)
@@ -591,8 +591,8 @@ INNER JOIN packagemovement pm ON (pm.packageid = p.id)
 WHERE p.`type` = '".$type."' AND pm.`status` = 3";
 	$samples = \DB::select($query);
 	return count($samples);
-	} 
-	
+	}
+
 
 /*public function index(Request $request){
 
@@ -625,13 +625,13 @@ function packageStats($status, $packagetype){
 	if(Auth::user()->hasRole('hub_coordinator')){
 		$incharge_clause .= " AND hubid = '".Auth::user()->hubid."'";
 	}
-	$query = "SELECT COUNT(id) as numberofsamples FROM package WHERE status = 
-	".$status." AND type = '".$packagetype."'".$incharge_clause;		
-	$samples = \DB::select($query);	
-	if(!empty($samples)) { 
+	$query = "SELECT COUNT(id) as numberofsamples FROM package WHERE status =
+	".$status." AND type = '".$packagetype."'".$incharge_clause;
+	$samples = \DB::select($query);
+	if(!empty($samples)) {
 		return $samples[0]->numberofsamples;
-	 } 
-	return 0;	
+	 }
+	return 0;
 }
 
 function getWeekEndDates(){
@@ -668,7 +668,7 @@ function time_elapsed($secs){
 	$ret = array();
     foreach($bit as $k => $v)
         if($v > 0)$ret[] = $v . $k;
-        
+
     return join(' ', $ret);
 }
 
@@ -688,14 +688,14 @@ function time_elapsed($secs){
  	return capitalizeFirstLetter($result[0]->name);
  }
  function capitalizeFirstLetter($str){
- 	return ucwords(strtolower($str)); 
+ 	return ucwords(strtolower($str));
  }
 
  function getRejectionReasons($test_id){
  	$query = "SELECT rr.reason from unhls_tests t
 	INNER JOIN analytic_specimen_rejections asr ON (asr.test_id = t.id)
 	INNER JOIN analytic_specimen_rejection_reasons asrr ON (asrr.rejection_id = asr.id)
-	LEFT JOIN rejection_reasons rr ON (asrr.reason_id = rr.id) 
+	LEFT JOIN rejection_reasons rr ON (asrr.reason_id = rr.id)
 	WHERE t.id = ".$test_id;
 	$result = DB::select($query);
 	return $result;
