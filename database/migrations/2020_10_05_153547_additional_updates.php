@@ -26,7 +26,7 @@ class AdditionalUpdates extends Migration {
 		DB::update('ALTER TABLE unhls_test_results ADD time_revised DATE NULL AFTER revised_by');
 		// DB::update('ALTER TABLE referrals ADD test_id INT(10) NULL AFTER status');
 		DB::update('ALTER TABLE unhls_tests  ADD instrument_id INT  AFTER instrument,  ADD method_used VARCHAR(60) NULL');
-        DB::statement('ALTER TABLE `unhls_tests` CHANGE `purpose` `purpose` VARCHAR(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL');
+        DB::statement('ALTER TABLE `unhls_tests` CHANGE `purpose` `purpose` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
 		DB::update('ALTER TABLE unhls_visits ADD is_printed INT(2) NOT NULL DEFAULT 0 AFTER facility_lab_number');
 		DB::update('ALTER TABLE unhls_visits ADD printed_by INT(3) NULL AFTER is_printed, ADD time_printed DATETIME NULL AFTER printed_by');
 		DB::update('ALTER TABLE test_types ADD parentId INT(3) NULL AFTER description');
@@ -44,6 +44,11 @@ class AdditionalUpdates extends Migration {
         DB::statement('ALTER TABLE `poc_results` CHANGE `test_time` `test_time` TIME NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `poc_tables` CHANGE `caretaker_number` `caretaker_number` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `poc_tables` CHANGE `other_entry_point` `other_entry_point` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
+        DB::statement('ALTER TABLE `clinicians` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP');
+        DB::statement('ALTER TABLE `clinicians` CHANGE `email` `email` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
+        DB::statement('ALTER TABLE `inv_items` CHANGE `created_at` `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
+        DB::statement('ALTER TABLE `inv_items` CHANGE `min_level` `min_level` DECIMAL(8,2) NULL DEFAULT NULL, CHANGE `storage_req` `storage_req` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
+        DB::statement('ALTER TABLE `unhls_equipment_suppliers` CHANGE `created_at` `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
     }
 
 	/**
