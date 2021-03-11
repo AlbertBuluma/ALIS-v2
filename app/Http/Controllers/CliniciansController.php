@@ -46,7 +46,7 @@ class CliniciansController extends Controller {
     {
         //Validation
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:clinicians,name',
             'cadre' => 'required',
             'phone' => 'required'
 
@@ -112,8 +112,10 @@ class CliniciansController extends Controller {
     public function update(Request $request, $id)
     {
         //Validate
-        $rules = array('name' => 'required|unique:clinicians,name',
-            'phone' => 'required');
+//        $rules = array('name' => 'required|unique:clinicians,name',
+        $rules = array('name' => 'required',
+                        'cadre' => 'required',
+                        'phone' => 'required');
         $validator = Validator::make($request->all(), $rules);
 
         // process the login
@@ -131,7 +133,7 @@ class CliniciansController extends Controller {
             // redirect
 
             return redirect()->route('clinicians.index')
-                ->with('message', 'Clinician Successfully Updated') ->with('activeclinician', $clinician ->id);
+                ->with('message', 'Clinician Successfully Updated')->with('activeclinician', $clinician->id);
         }
     }
 
