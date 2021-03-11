@@ -82,7 +82,7 @@
 				@if($selectedReport==0) <!-- monthly Report-->
 					<thead>
 						<tr>
-							<th></th>
+{{--							<th></th>--}}
 							<th>{{Lang::choice('messages.commodity',1)}}</th>
 							<th>{{Lang::choice('messages.supplier',1)}}</th>
 							<th>{{Lang::choice('messages.batch-no',1)}}</th>
@@ -99,8 +99,8 @@
 
 
 							<tr>
-								<td>{{$i++}}</td>
-								<td>{{Commodity::find($row->commodity_id)->name}}</td>
+{{--								<td>{{$i++}}</td>--}}
+								<td>{{App\Models\Commodity::find($row->commodity_id)->name}}</td>
 								<td>{{ $row->sourceOfStock($row->to_from_type,$row->to_from)->name }}</td>
 								<td>{{$row->batch_number }}</td>
 								<td>{{$row->quantity}}</td>
@@ -109,9 +109,9 @@
 								<td>{{$row->balance}}</td>
 							</tr>
 						@empty
-							<tr>
-								<td>{{Lang::choice('messages.no-data-found',1)}}</td>
-							</tr>
+{{--							<tr>--}}
+{{--								<td>{{Lang::choice('messages.no-data-found',1)}}</td>--}}
+{{--							</tr>--}}
 						@endforelse
 
 					</tbody>
@@ -119,7 +119,7 @@
 				@elseif($selectedReport == 1) <!-- quarterly Report-->
 					<thead>
 						<tr>
-							<th></th>
+{{--							<th></th>--}}
 							<th>{{Lang::choice('messages.commodity',1)}}</th>
 							<th>{{Lang::choice('messages.supplier',1)}}</th>
 							<th>{{Lang::choice('messages.batch-no',1)}}</th>
@@ -135,7 +135,7 @@
 						@forelse($reportData as $row)
 
 							<tr>
-								<td>{{$i++}}</td>
+{{--								<td>{{$i++}}</td>--}}
 								<td>{{$row->balance}}</td>
 								<td>{{ $row->sourceOfStock($row->to_from_type,$row->to_from)->name }}</td>
 								<td>{{$row->batch_number }}</td>
@@ -145,9 +145,9 @@
 								<td>{{$row->balance}}</td>
 							</tr>
 						@empty
-							<tr>
-								<td colspan='6'>{{Lang::choice('messages.no-data-found',1)}}</td>
-							</tr>
+{{--							<tr>--}}
+{{--								<td colspan='6'>{{Lang::choice('messages.no-data-found',1)}}</td>--}}
+{{--							</tr>--}}
 						@endforelse
 					</tbody>
 				@endif
