@@ -8,6 +8,7 @@ use App\Models\AdhocConfig;
 use App\Models\Control;
 use App\Models\ControlTest;
 use App\Models\DailyAlphanumericCount;
+use App\Models\DailyHIVCount;
 use App\Models\DailyNegativeCulture;
 use App\Models\DailyNegativeGramStain;
 use App\Models\DailyNumericRangeCount;
@@ -526,7 +527,6 @@ class ReportController extends Controller {
     public function viewPatientVisitReport(Request $request, $visit_id){
 
         $tests = UnhlsTest::where('visit_id', '=', $visit_id)->get();
-
         $patient_json_id_instance = UnhlsVisit::select('patient_id')->where('id','=',$visit_id)->get();
         $patient_json_id_decoded_instance = json_decode($patient_json_id_instance,true);
 
@@ -1893,7 +1893,7 @@ class ReportController extends Controller {
     /**
      * Returns qc index page
      *
-     * @return view
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function qualityControl()
     {
@@ -2702,7 +2702,7 @@ class ReportController extends Controller {
                 $q->where('specimens.time_accepted', '>=', $dateFrom);
                 $q->where('specimens.time_accepted', '<=', $dateTo);
             })->orderBy('specimens.time_accepted', 'DESC')
-            ->groupBy('unhls_patients.name','specimens.time_accepted','specimens.time_collected','unhls_patients.patient_number','unhls_patients.ulin','unhls_patients.admission_date','unhls_districts.name','unhls_patients.gender','unhls_visits.hospitalized','age','unhls_visits.visit_type','onAntibiotics','Ward','diagnosis','SpecimenType','unhls_tests.test_type_id','DonAntibiotics','testID','drugs.name','IsolatedOrganism','isoID')
+            ->groupBy('unhls_patients.name','specimens.time_accepted','specimens.time_collected','unhls_patients.patient_number','unhls_patients.ulin','unhls_patients.admission_date','unhls_districts.name','unhls_patients.gender','unhls_visits.hospitalized','unhls_patients.dob','unhls_visits.visit_type','onAntibiotics','Ward','diagnosis','SpecimenType','unhls_tests.test_type_id','DonAntibiotics','testID','drugs.name','IsolatedOrganism','isoID')
             ->groupBy('isolated_organisms.id')
             ->orderBy('specimens.time_accepted', 'DESC')
             ->get();
