@@ -17,7 +17,7 @@ class MicrobiologyExport implements FromQuery, WithHeadings, WithMapping
      */
     use Exportable;
 
-    
+
 
     public function query($dateFrom='', $dateTo='')
     {
@@ -48,10 +48,12 @@ class MicrobiologyExport implements FromQuery, WithHeadings, WithMapping
                 $q->where('specimens.time_accepted', '>=', $dateFrom);
                 $q->where('specimens.time_accepted', '<=', $dateTo);
             })->orderBy('specimens.time_accepted', 'DESC')
-            ->groupBy('unhls_patients.name','specimens.time_accepted','specimens.time_collected','unhls_patients.patient_number','unhls_patients.ulin','unhls_patients.admission_date','unhls_districts.name','unhls_patients.gender','unhls_visits.hospitalized','age','unhls_visits.visit_type','onAntibiotics','Ward','diagnosis','SpecimenType','unhls_tests.test_type_id','DonAntibiotics','testID','drugs.name','IsolatedOrganism','isoID')
+            ->groupBy('unhls_patients.name','specimens.time_accepted','specimens.time_collected','unhls_patients.patient_number',
+                'unhls_patients.ulin','unhls_patients.admission_date','unhls_districts.name','unhls_patients.gender',
+                'unhls_visits.hospitalized','unhls_patients.dob','unhls_visits.visit_type','onAntibiotics','Ward','diagnosis','SpecimenType','unhls_tests.test_type_id','DonAntibiotics','testID','drugs.name','IsolatedOrganism','isoID')
             ->groupBy('isolated_organisms.id')
             ->orderBy('specimens.time_accepted', 'DESC');
-        
+
         return $isolatedOrganisms;
     }
 
@@ -59,7 +61,7 @@ class MicrobiologyExport implements FromQuery, WithHeadings, WithMapping
     {
 
         return [
-            
+
             substr($isolatedOrganism->Recieved,0,-9),
             substr($isolatedOrganism->collected,0,-9),
             $isolatedOrganism->number,
