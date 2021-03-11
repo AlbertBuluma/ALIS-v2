@@ -5,6 +5,12 @@
 </head>
 <body>
 @include("reportHeader")
+<style>
+    table, th, td{
+        border: 1px solid black;
+        padding: 10px;
+    }
+</style>
 <div id="content" class="Section2">
 	<strong>
 		<p>

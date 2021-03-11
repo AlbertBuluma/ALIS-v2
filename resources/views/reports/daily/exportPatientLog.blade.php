@@ -5,6 +5,12 @@
 </head>
 <body>
 @include("reportHeader")
+<style>
+    table, th, td{
+        border: 1px solid black;
+        padding: 10px;
+    }
+</style>
 <div id="content">
 	<strong>
 		<p>
@@ -29,9 +35,9 @@
 			<tr>
 				<td>{{count($visits)}}</td>
 				<td>
-					{{--*/ $male = 0 /*--}}
+					<?php $male = 0 ?>
 					@forelse($visits as $visit)
-					  @if($visit->patient->gender==App\Models\Patient::MALE)
+					  @if($visit->patient->gender==App\Models\UnhlsPatient::MALE)
 					   	{{--*/ $male++ /*--}}
 					  @endif
 					@endforeach
