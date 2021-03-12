@@ -150,8 +150,10 @@ class MeasureNameMappingController extends Controller {
 		$testNameMapping->delete();
 
 		// redirect
-		return redirect()->route('testnamemapping.show', [$request->get('test_name_mapping_id')])
-			->with('message', 'Successfully Deleted Measure Name Mapping');
+//		return redirect()->route('testnamemapping.show', [$request->get('test_name_mapping_id')])
+//			->with('message', 'Successfully Deleted Measure Name Mapping');
+
+        return redirect()->back()->with('message', 'Successfully Deleted Measure Name Mapping');
 	}
 
 	public function getRanges($id)
