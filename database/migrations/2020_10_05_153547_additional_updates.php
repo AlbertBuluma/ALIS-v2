@@ -16,7 +16,6 @@ class AdditionalUpdates extends Migration {
 		// DB::update('ALTER TABLE unhls_equipment_maintenance ADD supplier_id INT(10) NULL');
 		DB::update('ALTER TABLE unhls_patients ADD age INT(10) NULL ');
 		// DB::update('ALTER TABLE unhls_patients ADD nationality VARCHAR(255) NULL AFTER age');
-		DB::update('ALTER TABLE poc_tables ADD ulin VARCHAR(255) NULL AFTER updated_at');
 		DB::update('ALTER TABLE unhls_patients ADD admission_date DATETIME NULL DEFAULT NULL AFTER gender');
 		DB::update('ALTER TABLE unhls_tests ADD revised_by INT(10) NULL AFTER time_approved');
 		DB::update('ALTER TABLE unhls_tests ADD time_revised DATE NULL AFTER revised_by');
@@ -35,15 +34,6 @@ class AdditionalUpdates extends Migration {
         DB::update('ALTER TABLE clinicians ADD active INT(3) NOT NULL DEFAULT 0 AFTER email');
         DB::statement('ALTER TABLE `clinicians` CHANGE `email` `email` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
         DB::insert('INSERT INTO `model_has_permissions` (`permission_id`, `model_type`, `model_id`) VALUES (18, "User", 1)');
-        DB::statement('ALTER TABLE `poc_tables` ADD `mother_hts` VARCHAR(60) NULL DEFAULT NULL AFTER `mother_name`');
-        DB::statement('ALTER TABLE `poc_tables` ADD `mother_art` VARCHAR(60) NULL DEFAULT NULL AFTER `mother_hts`');
-        DB::statement('ALTER TABLE `poc_tables` CHANGE `mother_hiv_status` `mother_hiv_status` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
-        DB::statement('ALTER TABLE `poc_tables` CHANGE `admission_date` `admission_date` DATE NULL DEFAULT NULL');
-        DB::statement('ALTER TABLE `poc_tables` CHANGE `mother_name` `mother_name` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
-        DB::statement('ALTER TABLE `poc_tables` CHANGE `provisional_diagnosis` `provisional_diagnosis` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
-        DB::statement('ALTER TABLE `poc_results` CHANGE `test_time` `test_time` TIME NULL DEFAULT NULL');
-        DB::statement('ALTER TABLE `poc_tables` CHANGE `caretaker_number` `caretaker_number` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
-        DB::statement('ALTER TABLE `poc_tables` CHANGE `other_entry_point` `other_entry_point` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `clinicians` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP');
         DB::statement('ALTER TABLE `clinicians` CHANGE `email` `email` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `inv_items` CHANGE `created_at` `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
@@ -52,9 +42,27 @@ class AdditionalUpdates extends Migration {
         DB::statement('ALTER TABLE `requests` CHANGE `remarks` `remarks` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `unhls_equipment_maintenance` CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `unhls_tests` CHANGE `interpretation` `interpretation` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
-        DB::statement('ALTER TABLE `unhls_equipment_inventory` DROP INDEX `unhls_equipment_inventory_supplier_id_foreign`');
-        DB::statement('ALTER TABLE `unhls_equipment_breakdown` CHANGE `hsd_request` `hsd_request` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL, CHANGE `in_charge_id` `in_charge_id` INT(11) NULL DEFAULT NULL, CHANGE `priority` `priority` INT(11) NULL DEFAULT NULL, CHANGE `breakdown_type` `breakdown_type` INT(11) NULL DEFAULT NULL, CHANGE `problem` `problem` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL, CHANGE `equipment_failure` `equipment_failure` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL, CHANGE `reporting_officer` `reporting_officer` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL, CHANGE `reporting_officer_contact` `reporting_officer_contact` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL, CHANGE `reporting_officer_email` `reporting_officer_email` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL, CHANGE `intervention_authority` `intervention_authority` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL, CHANGE `conclusion` `conclusion` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL, CHANGE `verified_by` `verified_by` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL, CHANGE `verification_date` `verification_date` DATE NULL DEFAULT NULL');
-        DB::statement('ALTER TABLE `unhls_equipment_breakdown` CHANGE `created_at` `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
+//        DB::statement('ALTER TABLE `unhls_equipment_inventory` DROP INDEX `unhls_equipment_inventory_supplier_id_foreign`');
+        DB::statement('ALTER TABLE `unhls_equipment_breakdown` CHANGE `hsd_request` `hsd_request` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                        CHANGE `in_charge_id` `in_charge_id` INT(11) NULL DEFAULT NULL, CHANGE `priority` `priority` INT(11) NULL DEFAULT NULL,
+                        CHANGE `breakdown_type` `breakdown_type` INT(11) NULL DEFAULT NULL,
+                        CHANGE `problem` `problem` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                        CHANGE `equipment_failure` `equipment_failure` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                        CHANGE `reporting_officer` `reporting_officer` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                        CHANGE `reporting_officer_contact` `reporting_officer_contact` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                        CHANGE `reporting_officer_email` `reporting_officer_email` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                        CHANGE `intervention_authority` `intervention_authority` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                        CHANGE `conclusion` `conclusion` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                        CHANGE `verified_by` `verified_by` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                        CHANGE `verification_date` `verification_date` DATE NULL DEFAULT NULL');
+        DB::statement('ALTER TABLE `unhls_equipment_breakdown` CHANGE `created_at` `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        CHANGE `updated_at` `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP');
+        DB::statement('ALTER TABLE `requests` CHANGE `quantity_remaining` `quantity_remaining` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL');
+        DB::statement('ALTER TABLE `requests` CHANGE `test_category_id` `test_category_id` INT(10) UNSIGNED NULL');
+        DB::statement('ALTER TABLE `requests` CHANGE `quantity_ordered` `quantity_ordered` INT(11) NULL');
+
+        DB::statement('ALTER TABLE `unhls_patients` CHANGE `patient_number` `patient_number` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL');
+
     }
 
 	/**
