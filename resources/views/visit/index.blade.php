@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class='col-md-3'>
-                    @can('manage_visits'))
+                    @can('manage_visits')
                          <div class='col-md-5'>
                             {{ Form::label('visit_status', trans('messages.visit-status')) }}
                         </div>
@@ -40,7 +40,7 @@
                             {{ Form::select('visit_status', $visitStatus,
                                 Illuminate\Support\Facades\Request::get('visit_status'), array('class' => 'form-control')) }}
                         </div>
-                    @can
+                    @endcan
                  </div>
                 <div class='col-md-2'>
                         {{ Form::label('search', trans('messages.search'), array('class' => 'sr-only')) }}
