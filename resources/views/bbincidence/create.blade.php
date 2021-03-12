@@ -52,7 +52,7 @@
 					{{ Form::label('lab_section', 'Location', array('class' => 'required')) }}
 					{{ Form::text('lab_section', old('lab_section'), array('class' => 'form-control col-sm-4')) }}
 
-					{{ Form::label('description', 'Description', array('class' => 'col-sm-2')) }}
+					{{ Form::label('description', 'Description', array('class' => 'col-sm-2 required')) }}
 					{{ Form::textarea('description', old('description'), array('size' => '10x2', 'class' => 'form-control col-sm-4')) }}
 
 					{{ Form::label('firstaid', 'First Aid / Immediate Actions', array('class' => 'col-sm-2')) }}
