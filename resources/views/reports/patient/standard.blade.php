@@ -100,8 +100,7 @@
                 @endif
             @endif
         </td>
-
-        <td width="20%"><strong>Officer's Contact</strong>:{{ is_null($tests->first()->therapy->contact)? '': $tests->first()->therapy->contact}}</td>
+        <td width="20%"><strong>Officer's Contact</strong>:</td>
         <td width="30%">
             @if(isset($tests))
                 @if(!empty($tests->first()))
@@ -397,13 +396,13 @@
     </tr>
     <!-- <tr><td><u><strong></strong></u></td></tr> -->
 </table>
-<footer>
-    <div>Page<span class="pagenum"></span></div>
-    <script type="text/php">
-            if ( isset($pdf) ) {
-                $font = Font_Metrics::get_font("helvetica", "bold");
-                $pdf->page_text(490, 800, "Page: {PAGE_NUM} of {PAGE_COUNT}", $font, 7, array(0,0,0));
-            }
-          </script>
-</footer>
+{{--<footer>--}}
+{{--    <div>Page<span class="pagenum"></span></div>--}}
+{{--    <script type="text/php">--}}
+{{--            if ( isset($pdf) ) {--}}
+{{--                $font = Font_Metrics::get_font("helvetica", "bold");--}}
+{{--                $pdf->page_text(490, 800, "Page: {PAGE_NUM} of {PAGE_COUNT}", $font, 7, array(0,0,0));--}}
+{{--            }--}}
+{{--          </script>--}}
+{{--</footer>--}}
 
