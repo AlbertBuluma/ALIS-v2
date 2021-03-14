@@ -53,7 +53,7 @@
 			</div>
 
 <div class="form-group">
-				{{ Form::label('tested_by', 'Tested By:', array('class' =>'col-sm-2 ')) }}
+				{{ Form::label('tested_by', 'Tested By:', array('class' =>'col-sm-2')) }}
 				{{ Form::text('tested_by', old('tested_by'), array('class' => 'form-control  col-sm-4')) }}
 			</div>
 
@@ -61,7 +61,7 @@
 
 
 			<div class="form-group">
-				{{ Form::label('test_date', 'Test Date:', array('class' =>'col-sm-2 ')) }}
+				{{ Form::label('test_date', 'Test Date:', array('class' =>'col-sm-2 required')) }}
 				{{ Form::text('test_date', old('test_date'), array('class' => 'form-control standard-datepicker-nofuture  col-sm-4')) }}
 			</div>
 <div class="form-group">
@@ -74,7 +74,7 @@
 	<div class="radio-inline">{{ Form::radio("equipment_used", 'GeneXpert', false) }} <span class="input-tag">GeneXpert</span></div>
 
 			<div class="form-group">
-				{{ Form::label('dispatched_by', 'Results reviewed & dispatched By:', array('class' =>'col-sm-2 ')) }}
+				{{ Form::label('dispatched_by', 'Results reviewed & dispatched By:', array('class' =>'col-sm-2 required')) }}
 				{{ Form::text('dispatched_by', old('dispatched_by'), array('class' => 'form-control  col-sm-4')) }}
 			</div>
 
