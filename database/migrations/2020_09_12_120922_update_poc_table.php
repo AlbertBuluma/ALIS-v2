@@ -27,6 +27,10 @@ class UpdatePocTable extends Migration {
         DB::statement('ALTER TABLE `poc_tables` CHANGE `caretaker_number` `caretaker_number` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `poc_tables` CHANGE `other_entry_point` `other_entry_point` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
         DB::statement('ALTER TABLE `poc_results` CHANGE `test_time` `test_time` TIME NULL DEFAULT NULL');
+        DB::statement('ALTER TABLE `poc_tables` CHANGE `exp_no` `exp_no` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                            CHANGE `breastfeeding_status` `breastfeeding_status` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                            CHANGE `collection_date` `collection_date` DATE NULL DEFAULT NULL, CHANGE `pcr_level` `pcr_level` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+                            CHANGE `pmtct_antenatal` `pmtct_antenatal` VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL');
 
     }
 
