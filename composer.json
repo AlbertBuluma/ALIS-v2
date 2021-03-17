@@ -23,6 +23,7 @@
         "tecnickcom/tcpdf": "^6.3"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.5",
         "facade/ignition": "^1.16.4",
         "fakerphp/faker": "^1.9.1",
         "laravel/ui": "1.0",
