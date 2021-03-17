@@ -541,8 +541,8 @@ class ReportController extends Controller {
 
         $content = view($template)
             ->with('patient', $patient)
-            ->with('tests', $tests)
-            ->withInput($request->all());
+            ->with('tests', $tests);
+//            ->withInput($request->all());
 
         ob_end_clean();
 
@@ -1918,14 +1918,19 @@ class ReportController extends Controller {
             'specimen' => $specimen
         );
 
-        $pdf = new RejectionReportPdf;
-        $pdf->setTestRequestInformation($test_request_information);
+//        $pdf = new RejectionReportPdf;
+//        $pdf->setTestRequestInformation($test_request_information);
+//
+//        $pdf->SetAutoPageBreak(TRUE, 15);
+//        $pdf->AddPage();
+//        $pdf->SetFont('', '', 10);
+//        $pdf->writeHTML($html, true, false, true, false, '');
+//        return $pdf->output($specimen->sample_id.'.pdf');
 
-        $pdf->SetAutoPageBreak(TRUE, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('', '', 10);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        return $pdf->output($specimen->sample_id.'.pdf');
+        $pdf = PDF::loadHtml($html);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream($specimen->sample_id.'.pdf');
     }
 
 
