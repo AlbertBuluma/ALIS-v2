@@ -16,7 +16,7 @@ class UpdateEquipmentInventoryTable extends Migration {
 		{
 
 		    $table->integer('supplier_id')->unsigned();
-		    $table->foreign('supplier_id')->references('id')->on('unhls_equipment_suppliers');
+//		    $table->foreign('supplier_id')->references('id')->on('unhls_equipment_suppliers');
 
 		});
 
@@ -30,7 +30,7 @@ class UpdateEquipmentInventoryTable extends Migration {
 	public function down()
 	{
 		//
-	
+
 		Schema::table('unhls_equipment_inventory', function (Blueprint $table) {
 		    $table->dropColumn(['supplier_id']);
 		});

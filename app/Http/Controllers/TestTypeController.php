@@ -170,7 +170,7 @@ class TestTypeController extends Controller {
 	{
 		$rules = array(
 			'name' => 'required',
-			'test_category_id' => 'required|non_zero_key',
+			'test_category_id' => 'required', Rule::notIn([0]),
 			'specimentypes' => 'required',
 			'targetTAT' => 'required',
 			'targetTAT_unit'=>'required'

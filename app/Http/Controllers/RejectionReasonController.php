@@ -122,7 +122,7 @@ class RejectionReasonController extends Controller {
     {
         //Soft delete the rejection
         $rejection = RejectionReason::find($id);
-        $inUseBySpecimen = $rejection->specimen->toArray();
+        $inUseBySpecimen = optional($rejection->specimen)->toArray();
         try {
             // The rejection is not in use
             $rejection->delete();

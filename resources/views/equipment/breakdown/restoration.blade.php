@@ -110,7 +110,7 @@
                                 <div class="form-group">
                                 {{  Form::label('in_charge', 'In - charge', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('in_charge', array('' => 'Select in charge') + UNHLSStaff::select(DB::raw('concat (firstName," ",lastName) as full_name,id'))->pluck('full_name', 'id')->toArray(), $breakdown->in_charge_id, array('class' => 'form-control', 'id' => 'in_charge', 'disabled'=>'disabled')) }}
+                                        {{ Form::select('in_charge', array('' => 'Select in charge') + App\Models\UNHLSStaff::select(DB::raw('concat (firstName," ",lastName) as full_name,id'))->pluck('full_name', 'id')->toArray(), $breakdown->in_charge_id, array('class' => 'form-control', 'id' => 'in_charge', 'disabled'=>'disabled')) }}
 
                                         @if ($errors->has('in_charge'))
                                             <span class="text-danger">
@@ -154,7 +154,8 @@
                                 <div class="form-group">
                                 {{  Form::label('reviewed_by', 'Reviewed by', array('class'=>'control-label')) }}
                                   <div class="col-md-4">
-                                        {{ Form::select('reviewed_by', array('' => 'Select reviewed by') + App\Models\UNHLSStaff::select(DB::raw('concat (firstName," ",lastName) as full_name,id'))->pluck('full_name', 'id')->toArray(), old('reviewed_by'), array('class' => 'form-control', 'id' => 'reviewed_by', 'required'=>'required')) }}
+{{--                                        {{ Form::select('reviewed_by', array('' => 'Select reviewed by') + App\Models\UNHLSStaff::select(DB::raw('concat (firstName," ",lastName) as full_name,id'))->pluck('full_name', 'id')->toArray(), old('reviewed_by'), array('class' => 'form-control', 'id' => 'reviewed_by', 'required'=>'required')) }}--}}
+                                        {{ Form::select('reviewed_by', array('' => 'Select reviewed by') + App\Models\User::select('username')->pluck('username')->toArray(), old('reviewed_by'), array('class' => 'form-control', 'id' => 'reviewed_by', 'required'=>'required')) }}
 
                                         @if ($errors->has('reviewed_by'))
                                             <span class="text-danger">

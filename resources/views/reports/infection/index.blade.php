@@ -90,11 +90,11 @@
 				</thead>
 				<tbody>
 					<?php
-						$testRow = "";
+						$testRow = '';
 
-						$currentTest = "";
-						$currentMeasure = "";
-						$currentResult = "";
+						$currentTest = '';
+						$currentMeasure = '';
+						$currentResult = '';
 
 						$testCount = 0;
 						$measureCount = 0;
@@ -110,12 +110,12 @@
 						$resultCount++;
 
 						if(strcmp($currentTest, $inf->test_name) == 0){
-							$testRow.="<tr>";
+							$testRow.='<tr>';
 
 							if(strcmp($currentMeasure, $inf->measure_name) != 0){
-								$testRow = str_replace("NEW_MEASURE", $measureCount, $testRow);
-								$testRow = str_replace("NEW_RESULT", $resultCount, $testRow);
-								$testRow = str_replace("RESULT_TOTAL", $resultTotal, $testRow);
+								$testRow = str_replace('NEW_MEASURE', $measureCount, $testRow);
+								$testRow = str_replace('NEW_RESULT', $resultCount, $testRow);
+								$testRow = str_replace('RESULT_TOTAL', $resultTotal, $testRow);
 
 								$measureCount=0;
 								$resultCount=0;
@@ -124,27 +124,27 @@
 								$currentMeasure = $inf->measure_name;
 								$currentResult = $inf->result;
 
-								$testRow.="<td rowspan='NEW_MEASURE'>".$inf->measure_name."</td>";
-								$testRow.="<td rowspan='NEW_RESULT'>".$inf->result."</td>";
+								$testRow.='<td rowspan="NEW_MEASURE">'.$inf->measure_name.'</td>';
+								$testRow.='<td rowspan="NEW_RESULT">'.$inf->result.'</td>';
 							}else{
 								if(strcmp($currentResult, $inf->result) != 0){
-									$testRow = str_replace("NEW_RESULT", $resultCount, $testRow);
-									$testRow = str_replace("RESULT_TOTAL", $resultTotal, $testRow);
+									$testRow = str_replace('NEW_RESULT', $resultCount, $testRow);
+									$testRow = str_replace('RESULT_TOTAL', $resultTotal, $testRow);
 
 									$resultCount=0;
 									$resultTotal = 0;
 
 									$currentResult = $inf->result;
-									$testRow.="<td rowspan='NEW_RESULT'>".$inf->result."</td>";
+									$testRow.='<td rowspan="NEW_RESULT">'.$inf->result.'</td>';
 								}
 							}
 						}else{
-							$testRow = str_replace("NEW_TEST", $testCount, $testRow);
-							$testRow = str_replace("NEW_MEASURE", $measureCount, $testRow);
-							$testRow = str_replace("NEW_RESULT", $resultCount, $testRow);
+							$testRow = str_replace('NEW_TEST', $testCount, $testRow);
+							$testRow = str_replace('NEW_MEASURE', $measureCount, $testRow);
+							$testRow = str_replace('NEW_RESULT', $resultCount, $testRow);
 
-							$testRow = str_replace("RESULT_TOTAL", $resultTotal, $testRow);
-							$testRow = str_replace("TEST_TOTAL", $testTotal, $testRow);
+							$testRow = str_replace('RESULT_TOTAL', $resultTotal, $testRow);
+							$testRow = str_replace('TEST_TOTAL', $testTotal, $testRow);
 
 							echo $testRow;
 
@@ -159,22 +159,22 @@
 							$currentMeasure = $inf->measure_name;
 							$currentResult = $inf->result;
 
-							$testRow="<tr>";
-							$testRow.="<td rowspan='NEW_TEST'>".$inf->test_name."</td>";
-							$testRow.="<td rowspan='NEW_MEASURE'>".$inf->measure_name."</td>";
-							$testRow.="<td rowspan='NEW_RESULT'>".$inf->result."</td>";
+							$testRow='<tr>';
+							$testRow.='<td rowspan="NEW_TEST">'.$inf->test_name.'</td>';
+							$testRow.='<td rowspan="NEW_MEASURE">'.$inf->measure_name.'</td>';
+							$testRow.='<td rowspan="NEW_RESULT">'.$inf->result.'</td>';
 						}
 
-						$testRow.="<td>".$inf->gender."</td>";
-						$testRow.="<td>".$inf->RC_U_5."</td>";
-						$testRow.="<td>".$inf->RC_5_15."</td>";
-						$testRow.="<td>".$inf->RC_A_15."</td>";
-						$testRow.="<td>".($inf->RC_U_5 + $inf->RC_5_15 + $inf->RC_A_15)."</td><!-- Male|Female Total-->";
+						$testRow.='<td>'.$inf->gender.'</td>';
+						$testRow.='<td>'.$inf->RC_U_5.'</td>';
+						$testRow.='<td>'.$inf->RC_5_15.'</td>';
+						$testRow.='<td>'.$inf->RC_A_15.'</td>';
+						$testRow.='<td>'.($inf->RC_U_5 + $inf->RC_5_15 + $inf->RC_A_15).'</td><!-- Male|Female Total-->';
 
 						$resultTotal += $inf->RC_U_5 + $inf->RC_5_15 + $inf->RC_A_15;
 
 						if(strcmp($currentResult, $inf->result) == 0 && $resultCount == 0){
-							$testRow.="<td rowspan='NEW_RESULT'>RESULT_TOTAL</td>";
+							$testRow.='<td rowspan="NEW_RESULT">RESULT_TOTAL</td>';
 						}
 
 						if($measureCount == 0)
@@ -183,10 +183,10 @@
 							$testTotal += $inf->RC_U_5 + $inf->RC_5_15 + $inf->RC_A_15;
 
 						if(strcmp($currentTest, $inf->test_name) == 0 && $testCount == 0){
-							$testRow.="<td rowspan='NEW_TEST'>TEST_TOTAL</td>";
+							$testRow.='<td rowspan="NEW_TEST">TEST_TOTAL</td>';
 						}
 
-						$testRow.="</tr>";
+						$testRow.='</tr>';
 						?>
 					@empty
 						<tr>
@@ -196,11 +196,11 @@
 						</tr>
 					@endforelse
 					<?php
-						$testRow = str_replace("NEW_TEST", ++$testCount, $testRow);
-						$testRow = str_replace("NEW_MEASURE", ++$measureCount, $testRow);
-						$testRow = str_replace("NEW_RESULT", ++$resultCount, $testRow);
-						$testRow = str_replace("RESULT_TOTAL", $resultTotal, $testRow);
-						$testRow = str_replace("TEST_TOTAL", $testTotal, $testRow);
+						$testRow = str_replace('NEW_TEST', ++$testCount, $testRow);
+						$testRow = str_replace('NEW_MEASURE', ++$measureCount, $testRow);
+						$testRow = str_replace('NEW_RESULT', ++$resultCount, $testRow);
+						$testRow = str_replace('RESULT_TOTAL', $resultTotal, $testRow);
+						$testRow = str_replace('TEST_TOTAL', $testTotal, $testRow);
 					?>
 					{{$testRow}}
 				</tbody>

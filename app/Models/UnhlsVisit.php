@@ -210,12 +210,17 @@ class UnhlsVisit extends Model
 				});
 			});
 		});
-		if ($visitStatusId > 0) {
-			$visits = $visits->where(function($q) use ($visitStatusId)
-			{
-				$q->where('visit_status_id','=', $visitStatusId);
-			});
-		}
+
+
+//		if ($visitStatusId > 0) {
+////			$visits = $visits->where(function($q) use ($visitStatusId)
+////			{
+////				$q->where('visit_status_id','=', $visitStatusId);
+////			});
+//
+//            $visits = UnhlsVisit::where('visit_status_id', $visitStatusId);
+//		}
+
 		//  put default to get content for today
 		if ($dateFrom||$dateTo) {
 			$visits = $visits->where(function($q) use ($dateFrom, $dateTo)

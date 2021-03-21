@@ -59,10 +59,14 @@
 		        </div>
 	        </div>
 	    </div>
-	    <div class="col-md-2">
+	    <div class="col-md-1">
 		    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'),
 		        array('class' => 'btn btn-info', 'id' => 'filter', 'type' => 'submit')) }}
         </div>
+         <div class="col-sm-1">
+					{{Form::submit(trans('messages.export-to-word'), 
+			    		array('class' => 'btn btn-success', 'id'=>'word', 'name'=>'word'))}}
+				</div>
 	</div><!-- /.row -->
 </div><!-- /.container-fluid -->
 

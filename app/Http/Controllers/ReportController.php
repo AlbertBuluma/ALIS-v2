@@ -8,6 +8,7 @@ use App\Models\AdhocConfig;
 use App\Models\Control;
 use App\Models\ControlTest;
 use App\Models\DailyAlphanumericCount;
+use App\Models\DailyHIVCount;
 use App\Models\DailyNegativeCulture;
 use App\Models\DailyNegativeGramStain;
 use App\Models\DailyNumericRangeCount;
@@ -526,7 +527,6 @@ class ReportController extends Controller {
     public function viewPatientVisitReport(Request $request, $visit_id){
 
         $tests = UnhlsTest::where('visit_id', '=', $visit_id)->get();
-
         $patient_json_id_instance = UnhlsVisit::select('patient_id')->where('id','=',$visit_id)->get();
         $patient_json_id_decoded_instance = json_decode($patient_json_id_instance,true);
 
@@ -541,8 +541,8 @@ class ReportController extends Controller {
 
         $content = view($template)
             ->with('patient', $patient)
-            ->with('tests', $tests)
-            ->withInput($request->all());
+            ->with('tests', $tests);
+//            ->withInput($request->all());
 
         ob_end_clean();
 
@@ -1312,18 +1312,35 @@ class ReportController extends Controller {
 
             $ungroupedTests = array();
             foreach (TestType::all() as $testType) {
-                $pending = $testType->countPerStatus([UnhlsTest::PENDING, UnhlsTest::STARTED], $from, $toPlusOne->format('Y-m-d H:i:s'));
-                $complete = $testType->countPerStatus([UnhlsTest::COMPLETED, UnhlsTest::VERIFIED], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $pending = $testType->countPerStatus([UnhlsTest::PENDING], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $started = $testType->countPerStatus([UnhlsTest::PENDING], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $complete = $testType->countPerStatus([UnhlsTest::COMPLETED], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $verified = $testType->countPerStatus([UnhlsTest::VERIFIED], $from, $toPlusOne->format('Y-m-d H:i:s'));
                 $approved = $testType->countPerStatus([UnhlsTest::APPROVED], $from, $toPlusOne->format('Y-m-d H:i:s'));
-                $rejected = $testType->countPerStatus([UnhlsTest::REJECTED], $from, $toPlusOne->format('Y-m-d H:i:s'));
-                $ungroupedTests[$testType->id] = ["complete"=>$complete, "pending"=>$pending, "approved"=>$approved, "rejected"=>$rejected];
+                $ungroupedTests[$testType->id] = ["complete"=>$complete, "pending"=>$pending, "started"=>$started, "verified"=>$verified, "approved"=>$approved];
             }
+
+            if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "testtype_tat_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.counts.exportCounts')
+                                ->with('ungroupedTests', $ungroupedTests)
+                                ->with('accredited', $accredited)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
+            else{
 
             // $data = $data->groupBy('test_type_id')->paginate(Config::get('kblis.page-items'));
             return view('reports.counts.ungroupedTestCount')
                 ->with('ungroupedTests', $ungroupedTests)
                 ->with('accredited', $accredited)
                 ->withInput($request->all());
+            }
         }
     }
     /*
@@ -1821,7 +1838,22 @@ class ReportController extends Controller {
         $testCategory = $request->get('test_category');
 
         $infectionData = UnhlsTest::getInfectionData($from, $toPlusOne, $testCategory);	// array for counts data for each test type and age range
-
+        if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "test_report_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.infection.testReportExport')
+                                ->with('gender', $gender)
+                                ->with('ageRanges', $ageRanges)
+                                ->with('ranges', $ranges)
+                                ->with('infectionData', $infectionData)
+                                ->with('accredited', $accredited)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
         return view('reports.infection.index')
             ->with('gender', $gender)
             ->with('ageRanges', $ageRanges)
@@ -1859,22 +1891,92 @@ class ReportController extends Controller {
             case '1':
                 $reportData = User::getPatientsRegistered($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-patients-register-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "Patient_register_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.patientexport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
             case '2':
                 $reportData = User::getSpecimensRegistered($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-specimens-register-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "specimen_register_log_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.specimenexport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
             case '3':
                 $reportData = User::getTestsRegistered($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-tests-register-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "test_register_log_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.testsRegisteredExport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
             case '4':
                 $reportData = User::getTestsPerformed($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-tests-performed-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "user_log_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.testsPerformedExport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
             default:
                 $reportData = User::getSummaryUserStatistics($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-summary-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "daily_visits_log_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.summaryExport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
         }
 
@@ -1893,7 +1995,7 @@ class ReportController extends Controller {
     /**
      * Returns qc index page
      *
-     * @return view
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function qualityControl()
     {
@@ -1918,14 +2020,19 @@ class ReportController extends Controller {
             'specimen' => $specimen
         );
 
-        $pdf = new RejectionReportPdf;
-        $pdf->setTestRequestInformation($test_request_information);
+//        $pdf = new RejectionReportPdf;
+//        $pdf->setTestRequestInformation($test_request_information);
+//
+//        $pdf->SetAutoPageBreak(TRUE, 15);
+//        $pdf->AddPage();
+//        $pdf->SetFont('', '', 10);
+//        $pdf->writeHTML($html, true, false, true, false, '');
+//        return $pdf->output($specimen->sample_id.'.pdf');
 
-        $pdf->SetAutoPageBreak(TRUE, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('', '', 10);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        return $pdf->output($specimen->sample_id.'.pdf');
+        $pdf = PDF::loadHtml($html);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream($specimen->sample_id.'.pdf');
     }
 
 
@@ -2702,7 +2809,7 @@ class ReportController extends Controller {
                 $q->where('specimens.time_accepted', '>=', $dateFrom);
                 $q->where('specimens.time_accepted', '<=', $dateTo);
             })->orderBy('specimens.time_accepted', 'DESC')
-            ->groupBy('unhls_patients.name','specimens.time_accepted','specimens.time_collected','unhls_patients.patient_number','unhls_patients.ulin','unhls_patients.admission_date','unhls_districts.name','unhls_patients.gender','unhls_visits.hospitalized','age','unhls_visits.visit_type','onAntibiotics','Ward','diagnosis','SpecimenType','unhls_tests.test_type_id','DonAntibiotics','testID','drugs.name','IsolatedOrganism','isoID')
+            ->groupBy('unhls_patients.name','specimens.time_accepted','specimens.time_collected','unhls_patients.patient_number','unhls_patients.ulin','unhls_patients.admission_date','unhls_districts.name','unhls_patients.gender','unhls_visits.hospitalized','unhls_patients.dob','unhls_visits.visit_type','onAntibiotics','Ward','diagnosis','SpecimenType','unhls_tests.test_type_id','DonAntibiotics','testID','drugs.name','IsolatedOrganism','isoID')
             ->groupBy('isolated_organisms.id')
             ->orderBy('specimens.time_accepted', 'DESC')
             ->get();

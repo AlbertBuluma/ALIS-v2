@@ -60,7 +60,7 @@ class VisitController extends Controller {
                 $dateTo = '';
             }
 
-            $visits = UnhlsVisit::search($searchString, $dateFrom, $dateTo);
+            $visits = UnhlsVisit::search($searchString, $visitStatusId, $dateFrom, $dateTo);
 
             if (count($visits->get()) == 0) {
                 Session::flash('message', trans('messages.empty-search'));

@@ -46,7 +46,8 @@
 	    @endif
 	</tbody>
 </table>
-<table>
+
+
 <table width="100%">
 	<thead>
 		<tr>
@@ -153,7 +154,6 @@
 			</tr>
         </table>
 
-        </hr>
         <table style="border-bottom: 1px solid #cecfd5; font-size:10px;font-family: 'Courier New',Courier;">
             <tr>
               <td colspan="2"><b>Analysis Performed by:</b></td>

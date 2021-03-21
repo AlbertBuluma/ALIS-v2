@@ -447,7 +447,8 @@
                             <ul>
                                 <li>
                                     <div>
-                                        <a href="{{ Auth::user()->can('manage_users') ? route('user.index') : URL::to('user/'.Auth::user()->id.'/edit') }}">
+{{--                                        <a href="{{ Auth::user()->can('manage_users') ? route('user.index') : URL::to('user/'.Auth::user()->id.'/edit') }}">--}}
+                                        <a href="{{ Auth::user()->can('manage_users') ? route('user.index') : URL::to('user') }}">
                                             <span class="glyphicon glyphicon-tag"></span> {{trans('messages.user-accounts')}}</a>
                                     </div>
                                 </li>

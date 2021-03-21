@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use PhpOffice\PhpSpreadsheet\Writer\Pdf;
+//use PhpOffice\PhpSpreadsheet\Writer\Pdf;
+use PDF;
 
 /**
  *Contains functions for managing bbincidence records
@@ -286,7 +287,12 @@ class BbincidenceController extends Controller {
 		$content = view('bbincidence.show')->with('bbincidence', $bbincidence)->with('nextbbincidence', $nextbbincidence)
 		->with('previousbbincidence', $previousbbincidence);
 
-		return PDF::loadHTML($content)->stream('bbincidenceReport.pdf');
+//		return PDF::loadHTML($content)->stream('bbincidenceReport.pdf');
+
+        $pdf = PDF::loadHtml($content);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        return $pdf->stream('bbincidenceReport.pdf');
 	}
 
 	/**
