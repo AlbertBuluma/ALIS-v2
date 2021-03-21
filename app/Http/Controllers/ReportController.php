@@ -1312,18 +1312,35 @@ class ReportController extends Controller {
 
             $ungroupedTests = array();
             foreach (TestType::all() as $testType) {
-                $pending = $testType->countPerStatus([UnhlsTest::PENDING, UnhlsTest::STARTED], $from, $toPlusOne->format('Y-m-d H:i:s'));
-                $complete = $testType->countPerStatus([UnhlsTest::COMPLETED, UnhlsTest::VERIFIED], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $pending = $testType->countPerStatus([UnhlsTest::PENDING], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $started = $testType->countPerStatus([UnhlsTest::PENDING], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $complete = $testType->countPerStatus([UnhlsTest::COMPLETED], $from, $toPlusOne->format('Y-m-d H:i:s'));
+                $verified = $testType->countPerStatus([UnhlsTest::VERIFIED], $from, $toPlusOne->format('Y-m-d H:i:s'));
                 $approved = $testType->countPerStatus([UnhlsTest::APPROVED], $from, $toPlusOne->format('Y-m-d H:i:s'));
-                $rejected = $testType->countPerStatus([UnhlsTest::REJECTED], $from, $toPlusOne->format('Y-m-d H:i:s'));
-                $ungroupedTests[$testType->id] = ["complete"=>$complete, "pending"=>$pending, "approved"=>$approved, "rejected"=>$rejected];
+                $ungroupedTests[$testType->id] = ["complete"=>$complete, "pending"=>$pending, "started"=>$started, "verified"=>$verified, "approved"=>$approved];
             }
+
+            if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "testtype_tat_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.counts.exportCounts')
+                                ->with('ungroupedTests', $ungroupedTests)
+                                ->with('accredited', $accredited)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
+            else{
 
             // $data = $data->groupBy('test_type_id')->paginate(Config::get('kblis.page-items'));
             return view('reports.counts.ungroupedTestCount')
                 ->with('ungroupedTests', $ungroupedTests)
                 ->with('accredited', $accredited)
                 ->withInput($request->all());
+            }
         }
     }
     /*
@@ -1821,7 +1838,22 @@ class ReportController extends Controller {
         $testCategory = $request->get('test_category');
 
         $infectionData = UnhlsTest::getInfectionData($from, $toPlusOne, $testCategory);	// array for counts data for each test type and age range
-
+        if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "test_report_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.infection.testReportExport')
+                                ->with('gender', $gender)
+                                ->with('ageRanges', $ageRanges)
+                                ->with('ranges', $ranges)
+                                ->with('infectionData', $infectionData)
+                                ->with('accredited', $accredited)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
         return view('reports.infection.index')
             ->with('gender', $gender)
             ->with('ageRanges', $ageRanges)
@@ -1859,22 +1891,92 @@ class ReportController extends Controller {
             case '1':
                 $reportData = User::getPatientsRegistered($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-patients-register-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "Patient_register_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.patientexport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
             case '2':
                 $reportData = User::getSpecimensRegistered($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-specimens-register-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "specimen_register_log_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.specimenexport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
             case '3':
                 $reportData = User::getTestsRegistered($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-tests-register-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "test_register_log_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.testsRegisteredExport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
             case '4':
                 $reportData = User::getTestsPerformed($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-tests-performed-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "user_log_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.testsPerformedExport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
             default:
                 $reportData = User::getSummaryUserStatistics($from, $to.' 23:59:59', $request->get('user'));
                 $reportTitle = Lang::choice('messages.user-statistics-summary-report-title',1);
+                if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "daily_visits_log_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('reports.userstatistics.summaryExport')
+                                ->with('reportTypes', $reportTypes)
+                                ->with('reportData', $reportData)
+                                ->with('selectedReport', $selectedReport)
+                                ->withInput($request->all());
+                return Response::make($content,200, $headers);
+            }
                 break;
         }
 

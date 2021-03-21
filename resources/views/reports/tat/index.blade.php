@@ -46,9 +46,13 @@
                         isset($input['test_type'])?$input['test_type']:0, array('class' => 'form-control')) }}
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 {{Form::submit(trans('messages.view'),
                     array('class' => 'btn btn-info', 'id'=>'filter', 'name'=>'filter'))}}
+            </div>
+            <div class="col-sm-1">
+                {{Form::submit(trans('messages.export-to-word'), 
+                    array('class' => 'btn btn-success', 'id'=>'word', 'name'=>'word'))}}
             </div>
         </div>
     </div>

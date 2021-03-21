@@ -32,10 +32,14 @@
 		        </div>
 	    	</div>
 	    </div>
-	    <div class="col-sm-2">
+	    <div class="col-sm-1">
 		    {{ Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'),
 		        array('class' => 'btn btn-info', 'id' => 'filter', 'type' => 'submit')) }}
 	    </div>
+	    <div class="col-sm-1">
+					{{Form::submit(trans('messages.export-to-word'), 
+			    		array('class' => 'btn btn-success', 'id'=>'word', 'name'=>'word'))}}
+		</div>
 	</div>
 	<div class='row spacer'>
 		<div class="col-sm-12">
@@ -95,16 +99,21 @@
 		    <tbody>
 			    <tr>
 			    	<th>{{Lang::choice('messages.test-type',2)}}</th>
-			    	<th>{{trans('messages.complete-tests')}}</th>
 			    	<th>{{trans('messages.pending-tests')}}</th>
+			    	<th>{{trans('Started Tests')}}</th>
+			    	<th>{{trans('messages.complete-tests')}}</th>
+			    	<th>{{trans('Verified Tests')}}</th>
 			    	<th>{{trans('Approved Tests')}}</th>
 			    </tr>
 			    @forelse($ungroupedTests as $key => $value)
 
 			    <tr>
 			    	<td>{{ App\Models\TestType::find($key)->name }}</td>
-			    	<td>{{ $value['complete'] }}</td>
 			    	<td>{{ $value['pending'] }}</td>
+			    	<td>{{ $value['started'] }}</td>
+			    	<td>{{ $value['complete'] }}</td>
+			    	<td>{{ $value['verified'] }}</td>
+			    	<td>{{ $value['approved'] }}</td>
 			    </tr>
 			    @empty
 			    <tr>
