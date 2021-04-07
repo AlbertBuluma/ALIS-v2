@@ -1188,4 +1188,6 @@ Route::post("/updateupload/", array(
 
 Route::get('/facility_settings', 'ApiController@facilitySettings');
 
-Route::get('/getvisits/{visit_id}/{poc_id}/{clin_id}/{user_id}', 'ApiController@getChunkedVisits');
+Route::get('/getvisits/{visit_id}/{clin_id}/{user_id}', 'ApiController@getChunkedVisits');
+
+Route::get('/warehouse_poc/{poc_id}', 'ApiController@getPocDetails');
