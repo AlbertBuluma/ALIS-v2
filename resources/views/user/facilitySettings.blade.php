@@ -79,6 +79,15 @@
                 )) }}
             </div>
         </div>
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon glyphicon glyphicon-home"></span>
+                {{ Form::text("lab_name", old("lab_name"), array(
+                    "placeholder" => trans('messages.lab-name'),
+                    "class" => "form-control"
+                )) }}
+            </div>
+        </div>
         {{--        <div class="form-group">--}}
         {{--            <div class="input-group">--}}
         {{--                <span class="input-group-addon glyphicon glyphicon-info-sign"></span>--}}
