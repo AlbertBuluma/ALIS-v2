@@ -593,6 +593,7 @@ return [
     'main_ip_port_number' => 'Main IP Port Number',
     'lab-name' => 'Laboratory Name',
     'facility_settings' => 'Save Settings',
+    'last-export' => 'Last Export',
 
     /*
     *   Instrumentation
