@@ -67,6 +67,7 @@ class UserController extends Controller {
                 "host_ip" => "required|min:6",
                 "main_ip_port_number" => "required|min:6",
                 "host_ip_port_number" => "required|min:6",
+                "lab_name" => "required|min:6"
             ));
 
 
@@ -76,7 +77,8 @@ class UserController extends Controller {
             $form_input = array("password=".$request->get('password'),
                 "mainIp=".'http://'.$request->get('main_ip').':'.$request->get('main_ip_port_number'),
                 "hostIp=".'http://'.$request->get('host_ip').':'.$request->get('host_ip_port_number'),
-                "username=".$request->get('username'));
+                "username=".$request->get('username'),
+                "labName=".$request->get('lab_name'));
 
             $contents = implode(PHP_EOL, $form_input);
             $contents .= PHP_EOL . PHP_EOL;
