@@ -587,6 +587,12 @@ return [
     'new-disease' => 'New Disease',
     'successfully-updated-facility' => 'Facility was successfully updated!',
     'successfully-deleted-facility' => 'Facility was successfully deleted!',
+    'host_ip' => 'Host IP Address',
+    'host_ip_port_number' => 'Host IP Port Number',
+    'main_ip' => 'Main IP Address',
+    'main_ip_port_number' => 'Main IP Port Number',
+    'lab-name' => 'Laboratory Name',
+    'facility_settings' => 'Save Settings',
 
     /*
     *   Instrumentation
