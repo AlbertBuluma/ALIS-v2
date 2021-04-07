@@ -7,6 +7,7 @@ use App\Models\UnhlsTest;
 use App\Models\UnhlsTestResult;
 use App\Models\UnhlsVisit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
@@ -78,9 +79,10 @@ class ApiController extends Controller {
      * Display a listing of the UNHLS Test Results.
      *
      * @param $test_id
+     * @param int $test_type_id
      * @return \Illuminate\Support\Collection
      */
-    public function unhlsResults($test_id)
+    public function unhlsResults($test_id, $test_type_id)
     {
 
         $results = DB::table('unhls_test_results')
@@ -91,6 +93,13 @@ class ApiController extends Controller {
             ->leftjoin('measure_types', function ($join) {
                 $join->on('measures.measure_type_id', '=', 'measure_types.id');
             })
+            ->leftJoin('test_name_mappings', function ($join) use ($test_type_id){
+                $join->where('test_name_mappings.test_type_id', '=', $test_type_id);
+            })
+            ->leftJoin('measure_name_mappings', function ($join){
+                $join->on('measure_name_mappings.test_name_mapping_id', '=', 'test_name_mappings.id');
+            })
+
             ->select('unhls_test_results.id AS unhlsTestsResultsId', 'unhls_test_results.test_id AS unhlsTestsResultsTestId',
                 'unhls_test_results.measure_id AS unhlsTestsResultsMeasureId', 'unhls_test_results.result AS unhlsTestsResultsResult',
                 'unhls_test_results.time_entered AS timeEntered', 'unhls_test_results.sample_id AS sampleId', 'unhls_test_results.revised_result AS revisedResult',
@@ -99,14 +108,17 @@ class ApiController extends Controller {
                 'measures.unit AS unit', 'measures.description AS measuresDescription', 'measures.created_at AS measuresCreatedAt',
                 'measures.updated_at AS measuresUpdatedAt', 'measures.deleted_at AS measuresDeletedAt',
                 'measure_types.id AS measureTypesId', 'measure_types.name AS measureTypesName', 'measure_types.deleted_at AS measureTypesDeletedAt',
-                'measure_types.created_at AS measureTypesCreatedAt', 'measure_types.updated_at AS measureTypesUpdatedAt')
+                'measure_types.created_at AS measureTypesCreatedAt', 'measure_types.updated_at AS measureTypesUpdatedAt',
+                'test_name_mappings.id AS testNameMappingsId', 'test_name_mappings.test_type_id AS testNameMappingsTestTypeId',
+                'test_name_mappings.standard_name AS testNameMappingsStandardName', 'test_name_mappings.system_name AS testNameMappingsSystemName',
+                'measure_name_mappings.id AS measureNameMappingsId', 'measure_name_mappings.test_name_mapping_id AS measureNameMappingsTestNameMappingId',
+                'measure_name_mappings.measure_id AS measureNameMappingsMeasureId', 'measure_name_mappings.standard_name AS measureNameMappingsStandardName',
+                'measure_name_mappings.system_name AS measureNameMappingsSystemName')
             ->orderBy('unhls_test_results.id', 'asc')
             ->get();
-//                    ->paginate(10);
 
         //TODO measure_types.name to select column results
 
-//        return Response::json($results, 200);
         return $results;
     }
 
@@ -496,7 +508,7 @@ class ApiController extends Controller {
                 foreach ($patient_visit['specimentestList'] as $spec_test) {
                     // Appending test results to specimentest
                     $spec_test['testresultList'] = [];
-                    $test_results = json_decode(json_encode($this->unhlsResults($spec_test['unhlsTestsId'])), true);
+                    $test_results = json_decode(json_encode($this->unhlsResults($spec_test['unhlsTestsId'], $spec_test['testTypeId'])), true);
                     $spec_test['testresultList'] = $test_results;
 
 
@@ -646,7 +658,7 @@ class ApiController extends Controller {
     }
 
 
-    public function getChunkedVisits($visit_id, $poc_id, $clinician_id, $user_id)
+    public function getChunkedVisits($visit_id, $clinician_id, $user_id)
     {
         $visit_ids = $this->chunkVisits($visit_id);
         $vis = $all_visits = [];
@@ -761,39 +773,6 @@ class ApiController extends Controller {
         }
 
 
-        // Add POC table
-        $vis['poc'] = json_decode(json_encode($this->pocTable($poc_id)), true);
-
-        // Add poc_result to each POC
-        $poc_visits = $poc_results = [];
-        foreach ($vis['poc'] as $poc) {
-            $poc['pocresultList'] = [];
-            $poc['pocresultList'] = json_decode(json_encode($this->pocResults($poc['pocId'])), true);
-
-            $poc_results[] = $poc;
-        }
-
-        $vis['poc'] = $poc_results;
-
-        $poc_keys = $poc_array = $result_keys = $p_result = [];
-
-        foreach ($vis['poc'] as $poc){
-            $result_poc = [];
-            foreach ($poc as $poc_key => $poc_value){
-                $poc_keys[$poc_key] = $this->sanitizeTimeValues($poc_value);
-            }
-
-            foreach ($poc_keys['pocresultList'] as $poc_res){
-                foreach ($poc_res as $res_key => $res_value){
-                    $result_keys[$res_key] = $this->sanitizeTimeValues($res_value);
-                }
-                $result_poc[] = $result_keys;
-            }
-            $poc_keys['pocresultList'] = $result_poc;
-            $p_result[] = $poc_keys;
-        }
-        $vis['poc'] = $p_result;
-
         // Add facility users
         $user_keys = $user_array = [];
         $vis['facilityusers'] = json_decode(json_encode($this->users($user_id)), true);
@@ -821,6 +800,45 @@ class ApiController extends Controller {
         return $vis;
     }
 
+
+    public function getPocDetails($poc_id)
+    {
+        // Add POC table
+        $vis = json_decode(json_encode($this->pocTable($poc_id)), true);
+
+        // Add poc_result to each POC
+        $poc_visits = $poc_results = [];
+        foreach ($vis as $poc) {
+            $poc['pocresultList'] = [];
+            $poc['pocresultList'] = json_decode(json_encode($this->pocResults($poc['pocId'])), true);
+
+            $poc_results[] = $poc;
+        }
+
+        $vis = $poc_results;
+
+        $poc_keys = $poc_array = $result_keys = $p_result = [];
+
+        foreach ($vis as $poc){
+            $result_poc = [];
+            foreach ($poc as $poc_key => $poc_value){
+                $poc_keys[$poc_key] = $this->sanitizeTimeValues($poc_value);
+            }
+
+            foreach ($poc_keys['pocresultList'] as $poc_res){
+                foreach ($poc_res as $res_key => $res_value){
+                    $result_keys[$res_key] = $this->sanitizeTimeValues($res_value);
+                }
+                $result_poc[] = $result_keys;
+            }
+            $poc_keys['pocresultList'] = $result_poc;
+            $p_result[] = $poc_keys;
+        }
+
+        $vis = $p_result;
+
+        return Arr::first($vis);
+    }
 
     public function facilitySettings()
     {
