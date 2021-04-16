@@ -482,6 +482,15 @@ class ApiController extends Controller {
 
         $visits = json_decode(json_encode($visits), true);
 
+        // Add Lab Name to Patient visit JSON
+        $patientArr = [];
+        foreach ($visits as $vis){
+            $vis['labName'] = config('warehouse.LAB_NAME');
+            $patientArr[] = $vis;
+        }
+
+        $visits = $patientArr;
+
         // Add Specimentest key to each visit
         $visits = json_decode(json_encode($visits), true);
         $visits2 = [];
@@ -805,9 +814,18 @@ class ApiController extends Controller {
     {
         // Add POC table
         $vis = json_decode(json_encode($this->pocTable($poc_id)), true);
+        $pocs = [];
+
+        // Add Lab Name to POC JSON
+        foreach ($vis as $pocVisit){
+            $pocVisit['labName'] = config('warehouse.LAB_NAME');
+            $pocs[] = $pocVisit;
+        }
+
+        $vis = $pocs;
 
         // Add poc_result to each POC
-        $poc_visits = $poc_results = [];
+        $poc_results = [];
         foreach ($vis as $poc) {
             $poc['pocresultList'] = [];
             $poc['pocresultList'] = json_decode(json_encode($this->pocResults($poc['pocId'])), true);
